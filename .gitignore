@@ -123,3 +123,7 @@ typings/
 
 # Serverless directories
 .serverless
+
+# Project
+#
+dist/
