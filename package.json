@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/drmonkeysee/letter-sketch/issues"
   },
-  "homepage": "https://github.com/drmonkeysee/letter-sketch#readme"
+  "homepage": "https://github.com/drmonkeysee/letter-sketch#readme",
+  "devDependencies": {
+    "parcel-bundler": "^1.9.7"
+  }
 }
