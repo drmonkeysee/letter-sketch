@@ -1,7 +1,3 @@
-import SketchPad from './sketchpad.js';
+import app from './app.js';
 
-global.lettersketch = {
-  start: function (document) {
-    const sp = new SketchPad(document.getElementById('sketchpad'));
-  }
-};
+global.lettersketch = app;
