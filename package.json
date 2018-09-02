@@ -2,7 +2,7 @@
   "name": "letter-sketch",
   "version": "0.1.0",
   "description": "An ASCII sketch program",
-  "main": "index.js",
+  "browser": "main.js",
   "scripts": {
     "start": "node_modules/.bin/parcel index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
