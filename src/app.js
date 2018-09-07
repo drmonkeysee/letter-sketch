@@ -9,10 +9,10 @@ export default {
 
     console.log('started letter-sketch');
 
-    // TODO: this includes the border so calculations off rect are slightly off
     const rect = canvas.getBoundingClientRect();
     const dpr = win.devicePixelRatio || 1;
     console.log('dpr: %d, rect: %d x, %d y', dpr, rect.width, rect.height);
+    console.log('canvas %d w %d h', canvas.width, canvas.height);
 
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;

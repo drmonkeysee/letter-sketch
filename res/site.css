@@ -1,5 +1,9 @@
+body {
+  font: 12px Monaco;
+}
+
 #sketchpad {
-  border: 1px solid blue;
+  outline: 1px solid blue;
   width: 400px;
   height: 300px;
 }
