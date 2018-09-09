@@ -1,5 +1,6 @@
 export default {
-  start: (win, doc) => {
+  start: win => {
+    const doc = window.document;
     const canvas = doc.getElementById('sketchpad');
     if (!canvas.getContext) {
       const msg = 'No console support detected!';
@@ -26,7 +27,9 @@ export default {
     ctx.fillRect(10, 10, rect.width - 20, rect.height - 20);
     ctx.clearRect(40, 40, rect.width - 80, rect.height - 80);
     
-    ctx.font = '12px Monaco';
+    const bodyStyle = window.getComputedStyle(document.getElementsByTagName('body')[0]);
+    const fontStyle = `${bodyStyle.getPropertyValue('font-size')} ${bodyStyle.getPropertyValue('font-family')}`;
+    ctx.font = fontStyle;
     ctx.fillStyle = 'red';
     ctx.fillText('Hello World!', 25, 25);
     console.log('ctx A dimensions %o', ctx.measureText('A'));
