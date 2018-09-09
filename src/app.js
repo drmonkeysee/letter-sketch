@@ -32,19 +32,16 @@ export default {
     ctx.font = fontStyle;
     ctx.fillStyle = 'red';
     ctx.fillText('Hello World!', 25, 25);
-    console.log('ctx A dimensions %o', ctx.measureText('A'));
-    console.log('ctx a dimensions %o', ctx.measureText('a'));
-    console.log('ctx W dimensions %o', ctx.measureText('W'));
-    console.log('ctx y dimensions %o', ctx.measureText('y'));
+    
+    const letters = ['A', 'a', 'W', '1'];
+    for (const letter of letters) {
+      console.log('ctx %s dimensions %o', letter, ctx.measureText(letter));
+    }
 
     const textRuler = document.getElementById('text-ruler');
-    textRuler.textContent = 'A';
-    console.log('A dimensions %o', textRuler.getBoundingClientRect());
-    textRuler.textContent = 'a';
-    console.log('a dimensions %o', textRuler.getBoundingClientRect());
-    textRuler.textContent = 'W';
-    console.log('W dimensions %o', textRuler.getBoundingClientRect());
-    textRuler.textContent = 'y';
-    console.log('y dimensions %o', textRuler.getBoundingClientRect());
+    for (const letter of letters) {
+      textRuler.textContent = letter;
+      console.log('%s dimensions cw %d ch %d %o', letter, textRuler.clientWidth, textRuler.clientHeight, textRuler.getBoundingClientRect());  
+    }
   }
 };
