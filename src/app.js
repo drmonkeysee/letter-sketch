@@ -1,6 +1,6 @@
 export default {
   start: win => {
-    const doc = window.document;
+    const doc = win.document;
     const canvas = doc.getElementById('sketchpad');
     if (!canvas.getContext) {
       const msg = 'No console support detected!';
@@ -12,7 +12,7 @@ export default {
 
     const rect = canvas.getBoundingClientRect();
     const dpr = win.devicePixelRatio || 1;
-    console.log('dpr: %d, rect: %d x, %d y', dpr, rect.width, rect.height);
+    console.log('dpr: %d, rect: %o', dpr, rect.width, rect.height);
     console.log('canvas %d w %d h', canvas.width, canvas.height);
 
     canvas.width = rect.width * dpr;
@@ -22,26 +22,69 @@ export default {
     ctx.scale(dpr, dpr);
 
     ctx.clearRect(0, 0, rect.width, rect.height);
-    ctx.fillStyle = 'yellow';
-    console.log('fill rect %d w %d h', rect.width - 20, rect.height - 20);
-    ctx.fillRect(10, 10, rect.width - 20, rect.height - 20);
-    ctx.clearRect(40, 40, rect.width - 80, rect.height - 80);
     
-    const bodyStyle = window.getComputedStyle(document.getElementsByTagName('body')[0]);
+    const bodyStyle = win.getComputedStyle(doc.getElementsByTagName('body')[0]);
     const fontStyle = `${bodyStyle.getPropertyValue('font-size')} ${bodyStyle.getPropertyValue('font-family')}`;
     ctx.font = fontStyle;
     ctx.fillStyle = 'red';
     ctx.fillText('Hello World!', 25, 25);
     
-    const letters = ['A', 'a', 'W', '1'];
+    const letters = ['A', 'a', 'W', '1', 'y', '@'];
     for (const letter of letters) {
       console.log('ctx %s dimensions %o', letter, ctx.measureText(letter));
     }
 
-    const textRuler = document.getElementById('text-ruler');
+    let glyphDims;
+    const textRuler = doc.getElementById('text-ruler');
     for (const letter of letters) {
       textRuler.textContent = letter;
-      console.log('%s dimensions cw %d ch %d %o', letter, textRuler.clientWidth, textRuler.clientHeight, textRuler.getBoundingClientRect());  
+      glyphDims = textRuler.getBoundingClientRect();
+      console.log('%s dimensions cw %d ch %d %o', letter, textRuler.clientWidth, textRuler.clientHeight, glyphDims);  
+    }
+
+    const baseLines = ['alphabetic', 'bottom', 'hanging', 'ideographic', 'middle', 'top'];
+    const drawRect = { x: 60, y: 60, w: glyphDims.width, h: glyphDims.height };
+    console.log('draw rect: %o', drawRect);
+    ctx.strokeStyle = '#5a5a5a';
+    ctx.fillStyle = 'blue';
+    const blLength = baseLines.length;
+
+    // test baselines (top places the best)
+    for (let i = 0; i < blLength; ++i) {
+      const xOffset = drawRect.x + (i * drawRect.w);
+      ctx.strokeRect(xOffset, drawRect.y, drawRect.w, drawRect.h);
+      ctx.textBaseline = baseLines[i];
+      ctx.fillText('y', xOffset, drawRect.y);
+    }
+    
+    // test varied glyphs
+    drawRect.y += drawRect.h;
+    console.log('draw rect: %o', drawRect);
+    ctx.textBaseline = 'top';
+    for (let i = 0; i < blLength; ++i) {
+      const xOffset = drawRect.x + (i * drawRect.w);
+      ctx.strokeRect(xOffset, drawRect.y, drawRect.w, drawRect.h);
+      ctx.fillText(letters[i], xOffset, drawRect.y);
+    }
+
+    // compare to rendered as single string
+    drawRect.y += drawRect.h;
+    console.log('draw rect: %o', drawRect);
+    for (let i = 0; i < blLength; ++i) {
+      const xOffset = drawRect.x + (i * drawRect.w);
+      ctx.strokeRect(xOffset, drawRect.y, drawRect.w, drawRect.h);
+    }
+    ctx.fillText(letters.join(''), drawRect.x, drawRect.y);
+
+    // test int-truncated width
+    drawRect.y += drawRect.h;
+    drawRect.w = Math.floor(drawRect.w);
+    console.log('draw rect: %o', drawRect);
+    ctx.textBaseline = 'top';
+    for (let i = 0; i < blLength; ++i) {
+      const xOffset = drawRect.x + (i * drawRect.w);
+      ctx.strokeRect(xOffset, drawRect.y, drawRect.w, drawRect.h);
+      ctx.fillText(letters[i], xOffset, drawRect.y);
     }
   }
 };
