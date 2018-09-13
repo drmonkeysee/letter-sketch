@@ -18,7 +18,7 @@ export default {
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
 
-    const ctx = canvas.getContext('2d', { alpha: false });
+    const ctx = canvas.getContext('2d', {alpha: false});
     ctx.scale(dpr, dpr);
 
     ctx.clearRect(0, 0, rect.width, rect.height);
@@ -43,7 +43,7 @@ export default {
     }
 
     const baseLines = ['alphabetic', 'bottom', 'hanging', 'ideographic', 'middle', 'top'];
-    const drawRect = { x: 60, y: 60, w: glyphDims.width, h: glyphDims.height };
+    const drawRect = {x: 60, y: 60, w: glyphDims.width, h: glyphDims.height};
     console.log('draw rect: %o', drawRect);
     ctx.strokeStyle = '#5a5a5a';
     ctx.fillStyle = 'blue';
@@ -76,15 +76,28 @@ export default {
     }
     ctx.fillText(letters.join(''), drawRect.x, drawRect.y);
 
-    // test int-truncated width
-    drawRect.y += drawRect.h;
-    drawRect.w = Math.floor(drawRect.w);
-    console.log('draw rect: %o', drawRect);
+    // test round-down width
+    const rdRect = Object.assign({}, drawRect);
+    rdRect.y += rdRect.h;
+    rdRect.w = Math.floor(rdRect.w);
+    console.log('draw rect: %o', rdRect);
     ctx.textBaseline = 'top';
     for (let i = 0; i < blLength; ++i) {
-      const xOffset = drawRect.x + (i * drawRect.w);
-      ctx.strokeRect(xOffset, drawRect.y, drawRect.w, drawRect.h);
-      ctx.fillText(letters[i], xOffset, drawRect.y);
+      const xOffset = rdRect.x + (i * rdRect.w);
+      ctx.strokeRect(xOffset, rdRect.y, rdRect.w, rdRect.h);
+      ctx.fillText(letters[i], xOffset, rdRect.y);
+    }
+
+    // test round-up width
+    const ruRect = Object.assign({}, drawRect);
+    ruRect.y += 2 * ruRect.h;
+    ruRect.w = Math.ceil(ruRect.w);
+    console.log('draw rect: %o', ruRect);
+    ctx.textBaseline = 'top';
+    for (let i = 0; i < blLength; ++i) {
+      const xOffset = ruRect.x + (i * ruRect.w);
+      ctx.strokeRect(xOffset, ruRect.y, ruRect.w, ruRect.h);
+      ctx.fillText(letters[i], xOffset, ruRect.y);
     }
   }
 };
