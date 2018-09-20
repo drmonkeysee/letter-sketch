@@ -1,9 +1,23 @@
 body {
-  font: 12pt Monaco;
+  font: 12pt monospace;
 }
 
 #sketchpad {
   outline: 1px solid blue;
   width: 400px;
   height: 300px;
+}
+
+#letter-block {
+  width: 400px;
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+}
+#letter-block div {
+  outline: 1px solid gray;
+  display: flex;
+  justify-content: center;
+}
+#letter-block div span {
+  background-color: aqua;
 }
