@@ -130,6 +130,16 @@ export default {
       ctx.fillText(letters[i], xOffset, ruRect.y);
     }
 
+    // test varied glyphs
+    drawRect.y += 3*drawRect.h;
+    console.log('draw rect: %o', drawRect);
+    const weirdLetters = ['►', '↑', '←', '▼', '╩', '╗']
+    for (let i = 0; i < blLength; ++i) {
+      const xOffset = drawRect.x + (i * drawRect.w);
+      ctx.strokeRect(xOffset, drawRect.y, drawRect.w, drawRect.h);
+      ctx.fillText(weirdLetters[i], xOffset, drawRect.y);
+    }
+
     buildLetterBlock(doc);
   }
 };
