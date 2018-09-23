@@ -18,20 +18,31 @@ const cp437 = [
 ];
 
 function buildLetterBlock(doc) {
-  const letterBlock = doc.getElementById('letter-block');
+  const letterBlock = doc.getElementById('letter-block'),
+        heights = new Set(),
+        widths = new Set();
   for (const letter of cp437) {
     const blockText = doc.createElement('span');
     blockText.textContent = letter;
     const blockCell = doc.createElement('div');
     blockCell.appendChild(blockText);
     letterBlock.appendChild(blockCell);
+    const drawRect = blockText.getBoundingClientRect();
+    heights.add(drawRect.height);
+    if (drawRect.height === 19) {
+      console.log('Too high: %s', letter);
+    }
+    widths.add(drawRect.width);
   }
+  console.log('Glyph heights: %o', [...heights].sort());
+  console.log('Glyph widths: %o', [...widths].sort());
+  return {height: Math.max(...heights), width: Math.max(...widths)}
 }
 
 export default {
   start(win) {
-    const doc = win.document;
-    const canvas = doc.getElementById('sketchpad');
+    const doc = win.document,
+          canvas = doc.getElementById('sketchpad');
     if (!canvas.getContext) {
       const msg = 'No console support detected!';
       console.error(msg);
@@ -40,8 +51,9 @@ export default {
 
     console.log('started letter-sketch');
 
-    const rect = canvas.getBoundingClientRect();
-    const dpr = win.devicePixelRatio || 1;
+    const maxFontExtents = buildLetterBlock(doc),
+          rect = canvas.getBoundingClientRect(),
+          dpr = win.devicePixelRatio || 1;
     console.log('dpr: %d, rect: %o', dpr, rect.width, rect.height);
     console.log('canvas %d w %d h', canvas.width, canvas.height);
 
@@ -53,27 +65,20 @@ export default {
 
     ctx.clearRect(0, 0, rect.width, rect.height);
     
-    const bodyStyle = win.getComputedStyle(doc.getElementsByTagName('body')[0]);
-    const fontStyle = `${bodyStyle.getPropertyValue('font-size')} ${bodyStyle.getPropertyValue('font-family')}`;
+    const bodyStyle = win.getComputedStyle(doc.getElementsByTagName('body')[0]),
+          fontStyle = `${bodyStyle.getPropertyValue('font-size')} ${bodyStyle.getPropertyValue('font-family')}`;
     ctx.font = fontStyle;
     ctx.fillStyle = 'red';
     ctx.fillText('Hello World!', 25, 25);
     
-    const letters = ['A', 'a', 'W', '1', 'y', '@'];
-    for (const letter of letters) {
-      console.log('ctx %s dimensions %o', letter, ctx.measureText(letter));
-    }
-
-    let glyphDims;
     const textRuler = doc.getElementById('text-ruler');
-    for (const letter of letters) {
-      textRuler.textContent = letter;
-      glyphDims = textRuler.getBoundingClientRect();
-      console.log('%s dimensions cw %d ch %d %o', letter, textRuler.clientWidth, textRuler.clientHeight, glyphDims);  
-    }
+    textRuler.textContent = 'A';
+    const rulerDims = textRuler.getBoundingClientRect();
+    console.log('Ruler dims: %o', rulerDims);
 
-    const baseLines = ['alphabetic', 'bottom', 'hanging', 'ideographic', 'middle', 'top'];
-    const drawRect = {x: 60, y: 60, w: glyphDims.width, h: glyphDims.height};
+    const letters = ['A', 'a', 'W', '1', 'y', '@'],
+          baseLines = ['alphabetic', 'bottom', 'hanging', 'ideographic', 'middle', 'top'],
+          drawRect = {x: 60, y: 60, w: rulerDims.width, h: rulerDims.height};
     console.log('draw rect: %o', drawRect);
     ctx.strokeStyle = '#5a5a5a';
     ctx.fillStyle = 'blue';
@@ -140,6 +145,14 @@ export default {
       ctx.fillText(weirdLetters[i], xOffset, drawRect.y);
     }
 
-    buildLetterBlock(doc);
+    // test varied glyphs
+    drawRect.y += drawRect.h;
+    console.log('draw rect: %o', drawRect);
+    const connectors = ['╚', '╤', '╧', '╦', '═', '╬']
+    for (let i = 0; i < blLength; ++i) {
+      const xOffset = drawRect.x + (i * drawRect.w);
+      ctx.strokeRect(xOffset, drawRect.y, drawRect.w, drawRect.h);
+      ctx.fillText(connectors[i], xOffset, drawRect.y);
+    }
   }
 };
