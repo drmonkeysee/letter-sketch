@@ -24,7 +24,8 @@
   },
   "homepage": "https://github.com/drmonkeysee/letter-sketch#readme",
   "devDependencies": {
-    "parcel-bundler": "^1.9.7"
+    "parcel-bundler": "^1.9.7",
+    "precss": "^3.1.2"
   },
   "private": true
 }

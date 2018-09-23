@@ -12,12 +12,14 @@ body {
   width: 400px;
   display: grid;
   grid-template-columns: repeat(16, 1fr);
-}
-#letter-block div {
-  outline: 1px solid gray;
-  display: flex;
-  justify-content: center;
-}
-#letter-block div span {
-  background-color: aqua;
+  
+  div {
+    outline: 1px solid gray;
+    display: flex;
+    justify-content: center;
+
+    span {
+      background-color: aqua;
+    }
+  }
 }
