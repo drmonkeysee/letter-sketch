@@ -44,7 +44,7 @@ function drawPalette(doc) {
         colorSteps = [0x00, 0x40, 0x80, 0xc0, 0xff],
         byteHex = n => {
           const s = n.toString(16);
-          return n < 0xf ? `0${s}` : s;
+          return n < 0x10 ? `0${s}` : s;
         };
   
   for (const redStep of colorSteps) {
