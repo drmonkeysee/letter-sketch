@@ -17,7 +17,7 @@ const cp437 = [
   '\u2261', '\u00b1', '\u2265', '\u2264', '\u2320', '\u2321', '\u00f7', '\u2248', '\u00b0', '\u2219', '\u00b7', '\u221a', '\u207f', '\u00b2', '\u25a0', '\u00a0',
 ];
 
-function buildLetterBlock(doc) {
+function drawLetterBlock(doc) {
   const letterBlock = doc.getElementById('letter-block'),
         heights = new Set(),
         widths = new Set();
@@ -39,6 +39,31 @@ function buildLetterBlock(doc) {
   return {height: Math.max(...heights), width: Math.max(...widths)}
 }
 
+function drawPalette(doc) {
+  const palette = doc.getElementById('palette'),
+        colorSteps = [0x00, 0x40, 0x80, 0xc0, 0xff],
+        byteHex = n => {
+          const s = n.toString(16);
+          return n < 0xf ? `0${s}` : s;
+        };
+  
+  for (const redStep of colorSteps) {
+    const colorColumn = doc.createElement('div');
+    palette.appendChild(colorColumn);
+    
+    for (const greenStep of colorSteps) {
+      for (const blueStep of colorSteps) {
+        const colorCell = doc.createElement('div');
+        colorCell.className = 'palette-cell';
+        const cssColor = `#${byteHex(redStep)}${byteHex(greenStep)}${byteHex(blueStep)}`;
+        colorCell.style.backgroundColor = cssColor;
+        colorCell.dataset.hexColor = cssColor;
+        colorColumn.appendChild(colorCell);
+      }
+    }
+  }
+}
+
 export default {
   start(win) {
     const doc = win.document,
@@ -51,8 +76,10 @@ export default {
 
     console.log('started letter-sketch');
 
-    const maxFontExtents = buildLetterBlock(doc),
-          rect = canvas.getBoundingClientRect(),
+    drawLetterBlock(doc);
+    drawPalette(doc);
+
+    const rect = canvas.getBoundingClientRect(),
           dpr = win.devicePixelRatio || 1;
     console.log('dpr: %d, rect: %o', dpr, rect.width, rect.height);
     console.log('canvas %d w %d h', canvas.width, canvas.height);

@@ -23,3 +23,12 @@ body {
     }
   }
 }
+
+#palette {
+  display: flex;
+
+  div.palette-cell {
+    width: 40px;
+    height: 40px;
+  }
+}
