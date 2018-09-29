@@ -1,3 +1,5 @@
+$thin-border: solid 1px black;
+
 body {
   font: 12pt 'Courier New';
 }
@@ -24,11 +26,31 @@ body {
   }
 }
 
+#current-brush {
+  display: flex;
+
+  & > div {
+    width: 50px;
+    height: 50px;
+    border-left: $thin-border;
+  }
+
+  & > :last-child {
+    border-right: $thin-border;
+  }
+
+  #brush-view {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
 #palette {
   display: flex;
 
-  div.palette-cell {
-    width: 40px;
-    height: 40px;
+  .palette-cell {
+    width: 100px;
+    height: 100px;
   }
 }

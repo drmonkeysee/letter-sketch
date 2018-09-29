@@ -93,19 +93,19 @@ export default {
     ctx.clearRect(0, 0, rect.width, rect.height);
     
     const bodyStyle = win.getComputedStyle(doc.getElementsByTagName('body')[0]),
-          fontStyle = `${bodyStyle.getPropertyValue('font-size')} ${bodyStyle.getPropertyValue('font-family')}`;
+          fontStyle = `${bodyStyle.getPropertyValue('font-weight')} ${bodyStyle.getPropertyValue('font-size')} ${bodyStyle.getPropertyValue('font-family')}`;
     ctx.font = fontStyle;
     ctx.fillStyle = 'red';
     ctx.fillText('Hello World!', 25, 25);
     
-    const textRuler = doc.getElementById('text-ruler');
-    textRuler.textContent = 'A';
-    const rulerDims = textRuler.getBoundingClientRect();
-    console.log('Ruler dims: %o', rulerDims);
+    const brushGlyph = doc.querySelector('#brush-view span');
+    brushGlyph.textContent = 'A';
+    const glyphDims = brushGlyph.getBoundingClientRect();
+    console.log('Brush dims: %o', glyphDims);
 
     const letters = ['A', 'a', 'W', '1', 'y', '@'],
           baseLines = ['alphabetic', 'bottom', 'hanging', 'ideographic', 'middle', 'top'],
-          drawRect = {x: 60, y: 60, w: rulerDims.width, h: rulerDims.height};
+          drawRect = {x: 60, y: 60, w: glyphDims.width, h: glyphDims.height};
     console.log('draw rect: %o', drawRect);
     ctx.strokeStyle = '#5a5a5a';
     ctx.fillStyle = 'blue';
