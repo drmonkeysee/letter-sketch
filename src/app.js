@@ -41,7 +41,7 @@ function drawLetterBlock(doc) {
 
 function drawPalette(doc) {
   const palette = doc.getElementById('palette'),
-        colorSteps = [0x00, 0x40, 0x80, 0xc0, 0xff],
+        colorSteps = [0x00, 0x80, 0xff],
         byteHex = n => {
           const s = n.toString(16);
           return n < 0x10 ? `0${s}` : s;
