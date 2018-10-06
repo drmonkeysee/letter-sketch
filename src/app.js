@@ -98,7 +98,7 @@ export default {
     ctx.fillStyle = 'red';
     ctx.fillText('Hello World!', 25, 25);
     
-    const brushGlyph = doc.querySelector('#brush-view span');
+    const brushGlyph = doc.querySelector('#glyph-selection span');
     brushGlyph.textContent = 'A';
     const glyphDims = brushGlyph.getBoundingClientRect();
     console.log('Brush dims: %o', glyphDims);
