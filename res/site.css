@@ -3,13 +3,6 @@ $color-selector-dim: 50px;
 $color-selector-border: 2px;
 $color-selection-position: 10px;
 
-%color-selector {
-  width: calc($color-selector-dim - $color-selector-border);
-  height: calc($color-selector-dim - $color-selector-border);
-  position: absolute;
-  border: $color-selector-border solid gray;
-}
-
 body {
   font: 12pt 'Courier New';
 }
@@ -49,18 +42,23 @@ body {
     border-right: $thin-border;
   }
 
-  #color-selection {
+  #color-selections {
     position: relative;
+
+    .color-selection {
+      width: calc($color-selector-dim - (2 * $color-selector-border));
+      height: calc($color-selector-dim - (2 * $color-selector-border));
+      position: absolute;
+      border: $color-selector-border solid gray;
+    }
     
     #background-selection {
-      @extend %color-selector;
       bottom: $color-selection-position;
       right: $color-selection-position;
       background-color: aqua;
     }
 
     #foreground-selection {
-      @extend %color-selector;
       top: $color-selection-position;
       left: $color-selection-position;
       background-color: yellow;
