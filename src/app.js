@@ -1,3 +1,6 @@
+import {makeBrush, makeTile, Color} from './models.js';
+
+
 const cp437 = [
   '\u0000', '\u263a', '\u263b', '\u2665', '\u2666', '\u2663', '\u2660', '\u2022', '\u25d8', '\u25cb', '\u25d9', '\u2642', '\u2640', '\u266a', '\u266b', '\u263c',
   '\u25ba', '\u25c4', '\u2195', '\u203c', '\u00b6', '\u00a7', '\u25ac', '\u21a8', '\u2191', '\u2193', '\u2192', '\u2190', '\u221f', '\u2194', '\u25b2', '\u25bc',
@@ -15,37 +18,45 @@ const cp437 = [
   '\u2568', '\u2564', '\u2565', '\u2559', '\u2558', '\u2552', '\u2553', '\u256b', '\u256a', '\u2518', '\u250c', '\u2588', '\u2584', '\u258c', '\u2590', '\u2580',
   '\u03b1', '\u00df', '\u0393', '\u03c0', '\u03a3', '\u03c3', '\u00b5', '\u03c4', '\u03a6', '\u0398', '\u03a9', '\u03b4', '\u221e', '\u03c6', '\u03b5', '\u2229',
   '\u2261', '\u00b1', '\u2265', '\u2264', '\u2320', '\u2321', '\u00f7', '\u2248', '\u00b0', '\u2219', '\u00b7', '\u221a', '\u207f', '\u00b2', '\u25a0', '\u00a0',
-];
+], GLYPH_REFERENCE = 0x41;
 
-function drawLetterBlock(doc) {
-  const letterBlock = doc.getElementById('letter-block'),
-        heights = new Set(),
-        widths = new Set();
+function initBrush(doc) {
+  const referenceGlyph = cp437[GLYPH_REFERENCE],
+        ruler = doc.getElementById('glyph-ruler');
+  ruler.textContent = referenceGlyph;
+  const {height, width} = ruler.getBoundingClientRect();
+  return makeBrush(
+      makeTile(referenceGlyph, new Color(0, 0, 0), null),
+      {height, width},
+      null
+  );
+}
+
+function drawLetterBlock(doc, brush) {
+  const letterBlock = doc.getElementById('letter-block');
   for (const letter of cp437) {
     const blockText = doc.createElement('span');
     blockText.textContent = letter;
+    
     const blockCell = doc.createElement('div');
     blockCell.appendChild(blockText);
-    letterBlock.appendChild(blockCell);
-    const drawRect = blockText.getBoundingClientRect();
-    heights.add(drawRect.height);
-    if (drawRect.height === 19) {
-      console.log('Too high: %s', letter);
+    blockCell.style.height = `${2 * brush.tileSize.height}px`;
+    blockCell.style.width = `${2 * brush.tileSize.width}px`;
+    if (letter == brush.tile.glyph) {
+      blockCell.className = 'selected';
     }
-    widths.add(drawRect.width);
+    letterBlock.appendChild(blockCell);
   }
-  console.log('Glyph heights: %o', [...heights].sort());
-  console.log('Glyph widths: %o', [...widths].sort());
-  return {height: Math.max(...heights), width: Math.max(...widths)}
 }
 
-function drawPalette(doc) {
+function drawPalette(doc, brush) {
   const palette = doc.getElementById('palette'),
         colorSteps = [0x00, 0x80, 0xff],
         byteHex = n => {
           const s = n.toString(16);
           return n < 0x10 ? `0${s}` : s;
-        };
+        },
+        cssHexColor = (r, g, b) => `#${byteHex(r)}${byteHex(g)}${byteHex(b)}`
   
   for (const redStep of colorSteps) {
     const colorColumn = doc.createElement('div');
@@ -55,13 +66,17 @@ function drawPalette(doc) {
       for (const blueStep of colorSteps) {
         const colorCell = doc.createElement('div');
         colorCell.className = 'palette-cell';
-        const cssColor = `#${byteHex(redStep)}${byteHex(greenStep)}${byteHex(blueStep)}`;
+        const cssColor = cssHexColor(redStep, greenStep, blueStep);
         colorCell.style.backgroundColor = cssColor;
         colorCell.dataset.hexColor = cssColor;
         colorColumn.appendChild(colorCell);
       }
     }
   }
+
+  const fgSelection = document.getElementById('foreground-selection'),
+        fgColor = brush.tile.foregroundColor;
+  fgSelection.style.backgroundColor = cssHexColor(fgColor.r, fgColor.g, fgColor.b);
 }
 
 export default {
@@ -76,8 +91,10 @@ export default {
 
     console.log('started letter-sketch');
 
-    drawLetterBlock(doc);
-    drawPalette(doc);
+    const currentBrush = initBrush(doc);
+
+    drawLetterBlock(doc, currentBrush);
+    drawPalette(doc, currentBrush);
 
     const rect = canvas.getBoundingClientRect(),
           dpr = win.devicePixelRatio || 1;

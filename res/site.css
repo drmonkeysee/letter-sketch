@@ -13,19 +13,25 @@ body {
   height: 300px;
 }
 
+#glyph-ruler {
+  position: absolute;
+  visibility: hidden;
+}
+
 #letter-block {
   width: 400px;
   display: grid;
   grid-template-columns: repeat(16, 1fr);
   
   div {
-    outline: 1px solid gray;
+    border: 1px solid gray;
     display: flex;
     justify-content: center;
-
-    span {
-      background-color: aqua;
-    }
+    align-items: center;
+  }
+  
+  .selected {
+    background-color: aqua;
   }
 }
 

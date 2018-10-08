@@ -24,10 +24,18 @@ export class Color {
 const WHITE = new Color(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX),
       BLACK = new Color(COLOR_CHANNEL_MIN, COLOR_CHANNEL_MIN, COLOR_CHANNEL_MIN);
 
-export class Brush {
-  constructor(glyph, bgColor, fgColor) {
-    this.glyph = glyph;
-    this.backgroundColor = bgColor;
-    this.foregroundColor = fgColor;
-  }
+export function makeTile(glyph, fgColor, bgColor) {
+  return {
+    glyph: glyph,
+    foregroundColor: fgColor,
+    backgroundColor: bgColor
+  };
+}
+
+export function makeBrush(tile, tileSize, fillColor) {
+  return {
+    tile: tile,
+    tileSize: tileSize,
+    fillColor: fillColor
+  };
 }
