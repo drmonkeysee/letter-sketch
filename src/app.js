@@ -40,8 +40,7 @@ function drawLetterBlock(doc, brush) {
     
     const blockCell = doc.createElement('div');
     blockCell.appendChild(blockText);
-    blockCell.style.height = `${2 * brush.tileSize.height}px`;
-    blockCell.style.width = `${2 * brush.tileSize.width}px`;
+    blockCell.style.height = `${1.5 * brush.tileSize.height}px`;
     if (letter == brush.tile.glyph) {
       blockCell.className = 'selected';
     }

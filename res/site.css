@@ -1,7 +1,9 @@
-$thin-border: solid 1px black;
-$color-selector-dim: 50px;
-$color-selector-border: 2px;
-$color-selection-position: 10px;
+$content-width: 400px;
+$thin-strong-border: solid 1px black;
+$thin-medium-border: solid 1px gray;
+$color-selection-dim: 50px;
+$color-selection-border-thickness: 2px;
+$color-selection-offset: 10px;
 
 body {
   font: 12pt 'Courier New';
@@ -9,7 +11,7 @@ body {
 
 #sketchpad {
   outline: 1px solid blue;
-  width: 400px;
+  width: $content-width;
   height: 300px;
 }
 
@@ -19,12 +21,15 @@ body {
 }
 
 #letter-block {
-  width: 400px;
+  width: $content-width;
   display: grid;
   grid-template-columns: repeat(16, 1fr);
+  border-left: $thin-medium-border;
+  border-top: $thin-medium-border;
   
   div {
-    border: 1px solid gray;
+    border-right: $thin-medium-border;
+    border-bottom: $thin-medium-border;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,32 +46,32 @@ body {
   & > div {
     width: 100px;
     height: 100px;
-    border-left: $thin-border;
+    border-left: $thin-strong-border;
   }
 
   & > :last-child {
-    border-right: $thin-border;
+    border-right: $thin-strong-border;
   }
 
   #color-selections {
     position: relative;
 
     .color-selection {
-      width: calc($color-selector-dim - (2 * $color-selector-border));
-      height: calc($color-selector-dim - (2 * $color-selector-border));
+      width: calc($color-selection-dim - (2 * $color-selection-border-thickness));
+      height: calc($color-selection-dim - (2 * $color-selection-border-thickness));
       position: absolute;
-      border: $color-selector-border solid gray;
+      border: $color-selection-border-thickness solid gray;
     }
     
     #background-selection {
-      bottom: $color-selection-position;
-      right: $color-selection-position;
+      bottom: $color-selection-offset;
+      right: $color-selection-offset;
       background-color: aqua;
     }
 
     #foreground-selection {
-      top: $color-selection-position;
-      left: $color-selection-position;
+      top: $color-selection-offset;
+      left: $color-selection-offset;
       background-color: yellow;
     }
   }
