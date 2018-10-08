@@ -61,18 +61,44 @@ body {
       height: calc($color-selection-dim - (2 * $color-selection-border-thickness));
       position: absolute;
       border: $color-selection-border-thickness solid gray;
+      overflow: hidden;
+
+      hr {
+        border: none;
+        border-top: $thin-strong-border;
+        width: 200%;
+        height: 0;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: -50%;
+        visibility: hidden;
+
+        &:first-child {
+          transform: rotate(45deg);
+        }
+
+        &:last-child {
+          transform: rotate(-45deg);
+        };
+      }
+
+      &.no-color {
+        hr {
+          visibility: visible;
+        }
+      }
     }
     
     #background-selection {
       bottom: $color-selection-offset;
       right: $color-selection-offset;
-      background-color: aqua;
     }
 
     #foreground-selection {
       top: $color-selection-offset;
       left: $color-selection-offset;
-      background-color: yellow;
     }
   }
 

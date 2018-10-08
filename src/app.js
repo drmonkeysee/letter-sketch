@@ -18,7 +18,8 @@ const cp437 = [
   '\u2568', '\u2564', '\u2565', '\u2559', '\u2558', '\u2552', '\u2553', '\u256b', '\u256a', '\u2518', '\u250c', '\u2588', '\u2584', '\u258c', '\u2590', '\u2580',
   '\u03b1', '\u00df', '\u0393', '\u03c0', '\u03a3', '\u03c3', '\u00b5', '\u03c4', '\u03a6', '\u0398', '\u03a9', '\u03b4', '\u221e', '\u03c6', '\u03b5', '\u2229',
   '\u2261', '\u00b1', '\u2265', '\u2264', '\u2320', '\u2321', '\u00f7', '\u2248', '\u00b0', '\u2219', '\u00b7', '\u221a', '\u207f', '\u00b2', '\u25a0', '\u00a0',
-], GLYPH_REFERENCE = 0x41;
+],
+GLYPH_REFERENCE = 0x41;
 
 function initBrush(doc) {
   const referenceGlyph = cp437[GLYPH_REFERENCE],
@@ -26,7 +27,7 @@ function initBrush(doc) {
   ruler.textContent = referenceGlyph;
   const {height, width} = ruler.getBoundingClientRect();
   return makeBrush(
-      makeTile(referenceGlyph, new Color(0, 0, 0), null),
+      makeTile(referenceGlyph, Color.BLACK, null),
       {height, width},
       null
   );
@@ -74,8 +75,23 @@ function drawPalette(doc, brush) {
   }
 
   const fgSelection = document.getElementById('foreground-selection'),
-        fgColor = brush.tile.foregroundColor;
-  fgSelection.style.backgroundColor = cssHexColor(fgColor.r, fgColor.g, fgColor.b);
+        bgSelection = document.getElementById('background-selection'),
+        fgColor = brush.tile.foregroundColor,
+        bgColor = brush.tile.backgroundColor;
+  if (fgColor) {
+    fgSelection.classList.remove('no-color');
+    fgSelection.style.backgroundColor = cssHexColor(fgColor.r, fgColor.g, fgColor.b);
+  } else {
+    fgSelection.classList.add('no-color');
+    fgSelection.style.backgroundColor = null;
+  }
+  if (bgColor) {
+    bgSelection.classList.remove('no-color');
+    bgSelection.style.backgroundColor = cssHexColor(bgColor.r, bgColor.g, bgColor.b);
+  } else {
+    bgSelection.classList.add('no-color');
+    bgSelection.style.backgroundColor = null;
+  }
 }
 
 export default {
