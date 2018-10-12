@@ -76,8 +76,10 @@ function drawPalette(doc, brush) {
 
   const fgSelection = document.getElementById('foreground-selection'),
         bgSelection = document.getElementById('background-selection'),
+        fillSelection = document.getElementById('fill-selection'),
         fgColor = brush.tile.foregroundColor,
-        bgColor = brush.tile.backgroundColor;
+        bgColor = brush.tile.backgroundColor,
+        fillColor = brush.fillColor;
   if (fgColor) {
     fgSelection.classList.remove('no-color');
     fgSelection.style.backgroundColor = cssHexColor(fgColor.r, fgColor.g, fgColor.b);
@@ -91,6 +93,13 @@ function drawPalette(doc, brush) {
   } else {
     bgSelection.classList.add('no-color');
     bgSelection.style.backgroundColor = null;
+  }
+  if (fillColor) {
+    fillSelection.classList.remove('no-color');
+    fillSelection.style.backgroundColor = cssHexColor(fillColor.r, fillColor.g, fillColor.b);
+  } else {
+    fillSelection.classList.add('no-color');
+    fillSelection.style.backgroundColor = null;
   }
 }
 

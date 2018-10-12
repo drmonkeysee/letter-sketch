@@ -1,6 +1,7 @@
 $content-width: 400px;
-$thin-strong-border: solid 1px black;
-$thin-medium-border: solid 1px gray;
+$border-thin: solid 1px;
+$color-outline-control: gray;
+$color-outline-layout: black;
 $color-selection-dim: 50px;
 $color-selection-border-thickness: 2px;
 $color-selection-offset: 10px;
@@ -24,12 +25,12 @@ body {
   width: $content-width;
   display: grid;
   grid-template-columns: repeat(16, 1fr);
-  border-left: $thin-medium-border;
-  border-top: $thin-medium-border;
+  border-left: $border-thin $color-outline-control;
+  border-top: $border-thin $color-outline-control;
   
   div {
-    border-right: $thin-medium-border;
-    border-bottom: $thin-medium-border;
+    border-right: $border-thin $color-outline-control;
+    border-bottom: $border-thin $color-outline-control;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,26 +47,22 @@ body {
   & > div {
     width: 100px;
     height: 100px;
-    border-left: $thin-strong-border;
+    border-left: $border-thin $color-outline-layout;
   }
 
   & > :last-child {
-    border-right: $thin-strong-border;
+    border-right: $border-thin $color-outline-layout;
   }
 
   #color-selections {
     position: relative;
 
     .color-selection {
-      width: calc($color-selection-dim - (2 * $color-selection-border-thickness));
-      height: calc($color-selection-dim - (2 * $color-selection-border-thickness));
-      position: absolute;
-      border: $color-selection-border-thickness solid gray;
       overflow: hidden;
 
       hr {
         border: none;
-        border-top: $thin-strong-border;
+        border-top: $border-thin;
         width: 200%;
         height: 0;
         padding: 0;
@@ -91,6 +88,27 @@ body {
       }
     }
     
+    #fill-selection {
+      width: 100%;
+      height: 100%;
+      position: relative;
+
+      hr {
+        border-top-color: $color-outline-layout;
+      }
+    }
+
+    .tile-color {
+      width: calc($color-selection-dim - (2 * $color-selection-border-thickness));
+      height: calc($color-selection-dim - (2 * $color-selection-border-thickness));
+      position: absolute;
+      border: $color-selection-border-thickness solid $color-outline-control;
+
+      hr {
+        border-top-color: $color-outline-control;
+      }
+    }
+
     #background-selection {
       bottom: $color-selection-offset;
       right: $color-selection-offset;
