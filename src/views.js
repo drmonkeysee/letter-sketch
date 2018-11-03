@@ -20,6 +20,10 @@ class GlyphRuler extends View {
     const {height, width} = this._ruler.getBoundingClientRect();
     return {height, width};
   }
+
+  get referenceGlyph() {
+    return this._ruler.textContext;
+  }
 }
 
 export default function () {
