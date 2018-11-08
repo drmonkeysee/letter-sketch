@@ -3,76 +3,6 @@ import {CommandDispatcher} from './commands.js';
 import {ViewNotifier} from './refresh.js';
 import allViews from './views.js';
 
-function drawLetterBlock(doc, brush) {
-  const letterBlock = doc.getElementById('letter-block');
-  for (const letter of cp437) {
-    const blockText = doc.createElement('span');
-    blockText.textContent = letter;
-    
-    const blockCell = doc.createElement('div');
-    blockCell.appendChild(blockText);
-    blockCell.style.height = `${1.5 * brush.tileSize.height}px`;
-    if (letter == brush.tile.glyph) {
-      blockCell.className = 'selected';
-    }
-    letterBlock.appendChild(blockCell);
-  }
-}
-
-function drawPalette(doc, brush) {
-  const palette = doc.getElementById('palette'),
-        colorSteps = [0x00, 0x80, 0xff],
-        byteHex = n => {
-          const s = n.toString(16);
-          return n < 0x10 ? `0${s}` : s;
-        },
-        cssHexColor = (r, g, b) => `#${byteHex(r)}${byteHex(g)}${byteHex(b)}`
-  
-  for (const redStep of colorSteps) {
-    const colorColumn = doc.createElement('div');
-    palette.appendChild(colorColumn);
-    
-    for (const greenStep of colorSteps) {
-      for (const blueStep of colorSteps) {
-        const colorCell = doc.createElement('div');
-        colorCell.className = 'palette-cell';
-        const cssColor = cssHexColor(redStep, greenStep, blueStep);
-        colorCell.style.backgroundColor = cssColor;
-        colorCell.dataset.hexColor = cssColor;
-        colorColumn.appendChild(colorCell);
-      }
-    }
-  }
-
-  const fgSelection = doc.getElementById('foreground-selection'),
-        bgSelection = doc.getElementById('background-selection'),
-        fillSelection = doc.getElementById('fill-selection'),
-        fgColor = brush.tile.foregroundColor,
-        bgColor = brush.tile.backgroundColor,
-        fillColor = brush.fillColor;
-  if (fgColor) {
-    fgSelection.classList.remove('no-color');
-    fgSelection.style.backgroundColor = cssHexColor(fgColor.r, fgColor.g, fgColor.b);
-  } else {
-    fgSelection.classList.add('no-color');
-    fgSelection.style.backgroundColor = null;
-  }
-  if (bgColor) {
-    bgSelection.classList.remove('no-color');
-    bgSelection.style.backgroundColor = cssHexColor(bgColor.r, bgColor.g, bgColor.b);
-  } else {
-    bgSelection.classList.add('no-color');
-    bgSelection.style.backgroundColor = null;
-  }
-  if (fillColor) {
-    fillSelection.classList.remove('no-color');
-    fillSelection.style.backgroundColor = cssHexColor(fillColor.r, fillColor.g, fillColor.b);
-  } else {
-    fillSelection.classList.add('no-color');
-    fillSelection.style.backgroundColor = null;
-  }
-}
-
 class App {
   constructor(win, dispatch, notify) {
     this.win = win;
@@ -96,9 +26,6 @@ class App {
     //registerViews();
 
     console.log('started letter-sketch');
-
-    //drawLetterBlock(this.doc, this.currentBrush);
-    drawPalette(this.doc, this.currentBrush);
 
     const rect = canvas.getBoundingClientRect(),
           dpr = this.win.devicePixelRatio || 1;
