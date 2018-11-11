@@ -1,7 +1,7 @@
 $content-width: 400px;
 $border-thin: solid 1px;
-$color-outline-control: gray;
-$color-outline-layout: black;
+$color-border-control: gray;
+$color-border-layout: black;
 $color-selection-dim: 50px;
 $color-selection-border-thickness: 2px;
 $color-selection-offset: 10px;
@@ -25,12 +25,12 @@ body {
   width: $content-width;
   display: grid;
   grid-template-columns: repeat(16, 1fr);
-  border-left: $border-thin $color-outline-control;
-  border-top: $border-thin $color-outline-control;
+  border-left: $border-thin $color-border-control;
+  border-top: $border-thin $color-border-control;
   
   div {
-    border-right: $border-thin $color-outline-control;
-    border-bottom: $border-thin $color-outline-control;
+    border-right: $border-thin $color-border-control;
+    border-bottom: $border-thin $color-border-control;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -47,11 +47,11 @@ body {
   & > div {
     width: 100px;
     height: 100px;
-    border-left: $border-thin $color-outline-layout;
+    border-left: $border-thin $color-border-layout;
   }
 
   & > :last-child {
-    border-right: $border-thin $color-outline-layout;
+    border-right: $border-thin $color-border-layout;
   }
 
   #color-selections {
@@ -94,7 +94,7 @@ body {
       position: relative;
 
       hr {
-        border-top-color: $color-outline-layout;
+        border-top-color: $color-border-layout;
       }
     }
 
@@ -102,10 +102,10 @@ body {
       width: calc($color-selection-dim - (2 * $color-selection-border-thickness));
       height: calc($color-selection-dim - (2 * $color-selection-border-thickness));
       position: absolute;
-      border: $color-selection-border-thickness solid $color-outline-control;
+      border: $color-selection-border-thickness solid $color-border-control;
 
       hr {
-        border-top-color: $color-outline-control;
+        border-top-color: $color-border-control;
       }
     }
 
