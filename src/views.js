@@ -56,9 +56,12 @@ class ColorPalette extends View {
     super(doc);
     this._colorSteps = [0x00, 0x80, 0xff];
     this._palette = doc.getElementById('palette');
-    this._fgSelection = doc.getElementById('foreground-selection');
-    this._bgSelection = doc.getElementById('background-selection');
-    this._fillSelection = doc.getElementById('fill-selection');
+    this._colorSelections = [
+      doc.getElementById('foreground-selection'),
+      doc.getElementById('background-selection'),
+      doc.getElementById('fill-selection')
+    ];
+    [this._fgSelection, this._bgSelection, this._fillSelection] = this._colorSelections;
   }
 
   draw() {
@@ -73,6 +76,7 @@ class ColorPalette extends View {
           const cssColor = this._cssHexColor(redStep, greenStep, blueStep);
           colorCell.style.backgroundColor = cssColor;
           colorCell.dataset.hexColor = cssColor;
+          colorCell.addEventListener('click', this._pickColor);
           colorColumn.appendChild(colorCell);
         }
       }
@@ -85,6 +89,23 @@ class ColorPalette extends View {
     this._setColorSelection(this._fgSelection, fgColor);
     this._setColorSelection(this._bgSelection, bgColor);
     this._setColorSelection(this._fillSelection, fillColor);
+
+    const handler = e => this._setCurrentSelection(e.target);
+    for (const selection of this._colorSelections) {
+      selection.addEventListener('click', handler);
+    }
+    this._setCurrentSelection(this._fgSelection);
+  }
+
+  _setCurrentSelection(targetSelection) {
+    for (const selection of this._colorSelections) {
+      selection.classList.remove('selected');
+    }
+    targetSelection.classList.add('selected');
+  }
+
+  _pickColor(event) {
+    console.log('picked color %o', event);
   }
 
   _setColorSelection(selection, color) {
@@ -97,13 +118,13 @@ class ColorPalette extends View {
     }
   }
 
+  _cssHexColor(r, g, b) {
+    return `#${this._byteHex(r)}${this._byteHex(g)}${this._byteHex(b)}`;
+  }
+
   _byteHex(n) {
     const s = n.toString(16);
     return n < 0x10 ? `0${s}` : s;
-  }
-
-  _cssHexColor(r, g, b) {
-    return `#${this._byteHex(r)}${this._byteHex(g)}${this._byteHex(b)}`;
   }
 }
 

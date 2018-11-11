@@ -86,6 +86,10 @@ body {
           visibility: visible;
         }
       }
+
+      &.selected {
+        outline: gold dotted 2px;
+      }
     }
     
     #fill-selection {
