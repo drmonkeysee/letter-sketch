@@ -3,15 +3,16 @@ import {CP437, DEFAULT_GLYPH} from './codepage.js';
 import {Color} from './models.js';
 
 class View {
-  constructor(doc) {
+  constructor(doc, dispatch) {
     this._doc = doc;
+    this._dispatch = dispatch;
   }
 }
 
 class GlyphRuler extends View {
-  constructor(doc) {
-    super(doc);
-    this._ruler = doc.getElementById('glyph-ruler');
+  constructor(...args) {
+    super(...args);
+    this._ruler = this._doc.getElementById('glyph-ruler');
   }
 
   draw() {
@@ -29,9 +30,9 @@ class GlyphRuler extends View {
 }
 
 class LetterBlock extends View {
-  constructor(doc) {
-    super(doc);
-    this._block = doc.getElementById('letter-block');
+  constructor(...args) {
+    super(...args);
+    this._block = this._doc.getElementById('letter-block');
   }
 
   draw() {
@@ -52,16 +53,17 @@ class LetterBlock extends View {
 }
 
 class ColorPalette extends View {
-  constructor(doc) {
-    super(doc);
+  constructor(...args) {
+    super(...args);
     this._colorSteps = [0x00, 0x80, 0xff];
-    this._palette = doc.getElementById('palette');
+    this._palette = this._doc.getElementById('palette');
     this._colorSelections = [
-      doc.getElementById('foreground-selection'),
-      doc.getElementById('background-selection'),
-      doc.getElementById('fill-selection')
+      this._doc.getElementById('foreground-selection'),
+      this._doc.getElementById('background-selection'),
+      this._doc.getElementById('fill-selection')
     ];
     [this._fgSelection, this._bgSelection, this._fillSelection] = this._colorSelections;
+    this._currentSelection = null;
   }
 
   draw() {
@@ -76,7 +78,7 @@ class ColorPalette extends View {
           const cssColor = this._cssHexColor(redStep, greenStep, blueStep);
           colorCell.style.backgroundColor = cssColor;
           colorCell.dataset.hexColor = cssColor;
-          colorCell.addEventListener('click', this._pickColor);
+          colorCell.addEventListener('click', this._pickColor.bind(this));
           colorColumn.appendChild(colorCell);
         }
       }
@@ -102,10 +104,12 @@ class ColorPalette extends View {
       selection.classList.remove('selected');
     }
     targetSelection.classList.add('selected');
+    this._currentSelection = targetSelection;
   }
 
   _pickColor(event) {
-    console.log('picked color %o', event);
+    // TODO: reverse dispatch to ColorSelection to determine fg, bg, fill
+    this._dispatch.dispatch('setForegroundColor', event.target.dataset.hexColor);
   }
 
   _setColorSelection(selection, color) {

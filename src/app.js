@@ -7,7 +7,7 @@ class App {
   constructor(win, dispatch, notify) {
     this.win = win;
     this.doc = win.document;
-    this.dispath = dispatch;
+    this.dispatch = dispatch;
     this.notify = notify;
   }
 
@@ -22,7 +22,7 @@ class App {
     this.createModels();
     this.createViews();
     this.syncModels();
-    //wireCommands();
+    this.wireCommands();
     //registerViews();
 
     console.log('started letter-sketch');
@@ -142,7 +142,7 @@ class App {
     for (const viewClass of allViews()) {
       let name = viewClass.name;
       name = name.replace(name[0], name[0].toLowerCase());
-      views[name] = new viewClass(this.doc);
+      views[name] = new viewClass(this.doc, this.dispatch);
     }
     for (const v of Object.values(views)) {
       v.draw();
@@ -155,6 +155,10 @@ class App {
   syncModels() {
     this.currentBrush.tile.glyph = this.views.glyphRuler.referenceGlyph;
     this.currentBrush.tileSize = this.views.glyphRuler.glyphExtent;
+  }
+
+  wireCommands() {
+    this.dispatch.createCommands(this.currentBrush);
   }
 }
 
