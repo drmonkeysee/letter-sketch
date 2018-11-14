@@ -9,6 +9,7 @@ class App {
     this.doc = win.document;
     this.dispatch = dispatch;
     this.notify = notify;
+    this.models = {};
   }
 
   initialize() {
@@ -132,9 +133,11 @@ class App {
   }
 
   createModels() {
-    this.currentBrush = makeBrush(
+    this.models.currentBrush = makeBrush(
       makeTile(null, Color.BLACK, null)
     );
+    // TODO: is there a better way to do this? dispatcher is a bit like the AppController
+    this.dispatch.models = this.models;
   }
 
   createViews() {
@@ -153,12 +156,12 @@ class App {
   // TODO: replace this with event storm on init?
   // chicken and egg, model should determine data but tile size must come from DOM
   syncModels() {
-    this.currentBrush.tile.glyph = this.views.glyphRuler.referenceGlyph;
-    this.currentBrush.tileSize = this.views.glyphRuler.glyphExtent;
+    this.models.currentBrush.tile.glyph = this.views.glyphRuler.referenceGlyph;
+    this.models.currentBrush.tileSize = this.views.glyphRuler.glyphExtent;
   }
 
   wireCommands() {
-    this.dispatch.createCommands(this.currentBrush);
+    // TODO: is this necessary?
   }
 }
 

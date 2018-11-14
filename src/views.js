@@ -109,7 +109,8 @@ class ColorPalette extends View {
 
   _pickColor(event) {
     // TODO: reverse dispatch to ColorSelection to determine fg, bg, fill
-    this._dispatch.dispatch('setForegroundColor', event.target.dataset.hexColor);
+    // Command per UI element?
+    this._dispatch.command('setForegroundColor', event.target.dataset.hexColor);
   }
 
   _setColorSelection(selection, color) {
