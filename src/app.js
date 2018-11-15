@@ -136,8 +136,6 @@ class App {
     this.models.currentBrush = makeBrush(
       makeTile(null, Color.BLACK, null)
     );
-    // TODO: is there a better way to do this? dispatcher is a bit like the AppController
-    this.dispatch.models = this.models;
   }
 
   createViews() {
@@ -161,7 +159,7 @@ class App {
   }
 
   wireCommands() {
-    // TODO: is this necessary?
+    this.dispatch.bindCommands(this.models);
   }
 }
 

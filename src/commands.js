@@ -1,12 +1,24 @@
+import {Color} from './models.js';
+
+// TODO: move this somewhere else
+function toColor(hexColor) {
+  const step = 2,
+        start = hexColor.length % 2 ? 1 : 0,
+        offsets = hexColor.length > 7 ? [1, 2, 3, 4] : [1, 2, 3],
+        channels = offsets.map(i => parseInt(hexColor.substring(start * i, (start * i) + step), 16));
+  return new Color(...channels);
+}
+
 class SetForegroundColor {
-  constructor(dispatcher, hexColor) {
-    this.brushTile = dispatcher.models.currentBrush.tile;
+  constructor(models, hexColor) {
+    this.brushTile = models.currentBrush.tile;
     this.hexColor = hexColor;
   }
 
   execute() {
     console.log('set fg color: %o', this.hexColor);
-    //this.brushTile.foregroundColor = CONVERT this.hexColor;
+    this.brushTile.foregroundColor = toColor(this.hexColor);
+    console.log('updated tile: %o', this.brushTile);
   }
 }
 
@@ -15,23 +27,24 @@ const CMD_REGISTRY = [
 ];
 
 export class CommandDispatcher {
-  constructor() {
-    // TODO: abstract this into a ClassMap
+  bindCommands(models) {
+    // TODO: abstract this into a ClassMap?
     this._commands = CMD_REGISTRY.reduce(
       (cmds, cls) => {
         let name = cls.name;
         name = name.replace(name[0], name[0].toLowerCase());
-        cmds[name] = cls;
+        // create cmd factory per class that captures models for ctor binding
+        cmds[name] = (...args) => new cls(models, ...args);
         return cmds;
       },
       {}
-    )
+    );
   }
 
   command(name, ...args) {
     const cmdCls = this._commands[name];
     if (cmdCls) {
-      const cmd = new cmdCls(this, ...args);
+      const cmd = new cmdCls(...args);
       cmd.execute();
     } else {
       throw new Error(`Unknown command: ${name}`);
