@@ -7,6 +7,10 @@ class View {
     this._doc = doc;
     this._dispatch = dispatch;
   }
+
+  subscribe(notifier) {
+    // do nothing by default
+  }
 }
 
 class GlyphRuler extends View {
@@ -66,6 +70,10 @@ class ColorPalette extends View {
     this._currentSelection = null;
   }
 
+  subscribe(notifier) {
+    notifier.subscribe('onForegroundColorChanged', this._refreshColor.bind(this));
+  }
+
   draw() {
     for (const redStep of this._colorSteps) {
       const colorColumn = this._doc.createElement('div');
@@ -108,9 +116,14 @@ class ColorPalette extends View {
   }
 
   _pickColor(event) {
-    // TODO: reverse dispatch to ColorSelection to determine fg, bg, fill
+    // TODO: reverse dispatch to ColorSelection view to determine fg, bg, fill
     // Command per UI element?
     this._dispatch.command('setForegroundColor', event.target.dataset.hexColor);
+  }
+
+  _refreshColor(update) {
+    const color = update.color;
+    this._fgSelection.style.backgroundColor = this._cssHexColor(color.r, color.g, color.b);
   }
 
   _setColorSelection(selection, color) {

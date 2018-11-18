@@ -1,14 +1,14 @@
 import {makeBrush, makeTile, Color} from './models.js';
-import {CommandDispatcher} from './commands.js';
 import {ViewNotifier} from './refresh.js';
+import {CommandDispatcher} from './commands.js';
 import allViews from './views.js';
 
 class App {
-  constructor(win, dispatch, notify) {
+  constructor(win, notifier, dispatcher) {
     this.win = win;
     this.doc = win.document;
-    this.dispatch = dispatch;
-    this.notify = notify;
+    this.notifier = notifier;
+    this.dispatcher = dispatcher;
     this.models = {};
   }
 
@@ -24,7 +24,7 @@ class App {
     this.createViews();
     this.syncModels();
     this.wireCommands();
-    //registerViews();
+    this.registerViews();
 
     console.log('started letter-sketch');
 
@@ -143,7 +143,7 @@ class App {
     for (const viewClass of allViews()) {
       let name = viewClass.name;
       name = name.replace(name[0], name[0].toLowerCase());
-      views[name] = new viewClass(this.doc, this.dispatch);
+      views[name] = new viewClass(this.doc, this.dispatcher);
     }
     for (const v of Object.values(views)) {
       v.draw();
@@ -159,7 +159,11 @@ class App {
   }
 
   wireCommands() {
-    this.dispatch.bindCommands(this.models);
+    this.dispatcher.bindCommands(this.models);
+  }
+
+  registerViews() {
+    this.notifier.register(Object.values(this.views));
   }
 }
 
@@ -167,7 +171,9 @@ let app = null;
 
 export default {
   start(win) {
-    app = new App(win, new CommandDispatcher(), new ViewNotifier());
+    const notifier = new ViewNotifier(),
+          dispatcher = new CommandDispatcher(notifier);
+    app = new App(win, notifier, dispatcher);
     app.initialize();
   }
 };

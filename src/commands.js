@@ -20,9 +20,8 @@ class SetForegroundColor {
   }
 
   execute() {
-    console.log('set fg color: %o', this.hexColor);
     this.brushTile.foregroundColor = toColor(this.hexColor);
-    console.log('updated tile: %o', this.brushTile);
+    return {event: 'onForegroundColorChanged', color: this.brushTile.foregroundColor};
   }
 }
 
@@ -31,6 +30,10 @@ const CMD_REGISTRY = [
 ];
 
 export class CommandDispatcher {
+  constructor(notifier) {
+    this.notifier = notifier;
+  }
+
   bindCommands(models) {
     // TODO: abstract this into a ClassMap?
     this._commands = CMD_REGISTRY.reduce(
@@ -47,11 +50,11 @@ export class CommandDispatcher {
 
   command(name, ...args) {
     const cmdCls = this._commands[name];
-    if (cmdCls) {
-      const cmd = new cmdCls(...args);
-      cmd.execute();
-    } else {
+    if (!cmdCls) {
       throw new Error(`Unknown command: ${name}`);
     }
+    const cmd = new cmdCls(...args),
+          update = cmd.execute();
+    this.notifier.signal(update);
   }
 }
