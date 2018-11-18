@@ -2,10 +2,14 @@ import {Color} from './models.js';
 
 // TODO: move this somewhere else
 function toColor(hexColor) {
+  // chop the leading '#'
+  if (hexColor.length % 2) {
+    hexColor = hexColor.substring(1);
+  }
   const step = 2,
-        start = hexColor.length % 2 ? 1 : 0,
-        offsets = hexColor.length > 7 ? [1, 2, 3, 4] : [1, 2, 3],
-        channels = offsets.map(i => parseInt(hexColor.substring(start * i, (start * i) + step), 16));
+        start = 0,
+        offsets = hexColor.length > 7 ? [0, 1, 2, 3] : [0, 1, 2],
+        channels = offsets.map(i => parseInt(hexColor.substring(start + (step * i), step + (step * i)), 16));
   return new Color(...channels);
 }
 
