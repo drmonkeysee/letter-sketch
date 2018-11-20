@@ -1,4 +1,5 @@
 import {CP437, DEFAULT_GLYPH} from './codepage.js';
+import {EVENTS} from './refresh.js';
 // TODO: temporary import to get display working
 import {Color} from './models.js';
 
@@ -71,7 +72,7 @@ class ColorPalette extends View {
   }
 
   subscribe(notifier) {
-    notifier.subscribe('onForegroundColorChanged', this._refreshColor.bind(this));
+    notifier.subscribe(EVENTS.onForegroundColorChanged, this._refreshColor.bind(this));
   }
 
   draw() {

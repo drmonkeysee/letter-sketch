@@ -1,3 +1,4 @@
+import {EVENTS, makeUpdate} from './refresh.js';
 import {Color} from './models.js';
 
 // TODO: move this somewhere else
@@ -21,7 +22,7 @@ class SetForegroundColor {
 
   execute() {
     this.brushTile.foregroundColor = toColor(this.hexColor);
-    return {event: 'onForegroundColorChanged', color: this.brushTile.foregroundColor};
+    return makeUpdate(EVENTS.onForegroundColorChanged, {color: this.brushTile.foregroundColor});
   }
 }
 
@@ -43,8 +44,7 @@ export class CommandDispatcher {
         // create cmd factory per class that captures models for ctor binding
         cmds[name] = (...args) => new cls(models, ...args);
         return cmds;
-      },
-      {}
+      }, {}
     );
   }
 
