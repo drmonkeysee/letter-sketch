@@ -1,3 +1,4 @@
+import makeNameMap from './namemap.js';
 import {EVENTS, makeUpdate} from './refresh.js';
 import {Color} from './models.js';
 
@@ -16,45 +17,18 @@ function toColor(hexColor) {
 
 class SetForegroundColor {
   constructor(models, hexColor) {
-    this.brushTile = models.currentBrush.tile;
-    this.hexColor = hexColor;
+    this._brushTile = models.currentBrush.tile;
+    this._hexColor = hexColor;
   }
 
   execute() {
-    this.brushTile.foregroundColor = toColor(this.hexColor);
-    return makeUpdate(EVENTS.onForegroundColorChanged, {color: this.brushTile.foregroundColor});
+    this._brushTile.foregroundColor = toColor(this._hexColor);
+    return makeUpdate(EVENTS.onForegroundColorChanged, {color: this._brushTile.foregroundColor});
   }
 }
 
-const CMD_REGISTRY = [
+export const COMMAND_REGISTRY = [
   SetForegroundColor
 ];
 
-export class CommandDispatcher {
-  constructor(notifier) {
-    this.notifier = notifier;
-  }
-
-  bindCommands(models) {
-    // TODO: abstract this into a ClassMap?
-    this._commands = CMD_REGISTRY.reduce(
-      (cmds, cls) => {
-        let name = cls.name;
-        name = name.replace(name[0], name[0].toLowerCase());
-        // create cmd factory per class that captures models for ctor binding
-        cmds[name] = (...args) => new cls(models, ...args);
-        return cmds;
-      }, {}
-    );
-  }
-
-  command(name, ...args) {
-    const cmdCls = this._commands[name];
-    if (!cmdCls) {
-      throw new Error(`Unknown command: ${name}`);
-    }
-    const cmd = new cmdCls(...args),
-          update = cmd.execute();
-    this.notifier.signal(update);
-  }
-}
+export const COMMANDS = makeNameMap(COMMAND_REGISTRY, (name, c) => Symbol(name));

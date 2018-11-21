@@ -1,14 +1,15 @@
+import makeNameMap from './namemap.js';
 import {makeBrush, makeTile, Color} from './models.js';
 import {ViewNotifier} from './refresh.js';
-import {CommandDispatcher} from './commands.js';
-import allViews from './views.js';
+import dispatchFactory from './dispatch.js';
+import {VIEW_REGISTRY} from './views.js';
 
 class App {
-  constructor(win, notifier, dispatcher) {
+  constructor(win, notifier, dispatchFactory) {
     this.win = win;
     this.doc = win.document;
     this.notifier = notifier;
-    this.dispatcher = dispatcher;
+    this.dispatchFactory = dispatchFactory;
     this.models = {};
   }
 
@@ -21,10 +22,10 @@ class App {
     }
 
     this.createModels();
-    this.createViews();
-    this.syncModels();
     this.wireCommands();
+    this.createViews();
     this.registerViews();
+    this.syncModels();
 
     console.log('started letter-sketch');
 
@@ -138,17 +139,20 @@ class App {
     );
   }
 
+  wireCommands() {
+    this.dispatcher = this.dispatchFactory(this.notifier, this.models);
+  }
+
   createViews() {
-    const views = {};
-    for (const viewClass of allViews()) {
-      let name = viewClass.name;
-      name = name.replace(name[0], name[0].toLowerCase());
-      views[name] = new viewClass(this.doc, this.dispatcher);
-    }
+    const views = makeNameMap(VIEW_REGISTRY, (n, viewCls) => new viewCls(this.doc, this.dispatcher));
     for (const v of Object.values(views)) {
       v.draw();
     }
     this.views = views;
+  }
+
+  registerViews() {
+    this.notifier.register(...Object.values(this.views));
   }
 
   // TODO: replace this with event storm on init?
@@ -157,23 +161,13 @@ class App {
     this.models.currentBrush.tile.glyph = this.views.glyphRuler.referenceGlyph;
     this.models.currentBrush.tileSize = this.views.glyphRuler.glyphExtent;
   }
-
-  wireCommands() {
-    this.dispatcher.bindCommands(this.models);
-  }
-
-  registerViews() {
-    this.notifier.register(Object.values(this.views));
-  }
 }
 
 let app = null;
 
 export default {
   start(win) {
-    const notifier = new ViewNotifier(),
-          dispatcher = new CommandDispatcher(notifier);
-    app = new App(win, notifier, dispatcher);
+    app = new App(win, new ViewNotifier(), dispatchFactory);
     app.initialize();
   }
 };

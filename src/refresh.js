@@ -1,13 +1,10 @@
+import makeNameMap from './namemap.js';
+
 const EVENT_NAMES = [
-  'onForegroundColorChanged'
+  'OnForegroundColorChanged'
 ];
 
-export const EVENTS = EVENT_NAMES.reduce(
-  (obj, name) => {
-    obj[name] = Symbol(name);
-    return obj;
-  }, {}
-);
+export const EVENTS = makeNameMap(EVENT_NAMES, (name, e) => Symbol(name));
 
 export function makeUpdate(event, data) {
   return {event: event, ...data};
@@ -19,7 +16,7 @@ export class ViewNotifier {
     this._notifications = {};
   }
 
-  register(views) {
+  register(...views) {
     for (const view of views) {
       view.subscribe(this);
     }

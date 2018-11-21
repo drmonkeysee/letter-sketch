@@ -2,6 +2,7 @@ import {CP437, DEFAULT_GLYPH} from './codepage.js';
 import {EVENTS} from './refresh.js';
 // TODO: temporary import to get display working
 import {Color} from './models.js';
+import {COMMANDS} from './commands.js';
 
 class View {
   constructor(doc, dispatch) {
@@ -118,8 +119,7 @@ class ColorPalette extends View {
 
   _pickColor(event) {
     // TODO: reverse dispatch to ColorSelection view to determine fg, bg, fill
-    // Command per UI element?
-    this._dispatch.command('setForegroundColor', event.target.dataset.hexColor);
+    this._dispatch.command(COMMANDS.setForegroundColor, event.target.dataset.hexColor);
   }
 
   _refreshColor(update) {
@@ -147,10 +147,8 @@ class ColorPalette extends View {
   }
 }
 
-export default function () {
-  return [
-    GlyphRuler,
-    LetterBlock,
-    ColorPalette
-  ];
-};
+export const VIEW_REGISTRY = [
+  GlyphRuler,
+  LetterBlock,
+  ColorPalette
+];
