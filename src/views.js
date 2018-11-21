@@ -1,7 +1,7 @@
 import {CP437, DEFAULT_GLYPH} from './codepage.js';
 import {EVENTS} from './refresh.js';
 // TODO: temporary import to get display working
-import {Color} from './models.js';
+import {colorToCssHex, Color} from './models/color.js';
 import {COMMANDS} from './commands.js';
 
 class View {
@@ -85,7 +85,7 @@ class ColorPalette extends View {
         for (const blueStep of this._colorSteps) {
           const colorCell = this._doc.createElement('div');
           colorCell.className = 'palette-cell';
-          const cssColor = this._cssHexColor(redStep, greenStep, blueStep);
+          const cssColor = colorToCssHex(redStep, greenStep, blueStep);
           colorCell.style.backgroundColor = cssColor;
           colorCell.dataset.hexColor = cssColor;
           colorCell.addEventListener('click', this._pickColor.bind(this));
@@ -124,26 +124,17 @@ class ColorPalette extends View {
 
   _refreshColor(update) {
     const color = update.color;
-    this._fgSelection.style.backgroundColor = this._cssHexColor(color.r, color.g, color.b);
+    this._fgSelection.style.backgroundColor = colorToCssHex(color);
   }
 
   _setColorSelection(selection, color) {
     if (color) {
       selection.classList.remove('no-color');
-      selection.style.backgroundColor = this._cssHexColor(color.r, color.g, color.b);
+      selection.style.backgroundColor = colorToCssHex(color);
     } else {
       selection.classList.add('no-color');
       selection.style.backgroundColor = null;
     }
-  }
-
-  _cssHexColor(r, g, b) {
-    return `#${this._byteHex(r)}${this._byteHex(g)}${this._byteHex(b)}`;
-  }
-
-  _byteHex(n) {
-    const s = n.toString(16);
-    return n < 0x10 ? `0${s}` : s;
   }
 }
 
