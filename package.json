@@ -5,7 +5,7 @@
   "browser": "main.js",
   "scripts": {
     "start": "node_modules/.bin/parcel index.html",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --require test/mochaBootstrap.js --recursive",
     "clean": "rm -r dist",
     "scrub": "npm run clean && rm -r node_modules"
   },
