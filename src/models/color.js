@@ -36,7 +36,7 @@ export function cssHexToColor(cssHex) {
   }
   const step = 2,
         start = 0,
-        offsetFactors = cssHex.length > 7 ? [0, 1, 2, 3] : [0, 1, 2],
+        offsetFactors = cssHex.length > 6 ? [0, 1, 2, 3] : [0, 1, 2],
         channels = offsetFactors.map(i => {
           const offset = step * i;
           return parseInt(cssHex.substring(start + offset, step + offset), 16)
