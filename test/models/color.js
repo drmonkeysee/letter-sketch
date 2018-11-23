@@ -57,6 +57,24 @@ describe('Color', function () {
       expect(c.b).to.equal(0x00);
       expect(c.a).to.equal(0xff);
     });
+
+    it('handles undefined arguments', function () {
+      const c = new Color();
+
+      expect(c.r).to.equal(0x00);
+      expect(c.g).to.equal(0x00);
+      expect(c.b).to.equal(0x00);
+      expect(c.a).to.equal(0xff);
+    });
+
+    it('handles NaN arguments', function () {
+      const c = new Color(NaN, NaN, NaN, NaN);
+
+      expect(c.r).to.equal(0x00);
+      expect(c.g).to.equal(0x00);
+      expect(c.b).to.equal(0x00);
+      expect(c.a).to.equal(0x00);
+    });
   });
 });
 
@@ -147,6 +165,39 @@ describe('#cssHexToColor()', function () {
     expect(c.g).to.equal(0xaa);
     expect(c.b).to.equal(0x44);
     expect(c.a).to.equal(0xbb);
+  });
+
+  it('parses empty string', function () {
+    const s = '';
+    
+    const c = cssHexToColor(s);
+
+    expect(c.r).to.equal(0x00);
+    expect(c.g).to.equal(0x00);
+    expect(c.b).to.equal(0x00);
+    expect(c.a).to.equal(0xff);
+  });
+
+  it('parses invalid string', function () {
+    const s = 'this is not a number';
+    
+    const c = cssHexToColor(s);
+
+    expect(c.r).to.equal(0x00);
+    expect(c.g).to.equal(0x00);
+    expect(c.b).to.equal(0x00);
+    expect(c.a).to.equal(0x00);
+  });
+
+  it('ignores extra characters', function () {
+    const s = '#23ab45bc123456';
+    
+    const c = cssHexToColor(s);
+
+    expect(c.r).to.equal(0x23);
+    expect(c.g).to.equal(0xab);
+    expect(c.b).to.equal(0x45);
+    expect(c.a).to.equal(0xbc);
   });
 });
 

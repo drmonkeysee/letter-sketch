@@ -1,7 +1,7 @@
 const COLOR_CHANNEL_MIN = 0x00, COLOR_CHANNEL_MAX = 0xff;
 
 function clamp(value) {
-  return Math.max(COLOR_CHANNEL_MIN, Math.min(value, COLOR_CHANNEL_MAX));
+  return Math.max(COLOR_CHANNEL_MIN, Math.min(value || COLOR_CHANNEL_MIN, COLOR_CHANNEL_MAX));
 }
 
 function byteHex(n) {
@@ -39,7 +39,7 @@ export function cssHexToColor(cssHex) {
         offsetFactors = cssHex.length > 6 ? [0, 1, 2, 3] : [0, 1, 2],
         channels = offsetFactors.map(i => {
           const offset = step * i;
-          return parseInt(cssHex.substring(start + offset, step + offset), 16)
+          return parseInt(cssHex.substring(start + offset, step + offset), 16);
         });
   return new Color(...channels);
 };
