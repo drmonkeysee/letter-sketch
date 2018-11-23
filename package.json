@@ -4,7 +4,7 @@
   "description": "An ASCII sketch program",
   "browser": "main.js",
   "scripts": {
-    "start": "node_modules/.bin/parcel index.html",
+    "start": "parcel index.html",
     "test": "mocha --require test/mochaBootstrap.js --recursive",
     "clean": "rm -r dist",
     "scrub": "npm run clean && rm -r node_modules"
