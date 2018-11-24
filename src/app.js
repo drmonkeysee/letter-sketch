@@ -1,6 +1,5 @@
 import makeNameMap from './namemap.js';
-import {makeBrush, makeTile} from './models/brush.js';
-import {Color} from './models/color.js';
+import {makeBrush} from './models/brush.js';
 import {ViewNotifier} from './refresh.js';
 import dispatchFactory from './dispatch.js';
 import {VIEW_REGISTRY} from './views.js';
@@ -135,9 +134,7 @@ class App {
   }
 
   createModels() {
-    this.models.currentBrush = makeBrush(
-      makeTile(null, Color.BLACK, null)
-    );
+    this.models.currentBrush = makeBrush();
   }
 
   wireCommands() {

@@ -1,3 +1,5 @@
+import {colors} from './color.js';
+
 export function makeTile(glyph, fgColor, bgColor) {
   return {
     glyph: glyph,
@@ -6,9 +8,9 @@ export function makeTile(glyph, fgColor, bgColor) {
   };
 }
 
-export function makeBrush(tile, tileSize = null, fillColor = null) {
+export function makeBrush(tile = null, tileSize = null, fillColor = null) {
   return {
-    tile: tile,
+    tile: tile || makeTile(null, colors.BLACK, null),
     tileSize: tileSize,
     fillColor: fillColor
   };
