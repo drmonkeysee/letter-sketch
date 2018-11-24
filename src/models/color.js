@@ -1,7 +1,7 @@
 const COLOR_CHANNEL_MIN = 0x00, COLOR_CHANNEL_MAX = 0xff;
 
-function clamp(value) {
-  return Math.max(COLOR_CHANNEL_MIN, Math.min(value || COLOR_CHANNEL_MIN, COLOR_CHANNEL_MAX));
+function clamp(value = COLOR_CHANNEL_MIN) {
+  return Math.max(COLOR_CHANNEL_MIN, Math.min(value, COLOR_CHANNEL_MAX));
 }
 
 function byteHex(n) {

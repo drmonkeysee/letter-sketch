@@ -8,9 +8,9 @@ export function makeTile(glyph, fgColor, bgColor) {
   };
 }
 
-export function makeBrush(tile = null, tileSize = null, fillColor = null) {
+export function makeBrush(tile = makeTile(null, colors.BLACK, null), tileSize = null, fillColor = null) {
   return {
-    tile: tile || makeTile(null, colors.BLACK, null),
+    tile: tile,
     tileSize: tileSize,
     fillColor: fillColor
   };
