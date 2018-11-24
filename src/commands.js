@@ -3,13 +3,13 @@ import {EVENTS, makeUpdate} from './refresh.js';
 import {cssHexToColor} from './models/color.js';
 
 class SetForegroundColor {
-  constructor(models, hexColor) {
+  constructor(models, color) {
     this._brushTile = models.currentBrush.tile;
-    this._hexColor = hexColor;
+    this._color = color;
   }
 
   execute() {
-    this._brushTile.foregroundColor = cssHexToColor(this._hexColor);
+    this._brushTile.foregroundColor = this._color;
     return makeUpdate(EVENTS.onForegroundColorChanged, {color: this._brushTile.foregroundColor});
   }
 }

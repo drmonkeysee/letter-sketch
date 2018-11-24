@@ -1,7 +1,6 @@
 import {CP437, DEFAULT_GLYPH} from './codepage.js';
 import {EVENTS} from './refresh.js';
-// TODO: temporary import to get display working
-import {colorToCssHex, Color} from './models/color.js';
+import {channelsToCss, colors} from './models/color.js';
 import {COMMANDS} from './commands.js';
 
 class View {
@@ -61,7 +60,6 @@ class LetterBlock extends View {
 class ColorPalette extends View {
   constructor(...args) {
     super(...args);
-    this._colorSteps = [0x00, 0x80, 0xff];
     this._palette = this._doc.getElementById('palette');
     this._colorSelections = [
       this._doc.getElementById('foreground-selection'),
@@ -77,17 +75,16 @@ class ColorPalette extends View {
   }
 
   draw() {
-    for (const redStep of this._colorSteps) {
+    const colorSteps = [0x00, 0x80, 0xff];
+    for (const redStep of colorSteps) {
       const colorColumn = this._doc.createElement('div');
       this._palette.appendChild(colorColumn);
       
-      for (const greenStep of this._colorSteps) {
-        for (const blueStep of this._colorSteps) {
+      for (const greenStep of colorSteps) {
+        for (const blueStep of colorSteps) {
           const colorCell = this._doc.createElement('div');
           colorCell.className = 'palette-cell';
-          const cssColor = colorToCssHex(redStep, greenStep, blueStep);
-          colorCell.style.backgroundColor = cssColor;
-          colorCell.dataset.hexColor = cssColor;
+          colorCell.style.backgroundColor = channelsToCss(redStep, greenStep, blueStep);
           colorCell.addEventListener('click', this._pickColor.bind(this));
           colorColumn.appendChild(colorCell);
         }
@@ -95,7 +92,7 @@ class ColorPalette extends View {
     }
 
     // TODO: figure out how to get this from brush
-    const fgColor = Color.BLACK,
+    const fgColor = colors.BLACK,
           bgColor = null,
           fillColor = null;
     this._setColorSelection(this._fgSelection, fgColor);
@@ -119,18 +116,17 @@ class ColorPalette extends View {
 
   _pickColor(event) {
     // TODO: reverse dispatch to ColorSelection view to determine fg, bg, fill
-    this._dispatch.command(COMMANDS.setForegroundColor, event.target.dataset.hexColor);
+    this._dispatch.command(COMMANDS.setForegroundColor, event.target.style.backgroundColor);
   }
 
   _refreshColor(update) {
-    const color = update.color;
-    this._fgSelection.style.backgroundColor = colorToCssHex(color);
+    this._fgSelection.style.backgroundColor = update.color;
   }
 
   _setColorSelection(selection, color) {
     if (color) {
       selection.classList.remove('no-color');
-      selection.style.backgroundColor = colorToCssHex(color);
+      selection.style.backgroundColor = color;
     } else {
       selection.classList.add('no-color');
       selection.style.backgroundColor = null;
