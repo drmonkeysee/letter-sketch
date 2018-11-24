@@ -54,3 +54,7 @@ export function colorToCssHex(...args) {
   }
   return `#${byteHex(r)}${byteHex(g)}${byteHex(b)}${byteHex(a)}`;
 };
+
+export function channelsToCss(r, g, b) {
+  return `rgb(${clamp(r)}, ${clamp(g)}, ${clamp(b)})`;
+};
