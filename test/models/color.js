@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {channelsToCss} from '../../src/models/color.js';
+import {channelsToCss, colors} from '../../src/models/color.js';
 
 describe('#channelsToCss()', function () {
   it('parses undefined for all channels', function () {
@@ -30,5 +30,19 @@ describe('#channelsToCss()', function () {
     const result = channelsToCss(r, g, b);
 
     expect(result).to.equal('rgb(255, 255, 255)');
+  });
+});
+
+describe('colors', function () {
+  describe('#BLACK', function () {
+    it('exists', function () {
+      expect(colors.BLACK).to.equal('rgb(0, 0, 0)');
+    });
+  });
+  
+  describe('#WHITE', function () {
+    it('exists', function () {
+      expect(colors.WHITE).to.equal('rgb(255, 255, 255)');
+    });
   });
 });
