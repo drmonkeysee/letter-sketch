@@ -1,6 +1,5 @@
 import makeNameMap from './namemap.js';
 import {EVENTS, makeUpdate} from './refresh.js';
-import {cssHexToColor} from './models/color.js';
 
 class SetForegroundColor {
   constructor(models, color) {
