@@ -8,7 +8,7 @@ export function channelsToCss(r, g, b) {
   return `rgb(${clamp(r)}, ${clamp(g)}, ${clamp(b)})`;
 };
 
-export const colors = {
-  BLACK: channelsToCss(0x00, 0x00, 0x00),
-  WHITE: channelsToCss(0xff, 0xff, 0xff)
+export const COLORS = {
+  black: channelsToCss(0x00, 0x00, 0x00),
+  white: channelsToCss(0xff, 0xff, 0xff)
 };

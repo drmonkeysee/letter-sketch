@@ -1,6 +1,6 @@
 import {CP437, DEFAULT_GLYPH} from './codepage.js';
 import {EVENTS} from './refresh.js';
-import {channelsToCss, colors} from './models/color.js';
+import {channelsToCss, COLORS} from './models/color.js';
 import {COMMANDS} from './commands.js';
 
 class View {
@@ -92,7 +92,7 @@ class ColorPalette extends View {
     }
 
     // TODO: figure out how to get this from brush
-    const fgColor = colors.BLACK,
+    const fgColor = COLORS.black,
           bgColor = null,
           fillColor = null;
     this._setColorSelection(this._fgSelection, fgColor);
