@@ -25,10 +25,11 @@ export class ViewNotifier {
   }
 
   subscribe(event, handler) {
-    if (!this._notifications[event]) {
-      this._notifications[event] = []
+    let notification = this._notifications[event];
+    if (!notification) {
+      this._notifications[event] = notification = [];
     }
-    this._notifications[event].push(handler);
+    notification.push(handler);
   }
 
   signal(update) {
