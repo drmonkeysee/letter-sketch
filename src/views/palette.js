@@ -81,6 +81,7 @@ export class ColorPalette extends View {
       )
     ];
     this._currentSelection = null;
+    this._clearSelection = this._doc.getElementById('clear-selection');
   }
 
   draw() {
@@ -104,6 +105,8 @@ export class ColorPalette extends View {
       selectionView.draw();
     }
     this._setSelection(this._colorSelections[0]);
+
+    this._clearSelection.addEventListener('click', this._pickColor.bind(this));
   }
 
   subscribe(notifier) {

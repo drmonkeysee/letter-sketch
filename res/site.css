@@ -125,10 +125,10 @@ body {
     }
   }
 
-  #glyph-selection {
+  #clear-selection {
     display: flex;
-    justify-content: center;
     align-items: center;
+    text-align: center;
   }
 }
 
