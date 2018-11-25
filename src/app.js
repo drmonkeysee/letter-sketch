@@ -1,4 +1,4 @@
-import makeNameMap from './namemap.js';
+import makeNameMap from './models/namemap.js';
 import {makeBrush} from './models/brush.js';
 import {ViewNotifier} from './refresh.js';
 import dispatchFactory from './dispatch.js';
