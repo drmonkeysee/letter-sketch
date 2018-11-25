@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import makeNamemap from '../../src/models/namemap.js';
+import makeNamemap from '../src/namemap.js';
 
 describe('#makeNamemap', function () {
   before(function () {

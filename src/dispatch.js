@@ -1,4 +1,4 @@
-import makeNameMap from './models/namemap.js';
+import makeNameMap from './namemap.js';
 import {COMMAND_REGISTRY, COMMANDS} from './commands.js';
 
 class CommandDispatcher {

@@ -1,4 +1,4 @@
-import makeNameMap from './models/namemap.js';
+import makeNameMap from './namemap.js';
 import {EVENTS, makeUpdate} from './refresh.js';
 
 class SetForegroundColor {

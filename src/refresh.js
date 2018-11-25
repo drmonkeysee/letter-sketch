@@ -1,4 +1,4 @@
-import makeNameMap from './models/namemap.js';
+import makeNameMap from './namemap.js';
 
 const EVENT_NAMES = [
   'OnForegroundColorChanged',
