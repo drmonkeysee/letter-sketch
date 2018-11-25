@@ -5,7 +5,7 @@
   "browser": "main.js",
   "scripts": {
     "start": "parcel index.html",
-    "test": "mocha --require test/mochaBootstrap.js --recursive",
+    "test": "mocha --require @babel/polyfill --require test/mochaBootstrap.js --recursive",
     "clean": "rm -r dist",
     "scrub": "npm run clean && rm -r node_modules"
   },
@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/drmonkeysee/letter-sketch#readme",
   "devDependencies": {
+    "@babel/polyfill": "^7.0.0",
     "@babel/register": "^7.0.0",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
