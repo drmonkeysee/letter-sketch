@@ -8,7 +8,7 @@ export class GlyphRuler extends View {
   }
 
   draw() {
-    this._ruler.textContext = DEFAULT_GLYPH;
+    this._ruler.textContent = DEFAULT_GLYPH;
   }
 
   get glyphExtent() {
@@ -17,6 +17,6 @@ export class GlyphRuler extends View {
   }
 
   get referenceGlyph() {
-    return this._ruler.textContext;
+    return this._ruler.textContent;
   }
 }

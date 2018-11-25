@@ -48,9 +48,7 @@ class App {
     ctx.fillStyle = 'red';
     ctx.fillText('Hello World!', 25, 25);
     
-    const brushGlyph = this.doc.querySelector('#glyph-selection span');
-    brushGlyph.textContent = 'A';
-    const glyphDims = brushGlyph.getBoundingClientRect();
+    const glyphDims = this.models.currentBrush.tileSize;
     console.log('Brush dims: %o', glyphDims);
 
     const letters = ['A', 'a', 'W', '1', 'y', '@'],
