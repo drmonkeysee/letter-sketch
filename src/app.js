@@ -2,7 +2,7 @@ import makeNameMap from './namemap.js';
 import {makeBrush} from './models/brush.js';
 import {ViewNotifier} from './refresh.js';
 import dispatchFactory from './dispatch.js';
-import {VIEW_REGISTRY} from './views.js';
+import {VIEW_REGISTRY} from './views/index.js';
 
 class App {
   constructor(win, notifier, dispatchFactory) {

@@ -1,63 +1,9 @@
-import {CP437, DEFAULT_GLYPH} from './codepage.js';
-import {EVENTS} from './refresh.js';
-import {channelsToCss, COLORS} from './models/color.js';
-import {COMMANDS} from './commands.js';
+import {View} from './view.js';
+import {EVENTS} from '../refresh.js';
+import {COMMANDS} from '../commands.js';
+import {channelsToCss, COLORS} from '../models/color.js';
 
-class View {
-  constructor(doc, dispatch) {
-    this._doc = doc;
-    this._dispatch = dispatch;
-  }
-
-  subscribe(notifier) {
-    // do nothing by default
-  }
-}
-
-class GlyphRuler extends View {
-  constructor(...args) {
-    super(...args);
-    this._ruler = this._doc.getElementById('glyph-ruler');
-  }
-
-  draw() {
-    this._ruler.textContext = DEFAULT_GLYPH;
-  }
-
-  get glyphExtent() {
-    const {height, width} = this._ruler.getBoundingClientRect();
-    return {height, width};
-  }
-
-  get referenceGlyph() {
-    return this._ruler.textContext;
-  }
-}
-
-class LetterBlock extends View {
-  constructor(...args) {
-    super(...args);
-    this._block = this._doc.getElementById('letter-block');
-  }
-
-  draw() {
-    for (const letter of CP437) {
-      const blockText = this._doc.createElement('span');
-      blockText.textContent = letter;
-      
-      const blockCell = this._doc.createElement('div');
-      blockCell.appendChild(blockText);
-      // TODO: figure out how to set these from brush
-      //blockCell.style.height = `${1.5 * brush.tileSize.height}px`;
-      if (letter === 'A') {
-        blockCell.className = 'selected';
-      }
-      this._block.appendChild(blockCell);
-    }
-  }
-}
-
-class ColorPalette extends View {
+export class ColorPalette extends View {
   constructor(...args) {
     super(...args);
     this._palette = this._doc.getElementById('palette');
@@ -133,9 +79,3 @@ class ColorPalette extends View {
     }
   }
 }
-
-export const VIEW_REGISTRY = [
-  GlyphRuler,
-  LetterBlock,
-  ColorPalette
-];
