@@ -1,15 +1,15 @@
 import makeNameMap from './namemap.js';
 import {makeBrush} from './models/brush.js';
 import {ViewNotifier} from './refresh.js';
-import createDispatch from './dispatch.js';
+import dispatch from './dispatch.js';
 import {VIEW_REGISTRY} from './views/index.js';
 
 class App {
-  constructor(win, notifier, createDispatch) {
+  constructor(win, notifier, dispatchBuilder) {
     this.win = win;
     this.doc = win.document;
     this.notifier = notifier;
-    this.createDispatch = createDispatch;
+    this.dispatchBuilder = dispatchBuilder;
     this.models = {};
   }
 
@@ -136,7 +136,7 @@ class App {
   }
 
   wireCommands() {
-    this.dispatcher = this.createDispatch(this.notifier, this.models);
+    this.dispatcher = this.dispatchBuilder.build(this.models);
   }
 
   createViews() {
@@ -163,7 +163,8 @@ let app = null;
 
 export default {
   start(win) {
-    app = new App(win, new ViewNotifier(), createDispatch);
+    const notifier = new ViewNotifier();
+    app = new App(win, notifier, dispatch(notifier));
     app.initialize();
   }
 };

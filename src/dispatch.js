@@ -27,6 +27,16 @@ class CommandDispatcher {
   }
 }
 
-export default function (notifier, models) {
-  return new CommandDispatcher(notifier, models);
+class DispatchBuilder {
+  constructor(notifier) {
+    this._notifier = notifier;
+  }
+
+  build(models) {
+    return new CommandDispatcher(this._notifier, models);
+  }
+}
+
+export default function (notifier) {
+  return new DispatchBuilder(notifier);
 };
