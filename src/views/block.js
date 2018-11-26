@@ -1,5 +1,7 @@
 import {View} from './view.js';
 import {CP437} from '../codepage.js';
+import {EVENTS} from '../refresh.js';
+import {COMMANDS} from '../commands.js';
 
 export class LetterBlock extends View {
   constructor(...args) {
@@ -8,18 +10,34 @@ export class LetterBlock extends View {
   }
 
   draw() {
-    for (const letter of CP437) {
+    for (const glyph of CP437) {
       const blockText = this._doc.createElement('span');
-      blockText.textContent = letter;
+      blockText.textContent = glyph;
       
       const blockCell = this._doc.createElement('div');
       blockCell.appendChild(blockText);
       // TODO: figure out how to set these from brush
       //blockCell.style.height = `${1.5 * brush.tileSize.height}px`;
-      if (letter === 'A') {
+      if (glyph === 'A') {
         blockCell.className = 'selected';
       }
+      blockCell.addEventListener('click', this._pickGlyph.bind(this));
       this._block.appendChild(blockCell);
     }
+  }
+
+  subscribe(notifier) {
+    notifier.subscribe(EVENTS.onGlyphChanged, this._refreshGlyph.bind(this));
+  }
+
+  _refreshGlyph(update) {
+    const glyph = update.glyph;
+    for (const cell of this._block.children) {
+      cell.className = cell.firstElementChild.textContent === glyph ? 'selected' : null;
+    }
+  }
+
+  _pickGlyph(event) {
+    this._dispatch.command(COMMANDS.setGlyph, event.target.firstElementChild.textContent);
   }
 }

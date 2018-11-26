@@ -3,7 +3,8 @@ import namemap from './namemap.js';
 const EVENT_NAMES = [
   'OnForegroundColorChanged',
   'OnBackgroundColorChanged',
-  'OnFillColorChanged'
+  'OnFillColorChanged',
+  'OnGlyphChanged'
 ];
 
 export const EVENTS = namemap(EVENT_NAMES, (name, e) => Symbol(name));

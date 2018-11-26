@@ -37,10 +37,23 @@ class SetFillColor {
   }
 }
 
+class SetGlyph {
+  constructor(models, glyph) {
+    this._brushTile = models.currentBrush.tile;
+    this._glyph = glyph;
+  }
+
+  execute() {
+    this._brushTile.glyph = this._glyph;
+    return makeUpdate(EVENTS.onGlyphChanged, {glyph: this._brushTile.glyph});
+  }
+}
+
 export const COMMAND_REGISTRY = [
   SetForegroundColor,
   SetBackgroundColor,
-  SetFillColor
+  SetFillColor,
+  SetGlyph
 ];
 
 export const COMMANDS = namemap(COMMAND_REGISTRY, (name, c) => Symbol(name));
