@@ -1,7 +1,7 @@
 import {expect} from 'chai';
-import makeNamemap from '../src/namemap.js';
+import namemap from '../src/namemap.js';
 
-describe('#makeNamemap', function () {
+describe('#namemap()', function () {
   before(function () {
     this.makeItems = count => {
       function* gen(n) {
@@ -15,7 +15,7 @@ describe('#makeNamemap', function () {
   it('creates empty map if empty items', function () {
     const items = this.makeItems();
 
-    const result = makeNamemap(items, this.mapItem);
+    const result = namemap(items, this.mapItem);
 
     expect(result).to.be.empty;
   });
@@ -23,7 +23,7 @@ describe('#makeNamemap', function () {
   it('creates map from named items', function () {
     const items = this.makeItems(3);
 
-    const result = makeNamemap(items, this.mapItem);
+    const result = namemap(items, this.mapItem);
 
     const expected = {
       foo0: 'Foo(foo0-10)',
@@ -37,7 +37,7 @@ describe('#makeNamemap', function () {
     const items = this.makeItems(3),
           mapName = name => name.toUpperCase();
 
-    const result = makeNamemap(items, this.mapItem, mapName);
+    const result = namemap(items, this.mapItem, mapName);
 
     const expected = {
       FOO0: 'Foo(foo0-10)',
@@ -51,7 +51,7 @@ describe('#makeNamemap', function () {
     const items = ['Foo', 'Bar', 'Baz'],
           mapItem = (n, i) => `${n}(${i})`;
     
-    const result = makeNamemap(items, mapItem);
+    const result = namemap(items, mapItem);
 
     const expected = {
       foo: 'foo(Foo)',
@@ -65,7 +65,7 @@ describe('#makeNamemap', function () {
     const items = [new String('Foo'), new String('Bar'), new String('Baz')],
           mapItem = (n, i) => `${n}(${i})`;
     
-    const result = makeNamemap(items, mapItem);
+    const result = namemap(items, mapItem);
 
     const expected = {
       foo: 'foo(Foo)',

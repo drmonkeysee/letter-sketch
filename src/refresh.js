@@ -1,4 +1,4 @@
-import makeNameMap from './namemap.js';
+import namemap from './namemap.js';
 
 const EVENT_NAMES = [
   'OnForegroundColorChanged',
@@ -6,7 +6,7 @@ const EVENT_NAMES = [
   'OnFillColorChanged'
 ];
 
-export const EVENTS = makeNameMap(EVENT_NAMES, (name, e) => Symbol(name));
+export const EVENTS = namemap(EVENT_NAMES, (name, e) => Symbol(name));
 
 export function makeUpdate(event, data) {
   return {event: event, ...data};

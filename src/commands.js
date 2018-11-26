@@ -1,4 +1,4 @@
-import makeNameMap from './namemap.js';
+import namemap from './namemap.js';
 import {EVENTS, makeUpdate} from './refresh.js';
 
 class SetForegroundColor {
@@ -43,4 +43,4 @@ export const COMMAND_REGISTRY = [
   SetFillColor
 ];
 
-export const COMMANDS = makeNameMap(COMMAND_REGISTRY, (name, c) => Symbol(name));
+export const COMMANDS = namemap(COMMAND_REGISTRY, (name, c) => Symbol(name));

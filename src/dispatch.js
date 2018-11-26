@@ -1,4 +1,4 @@
-import makeNameMap from './namemap.js';
+import namemap from './namemap.js';
 import {COMMAND_REGISTRY, COMMANDS} from './commands.js';
 
 class CommandDispatcher {
@@ -19,7 +19,7 @@ class CommandDispatcher {
 
   _bindCommands(models) {
     // create cmd factory per class that captures models for command ctor binding
-    this._commands = makeNameMap(
+    this._commands = namemap(
       COMMAND_REGISTRY,
       (n, cmdCls) => (...args) => new cmdCls(models, ...args),
       name => COMMANDS[name]

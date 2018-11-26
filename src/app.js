@@ -1,4 +1,4 @@
-import makeNameMap from './namemap.js';
+import namemap from './namemap.js';
 import {makeBrush} from './models/brush.js';
 import {ViewNotifier} from './refresh.js';
 import dispatch from './dispatch.js';
@@ -140,7 +140,7 @@ class App {
   }
 
   createViews() {
-    const views = makeNameMap(VIEW_REGISTRY, (n, viewCls) => new viewCls(this.doc, this.dispatcher));
+    const views = namemap(VIEW_REGISTRY, (n, viewCls) => new viewCls(this.doc, this.dispatcher));
     for (const v of Object.values(views)) {
       v.draw();
     }
