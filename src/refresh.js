@@ -15,7 +15,6 @@ export function makeUpdate(event, data) {
 
 export class ViewNotifier {
   constructor() {
-    // TODO: defaultdict-like
     this._notifications = {};
   }
 
