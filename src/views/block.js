@@ -9,18 +9,19 @@ export class LetterBlock extends View {
     this._block = this._doc.getElementById('letter-block');
   }
 
-  draw() {
+  draw(initialState) {
     for (const glyph of CP437) {
       const blockText = this._doc.createElement('span');
       blockText.textContent = glyph;
       
       const blockCell = this._doc.createElement('div');
       blockCell.appendChild(blockText);
-      // TODO: figure out how to set these from brush
-      //blockCell.style.height = `${1.5 * brush.tileSize.height}px`;
-      if (glyph === 'A') {
+      
+      blockCell.style.height = `${1.5 * initialState.tileSize.height}px`;
+      if (glyph === initialState.glyph) {
         blockCell.className = 'selected';
       }
+      
       blockCell.addEventListener('click', this._pickGlyph.bind(this));
       this._block.appendChild(blockCell);
     }

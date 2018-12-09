@@ -1,4 +1,5 @@
 import {COLORS} from './color.js';
+import {DEFAULT_GLYPH} from '../codepage.js';
 
 export function makeTile(glyph, fgColor, bgColor) {
   return {
@@ -8,7 +9,7 @@ export function makeTile(glyph, fgColor, bgColor) {
   };
 }
 
-export function makeBrush(tile = makeTile(null, COLORS.black, null), tileSize = null, fillColor = null) {
+export function makeBrush(tile = makeTile(DEFAULT_GLYPH, COLORS.black, null), tileSize = null, fillColor = null) {
   return {
     tile: tile,
     tileSize: tileSize,

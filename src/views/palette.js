@@ -4,17 +4,17 @@ import {COMMANDS} from '../commands.js';
 import {channelsToCss, COLORS} from '../models/color.js';
 
 class ColorSelection extends View {
-  constructor(id, cmd, refreshEvent, onSelected, initColor, ...args) {
+  constructor(id, cmd, refreshEvent, onSelected, colorInitializer, ...args) {
     super(...args);
     this.selection = this._doc.getElementById(id);
     this.cmd = cmd;
     this.refreshEvent = refreshEvent;
     this.onSelected = onSelected;
-    this.initColor = initColor;
+    this.colorInitializer = colorInitializer;
   }
 
-  draw() {
-    this._setColor(this.initColor);
+  draw(initialState) {
+    this._setColor(this.colorInitializer(initialState.colors));
     this.selection.addEventListener('click', e => this.onSelected(this));
   }
 
@@ -60,7 +60,7 @@ export class ColorPalette extends View {
         COMMANDS.setForegroundColor,
         EVENTS.onForegroundColorChanged,
         onSelectedHandler,
-        COLORS.black, // TODO: figure out how to get initial color from brush
+        colors => colors.fg,
         ...args
       ),
       new ColorSelection(
@@ -68,7 +68,7 @@ export class ColorPalette extends View {
         COMMANDS.setBackgroundColor,
         EVENTS.onBackgroundColorChanged,
         onSelectedHandler,
-        null,
+        colors => colors.bg,
         ...args
       ),
       new ColorSelection(
@@ -76,7 +76,7 @@ export class ColorPalette extends View {
         COMMANDS.setFillColor,
         EVENTS.onFillColorChanged,
         onSelectedHandler,
-        null,
+        colors => colors.fill,
         ...args
       )
     ];
@@ -84,7 +84,7 @@ export class ColorPalette extends View {
     this._clearSelection = this._doc.getElementById('clear-selection');
   }
 
-  draw() {
+  draw(initialState) {
     const colorSteps = [0x00, 0x80, 0xff];
     for (const redStep of colorSteps) {
       const colorColumn = this._doc.createElement('div');
@@ -102,7 +102,7 @@ export class ColorPalette extends View {
     }
 
     for (const selectionView of this._colorSelections) {
-      selectionView.draw();
+      selectionView.draw(initialState);
     }
     this._setSelection(this._colorSelections[0]);
 
