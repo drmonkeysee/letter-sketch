@@ -1,5 +1,6 @@
 import {makeTile} from './brush.js';
 
+// TODO: can i store glyphs only and move tiles up into view?
 export class Terminal {
   constructor(columns, rows) {
     this.resize(columns, rows);
