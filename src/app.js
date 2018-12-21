@@ -30,7 +30,7 @@ class App {
 
   createModels() {
     this.models.currentBrush = makeBrush();
-    this.models.terminal = new Terminal();
+    this.models.terminal = new Terminal(50, 20);
   }
 
   syncModels() {
@@ -59,6 +59,7 @@ class App {
   initialState() {
     return {
       tileSize: this.models.currentBrush.tileSize,
+      padSize: this.models.terminal.dimensions,
       glyph: this.models.currentBrush.tile.glyph,
       colors: {
         fg: this.models.currentBrush.tile.foregroundColor,

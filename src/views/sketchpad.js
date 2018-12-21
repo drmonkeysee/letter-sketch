@@ -13,6 +13,12 @@ export class SketchPad extends View {
   }
 
   draw(initialState) {
+    const viewSize = {
+      height: initialState.padSize.height * initialState.tileSize.height,
+      width: initialState.padSize.width * initialState.tileSize.width,
+    };
+    this._overlay.style.height = this._canvas.style.height = `${viewSize.height}px`;
+    this._overlay.style.width = this._canvas.style.width = `${viewSize.width}px`;
     this._drawSurface(initialState);
     this._drawUxOverlay(initialState);
   }
@@ -122,5 +128,8 @@ export class SketchPad extends View {
       this._context.strokeRect(xOffset, drawRect.y, drawRect.w, drawRect.h);
       this._context.fillText(connectors[i], xOffset, drawRect.y);
     }
+  }
+
+  _drawUxOverlay(initialState) {
   }
 }
