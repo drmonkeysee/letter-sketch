@@ -28,6 +28,14 @@ body {
     left: 0;
     background-color: yellow;
     opacity: 0.2;
+    display: grid;
+
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      outline: 1px solid orange;
+    }
   }
 }
 

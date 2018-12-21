@@ -14,8 +14,8 @@ export class SketchPad extends View {
 
   draw(initialState) {
     const viewSize = {
-      height: initialState.padSize.height * initialState.tileSize.height,
-      width: initialState.padSize.width * initialState.tileSize.width,
+      height: initialState.termSize.height * initialState.tileSize.height,
+      width: initialState.termSize.width * initialState.tileSize.width,
     };
     this._overlay.style.height = this._canvas.style.height = `${viewSize.height}px`;
     this._overlay.style.width = this._canvas.style.width = `${viewSize.width}px`;
@@ -131,5 +131,25 @@ export class SketchPad extends View {
   }
 
   _drawUxOverlay(initialState) {
+    const cellHeight = `${initialState.tileSize.height}px`,
+          cellWidth = `${initialState.tileSize.width}px`,
+          columns = initialState.termSize.width,
+          rows = initialState.termSize.height;
+
+    this._overlay.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+
+    for (let y = 0; y < rows; ++y) {
+      for (let x = 0; x < columns; ++x) {
+        const uxCell = this._doc.createElement('div');
+        uxCell.appendChild(this._doc.createElement('span'));
+        
+        uxCell.style.height = cellHeight;
+        uxCell.style.width = cellWidth;
+        uxCell.dataset.x = x;
+        uxCell.dataset.y = y;
+        
+        this._overlay.appendChild(uxCell);
+      }
+    }
   }
 }

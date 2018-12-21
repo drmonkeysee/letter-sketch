@@ -59,7 +59,7 @@ class App {
   initialState() {
     return {
       tileSize: this.models.currentBrush.tileSize,
-      padSize: this.models.terminal.dimensions,
+      termSize: this.models.terminal.dimensions,
       glyph: this.models.currentBrush.tile.glyph,
       colors: {
         fg: this.models.currentBrush.tile.foregroundColor,
