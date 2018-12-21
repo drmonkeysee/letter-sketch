@@ -1,6 +1,7 @@
 import namemap from './namemap.js';
 import {checkCanvas, measureGlyph} from './dom.js';
 import {makeBrush} from './models/brush.js';
+import {Terminal} from './models/terminal.js';
 import {ViewNotifier} from './refresh.js';
 import dispatch from './dispatch.js';
 import {VIEW_REGISTRY} from './views/index.js';
@@ -29,6 +30,7 @@ class App {
 
   createModels() {
     this.models.currentBrush = makeBrush();
+    this.models.terminal = new Terminal();
   }
 
   syncModels() {
