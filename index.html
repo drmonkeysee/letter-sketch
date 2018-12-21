@@ -6,9 +6,12 @@
     <link href="res/site.css" rel="stylesheet">
   </head>
   <body>
-    <canvas id="sketchpad">
-      Letter Sketch requires canvas support!
-    </canvas>
+    <div id="sketchpad">
+      <canvas id="draw-surface">
+        Letter Sketch requires canvas support!
+      </canvas>
+      <div id="ux-overlay"></div>
+    </div>
     <span id="glyph-ruler"></span>
     <div id="letter-block"></div>
     <div id="current-brush">

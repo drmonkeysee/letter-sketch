@@ -1,7 +1,7 @@
 import {DEFAULT_GLYPH} from './codepage.js';
 
 export function checkCanvas(doc) {
-  const canvas = doc.getElementById('sketchpad');
+  const canvas = doc.getElementById('draw-surface');
   if (!canvas.getContext) {
     const msg = 'No console support detected!';
     console.error(msg);

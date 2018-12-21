@@ -3,7 +3,8 @@ import {View} from './view.js';
 export class SketchPad extends View {
   constructor(...args) {
     super(...args);
-    this._canvas = this._doc.getElementById('sketchpad');
+    this._canvas = this._doc.getElementById('draw-surface');
+    this._overlay = this._doc.getElementById('ux-overlay');
     if (!this._canvas.getContext) {
       const msg = 'No console support detected!';
       console.error(msg);

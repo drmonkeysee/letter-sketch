@@ -11,9 +11,24 @@ body {
 }
 
 #sketchpad {
-  outline: 1px solid blue;
-  width: $content-width;
-  height: 300px;
+  position: relative;
+  
+  #draw-surface, #ux-overlay {
+    width: $content-width;
+    height: 300px;
+  }
+
+  #draw-surface {
+    outline: 1px solid blue;
+  }
+
+  #ux-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: yellow;
+    opacity: 0.2;
+  }
 }
 
 #glyph-ruler {
