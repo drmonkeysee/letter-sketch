@@ -39,11 +39,40 @@ export class SketchPad extends View {
     this._context = this._canvas.getContext('2d', {alpha: false});
     this._context.scale(dpr, dpr);
 
-    this._context.clearRect(0, 0, rect.width, rect.height);
-    
     const bodyStyle = this._doc.defaultView.getComputedStyle(this._doc.getElementsByTagName('body')[0]),
           fontStyle = `${bodyStyle.getPropertyValue('font-weight')} ${bodyStyle.getPropertyValue('font-size')} ${bodyStyle.getPropertyValue('font-family')}`;
     this._context.font = fontStyle;
+    this._context.textBaseline = 'top';
+    
+    this._context.clearRect(0, 0, rect.width, rect.height);
+    
+    this._drawDemo(initialState);
+  }
+
+  _drawUxOverlay(initialState) {
+    const cellHeight = `${initialState.tileSize.height}px`,
+          cellWidth = `${initialState.tileSize.width}px`,
+          columns = initialState.termSize.width,
+          rows = initialState.termSize.height;
+
+    this._overlay.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+
+    for (let y = 0; y < rows; ++y) {
+      for (let x = 0; x < columns; ++x) {
+        const uxCell = this._doc.createElement('div');
+        uxCell.appendChild(this._doc.createElement('span'));
+        
+        uxCell.style.height = cellHeight;
+        uxCell.style.width = cellWidth;
+        uxCell.dataset.x = x;
+        uxCell.dataset.y = y;
+        
+        this._overlay.appendChild(uxCell);
+      }
+    }
+  }
+
+  _drawDemo(initialState) {
     this._context.fillStyle = 'red';
     this._context.fillText('Hello World!', 25, 25);
     
@@ -127,29 +156,6 @@ export class SketchPad extends View {
       const xOffset = drawRect.x + (i * drawRect.w);
       this._context.strokeRect(xOffset, drawRect.y, drawRect.w, drawRect.h);
       this._context.fillText(connectors[i], xOffset, drawRect.y);
-    }
-  }
-
-  _drawUxOverlay(initialState) {
-    const cellHeight = `${initialState.tileSize.height}px`,
-          cellWidth = `${initialState.tileSize.width}px`,
-          columns = initialState.termSize.width,
-          rows = initialState.termSize.height;
-
-    this._overlay.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-
-    for (let y = 0; y < rows; ++y) {
-      for (let x = 0; x < columns; ++x) {
-        const uxCell = this._doc.createElement('div');
-        uxCell.appendChild(this._doc.createElement('span'));
-        
-        uxCell.style.height = cellHeight;
-        uxCell.style.width = cellWidth;
-        uxCell.dataset.x = x;
-        uxCell.dataset.y = y;
-        
-        this._overlay.appendChild(uxCell);
-      }
     }
   }
 }
