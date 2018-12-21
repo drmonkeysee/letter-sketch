@@ -13,6 +13,15 @@ export class SketchPad extends View {
   }
 
   draw(initialState) {
+    this._drawSurface(initialState);
+    this._drawUxOverlay(initialState);
+  }
+
+  subscribe(notifier) {
+    // TODO
+  }
+
+  _drawSurface(initialState) {
     const rect = this._canvas.getBoundingClientRect(),
           dpr = this._doc.defaultView.devicePixelRatio || 1;
     console.log('dpr: %d, rect: %o', dpr, rect.width, rect.height);
@@ -113,9 +122,5 @@ export class SketchPad extends View {
       this._context.strokeRect(xOffset, drawRect.y, drawRect.w, drawRect.h);
       this._context.fillText(connectors[i], xOffset, drawRect.y);
     }
-  }
-
-  subscribe(notifier) {
-    // TODO
   }
 }
