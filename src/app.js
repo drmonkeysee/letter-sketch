@@ -60,10 +60,10 @@ class App {
     return {
       tileSize: this.models.currentBrush.tileSize,
       termSize: this.models.terminal.dimensions,
-      glyph: this.models.currentBrush.tile.glyph,
+      glyph: this.models.currentBrush.cell.glyph,
       colors: {
-        fg: this.models.currentBrush.tile.foregroundColor,
-        bg: this.models.currentBrush.tile.backgroundColor,
+        fg: this.models.currentBrush.cell.foregroundColor,
+        bg: this.models.currentBrush.cell.backgroundColor,
         fill: this.models.currentBrush.fillColor
       }
     }

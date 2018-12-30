@@ -3,25 +3,25 @@ import {EVENTS, makeUpdate} from './refresh.js';
 
 class SetForegroundColor {
   constructor(models, color) {
-    this._brushTile = models.currentBrush.tile;
+    this._brushCell = models.currentBrush.cell;
     this._color = color;
   }
 
   execute() {
-    this._brushTile.foregroundColor = this._color;
-    return makeUpdate(EVENTS.onForegroundColorChanged, {color: this._brushTile.foregroundColor});
+    this._brushCell.foregroundColor = this._color;
+    return makeUpdate(EVENTS.onForegroundColorChanged, {color: this._brushCell.foregroundColor});
   }
 }
 
 class SetBackgroundColor {
   constructor(models, color) {
-    this._brushTile = models.currentBrush.tile;
+    this._brushCell = models.currentBrush.cell;
     this._color = color;
   }
 
   execute() {
-    this._brushTile.backgroundColor = this._color;
-    return makeUpdate(EVENTS.onBackgroundColorChanged, {color: this._brushTile.backgroundColor});
+    this._brushCell.backgroundColor = this._color;
+    return makeUpdate(EVENTS.onBackgroundColorChanged, {color: this._brushCell.backgroundColor});
   }
 }
 
@@ -39,13 +39,13 @@ class SetFillColor {
 
 class SetGlyph {
   constructor(models, glyph) {
-    this._brushTile = models.currentBrush.tile;
+    this._brushCell = models.currentBrush.cell;
     this._glyph = glyph;
   }
 
   execute() {
-    this._brushTile.glyph = this._glyph;
-    return makeUpdate(EVENTS.onGlyphChanged, {glyph: this._brushTile.glyph});
+    this._brushCell.glyph = this._glyph;
+    return makeUpdate(EVENTS.onGlyphChanged, {glyph: this._brushCell.glyph});
   }
 }
 

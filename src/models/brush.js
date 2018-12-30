@@ -1,17 +1,10 @@
 import {COLORS} from './color.js';
 import {DEFAULT_GLYPH} from '../codepage.js';
+import {makeCell} from './terminal.js';
 
-export function makeTile(glyph, fgColor, bgColor) {
+export function makeBrush(cell = makeCell(DEFAULT_GLYPH, COLORS.black), tileSize = null, fillColor = null) {
   return {
-    glyph: glyph,
-    foregroundColor: fgColor,
-    backgroundColor: bgColor
-  };
-}
-
-export function makeBrush(tile = makeTile(DEFAULT_GLYPH, COLORS.black, null), tileSize = null, fillColor = null) {
-  return {
-    tile: tile,
+    cell: cell,
     tileSize: tileSize,
     fillColor: fillColor
   };
