@@ -45,6 +45,8 @@ export class SketchPad extends View {
     this._context.textBaseline = 'top';
     
     this._context.clearRect(0, 0, rect.width, rect.height);
+
+    this._drawTiles(initialState.tiles, initialState.tileSize);
     
     this._drawDemo(initialState);
   }
@@ -72,10 +74,24 @@ export class SketchPad extends View {
     }
   }
 
+  _drawTiles(tiles, tileSize) {
+    for (const tile of tiles) {
+      const drawRect = {x: tile.x * tileSize.width, y: tile.y * tileSize.height, w: tileSize.width, h: tileSize.height},
+            cell = tile.cell;
+      if (cell.isEmpty()) {
+        this._context.clearRect(drawRect.x, drawRect.y, drawRect.w, drawRect.h);
+      } else {
+        if (cell.backgroundColor) {
+          this._context.fillStyle = cell.backgroundColor;
+          this._context.fillRect(drawRect.x, drawRect.y, drawRect.w, drawRect.h);
+        }
+        this._context.fillStyle = cell.foregroundColor;
+        this._context.fillText(cell.glyph, drawRect.x, drawRect.y);
+      }
+    }
+  }
+
   _drawDemo(initialState) {
-    this._context.fillStyle = 'red';
-    this._context.fillText('Hello World!', 25, 25);
-    
     const glyphDims = initialState.tileSize;
     console.log('Brush dims: %o', glyphDims);
 

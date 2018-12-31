@@ -5,6 +5,7 @@ import {Terminal} from './models/terminal.js';
 import {ViewNotifier} from './refresh.js';
 import dispatch from './dispatch.js';
 import {VIEW_REGISTRY} from './views/index.js';
+import {demoText} from './tools.js';
 
 class App {
   constructor(win, notifier, dispatchBuilder) {
@@ -58,6 +59,7 @@ class App {
 
   initialState() {
     return {
+      tiles: demoText(this.models.terminal, 9, 10),
       tileSize: this.models.currentBrush.tileSize,
       termSize: this.models.terminal.dimensions,
       glyph: this.models.currentBrush.cell.glyph,
