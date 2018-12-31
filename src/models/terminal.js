@@ -1,20 +1,6 @@
-export function makeCell(glyph = null, fgColor = null, bgColor = null) {
-  return {
-    glyph: glyph,
-    foregroundColor: fgColor,
-    backgroundColor: bgColor
-  };
-}
-
 export class Terminal {
   constructor(columns, rows) {
     this.resize(columns, rows);
-    const y = 10, x = 9, text = 'Hello World!', color = '#ff0000', textLength = text.length;
-    for (let i = 0; i < textLength; ++i) {
-      const cell = this._getCell(x + i, y);
-      cell.glyph = text[i];
-      cell.foregroundColor = color;
-    }
   }
 
   get dimensions() {
@@ -26,13 +12,37 @@ export class Terminal {
     this._height = rows;
     const size = columns * rows, cells = [];
     for (let i = 0; i < size; ++i) {
-      cells[i] = makeCell();
+      cells[i] = new Cell();
     }
     this._cells = cells;
   }
 
-  _getCell(x, y) {
+  getCell(x, y) {
     const idx = x + (y * this._stride);
     return this._cells[idx];
+  }
+
+  updateCell(x, y, cell) {
+    const targetCell = this.getCell(x, y);
+    targetCell.update(cell);
+    return targetCell;
+  }
+}
+
+export class Cell {
+  constructor(glyph = null, fgColor = null, bgColor = null) {
+    this.glyph = glyph;
+    this.foregroundColor = fgColor;
+    this.backgroundColor = bgColor;
+  }
+
+  isEmpty() {
+    return this.glyph == null;
+  }
+
+  update(that) {
+    this.glyph = that.glyph;
+    this.foregroundColor = that.foregroundColor;
+    this.backgroundColor = that.backgroundColor;
   }
 }
