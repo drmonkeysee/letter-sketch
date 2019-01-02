@@ -37,7 +37,8 @@ export class Cell {
   }
 
   isEmpty() {
-    return this.glyph == null;
+    // TODO: codepage null is actually \u0000
+    return !this.glyph;
   }
 
   update(that) {

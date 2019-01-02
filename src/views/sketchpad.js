@@ -5,11 +5,6 @@ export class SketchPad extends View {
     super(...args);
     this._canvas = this._doc.getElementById('draw-surface');
     this._overlay = this._doc.getElementById('ux-overlay');
-    if (!this._canvas.getContext) {
-      const msg = 'No console support detected!';
-      console.error(msg);
-      throw new Error(msg);
-    }
   }
 
   draw(initialState) {
