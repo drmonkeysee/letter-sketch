@@ -9,11 +9,11 @@ export class SketchPad extends View {
 
   draw(initialState) {
     const viewSize = {
-      height: initialState.termSize.height * initialState.tileSize.height,
-      width: initialState.termSize.width * initialState.tileSize.width,
+      h: initialState.termSize.height * initialState.tileSize.height,
+      w: initialState.termSize.width * initialState.tileSize.width
     };
-    this._overlay.style.height = this._canvas.style.height = `${viewSize.height}px`;
-    this._overlay.style.width = this._canvas.style.width = `${viewSize.width}px`;
+    this._overlay.style.height = this._canvas.style.height = `${viewSize.h}px`;
+    this._overlay.style.width = this._canvas.style.width = `${viewSize.w}px`;
     this._drawSurface(initialState);
     this._drawUxOverlay(initialState);
   }
@@ -37,7 +37,7 @@ export class SketchPad extends View {
     const bodyStyle = this._doc.defaultView.getComputedStyle(this._doc.getElementsByTagName('body')[0]),
           fontStyle = `${bodyStyle.getPropertyValue('font-weight')} ${bodyStyle.getPropertyValue('font-size')} ${bodyStyle.getPropertyValue('font-family')}`;
     this._context.font = fontStyle;
-    this._context.textBaseline = 'top';
+    this._context.textBaseline = 'middle';
     
     this._context.clearRect(0, 0, rect.width, rect.height);
 
@@ -58,11 +58,20 @@ export class SketchPad extends View {
       for (let x = 0; x < columns; ++x) {
         const uxCell = this._doc.createElement('div');
         uxCell.appendChild(this._doc.createElement('span'));
-        
+
         uxCell.style.height = cellHeight;
         uxCell.style.width = cellWidth;
         uxCell.dataset.x = x;
         uxCell.dataset.y = y;
+
+        uxCell.addEventListener('mouseenter', e => {
+          const txt = e.target.getElementsByTagName('span')[0];
+          txt.textContent = 'W';
+        });
+        uxCell.addEventListener('mouseleave', e => {
+          const txt = e.target.getElementsByTagName('span')[0];
+          txt.textContent = '';
+        });
         
         this._overlay.appendChild(uxCell);
       }
@@ -72,7 +81,8 @@ export class SketchPad extends View {
   _drawTiles(tiles, tileSize) {
     for (const tile of tiles) {
       const drawRect = {x: tile.x * tileSize.width, y: tile.y * tileSize.height, w: tileSize.width, h: tileSize.height},
-            cell = tile.cell;
+            cell = tile.cell,
+            glyphOffsetY = drawRect.h / 2;
       if (cell.isEmpty()) {
         this._context.clearRect(drawRect.x, drawRect.y, drawRect.w, drawRect.h);
       } else {
@@ -81,7 +91,7 @@ export class SketchPad extends View {
           this._context.fillRect(drawRect.x, drawRect.y, drawRect.w, drawRect.h);
         }
         this._context.fillStyle = cell.foregroundColor;
-        this._context.fillText(cell.glyph, drawRect.x, drawRect.y);
+        this._context.fillText(cell.glyph, drawRect.x, drawRect.y + glyphOffsetY);
       }
     }
   }

@@ -26,15 +26,20 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    background-color: yellow;
-    opacity: 0.2;
     display: grid;
 
     div {
       display: flex;
       justify-content: center;
       align-items: center;
-      outline: 1px solid orange;
+      background-color: yellow;
+      opacity: 0.2;
+
+      &:hover {
+        background-color: blue;
+        color: yellow;
+        opacity: 1;
+      }
     }
   }
 }
