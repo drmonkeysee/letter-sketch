@@ -7,11 +7,11 @@ class Tool {
     this._drawStrategy;
   }
 
-  get stroke {
+  get stroke() {
     return this._stroke;
   }
 
-  get drawStrategy {
+  get drawStrategy() {
     return this._drawStrategy;
   }
 }
