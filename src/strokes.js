@@ -1,7 +1,7 @@
 class Stroke {
-  constructor(cmd, brushTile) {
+  constructor(dispatch, cmd) {
+    this._dispatch;
     this._cmd = cmd;
-    this._brushTile = brushTile;
   }
 
   start() {
@@ -22,7 +22,7 @@ class Stroke {
 }
 
 export class PointStroke extends Stroke {
-  start(x, y) {
+  start(target, overlay, brushTile) {
     // generate shape
     // send command
   }
