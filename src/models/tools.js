@@ -1,4 +1,4 @@
-import {Cell} from './models/terminal.js';
+import {Cell} from './terminal.js';
 
 // TODO: need better name for draw strategy
 class Tool {

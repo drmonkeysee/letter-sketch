@@ -2,10 +2,10 @@ import namemap from './namemap.js';
 import {checkCanvas, measureGlyph} from './dom.js';
 import brush from './models/brush.js';
 import {Terminal} from './models/terminal.js';
+import {demoText} from './models/tools.js';
 import {ViewNotifier} from './refresh.js';
 import dispatch from './dispatch.js';
 import {VIEW_REGISTRY} from './views/index.js';
-import {demoText} from './tools.js';
 
 class App {
   constructor(win, notifier, dispatchBuilder) {
