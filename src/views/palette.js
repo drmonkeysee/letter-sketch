@@ -1,7 +1,7 @@
 import {View} from './view.js';
 import {EVENTS} from '../refresh.js';
 import {COMMANDS} from '../commands.js';
-import {channelsToCss, COLORS} from '../models/color.js';
+import {channelsToCss} from '../color.js';
 
 class ColorSelection extends View {
   constructor(id, cmd, refreshEvent, onSelected, colorInitializer, ...args) {

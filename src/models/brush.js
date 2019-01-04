@@ -1,4 +1,4 @@
-import {COLORS} from './color.js';
+import {COLORS} from '../color.js';
 import {DEFAULT_GLYPH} from '../codepage.js';
 import {Cell} from './terminal.js';
 

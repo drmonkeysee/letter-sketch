@@ -21,14 +21,14 @@ class Stroke {
   }
 }
 
-export class Point extends Stroke {
+export class PointStroke extends Stroke {
   start(x, y) {
     // generate shape
     // send command
   }
 }
 
-export class Brush extends Stroke {
+export class BrushStroke extends Stroke {
   start(x, y) {
     // start shape
   }
@@ -43,7 +43,7 @@ export class Brush extends Stroke {
   }
 }
 
-export class Rectangle extends Stroke {
+export class RectangleStroke extends Stroke {
   start(x, y) {
     // start rect
   }
