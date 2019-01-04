@@ -49,11 +49,38 @@ class SetGlyph {
   }
 }
 
+class SetTool {
+  constructor(models, tool) {
+    this._models = models;
+    this._tool = tool;
+  }
+
+  execute() {
+    this._models.currentTool = tool;
+    return makeUpdate(EVENTS.onToolChanged, {stroke: this._models.currentTool.stroke});
+  }
+}
+
+class DrawTerminal {
+  constructor(models, shape) {
+    this._brushCell = models.currentBrush.cell;
+    this._drawStrategy = models.currentTool.drawStrategy;
+    this._terminal = models.terminal;
+    this._shape = shape;
+  }
+
+  execute() {
+    // draw shape onto terminal
+    // return tiles for makeUpdate
+  }
+}
+
 export const COMMAND_REGISTRY = [
   SetForegroundColor,
   SetBackgroundColor,
   SetFillColor,
-  SetGlyph
+  SetGlyph,
+  DrawTerminal
 ];
 
 export const COMMANDS = namemap(COMMAND_REGISTRY, (name, c) => Symbol(name));
