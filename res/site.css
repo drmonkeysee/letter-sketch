@@ -40,6 +40,10 @@ body {
         color: yellow;
         opacity: 1;
       }
+
+      span {
+        pointer-events: none;
+      }
     }
   }
 }
