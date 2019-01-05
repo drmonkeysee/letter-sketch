@@ -1,5 +1,6 @@
 import namemap from './namemap.js';
 import {EVENTS, makeUpdate} from './refresh.js';
+import {TOOLS} from './tools.js';
 
 class SetForegroundColor {
   constructor(models, color) {
@@ -50,18 +51,19 @@ class SetGlyph {
 }
 
 class SetTool {
-  constructor(models, tool) {
+  constructor(models, toolName) {
     this._models = models;
-    this._tool = tool;
+    this._toolName = toolName;
   }
 
   execute() {
-    this._models.currentTool = tool;
-    return makeUpdate(EVENTS.onToolChanged, {stroke: this._models.currentTool.stroke});
+    this._models.currentTool = toolName;
+    const tool = TOOLS[this._models.currentTool];
+    return makeUpdate(EVENTS.onToolChanged, {stroke: tool.strokeFactory(this._models.currentBrush.tile)});
   }
 }
 
-class DrawTerminal {
+class DrawShape {
   constructor(models, shape) {
     this._brushCell = models.currentBrush.cell;
     this._drawStrategy = models.currentTool.drawStrategy;
@@ -80,7 +82,8 @@ export const COMMAND_REGISTRY = [
   SetBackgroundColor,
   SetFillColor,
   SetGlyph,
-  DrawTerminal
+  SetTool,
+  DrawShape
 ];
 
 export const COMMANDS = namemap(COMMAND_REGISTRY, (name, c) => Symbol(name));

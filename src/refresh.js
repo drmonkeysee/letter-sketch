@@ -4,7 +4,8 @@ const EVENT_NAMES = [
   'OnForegroundColorChanged',
   'OnBackgroundColorChanged',
   'OnFillColorChanged',
-  'OnGlyphChanged'
+  'OnGlyphChanged',
+  'OnToolChanged'
 ];
 
 export const EVENTS = namemap(EVENT_NAMES, (name, e) => Symbol(name));

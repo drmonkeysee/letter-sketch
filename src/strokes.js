@@ -15,16 +15,11 @@ class Stroke {
   end() {
     // do nothing
   }
-
-  reset() {
-    // clear overlay
-  }
 }
 
 export class PointStroke extends Stroke {
   start(target, overlay, brushTile) {
-    // generate shape
-    // send command
+    // create and return shape
   }
 }
 
@@ -38,8 +33,7 @@ export class BrushStroke extends Stroke {
   }
 
   end(x, y) {
-    // end shape
-    // send command
+    // return shape
   }
 }
 
@@ -53,7 +47,6 @@ export class RectangleStroke extends Stroke {
   }
 
   end(x, y) {
-    // end rect
-    // send command
+    // return rect
   }
 }

@@ -1,4 +1,7 @@
-import {Cell} from './terminal.js';
+import {Cell} from './models/terminal.js';
+import namemap from './namemap.js';
+import {PointStroke} from './strokes.js';
+import {drawCell} from './draw.js';
 
 // TODO: need better name for draw strategy
 class Tool {
@@ -16,9 +19,25 @@ class Tool {
   }
 }
 
+const pen = {
+  strokeFactory(currentTile) {
+    return (...args) => new PointStroke(currentTile, ...args);
+  }
+
+  drawStrategy() {
+    return drawCell;
+  }
+}
+
 export class Pen {
 
 }
+
+const TOOLS_REGISTRY = [
+  pen
+];
+
+export const TOOLS = namemap(TOOLS_REGISTRY, (name, t) => t);
 
 export function demoText(terminal, x, y) {
   const text = 'Hello World! yellow & green.', textLength = text.length, sourceCell = new Cell(null, '#ff0000', '#222222'), tiles = [];
