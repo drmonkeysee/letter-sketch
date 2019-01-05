@@ -1,25 +1,26 @@
+import {Cell, makeTile} from './models/terminal.js';
+
 class Stroke {
-  constructor(dispatch, cmd) {
-    this._dispatch;
-    this._cmd = cmd;
+  constructor(brushCell, overlay) {
+    this._overlay = overlay;
+    this._brushCell = brushCell;
   }
 
-  start() {
-    // do nothing
-  }
-
-  continue() {
-    // do nothing
-  }
-
-  end() {
-    // do nothing
+  handleEvent(event) {
+    const eventName = event.type.replace(event.type[0], event.type[0].toUpperCase()),
+          handlerName = `on${eventName}`;
+    if (this[handlerName]) return this[handlerName](event);
+    return null;
   }
 }
 
 export class PointStroke extends Stroke {
-  start(target, overlay, brushTile) {
-    // create and return shape
+  onMousedown(event) {
+    const uxCell = event.target,
+          tile = makeTile(uxCell.dataset.x, uxCell.dataset.y, this._brushCell),
+          txt = uxCell.getElementsByTagName('span')[0];
+    txt.textContent = this._brushCell.glyph;
+    return [tile];
   }
 }
 

@@ -5,9 +5,11 @@ export class SketchPad extends View {
     super(...args);
     this._canvas = this._doc.getElementById('draw-surface');
     this._overlay = this._doc.getElementById('ux-overlay');
+    this._activeStroke = this._stroke = null;
   }
 
   draw(initialState) {
+    this._stroke = initialState.stroke;
     const viewSize = {
       h: initialState.termSize.height * initialState.tileSize.height,
       w: initialState.termSize.width * initialState.tileSize.width
@@ -54,6 +56,7 @@ export class SketchPad extends View {
 
     this._overlay.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
 
+    const events = ['mousedown', 'mouseenter', 'mouseleave', 'mouseup'];
     for (let y = 0; y < rows; ++y) {
       for (let x = 0; x < columns; ++x) {
         const uxCell = this._doc.createElement('div');
@@ -64,14 +67,9 @@ export class SketchPad extends View {
         uxCell.dataset.x = x;
         uxCell.dataset.y = y;
 
-        uxCell.addEventListener('mouseenter', e => {
-          const txt = e.target.getElementsByTagName('span')[0];
-          txt.textContent = 'W';
-        });
-        uxCell.addEventListener('mouseleave', e => {
-          const txt = e.target.getElementsByTagName('span')[0];
-          txt.textContent = '';
-        });
+        for (const e of events) {
+          uxCell.addEventListener(e, this._handleDrawEvent.bind(this));
+        }
         
         this._overlay.appendChild(uxCell);
       }
@@ -93,6 +91,18 @@ export class SketchPad extends View {
         this._context.fillStyle = cell.foregroundColor;
         this._context.fillText(cell.glyph, drawRect.x, drawRect.y + glyphOffsetY);
       }
+    }
+  }
+
+  _handleDrawEvent(event) {
+    if (!this._activeStroke) {
+      this._activeStroke = this._stroke(this._overlay);
+    }
+    const shape = this._activeStroke.handleEvent(event);
+    if (shape) {
+      console.log('dispatch draw command');
+      // TODO: should i reset existing stroke or delete and recreate
+      console.log('clear active stroke');
     }
   }
 

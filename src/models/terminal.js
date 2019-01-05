@@ -48,17 +48,17 @@ export class Cell {
   }
 }
 
+export function makeTile(x, y, cell) {
+  return {x, y, cell};
+}
+
 export function demoText(terminal, x, y) {
   const text = 'Hello World! yellow & green.', textLength = text.length, sourceCell = new Cell(null, '#ff0000', '#222222'), tiles = [];
   for (let i = 0; i < textLength; ++i) {
     sourceCell.glyph = text[i];
     const targetX = x + i,
           targetCell = terminal.updateCell(targetX, y, sourceCell);
-    tiles.push({
-      x: targetX,
-      y,
-      cell: targetCell
-    });
+    tiles.push(makeTile(targetX, y, targetCell));
   }
   return tiles;
 }
