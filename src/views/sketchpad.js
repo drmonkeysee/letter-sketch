@@ -56,7 +56,8 @@ export class SketchPad extends View {
 
     this._overlay.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
 
-    const events = ['mousedown', 'mouseenter', 'mouseleave', 'mouseup'];
+    const startEvents = ['mousedown'],
+          strokeEvents = ['mouseenter', 'mouseleave', 'mouseup'];
     for (let y = 0; y < rows; ++y) {
       for (let x = 0; x < columns; ++x) {
         const uxCell = this._doc.createElement('div');
@@ -67,8 +68,12 @@ export class SketchPad extends View {
         uxCell.dataset.x = x;
         uxCell.dataset.y = y;
 
-        for (const e of events) {
-          uxCell.addEventListener(e, this._handleDrawEvent.bind(this));
+        // TODO: need a way to cancel stroke if cursor leaves draw region
+        for (const e of startEvents) {
+          uxCell.addEventListener(e, this._startStroke.bind(this));
+        }
+        for (const e of strokeEvents) {
+          uxCell.addEventListener(e, this._continueStroke.bind(this));
         }
         
         this._overlay.appendChild(uxCell);
@@ -94,15 +99,18 @@ export class SketchPad extends View {
     }
   }
 
-  _handleDrawEvent(event) {
-    if (!this._activeStroke) {
-      this._activeStroke = this._stroke(this._overlay);
-    }
+  _startStroke(event) {
+    this._activeStroke = this._stroke(this._overlay);
+    this._continueStroke(event);
+  }
+
+  _continueStroke(event) {
+    if (!this._activeStroke) return;
     const shape = this._activeStroke.handleEvent(event);
     if (shape) {
       console.log('dispatch draw command');
-      // TODO: should i reset existing stroke or delete and recreate
       console.log('clear active stroke');
+      this._activeStroke = null;
     }
   }
 
