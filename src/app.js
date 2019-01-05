@@ -5,7 +5,7 @@ import {Terminal, demoText} from './models/terminal.js';
 import {ViewNotifier} from './refresh.js';
 import dispatch from './dispatch.js';
 import {VIEW_REGISTRY} from './views/index.js';
-import {TOOLS} from './tools.js';
+import {currentStroke} from './models/tools.js';
 
 class App {
   constructor(win, notifier, dispatchBuilder) {
@@ -63,8 +63,7 @@ class App {
       tiles: demoText(this.models.terminal, 9, 10),
       tileSize: this.models.currentBrush.tileSize,
       termSize: this.models.terminal.dimensions,
-      // TODO: this is awkward
-      stroke: TOOLS[this.models.currentTool].strokeFactory(this.models.currentBrush.cell),
+      stroke: currentStroke(this.models),
       glyph: this.models.currentBrush.cell.glyph,
       colors: {
         fg: this.models.currentBrush.cell.foregroundColor,

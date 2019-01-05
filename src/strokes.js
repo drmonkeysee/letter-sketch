@@ -2,8 +2,8 @@ import {Cell, makeTile} from './models/terminal.js';
 
 class Stroke {
   constructor(brushCell, overlay) {
-    this._overlay = overlay;
     this._brushCell = brushCell;
+    this._overlay = overlay;
   }
 
   handleEvent(event) {

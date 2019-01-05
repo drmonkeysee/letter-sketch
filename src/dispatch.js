@@ -9,9 +9,7 @@ class CommandDispatcher {
 
   command(name, ...args) {
     const cmdCls = this._commands[name];
-    if (!cmdCls) {
-      throw new Error(`Unknown command: ${name.toString()}`);
-    }
+    if (!cmdCls) throw new Error(`Unknown command: ${name.toString()}`);
     const cmd = new cmdCls(...args),
           update = cmd.execute();
     this._notifier.signal(update);

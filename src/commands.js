@@ -1,6 +1,6 @@
 import namemap from './namemap.js';
 import {EVENTS, makeUpdate} from './refresh.js';
-import {TOOLS} from './tools.js';
+import {currentStroke} from './models/tools.js';
 
 class SetForegroundColor {
   constructor(models, color) {
@@ -58,15 +58,14 @@ class SetTool {
 
   execute() {
     this._models.currentTool = toolName;
-    const tool = TOOLS[this._models.currentTool];
-    return makeUpdate(EVENTS.onToolChanged, {stroke: tool.strokeFactory(this._models.currentBrush.tile)});
+    return makeUpdate(EVENTS.onToolChanged, {stroke: currentStroke(this._models)});
   }
 }
 
 class DrawShape {
   constructor(models, shape) {
     this._brushCell = models.currentBrush.cell;
-    this._drawStrategy = models.currentTool.drawStrategy;
+    this._draw = models.currentTool.drawStrategy;
     this._terminal = models.terminal;
     this._shape = shape;
   }
