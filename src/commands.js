@@ -1,6 +1,6 @@
 import namemap from './namemap.js';
 import {EVENTS, makeUpdate} from './refresh.js';
-import {currentStroke} from './models/tools.js';
+import {currentStroke, currentDraw} from './models/tools.js';
 
 class SetForegroundColor {
   constructor(models, color) {
@@ -64,15 +64,15 @@ class SetTool {
 
 class DrawShape {
   constructor(models, shape) {
-    this._brushCell = models.currentBrush.cell;
-    this._draw = models.currentTool.drawStrategy;
+    this._brush = models.currentBrush;
+    this._draw = currentDraw(models);
     this._terminal = models.terminal;
     this._shape = shape;
   }
 
   execute() {
-    // draw shape onto terminal
-    // return tiles for makeUpdate
+    const tiles = this._draw(this._shape, this._brush.cell, this._terminal);
+    return makeUpdate(EVENTS.onDrawCompleted, {tiles: tiles, tileSize: this._brush.tileSize});
   }
 }
 

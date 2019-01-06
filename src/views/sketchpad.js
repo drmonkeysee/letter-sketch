@@ -1,4 +1,6 @@
 import {View} from './view.js';
+import {COMMANDS} from '../commands.js';
+import {EVENTS} from '../refresh.js';
 
 export class SketchPad extends View {
   constructor(...args) {
@@ -21,7 +23,7 @@ export class SketchPad extends View {
   }
 
   subscribe(notifier) {
-    // TODO
+    notifier.subscribe(EVENTS.onDrawCompleted, this._drawTiles.bind(this));
   }
 
   _drawSurface(initialState) {
@@ -43,7 +45,7 @@ export class SketchPad extends View {
     
     this._context.clearRect(0, 0, rect.width, rect.height);
 
-    this._drawTiles(initialState.tiles, initialState.tileSize);
+    this._drawTiles(initialState);
     
     this._drawDemo(initialState);
   }
@@ -81,7 +83,8 @@ export class SketchPad extends View {
     }
   }
 
-  _drawTiles(tiles, tileSize) {
+  _drawTiles(update) {
+    const tiles = update.tiles, tileSize = update.tileSize;
     for (const tile of tiles) {
       const drawRect = {x: tile.x * tileSize.width, y: tile.y * tileSize.height, w: tileSize.width, h: tileSize.height},
             cell = tile.cell,
@@ -108,7 +111,7 @@ export class SketchPad extends View {
     if (!this._activeStroke) return;
     const shape = this._activeStroke.handleEvent(event);
     if (shape) {
-      console.log('dispatch draw command');
+      this._dispatch.command(COMMANDS.drawShape, shape);
       console.log('clear active stroke');
       this._activeStroke = null;
     }

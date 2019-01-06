@@ -6,17 +6,23 @@ const pen = {
   strokeFactory(models) {
     return (...args) => new PointStroke(models.currentBrush.cell, ...args);
   },
-  drawStrategy() {
-    return drawCell;
-  }
+  drawStrategy: drawCell
 };
 
 const TOOLS = {
   pen
 };
 
-export function currentStroke(models) {
+function currentToolProperty(models, propAccessor) {
   const tool = TOOLS[models.currentTool];
   if (!tool) throw new Error(`Unknown tool: ${models.currentTool}`);
-  return tool.strokeFactory(models);
+  return propAccessor(tool, models);
+}
+
+export function currentStroke(models) {
+  return currentToolProperty(models, (t, m) => t.strokeFactory(m));
+}
+
+export function currentDraw(models) {
+  return currentToolProperty(models, (t, m) => t.drawStrategy);
 }
