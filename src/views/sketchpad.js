@@ -2,6 +2,7 @@ import {View} from './view.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
 
+// TODO: split sketchpad into overlay and canvas views
 export class SketchPad extends View {
   constructor(...args) {
     super(...args);

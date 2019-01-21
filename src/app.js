@@ -9,66 +9,66 @@ import {currentStroke} from './models/tools.js';
 
 class App {
   constructor(win, notifier, dispatchBuilder) {
-    this.win = win;
-    this.doc = win.document;
-    this.notifier = notifier;
-    this.dispatchBuilder = dispatchBuilder;
-    this.models = {};
+    this._win = win;
+    this._doc = win.document;
+    this._notifier = notifier;
+    this._dispatchBuilder = dispatchBuilder;
+    this._models = {};
   }
 
   initialize() {
-    checkCanvas(this.doc);
+    checkCanvas(this._doc);
 
-    this.createModels();
-    this.syncModels();
-    this.wireCommands();
-    this.createViews();
-    this.registerViews();
-    this.drawViews();
+    this._createModels();
+    this._syncModels();
+    this._wireCommands();
+    this._createViews();
+    this._registerViews();
+    this._drawViews();
 
     console.log('started letter-sketch');
   }
 
-  createModels() {
-    this.models.currentBrush = brush();
-    this.models.terminal = new Terminal(50, 20);
-    this.models.currentTool = 'pen';
+  _createModels() {
+    this._models.currentBrush = brush();
+    this._models.terminal = new Terminal(50, 20);
+    this._models.currentTool = 'pen';
   }
 
-  syncModels() {
-    this.models.currentBrush.tileSize = measureGlyph(this.doc);
+  _syncModels() {
+    this._models.currentBrush.tileSize = measureGlyph(this._doc);
   }
 
-  wireCommands() {
-    this.dispatcher = this.dispatchBuilder.build(this.models);
+  _wireCommands() {
+    this._dispatcher = this._dispatchBuilder.build(this._models);
   }
 
-  createViews() {
-    this.views = namemap(VIEW_REGISTRY, (n, viewCls) => new viewCls(this.doc, this.dispatcher));
+  _createViews() {
+    this._views = namemap(VIEW_REGISTRY, (n, viewCls) => new viewCls(this._doc, this._dispatcher));
   }
 
-  registerViews() {
-    this.notifier.register(...Object.values(this.views));
+  _registerViews() {
+    this._notifier.register(...Object.values(this._views));
   }
 
-  drawViews() {
-    const initState = this.initialState();
-    for (const v of Object.values(this.views)) {
+  _drawViews() {
+    const initState = this._initialState();
+    for (const v of Object.values(this._views)) {
       v.draw(initState);
     }
   }
 
-  initialState() {
+  _initialState() {
     return {
-      tiles: demoText(this.models.terminal, 9, 10),
-      tileSize: this.models.currentBrush.tileSize,
-      termSize: this.models.terminal.dimensions,
-      stroke: currentStroke(this.models),
-      glyph: this.models.currentBrush.cell.glyph,
+      tiles: demoText(this._models.terminal, 9, 10),
+      tileSize: this._models.currentBrush.tileSize,
+      termSize: this._models.terminal.dimensions,
+      stroke: currentStroke(this._models),
+      glyph: this._models.currentBrush.cell.glyph,
       colors: {
-        fg: this.models.currentBrush.cell.foregroundColor,
-        bg: this.models.currentBrush.cell.backgroundColor,
-        fill: this.models.currentBrush.fillColor
+        fg: this._models.currentBrush.cell.foregroundColor,
+        bg: this._models.currentBrush.cell.backgroundColor,
+        fill: this._models.currentBrush.fillColor
       }
     }
   }
