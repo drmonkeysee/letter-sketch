@@ -113,6 +113,7 @@ export class SketchPad extends View {
     const shape = this._activeStroke.handleEvent(event);
     if (shape) {
       this._dispatch.command(COMMANDS.drawShape, shape);
+      console.log('generated shape: %o', shape);
       console.log('clear active stroke');
       this._activeStroke = null;
     }

@@ -6,32 +6,32 @@ import {channelsToCss} from '../color.js';
 class ColorSelection extends View {
   constructor(id, cmd, refreshEvent, onSelected, colorInitializer, ...args) {
     super(...args);
-    this.selection = this._doc.getElementById(id);
-    this.cmd = cmd;
-    this.refreshEvent = refreshEvent;
-    this.onSelected = onSelected;
-    this.colorInitializer = colorInitializer;
+    this._selection = this._doc.getElementById(id);
+    this._cmd = cmd;
+    this._refreshEvent = refreshEvent;
+    this._onSelected = onSelected;
+    this._colorInitializer = colorInitializer;
   }
 
   draw(initialState) {
-    this._setColor(this.colorInitializer(initialState.colors));
-    this.selection.addEventListener('click', e => this.onSelected(this));
+    this._setColor(this._colorInitializer(initialState.colors));
+    this._selection.addEventListener('click', e => this._onSelected(this));
   }
 
   subscribe(notifier) {
-    notifier.subscribe(this.refreshEvent, this._refreshColor.bind(this));
+    notifier.subscribe(this._refreshEvent, this._refreshColor.bind(this));
   }
 
   select() {
-    this.selection.classList.add('selected');
+    this._selection.classList.add('selected');
   }
 
   deselect() {
-    this.selection.classList.remove('selected');
+    this._selection.classList.remove('selected');
   }
 
   pick(color) {
-    this._dispatch.command(this.cmd, color);
+    this._dispatch.command(this._cmd, color);
   }
 
   _refreshColor(update) {
@@ -40,11 +40,11 @@ class ColorSelection extends View {
 
   _setColor(color) {
     if (color) {
-      this.selection.classList.remove('no-color');
-      this.selection.style.backgroundColor = color;
+      this._selection.classList.remove('no-color');
+      this._selection.style.backgroundColor = color;
     } else {
-      this.selection.classList.add('no-color');
-      this.selection.style.backgroundColor = null;
+      this._selection.classList.add('no-color');
+      this._selection.style.backgroundColor = null;
     }
   }
 }
