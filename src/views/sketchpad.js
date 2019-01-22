@@ -151,24 +151,23 @@ class Overlay extends View {
     this._overlay = this._doc.getElementById('ux-overlay');
     this._activeStroke = this._stroke = null;
     this._uxGrid = [];
+    this._rows = this._columns = 0;
   }
 
   draw(initialState) {
     this._stroke = initialState.stroke;
+    this._rows = initialState.termSize.height;
+    this._columns = initialState.termSize.width;
     this._overlay.style.width = initialState.styleWidth;
     this._overlay.style.height = initialState.styleHeight;
+    this._overlay.style.gridTemplateColumns = `repeat(${this._columns}, 1fr)`;
     
     const cellHeight = `${initialState.tileSize.height}px`,
           cellWidth = `${initialState.tileSize.width}px`,
-          columns = initialState.termSize.width,
-          rows = initialState.termSize.height;
-
-    this._overlay.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-
-    const startEvents = ['mousedown'],
+          startEvents = ['mousedown'],
           strokeEvents = ['mouseenter', 'mouseleave', 'mouseup'];
-    for (let y = 0; y < rows; ++y) {
-      for (let x = 0; x < columns; ++x) {
+    for (let y = 0; y < this._rows; ++y) {
+      for (let x = 0; x < this._columns; ++x) {
         const uxCell = this._doc.createElement('div');
         uxCell.appendChild(this._doc.createElement('span'));
 
@@ -203,6 +202,15 @@ class Overlay extends View {
       this._dispatch.command(COMMANDS.drawShape, shape);
       console.log('generated shape: %o', shape);
       console.log('clear active stroke');
+      for (const tile of shape) {
+        const uxCell = this._uxGrid[tile.x + (tile.y * this._columns)],
+              cellText = uxCell.getElementsByTagName('span')[0];
+        setTimeout(() => {
+          cellText.style.color = '#ff0000';
+          cellText.style.backgroundColor = '#00ff00';
+          setTimeout(() => cellText.style.backgroundColor = cellText.textContent = null, 500);
+        }, 500);
+      }
       this._activeStroke = null;
     }
   }
