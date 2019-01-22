@@ -2,32 +2,17 @@ import {View} from './view.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
 
-// TODO: split sketchpad into overlay and canvas views
-export class SketchPad extends View {
+class Canvas extends View {
   constructor(...args) {
     super(...args);
     this._canvas = this._doc.getElementById('draw-surface');
-    this._overlay = this._doc.getElementById('ux-overlay');
-    this._activeStroke = this._stroke = null;
+    this._context = null;
   }
 
   draw(initialState) {
-    this._stroke = initialState.stroke;
-    const viewSize = {
-      h: initialState.termSize.height * initialState.tileSize.height,
-      w: initialState.termSize.width * initialState.tileSize.width
-    };
-    this._overlay.style.height = this._canvas.style.height = `${viewSize.h}px`;
-    this._overlay.style.width = this._canvas.style.width = `${viewSize.w}px`;
-    this._drawSurface(initialState);
-    this._drawUxOverlay(initialState);
-  }
+    this._canvas.style.width = initialState.styleWidth;
+    this._canvas.style.height = initialState.styleHeight;
 
-  subscribe(notifier) {
-    notifier.subscribe(EVENTS.onDrawCompleted, this._drawTiles.bind(this));
-  }
-
-  _drawSurface(initialState) {
     const rect = this._canvas.getBoundingClientRect(),
           dpr = this._doc.defaultView.devicePixelRatio || 1;
     console.log('dpr: %d, rect: %o', dpr, rect.width, rect.height);
@@ -51,37 +36,8 @@ export class SketchPad extends View {
     this._drawDemo(initialState);
   }
 
-  _drawUxOverlay(initialState) {
-    const cellHeight = `${initialState.tileSize.height}px`,
-          cellWidth = `${initialState.tileSize.width}px`,
-          columns = initialState.termSize.width,
-          rows = initialState.termSize.height;
-
-    this._overlay.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-
-    const startEvents = ['mousedown'],
-          strokeEvents = ['mouseenter', 'mouseleave', 'mouseup'];
-    for (let y = 0; y < rows; ++y) {
-      for (let x = 0; x < columns; ++x) {
-        const uxCell = this._doc.createElement('div');
-        uxCell.appendChild(this._doc.createElement('span'));
-
-        uxCell.style.height = cellHeight;
-        uxCell.style.width = cellWidth;
-        uxCell.dataset.x = x;
-        uxCell.dataset.y = y;
-
-        // TODO: need a way to cancel stroke if cursor leaves draw region
-        for (const e of startEvents) {
-          uxCell.addEventListener(e, this._startStroke.bind(this));
-        }
-        for (const e of strokeEvents) {
-          uxCell.addEventListener(e, this._continueStroke.bind(this));
-        }
-        
-        this._overlay.appendChild(uxCell);
-      }
-    }
+  subscribe(notifier) {
+    notifier.subscribe(EVENTS.onDrawCompleted, this._drawTiles.bind(this));
   }
 
   _drawTiles(update) {
@@ -89,7 +45,8 @@ export class SketchPad extends View {
     for (const tile of tiles) {
       const drawRect = {x: tile.x * tileSize.width, y: tile.y * tileSize.height, w: tileSize.width, h: tileSize.height},
             cell = tile.cell,
-            glyphOffsetY = drawRect.h / 2;
+            glyphOffsetY = drawRect.h / 2;  // NOTE: text baseline + y-offset to line up with overlay's textContent glyphs
+                                            // TODO: hope this math works cross-browser!
       if (cell.isEmpty()) {
         this._context.clearRect(drawRect.x, drawRect.y, drawRect.w, drawRect.h);
       } else {
@@ -100,22 +57,6 @@ export class SketchPad extends View {
         this._context.fillStyle = cell.foregroundColor;
         this._context.fillText(cell.glyph, drawRect.x, drawRect.y + glyphOffsetY);
       }
-    }
-  }
-
-  _startStroke(event) {
-    this._activeStroke = this._stroke(this._overlay);
-    this._continueStroke(event);
-  }
-
-  _continueStroke(event) {
-    if (!this._activeStroke) return;
-    const shape = this._activeStroke.handleEvent(event);
-    if (shape) {
-      this._dispatch.command(COMMANDS.drawShape, shape);
-      console.log('generated shape: %o', shape);
-      console.log('clear active stroke');
-      this._activeStroke = null;
     }
   }
 
@@ -201,5 +142,90 @@ export class SketchPad extends View {
       this._context.strokeRect(xOffset, drawRect.y, drawRect.w, drawRect.h);
       this._context.fillText(connectors[i], xOffset, drawRect.y);
     }
+  }
+}
+
+class Overlay extends View {
+  constructor(...args) {
+    super(...args);
+    this._overlay = this._doc.getElementById('ux-overlay');
+    this._activeStroke = this._stroke = null;
+    this._uxGrid = [];
+  }
+
+  draw(initialState) {
+    this._stroke = initialState.stroke;
+    this._overlay.style.width = initialState.styleWidth;
+    this._overlay.style.height = initialState.styleHeight;
+    
+    const cellHeight = `${initialState.tileSize.height}px`,
+          cellWidth = `${initialState.tileSize.width}px`,
+          columns = initialState.termSize.width,
+          rows = initialState.termSize.height;
+
+    this._overlay.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+
+    const startEvents = ['mousedown'],
+          strokeEvents = ['mouseenter', 'mouseleave', 'mouseup'];
+    for (let y = 0; y < rows; ++y) {
+      for (let x = 0; x < columns; ++x) {
+        const uxCell = this._doc.createElement('div');
+        uxCell.appendChild(this._doc.createElement('span'));
+
+        uxCell.style.height = cellHeight;
+        uxCell.style.width = cellWidth;
+        uxCell.dataset.x = x;
+        uxCell.dataset.y = y;
+
+        // TODO: need a way to cancel stroke if cursor leaves draw region
+        for (const e of startEvents) {
+          uxCell.addEventListener(e, this._startStroke.bind(this));
+        }
+        for (const e of strokeEvents) {
+          uxCell.addEventListener(e, this._continueStroke.bind(this));
+        }
+        
+        this._uxGrid.push(uxCell);
+        this._overlay.appendChild(uxCell);
+      }
+    }
+  }
+
+  _startStroke(event) {
+    this._activeStroke = this._stroke(this._overlay);
+    this._continueStroke(event);
+  }
+
+  _continueStroke(event) {
+    if (!this._activeStroke) return;
+    const shape = this._activeStroke.handleEvent(event);
+    if (shape) {
+      this._dispatch.command(COMMANDS.drawShape, shape);
+      console.log('generated shape: %o', shape);
+      console.log('clear active stroke');
+      this._activeStroke = null;
+    }
+  }
+}
+
+export class SketchPad extends View {
+  constructor(...args) {
+    super(...args);
+    this._canvas = new Canvas(...args);
+    this._overlay = new Overlay(...args);
+  }
+
+  draw(initialState) {
+    const styleSize = {
+      styleHeight: `${initialState.termSize.height * initialState.tileSize.height}px`,
+      styleWidth: `${initialState.termSize.width * initialState.tileSize.width}px`
+    };
+    initialState = Object.assign(styleSize, initialState);
+    this._canvas.draw(initialState);
+    this._overlay.draw(initialState);
+  }
+
+  subscribe(notifier) {
+    this._canvas.subscribe(notifier);
   }
 }
