@@ -17,7 +17,7 @@ class Stroke {
 export class PointStroke extends Stroke {
   onMousedown(event) {
     const uxCell = event.target,
-          tile = makeTile(uxCell.dataset.x, uxCell.dataset.y, this._brushCell),
+          tile = makeTile(parseInt(uxCell.dataset.x, 10), parseInt(uxCell.dataset.y), this._brushCell),
           txt = uxCell.getElementsByTagName('span')[0];
     txt.textContent = this._brushCell.glyph;
     return [tile];
