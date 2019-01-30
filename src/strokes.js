@@ -20,6 +20,8 @@ export class PointStroke extends Stroke {
           tile = makeTile(parseInt(uxCell.dataset.x, 10), parseInt(uxCell.dataset.y), this._brushCell),
           txt = uxCell.getElementsByTagName('span')[0];
     txt.textContent = this._brushCell.glyph;
+    txt.style.color = this._brushCell.foregroundColor;
+    txt.style.backgroundColor = this._brushCell.backgroundColor;
     return [tile];
   }
 }
