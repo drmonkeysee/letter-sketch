@@ -1,4 +1,6 @@
-export function drawCell(shape, brushCell, terminal) {
-  console.log('drawCell called');
-  return [];
+export function drawShape(shape, brushCell, terminal) {
+  for (const tile of shape) {
+    terminal.updateCell(tile.x, tile.y, tile.cell);
+  }
+  return shape;
 }

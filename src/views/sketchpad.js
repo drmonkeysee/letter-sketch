@@ -33,7 +33,7 @@ class Canvas extends View {
 
     this._drawTiles(initialState);
     
-    this._drawDemo(initialState);
+    //this._drawDemo(initialState);
   }
 
   subscribe(notifier) {
@@ -41,15 +41,20 @@ class Canvas extends View {
   }
 
   _drawTiles(update) {
-    const tiles = update.tiles, tileSize = update.tileSize;
-    for (const tile of tiles) {
-      const drawRect = {x: tile.x * tileSize.width, y: tile.y * tileSize.height, w: tileSize.width, h: tileSize.height},
+    const shape = update.shape, tileSize = update.tileSize;
+    for (const tile of shape) {
+      const drawRect = {
+              x: tile.x * tileSize.width,
+              y: tile.y * tileSize.height,
+              w: tileSize.width,
+              h: tileSize.height
+            },
             cell = tile.cell,
             glyphOffsetY = drawRect.h / 2;  // NOTE: text baseline + y-offset to line up with overlay's textContent glyphs
                                             // TODO: hope this math works cross-browser!
-      if (cell.isEmpty()) {
-        this._context.clearRect(drawRect.x, drawRect.y, drawRect.w, drawRect.h);
-      } else {
+      
+      this._context.clearRect(drawRect.x, drawRect.y, drawRect.w, drawRect.h);
+      if (!cell.isEmpty()) {
         if (cell.backgroundColor) {
           this._context.fillStyle = cell.backgroundColor;
           this._context.fillRect(drawRect.x, drawRect.y, drawRect.w, drawRect.h);
@@ -190,6 +195,10 @@ class Overlay extends View {
     }
   }
 
+  subscribe(notifier) {
+    notifier.subscribe(EVENTS.onDrawCompleted, this._clearStroke.bind(this));
+  }
+
   _startStroke(event) {
     this._activeStroke = this._stroke(this._overlay);
     this._continueStroke(event);
@@ -201,18 +210,18 @@ class Overlay extends View {
     if (shape) {
       this._dispatch.command(COMMANDS.drawShape, shape);
       console.log('generated shape: %o', shape);
-      console.log('clear active stroke');
-      for (const tile of shape) {
-        const uxCell = this._uxGrid[tile.x + (tile.y * this._columns)],
-              cellText = uxCell.getElementsByTagName('span')[0];
-        setTimeout(() => {
-          cellText.style.color = '#ff0000';
-          cellText.style.backgroundColor = '#00ff00';
-          setTimeout(() => cellText.style.backgroundColor = cellText.textContent = null, 500);
-        }, 500);
-      }
-      this._activeStroke = null;
     }
+  }
+
+  _clearStroke(update) {
+    console.log('clear active stroke');
+    const shape = update.shape;
+    for (const tile of shape) {
+      const uxCell = this._uxGrid[tile.x + (tile.y * this._columns)],
+            cellText = uxCell.getElementsByTagName('span')[0];
+      cellText.style.backgroundColor = cellText.textContent = null;
+    }
+    this._activeStroke = null;
   }
 }
 
@@ -235,5 +244,6 @@ export class SketchPad extends View {
 
   subscribe(notifier) {
     this._canvas.subscribe(notifier);
+    this._overlay.subscribe(notifier);
   }
 }

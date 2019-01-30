@@ -1,12 +1,12 @@
 import {PointStroke} from '../strokes.js';
-import {drawCell} from '../draw.js';
+import {drawShape} from '../draw.js';
 
 // TODO: need better name for draw strategy
 const pen = {
   strokeFactory(models) {
     return (...args) => new PointStroke(models.currentBrush.cell, ...args);
   },
-  drawStrategy: drawCell
+  drawStrategy: drawShape
 };
 
 const TOOLS = {

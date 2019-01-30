@@ -60,7 +60,7 @@ class App {
 
   _initialState() {
     return {
-      tiles: demoText(this._models.terminal, 9, 10),
+      shape: demoText(this._models.terminal, 9, 10),
       tileSize: this._models.currentBrush.tileSize,
       termSize: this._models.terminal.dimensions,
       stroke: currentStroke(this._models),

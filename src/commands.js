@@ -72,8 +72,8 @@ class DrawShape {
   }
 
   execute() {
-    const tiles = this._draw(this._shape, this._brush.cell, this._terminal);
-    return makeUpdate(EVENTS.onDrawCompleted, {tiles: tiles, tileSize: this._brush.tileSize});
+    const shape = this._draw(this._shape, this._brush.cell, this._terminal);
+    return makeUpdate(EVENTS.onDrawCompleted, {shape: shape, tileSize: this._brush.tileSize});
   }
 }
 
