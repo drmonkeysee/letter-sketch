@@ -14,7 +14,7 @@ class Canvas extends View {
     this._canvas.style.height = initialState.styleHeight;
 
     const rect = this._canvas.getBoundingClientRect(),
-          dpr = this._doc.defaultView.devicePixelRatio || 1;
+          dpr = this._doc.defaultView.devicePixelRatio;
     console.log('dpr: %d, rect: %o', dpr, rect.width, rect.height);
     console.log('canvas %d w %d h', this._canvas.width, this._canvas.height);
 
@@ -41,17 +41,15 @@ class Canvas extends View {
   }
 
   _drawTiles(update) {
-    const shape = update.shape, tileSize = update.tileSize;
+    const shape = update.shape, tileSize = update.tileSize,
+          drawRect = {x: 0, y: 0, w: tileSize.width, h: tileSize.height},
+          glyphOffsetY = drawRect.h / 2;  // NOTE: text baseline + y-offset to line up with overlay's textContent glyphs
+                                          // TODO: hope this math works cross-browser!
+    console.log('Drawrect: %o, glyphOffsetY: %o', drawRect, glyphOffsetY);
     for (const tile of shape) {
-      const drawRect = {
-              x: tile.x * tileSize.width,
-              y: tile.y * tileSize.height,
-              w: tileSize.width,
-              h: tileSize.height
-            },
-            cell = tile.cell,
-            glyphOffsetY = drawRect.h / 2;  // NOTE: text baseline + y-offset to line up with overlay's textContent glyphs
-                                            // TODO: hope this math works cross-browser!
+      const cell = tile.cell;
+      drawRect.x = tile.x * tileSize.width;
+      drawRect.y = tile.y * tileSize.height;
       
       this._context.clearRect(drawRect.x, drawRect.y, drawRect.w, drawRect.h);
       if (!cell.isEmpty()) {

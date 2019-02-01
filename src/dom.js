@@ -12,6 +12,9 @@ export function checkCanvas(doc) {
 export function measureGlyph(doc) {
   const r = doc.getElementById('glyph-ruler');
   r.textContent = DEFAULT_GLYPH;
-  const {height, width} = r.getBoundingClientRect();
-  return {height, width};
+  const {height, width} = r.getBoundingClientRect(),
+        dpr = doc.defaultView.devicePixelRatio;
+  console.log('Bounding rect: %o', {height, width});
+  // NOTE: round to the nearest physical pixel
+  return {height: Math.round(height * dpr) / dpr, width: Math.round(width * dpr) / dpr};
 }

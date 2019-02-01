@@ -37,6 +37,7 @@ class App {
 
   _syncModels() {
     this._models.currentBrush.tileSize = measureGlyph(this._doc);
+    console.log('Tilesize: %o', this._models.currentBrush.tileSize);
   }
 
   _wireCommands() {
