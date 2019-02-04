@@ -1,7 +1,7 @@
 import {DEFAULT_GLYPH} from './codepage.js';
 
 export function checkCanvas(doc) {
-  const canvas = doc.getElementById('draw-surface');
+  const canvas = doc.getElementById('img-surface');
   if (!canvas.getContext) {
     const msg = 'No console support detected!';
     console.error(msg);
@@ -12,9 +12,8 @@ export function checkCanvas(doc) {
 export function measureGlyph(doc) {
   const r = doc.getElementById('glyph-ruler');
   r.textContent = DEFAULT_GLYPH;
-  const {height, width} = r.getBoundingClientRect(),
-        dpr = doc.defaultView.devicePixelRatio;
+  const {height, width} = r.getBoundingClientRect();
   console.log('Bounding rect: %o', {height, width});
-  // NOTE: round to the nearest physical pixel
-  return {height: Math.round(height * dpr) / dpr, width: Math.round(width * dpr) / dpr};
+  // NOTE: round to the nearest pixel to close rounding gaps
+  return {height: Math.round(height), width: Math.round(width)};
 }

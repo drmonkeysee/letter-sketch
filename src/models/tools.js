@@ -2,15 +2,24 @@ import {PointStroke} from '../strokes.js';
 import {drawShape} from '../draw.js';
 
 // TODO: need better name for draw strategy
-const pen = {
-  strokeFactory(models) {
+const point = {
+  createStroke(models) {
     return (...args) => new PointStroke(models.currentBrush.cell, ...args);
   },
-  drawStrategy: drawShape
+  draw: drawShape
 };
 
 const TOOLS = {
-  pen
+  point,
+  pen: {},
+  fill: {},
+  rect: {},
+  fillRect: {},
+  ellipse: {},
+  fillEllipse: {},
+  line: {},
+  doubleLine: {},
+  text: {}
 };
 
 function currentToolProperty(models, propAccessor) {
@@ -20,9 +29,9 @@ function currentToolProperty(models, propAccessor) {
 }
 
 export function currentStroke(models) {
-  return currentToolProperty(models, (t, m) => t.strokeFactory(m));
+  return currentToolProperty(models, (t, m) => t.createStroke(m));
 }
 
 export function currentDraw(models) {
-  return currentToolProperty(models, (t, m) => t.drawStrategy);
+  return currentToolProperty(models, (t, m) => t.draw);
 }

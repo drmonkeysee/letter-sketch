@@ -32,7 +32,7 @@ class App {
   _createModels() {
     this._models.currentBrush = brush();
     this._models.terminal = new Terminal(50, 20);
-    this._models.currentTool = 'pen';
+    this._models.currentTool = 'point';
   }
 
   _syncModels() {

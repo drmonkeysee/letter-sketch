@@ -6,7 +6,7 @@ const EVENT_NAMES = [
   'OnFillColorChanged',
   'OnGlyphChanged',
   'OnToolChanged',
-  'OnDrawCompleted'
+  'OnDrawCommitted'
 ];
 
 export const EVENTS = namemap(EVENT_NAMES, (name, e) => Symbol(name));

@@ -7,35 +7,29 @@ $color-selection-border-thickness: 2px;
 $color-selection-offset: 10px;
 
 body {
-  font: 18pt 'Courier New';
+  font: 12pt 'Courier New';
+}
+
+#sketchpad, #glyph-ruler {
+  font-size: 18pt;
 }
 
 #sketchpad {
-  position: relative;
-  
-  #draw-surface {
-    outline: $canvas-outline;
-  }
+  display: grid;
+  outline: $canvas-outline;
 
-  #ux-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: grid;
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    div {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    &:hover {
+      outline: $canvas-outline;
+      opacity: 0.8;
+    }
 
-      &:hover {
-        outline: $canvas-outline;
-        opacity: 0.8;
-      }
-
-      span {
-        pointer-events: none;
-      }
+    span {
+      pointer-events: none;
     }
   }
 }
@@ -46,7 +40,7 @@ body {
 }
 
 #letter-block {
-  width: 500px;
+  width: 400px;
   display: grid;
   grid-template-columns: repeat(16, 1fr);
   border-left: $border-thin $color-border-control;
@@ -167,4 +161,8 @@ body {
     width: 100px;
     height: 100px;
   }
+}
+
+#draw-surface {
+  outline: $canvas-outline;
 }

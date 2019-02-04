@@ -63,7 +63,7 @@ class SetTool {
   }
 }
 
-class DrawShape {
+class CommitDraw {
   constructor(models, shape) {
     this._brush = models.currentBrush;
     this._draw = currentDraw(models);
@@ -73,7 +73,7 @@ class DrawShape {
 
   execute() {
     const shape = this._draw(this._shape, this._brush.cell, this._terminal);
-    return makeUpdate(EVENTS.onDrawCompleted, {shape: shape, tileSize: this._brush.tileSize});
+    return makeUpdate(EVENTS.onDrawCommitted, {shape: shape, tileSize: this._brush.tileSize});
   }
 }
 
@@ -83,7 +83,7 @@ export const COMMAND_REGISTRY = [
   SetFillColor,
   SetGlyph,
   SetTool,
-  DrawShape
+  CommitDraw
 ];
 
 export const COMMANDS = namemap(COMMAND_REGISTRY, (name, c) => Symbol(name));
