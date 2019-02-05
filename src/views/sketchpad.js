@@ -5,7 +5,7 @@ import {EVENTS} from '../refresh.js';
 export class SketchPad extends View {
   constructor(...args) {
     super(...args);
-    this._overlay = this._doc.getElementById('sketchpad');
+    this._sketchpad = this._doc.getElementById('sketchpad');
     this._activeStroke = this._stroke = null;
     this._uxGrid = [];
     this._rows = this._columns = 0;
@@ -15,9 +15,9 @@ export class SketchPad extends View {
     this._stroke = initialState.stroke;
     this._rows = initialState.termSize.height;
     this._columns = initialState.termSize.width;
-    this._overlay.style.width = `${initialState.termSize.width * initialState.tileSize.width}px`;
-    this._overlay.style.height = `${initialState.termSize.height * initialState.tileSize.height}px`;
-    this._overlay.style.gridTemplateColumns = `repeat(${this._columns}, 1fr)`;
+    this._sketchpad.style.width = `${initialState.termSize.width * initialState.tileSize.width}px`;
+    this._sketchpad.style.height = `${initialState.termSize.height * initialState.tileSize.height}px`;
+    this._sketchpad.style.gridTemplateColumns = `repeat(${this._columns}, 1fr)`;
     
     const cellHeight = `${initialState.tileSize.height}px`,
           cellWidth = `${initialState.tileSize.width}px`,
@@ -42,7 +42,7 @@ export class SketchPad extends View {
         }
         
         this._uxGrid.push(uxCell);
-        this._overlay.appendChild(uxCell);
+        this._sketchpad.appendChild(uxCell);
       }
     }
   }
@@ -52,7 +52,7 @@ export class SketchPad extends View {
   }
 
   _startStroke(event) {
-    this._activeStroke = this._stroke(this._overlay);
+    this._activeStroke = this._stroke(this._sketchpad);
     this._continueStroke(event);
   }
 

@@ -1,9 +1,9 @@
 import {Cell, makeTile} from './models/terminal.js';
 
 class Stroke {
-  constructor(brushCell, overlay) {
+  constructor(brushCell, sketchpad) {
     this._brushCell = brushCell;
-    this._overlay = overlay;
+    this._sketchpad = sketchpad;
   }
 
   handleEvent(event) {
@@ -17,7 +17,7 @@ class Stroke {
 export class PointStroke extends Stroke {
   onMousedown(event) {
     const uxCell = event.target,
-          tile = makeTile(parseInt(uxCell.dataset.x, 10), parseInt(uxCell.dataset.y), this._brushCell),
+          tile = makeTile(parseInt(uxCell.dataset.x, 10), parseInt(uxCell.dataset.y, 10), this._brushCell),
           txt = uxCell.getElementsByTagName('span')[0];
     txt.textContent = this._brushCell.glyph;
     txt.style.color = this._brushCell.foregroundColor;

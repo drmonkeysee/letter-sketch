@@ -9,6 +9,8 @@ const point = {
   draw: drawShape
 };
 
+// TODO: rework tool to be stroke(paint) where paint executes strategy of stroke
+// cmd is only for committing shapes to terminal
 const TOOLS = {
   point,
   pen: {},
