@@ -26,30 +26,33 @@ export class PointStroke extends Stroke {
   }
 }
 
-export class BrushStroke extends Stroke {
-  start(x, y) {
-    // start shape
+export class ContinualStroke extends Stroke {
+  onMousedown(event) {
+    // draw current shape
   }
 
-  continue(x, y) {
-    // add to shape
+  onMouseover(event) {
+    // continue drawing current shape
   }
 
-  end(x, y) {
-    // return shape
+  onMouseup(event) {
+    // finish drawing and return shape
   }
 }
 
-export class RectangleStroke extends Stroke {
-  start(x, y) {
-    // start rect
+export class SegmentStroke extends Stroke {
+  onMousedown(event) {
+    // save initial x, y
+    // draw shape
   }
 
-  continue(x, y) {
-    // draw rect from start to current
+  onMouseover(event) {
+    // clear last shape
+    // send start, current points
+    // draw new shape
   }
 
-  end(x, y) {
-    // return rect
+  onMouseup(event) {
+    // finish drawing and return shape
   }
 }
