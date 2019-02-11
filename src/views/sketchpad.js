@@ -7,7 +7,7 @@ export class SketchPad extends View {
     super(...args);
     this._sketchpad = this._doc.getElementById('sketchpad');
     this._activeStroke = this._stroke = null;
-    this._uxGrid = [];
+    this._grid = [];
     this._rows = this._columns = 0;
   }
 
@@ -25,24 +25,24 @@ export class SketchPad extends View {
           strokeEvents = ['mouseenter', 'mouseleave', 'mouseup'];
     for (let y = 0; y < this._rows; ++y) {
       for (let x = 0; x < this._columns; ++x) {
-        const uxCell = this._doc.createElement('div');
-        uxCell.appendChild(this._doc.createElement('span'));
+        const gridCell = this._doc.createElement('div');
+        gridCell.appendChild(this._doc.createElement('span'));
 
-        uxCell.style.height = cellHeight;
-        uxCell.style.width = cellWidth;
-        uxCell.dataset.x = x;
-        uxCell.dataset.y = y;
+        gridCell.style.height = cellHeight;
+        gridCell.style.width = cellWidth;
+        gridCell.dataset.x = x;
+        gridCell.dataset.y = y;
 
         // TODO: need a way to cancel stroke if cursor leaves draw region
         for (const e of startEvents) {
-          uxCell.addEventListener(e, this._startStroke.bind(this));
+          gridCell.addEventListener(e, this._startStroke.bind(this));
         }
         for (const e of strokeEvents) {
-          uxCell.addEventListener(e, this._continueStroke.bind(this));
+          gridCell.addEventListener(e, this._continueStroke.bind(this));
         }
         
-        this._uxGrid.push(uxCell);
-        this._sketchpad.appendChild(uxCell);
+        this._grid.push(gridCell);
+        this._sketchpad.appendChild(gridCell);
       }
     }
   }
@@ -51,8 +51,16 @@ export class SketchPad extends View {
     notifier.subscribe(EVENTS.onDrawCommitted, this._clearStroke.bind(this));
   }
 
+  updateAt(x, y, cell) {
+    const gridCell = this._grid[x + (y * this._columns)],
+          gridText = gridCell.firstChild;
+    gridText.textContent = cell.glyph;
+    gridText.style.color = cell.foregroundColor;
+    gridText.style.backgroundColor = cell.backgroundColor;
+  }
+
   _startStroke(event) {
-    this._activeStroke = this._stroke.start(this._sketchpad);
+    this._activeStroke = this._stroke.start(this);
     this._continueStroke(event);
   }
 

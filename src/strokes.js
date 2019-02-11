@@ -1,6 +1,6 @@
 class Stroke {
   constructor(shape, sketchpad) {
-    this._genShape = shape;
+    this._generateShape = shape;
     this._sketchpad = sketchpad;
   }
 
@@ -14,14 +14,10 @@ class Stroke {
 
 export class PointStroke extends Stroke {
   onMousedown(event) {
-    const uxCell = event.target,
-          point = {x: parseInt(uxCell.dataset.x, 10), y: parseInt(uxCell.dataset.y, 10)},
-          txt = uxCell.getElementsByTagName('span')[0],
-          shape = this._genShape({start: point});
+    const point = {x: parseInt(event.target.dataset.x, 10), y: parseInt(event.target.dataset.y, 10)},
+          shape = this._generateShape(point);
     for (const tile of shape) {
-      txt.textContent = tile.cell.glyph;
-      txt.style.color = tile.cell.foregroundColor;
-      txt.style.backgroundColor = tile.cell.backgroundColor;
+      this._sketchpad.updateAt(point.x, point.y, tile.cell);
     }
     return shape;
   }
