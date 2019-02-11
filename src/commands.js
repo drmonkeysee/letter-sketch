@@ -65,15 +65,13 @@ class SetTool {
 
 class CommitDraw {
   constructor(models, shape) {
-    this._brush = models.currentBrush;
-    this._draw = currentDraw(models);
     this._terminal = models.terminal;
     this._shape = shape;
   }
 
   execute() {
-    const shape = this._draw(this._shape, this._brush.cell, this._terminal);
-    return makeUpdate(EVENTS.onDrawCommitted, {shape: shape, tileSize: this._brush.tileSize});
+    this._terminal.update(this._shape);
+    return makeUpdate(EVENTS.onDrawCommitted, {shape: this._shape});
   }
 }
 

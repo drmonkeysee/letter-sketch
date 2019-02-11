@@ -27,6 +27,12 @@ export class Terminal {
     targetCell.update(cell);
     return targetCell;
   }
+
+  update(shape) {
+    for (const tile of shape) {
+      this.updateCell(tile.x, tile.y, tile.cell);
+    }
+  }
 }
 
 export class Cell {

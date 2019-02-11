@@ -1,16 +1,16 @@
 import {PointStroke} from '../strokes.js';
-import {drawShape} from '../draw.js';
+import {cellShape} from '../shapes.js';
 
-// TODO: need better name for draw strategy
 const point = {
   createStroke(models) {
-    return (...args) => new PointStroke(models.currentBrush.cell, ...args);
-  },
-  draw: drawShape
+    return {
+      start(...args) {
+        return new PointStroke(cellShape(models.currentBrush.cell, models.terminal), ...args);
+      }
+    }
+  }
 };
 
-// TODO: rework tool to be stroke(paint) where paint executes strategy of stroke
-// cmd is only for committing shapes to terminal
 const TOOLS = {
   point,
   pen: {},
@@ -21,19 +21,12 @@ const TOOLS = {
   fillEllipse: {},
   line: {},
   doubleLine: {},
-  text: {}
+  text: {},
+  replace: {}
 };
 
-function currentToolProperty(models, propAccessor) {
+export function currentStroke(models) {
   const tool = TOOLS[models.currentTool];
   if (!tool) throw new Error(`Unknown tool: ${models.currentTool}`);
-  return propAccessor(tool, models);
-}
-
-export function currentStroke(models) {
-  return currentToolProperty(models, (t, m) => t.createStroke(m));
-}
-
-export function currentDraw(models) {
-  return currentToolProperty(models, (t, m) => t.draw);
+  return tool.createStroke(models);
 }

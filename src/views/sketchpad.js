@@ -52,7 +52,7 @@ export class SketchPad extends View {
   }
 
   _startStroke(event) {
-    this._activeStroke = this._stroke(this._sketchpad);
+    this._activeStroke = this._stroke.start(this._sketchpad);
     this._continueStroke(event);
   }
 
@@ -67,12 +67,6 @@ export class SketchPad extends View {
 
   _clearStroke(update) {
     console.log('clear active stroke');
-    const shape = update.shape;
-    /*for (const tile of shape) {
-      const uxCell = this._uxGrid[tile.x + (tile.y * this._columns)],
-            cellText = uxCell.getElementsByTagName('span')[0];
-      cellText.style.backgroundColor = cellText.textContent = null;
-    }*/
     this._activeStroke = null;
   }
 }

@@ -1,8 +1,6 @@
-import {Cell, makeTile} from './models/terminal.js';
-
 class Stroke {
-  constructor(brushCell, sketchpad) {
-    this._brushCell = brushCell;
+  constructor(shape, sketchpad) {
+    this._genShape = shape;
     this._sketchpad = sketchpad;
   }
 
@@ -17,12 +15,15 @@ class Stroke {
 export class PointStroke extends Stroke {
   onMousedown(event) {
     const uxCell = event.target,
-          tile = makeTile(parseInt(uxCell.dataset.x, 10), parseInt(uxCell.dataset.y, 10), this._brushCell),
-          txt = uxCell.getElementsByTagName('span')[0];
-    txt.textContent = this._brushCell.glyph;
-    txt.style.color = this._brushCell.foregroundColor;
-    txt.style.backgroundColor = this._brushCell.backgroundColor;
-    return [tile];
+          point = {x: parseInt(uxCell.dataset.x, 10), y: parseInt(uxCell.dataset.y, 10)},
+          txt = uxCell.getElementsByTagName('span')[0],
+          shape = this._genShape({start: point});
+    for (const tile of shape) {
+      txt.textContent = tile.cell.glyph;
+      txt.style.color = tile.cell.foregroundColor;
+      txt.style.backgroundColor = tile.cell.backgroundColor;
+    }
+    return shape;
   }
 }
 
