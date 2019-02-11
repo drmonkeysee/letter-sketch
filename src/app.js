@@ -30,14 +30,14 @@ class App {
   }
 
   _createModels() {
-    this._models.currentBrush = brush();
+    this._models.brush = brush();
     this._models.terminal = new Terminal(50, 20);
     this._models.currentTool = 'point';
   }
 
   _syncModels() {
-    this._models.currentBrush.tileSize = measureGlyph(this._doc);
-    console.log('Tilesize: %o', this._models.currentBrush.tileSize);
+    this._models.brush.tileSize = measureGlyph(this._doc);
+    console.log('Tilesize: %o', this._models.brush.tileSize);
   }
 
   _wireCommands() {
@@ -62,14 +62,14 @@ class App {
   _initialState() {
     return {
       shape: demoText(this._models.terminal, 9, 10),
-      tileSize: this._models.currentBrush.tileSize,
+      tileSize: this._models.brush.tileSize,
       termSize: this._models.terminal.dimensions,
       stroke: currentStroke(this._models),
-      glyph: this._models.currentBrush.cell.glyph,
+      glyph: this._models.brush.cell.glyph,
       colors: {
-        fg: this._models.currentBrush.cell.foregroundColor,
-        bg: this._models.currentBrush.cell.backgroundColor,
-        fill: this._models.currentBrush.fillColor
+        fg: this._models.brush.cell.foregroundColor,
+        bg: this._models.brush.cell.backgroundColor,
+        fill: this._models.brush.fillColor
       }
     }
   }

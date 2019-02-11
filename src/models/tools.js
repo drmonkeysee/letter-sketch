@@ -5,7 +5,7 @@ const point = {
   createStroke(models) {
     return {
       start(...args) {
-        return new PointStroke(cellShape(models.currentBrush.cell, models.terminal), ...args);
+        return new PointStroke(cellShape(models.brush.cell, models.terminal), ...args);
       }
     }
   }

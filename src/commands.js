@@ -5,7 +5,7 @@ import {currentStroke, currentDraw} from './models/tools.js';
 // TODO: rework these classes into closures
 class SetForegroundColor {
   constructor(models, color) {
-    this._brushCell = models.currentBrush.cell;
+    this._brushCell = models.brush.cell;
     this._color = color;
   }
 
@@ -17,7 +17,7 @@ class SetForegroundColor {
 
 class SetBackgroundColor {
   constructor(models, color) {
-    this._brushCell = models.currentBrush.cell;
+    this._brushCell = models.brush.cell;
     this._color = color;
   }
 
@@ -29,7 +29,7 @@ class SetBackgroundColor {
 
 class SetFillColor {
   constructor(models, color) {
-    this._brush = models.currentBrush;
+    this._brush = models.brush;
     this._color = color;
   }
 
@@ -41,7 +41,7 @@ class SetFillColor {
 
 class SetGlyph {
   constructor(models, glyph) {
-    this._brushCell = models.currentBrush.cell;
+    this._brushCell = models.brush.cell;
     this._glyph = glyph;
   }
 
