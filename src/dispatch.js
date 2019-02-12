@@ -16,7 +16,7 @@ class CommandDispatcher {
   }
 
   _bindCommands(models) {
-    // create cmd factory per class that captures models for command ctor binding
+    // NOTE: create cmd factory per class that captures models for command ctor binding
     this._commands = namemap(
       COMMAND_REGISTRY,
       (n, cmdCls) => (...args) => new cmdCls(models, ...args),
