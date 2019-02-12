@@ -17,6 +17,7 @@ body {
 #sketchpad {
   display: grid;
   outline: $canvas-outline;
+  user-select: none;
 
   div {
     display: flex;
