@@ -2,6 +2,7 @@ class Stroke {
   constructor(shape, sketchpad) {
     this._generateShape = shape;
     this._sketchpad = sketchpad;
+    this._currentShape = [];
   }
 
   handleEvent(event) {
@@ -10,30 +11,57 @@ class Stroke {
     if (this[handlerName]) return this[handlerName](event);
     return null;
   }
+
+  get currentShape() {
+    return this._currentShape;
+  }
+}
+
+function getPoint(target) {
+  return {x: parseInt(target.dataset.x, 10), y: parseInt(target.dataset.y, 10)};
 }
 
 export class PointStroke extends Stroke {
   onMousedown(event) {
-    const point = {x: parseInt(event.target.dataset.x, 10), y: parseInt(event.target.dataset.y, 10)},
+    const point = getPoint(event.target),
           shape = this._generateShape(point);
     for (const tile of shape) {
       this._sketchpad.updateAt(point.x, point.y, tile.cell);
+      this._currentShape.push(shape);
     }
-    return shape;
+    return this._currentShape;
   }
 }
 
 export class ContinualStroke extends Stroke {
   onMousedown(event) {
-    // draw current shape
+    const point = getPoint(event.target),
+          shape = this._generateShape(point);
+    for (const tile of shape) {
+      this._sketchpad.updateAt(point.x, point.y, tile.cell);
+      this._currentShape.push(tile);
+    }
+    return null;
   }
 
   onMouseover(event) {
-    // continue drawing current shape
+    const point = getPoint(event.target),
+          shape = this._generateShape(point);
+    for (const tile of shape) {
+      this._sketchpad.updateAt(point.x, point.y, tile.cell);
+      this._currentShape.push(tile);
+    }
+    return null;
   }
 
   onMouseup(event) {
-    // finish drawing and return shape
+    const point = getPoint(event.target),
+          shape = this._generateShape(point);
+    for (const tile of shape) {
+      this._sketchpad.updateAt(point.x, point.y, tile.cell);
+      this._currentShape.push(tile);
+    }
+    return this._currentShape;
   }
 }
 

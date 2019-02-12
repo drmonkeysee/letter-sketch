@@ -22,7 +22,7 @@ export class SketchPad extends View {
     const cellHeight = `${initialState.tileSize.height}px`,
           cellWidth = `${initialState.tileSize.width}px`,
           startEvents = ['mousedown'],
-          strokeEvents = ['mouseenter', 'mouseleave', 'mouseup'];
+          strokeEvents = ['mouseover', 'mouseup'];
     for (let y = 0; y < this._rows; ++y) {
       for (let x = 0; x < this._columns; ++x) {
         const gridCell = this._doc.createElement('div');
@@ -33,13 +33,15 @@ export class SketchPad extends View {
         gridCell.dataset.x = x;
         gridCell.dataset.y = y;
 
-        // TODO: need a way to cancel stroke if cursor leaves draw region
         for (const e of startEvents) {
           gridCell.addEventListener(e, this._startStroke.bind(this));
         }
         for (const e of strokeEvents) {
           gridCell.addEventListener(e, this._continueStroke.bind(this));
         }
+
+        // NOTE: end current stroke if gesture leaves sketchpad
+        this._sketchpad.addEventListener('mouseleave', this._terminateStroke.bind(this));
         
         this._grid.push(gridCell);
         this._sketchpad.appendChild(gridCell);
@@ -76,5 +78,15 @@ export class SketchPad extends View {
   _clearStroke(update) {
     console.log('clear active stroke');
     this._activeStroke = null;
+  }
+
+  _terminateStroke(update) {
+    if (!this._activeStroke) return;
+    const shape = this._activeStroke.currentShape;
+    if (shape) {
+      this._dispatch.command(COMMANDS.commitDraw, shape);
+      console.log('generated shape on terminate: %o', shape);
+    }
+    this._clearStroke(update);
   }
 }

@@ -1,19 +1,29 @@
-import {PointStroke} from '../strokes.js';
-import {cellShape} from '../shapes.js';
+import {PointStroke, ContinualStroke} from '../strokes.js';
+import {singleCell} from '../shapes.js';
 
 const point = {
   createStroke(models) {
     return {
       start(...args) {
-        return new PointStroke(cellShape(models.brush.cell, models.terminal), ...args);
+        return new PointStroke(singleCell(models.brush.cell, models.terminal), ...args);
       }
     }
   }
 };
 
+const pen = {
+  createStroke(models) {
+    return {
+      start(...args) {
+        return new ContinualStroke(singleCell(models.brush.cell, models.terminal), ...args);
+      }
+    }
+  }
+}
+
 const TOOLS = {
   point,
-  pen: {},
+  pen,
   fill: {},
   rect: {},
   fillRect: {},
