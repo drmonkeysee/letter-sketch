@@ -6,6 +6,7 @@ export function singleCell(brushCell, terminal) {
   }
 }
 
+// TODO: remove duplicate tiles when going over same cells
 export function freeDraw(brushCell, terminal) {
   return (start, end, activeFigure) => {
     activeFigure = activeFigure || [];
