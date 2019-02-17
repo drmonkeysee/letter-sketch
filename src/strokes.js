@@ -53,26 +53,26 @@ export class ContinualStroke extends Stroke {
   }
 
   onMouseup(event) {
-    const point = getPoint(event.target),
-          shape = this._generateShape(point);
-    this._drawShape(shape);
     return this._currentShape;
   }
 }
 
 export class SegmentStroke extends Stroke {
   onMousedown(event) {
-    // save initial x, y
-    // draw shape
+    this._start = getPoint(event.target);
+    const shape = this._generateShape(this._start, this._start);
+    this._drawShape(shape);
+    return null;
   }
 
   onMouseover(event) {
-    // clear last shape
-    // send start, current points
-    // draw new shape
+    const point = getPoint(event.target),
+          shape = this._generateShape(this._start, point);
+    this._drawShape(shape);
+    return null;
   }
 
   onMouseup(event) {
-    // finish drawing and return shape
+    return this._currentShape;
   }
 }

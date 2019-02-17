@@ -8,3 +8,10 @@ export function floodFill(brushCell, terminal) {
   // starting at tile of shape[0] execute a floodfill
   // and return new shape
 }
+
+export function rectangle(brushCell, terminal) {
+  return (start, end, previousShape) => {
+    // draw rectangle, including restoration of last state? how to measure last state?
+    return [];
+  }
+}
