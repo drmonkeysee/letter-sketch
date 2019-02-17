@@ -87,6 +87,5 @@ export class SketchPad extends View {
       this._dispatch.command(COMMANDS.commitDraw, shape);
       console.log('generated shape on terminate: %o', shape);
     }
-    this._clearStroke(update);
   }
 }
