@@ -35,6 +35,7 @@ export class Terminal {
   }
 }
 
+// TODO: remove direct accessors so it's easier to pass cells around without worrying about accidental modification
 export class Cell {
   constructor(glyph = null, fgColor = null, bgColor = null) {
     this.glyph = glyph;

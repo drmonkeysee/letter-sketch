@@ -1,6 +1,6 @@
 import namemap from './namemap.js';
 import {EVENTS, makeUpdate} from './refresh.js';
-import {currentStroke, currentDraw} from './models/tools.js';
+import {currentTool} from './tools.js';
 
 // TODO: rework these classes into closures
 class SetForegroundColor {
@@ -59,7 +59,7 @@ class SetTool {
 
   execute() {
     this._models.currentTool = toolName;
-    return makeUpdate(EVENTS.onToolChanged, {stroke: currentStroke(this._models)});
+    return makeUpdate(EVENTS.onToolChanged, {tool: currentTool(this._models)});
   }
 }
 

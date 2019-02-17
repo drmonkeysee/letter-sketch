@@ -6,13 +6,13 @@ export class SketchPad extends View {
   constructor(...args) {
     super(...args);
     this._sketchpad = this._doc.getElementById('sketchpad');
-    this._activeStroke = this._stroke = null;
+    this._activeGesture = this._tool = null;
     this._grid = [];
     this._rows = this._columns = 0;
   }
 
   draw(initialState) {
-    this._stroke = initialState.stroke;
+    this._tool = initialState.tool;
     this._rows = initialState.termSize.height;
     this._columns = initialState.termSize.width;
     this._sketchpad.style.width = `${initialState.termSize.width * initialState.tileSize.width}px`;
@@ -51,6 +51,7 @@ export class SketchPad extends View {
 
   subscribe(notifier) {
     notifier.subscribe(EVENTS.onDrawCommitted, this._clearStroke.bind(this));
+    notifier.subscribe(EVENTS.onToolChanged, this._updateTool.bind(this));
   }
 
   updateAt(x, y, cell) {
@@ -62,13 +63,13 @@ export class SketchPad extends View {
   }
 
   _startStroke(event) {
-    this._activeStroke = this._stroke.start(this);
+    this._activeGesture = this._tool.startGesture(this);
     this._continueStroke(event);
   }
 
   _continueStroke(event) {
-    if (!this._activeStroke) return;
-    const shape = this._activeStroke.handleEvent(event);
+    if (!this._activeGesture) return;
+    const shape = this._activeGesture.handleEvent(event);
     if (shape) {
       this._dispatch.command(COMMANDS.commitDraw, shape);
       console.log('generated shape: %o', shape);
@@ -77,15 +78,19 @@ export class SketchPad extends View {
 
   _clearStroke(update) {
     console.log('clear active stroke');
-    this._activeStroke = null;
+    this._activeGesture = null;
   }
 
   _terminateStroke(update) {
-    if (!this._activeStroke) return;
-    const shape = this._activeStroke.currentShape;
+    if (!this._activeGesture) return;
+    const shape = this._activeGesture.currentShape;
     if (shape) {
       this._dispatch.command(COMMANDS.commitDraw, shape);
       console.log('generated shape on terminate: %o', shape);
     }
+  }
+
+  _updateTool(update) {
+    this._tool = update.tool;
   }
 }
