@@ -64,14 +64,14 @@ class SetTool {
 }
 
 class CommitDraw {
-  constructor(models, shape) {
+  constructor(models, figure) {
     this._terminal = models.terminal;
-    this._shape = shape;
+    this._figure = figure;
   }
 
   execute() {
-    this._terminal.update(this._shape);
-    return makeUpdate(EVENTS.onDrawCommitted, {shape: this._shape});
+    this._terminal.update(this._figure);
+    return makeUpdate(EVENTS.onDrawCommitted, {figure: this._figure});
   }
 }
 

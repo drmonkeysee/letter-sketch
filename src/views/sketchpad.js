@@ -34,14 +34,14 @@ export class SketchPad extends View {
         gridCell.dataset.y = y;
 
         for (const e of startEvents) {
-          gridCell.addEventListener(e, this._startStroke.bind(this));
+          gridCell.addEventListener(e, this._startGesture.bind(this));
         }
         for (const e of strokeEvents) {
-          gridCell.addEventListener(e, this._continueStroke.bind(this));
+          gridCell.addEventListener(e, this._continueGesture.bind(this));
         }
 
-        // NOTE: end current stroke if gesture leaves sketchpad
-        this._sketchpad.addEventListener('mouseleave', this._terminateStroke.bind(this));
+        // NOTE: end current gesture if user action leaves sketchpad
+        this._sketchpad.addEventListener('mouseleave', this._terminateGesture.bind(this));
         
         this._grid.push(gridCell);
         this._sketchpad.appendChild(gridCell);
@@ -50,7 +50,7 @@ export class SketchPad extends View {
   }
 
   subscribe(notifier) {
-    notifier.subscribe(EVENTS.onDrawCommitted, this._clearStroke.bind(this));
+    notifier.subscribe(EVENTS.onDrawCommitted, this._clearGesture.bind(this));
     notifier.subscribe(EVENTS.onToolChanged, this._updateTool.bind(this));
   }
 
@@ -62,31 +62,31 @@ export class SketchPad extends View {
     gridText.style.backgroundColor = cell.backgroundColor;
   }
 
-  _startStroke(event) {
+  _startGesture(event) {
     this._activeGesture = this._tool.startGesture(this);
-    this._continueStroke(event);
+    this._continueGesture(event);
   }
 
-  _continueStroke(event) {
+  _continueGesture(event) {
     if (!this._activeGesture) return;
-    const shape = this._activeGesture.handleEvent(event);
-    if (shape) {
-      this._dispatch.command(COMMANDS.commitDraw, shape);
-      console.log('generated shape: %o', shape);
+    const figure = this._activeGesture.handleEvent(event);
+    if (figure) {
+      this._dispatch.command(COMMANDS.commitDraw, figure);
+      console.log('generated figure: %o', figure);
     }
   }
 
-  _clearStroke(update) {
-    console.log('clear active stroke');
+  _clearGesture(update) {
+    console.log('clear active gesture');
     this._activeGesture = null;
   }
 
-  _terminateStroke(update) {
+  _terminateGesture(update) {
     if (!this._activeGesture) return;
-    const shape = this._activeGesture.currentShape;
-    if (shape) {
-      this._dispatch.command(COMMANDS.commitDraw, shape);
-      console.log('generated shape on terminate: %o', shape);
+    const figure = this._activeGesture.currentFigure;
+    if (figure) {
+      this._dispatch.command(COMMANDS.commitDraw, figure);
+      console.log('generated figure on terminate: %o', figure);
     }
   }
 

@@ -61,7 +61,7 @@ class App {
 
   _initialState() {
     return {
-      shape: demoText(this._models.terminal, 9, 10),
+      figure: demoText(this._models.terminal, 9, 10),
       tileSize: this._models.brush.tileSize,
       termSize: this._models.terminal.dimensions,
       tool: currentTool(this._models),

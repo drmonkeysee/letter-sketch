@@ -28,8 +28,8 @@ export class Terminal {
     return targetCell;
   }
 
-  update(shape) {
-    for (const tile of shape) {
+  update(figure) {
+    for (const tile of figure) {
       this.updateCell(tile.x, tile.y, tile.cell);
     }
   }
@@ -60,12 +60,12 @@ export function makeTile(x, y, cell) {
 }
 
 export function demoText(terminal, x, y) {
-  const text = 'Hello World! yellow & green.', textLength = text.length, sourceCell = new Cell(null, '#ff0000', '#222222'), shape = [];
+  const text = 'Hello World! yellow & green.', textLength = text.length, sourceCell = new Cell(null, '#ff0000', '#222222'), figure = [];
   for (let i = 0; i < textLength; ++i) {
     sourceCell.glyph = text[i];
     const targetX = x + i,
           targetCell = terminal.updateCell(targetX, y, sourceCell);
-    shape.push(makeTile(targetX, y, targetCell));
+    figure.push(makeTile(targetX, y, targetCell));
   }
-  return shape;
+  return figure;
 }

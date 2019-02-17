@@ -36,12 +36,12 @@ export class ImageSurface extends View {
   }
 
   _drawTiles(update) {
-    const shape = update.shape, tileSize = update.tileSize,
+    const figure = update.figure, tileSize = update.tileSize,
           drawRect = {x: 0, y: 0, w: tileSize.width, h: tileSize.height},
           glyphOffsetY = drawRect.h / 2;  // NOTE: text baseline + y-offset to line up with overlay's textContent glyphs
                                           // TODO: hope this math works cross-browser!
     console.log('Drawrect: %o, glyphOffsetY: %o', drawRect, glyphOffsetY);
-    for (const tile of shape) {
+    for (const tile of figure) {
       const cell = tile.cell;
       drawRect.x = tile.x * tileSize.width;
       drawRect.y = tile.y * tileSize.height;
