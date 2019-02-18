@@ -1,21 +1,30 @@
 import {NIL_GLYPH} from '../codepage.js';
 
-// TODO: remove direct accessors so it's easier to pass cells around without worrying about accidental modification
 export class Cell {
-  constructor(glyph, fgColor = null, bgColor = null) {
-    this.glyph = glyph || NIL_GLYPH;
-    this.foregroundColor = fgColor;
-    this.backgroundColor = bgColor;
+  constructor(glyph, fgColor, bgColor) {
+    this._setFields(glyph, fgColor, bgColor);
   }
+
+  get glyph() { return this._glyph; }
+  get foregroundColor() { return this._fgColor; }
+  get backgroundColor() { return this._bgColor; }
 
   isEmpty() {
     return this.glyph === NIL_GLYPH;
   }
 
-  update(that) {
-    this.glyph = that.glyph;
-    this.foregroundColor = that.foregroundColor;
-    this.backgroundColor = that.backgroundColor;
+  update({
+    glyph = this.glyph,
+    foregroundColor = this.foregroundColor,
+    backgroundColor = this.backgroundColor
+  } = {}) {
+    this._setFields(glyph, foregroundColor, backgroundColor);
+  }
+
+  _setFields(glyph, fgColor, bgColor) {
+    this._glyph = glyph || NIL_GLYPH;
+    this._fgColor = fgColor || null;
+    this._bgColor = bgColor || null;
   }
 }
 

@@ -41,7 +41,7 @@ export class Terminal {
 export function demoText(terminal, x, y) {
   const text = 'Hello World! yellow & green.', textLength = text.length, sourceCell = new Cell(null, '#ff0000', '#222222'), figure = [];
   for (let i = 0; i < textLength; ++i) {
-    sourceCell.glyph = text[i];
+    sourceCell.update({glyph: text[i]});
     const targetX = x + i,
           targetCell = terminal.updateCell(targetX, y, sourceCell);
     figure.push(makeTile(targetX, y, targetCell));

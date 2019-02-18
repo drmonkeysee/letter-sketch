@@ -10,7 +10,7 @@ class SetForegroundColor {
   }
 
   execute() {
-    this._brushCell.foregroundColor = this._color;
+    this._brushCell.update({foregroundColor: this._color});
     return makeUpdate(EVENTS.onForegroundColorChanged, {color: this._brushCell.foregroundColor});
   }
 }
@@ -22,7 +22,7 @@ class SetBackgroundColor {
   }
 
   execute() {
-    this._brushCell.backgroundColor = this._color;
+    this._brushCell.update({backgroundColor: this._color});
     return makeUpdate(EVENTS.onBackgroundColorChanged, {color: this._brushCell.backgroundColor});
   }
 }
@@ -46,7 +46,7 @@ class SetGlyph {
   }
 
   execute() {
-    this._brushCell.glyph = this._glyph;
+    this._brushCell.update({glyph: this._glyph});
     return makeUpdate(EVENTS.onGlyphChanged, {glyph: this._brushCell.glyph});
   }
 }
