@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {channelsToCss, COLORS} from '../../src/models/color.js';
+import {channelsToCss, COLORS} from '../src/color.js';
 
 describe('#channelsToCss()', function () {
   it('parses undefined for all channels', function () {
