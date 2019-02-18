@@ -1,3 +1,5 @@
+import {Cell, makeTile} from './cell.js';
+
 export class Terminal {
   constructor(columns, rows) {
     this.resize(columns, rows);
@@ -35,29 +37,6 @@ export class Terminal {
   }
 }
 
-// TODO: remove direct accessors so it's easier to pass cells around without worrying about accidental modification
-export class Cell {
-  constructor(glyph = null, fgColor = null, bgColor = null) {
-    this.glyph = glyph;
-    this.foregroundColor = fgColor;
-    this.backgroundColor = bgColor;
-  }
-
-  isEmpty() {
-    // TODO: codepage null is actually \u0000
-    return !this.glyph;
-  }
-
-  update(that) {
-    this.glyph = that.glyph;
-    this.foregroundColor = that.foregroundColor;
-    this.backgroundColor = that.backgroundColor;
-  }
-}
-
-export function makeTile(x, y, cell) {
-  return {x, y, cell};
-}
 
 export function demoText(terminal, x, y) {
   const text = 'Hello World! yellow & green.', textLength = text.length, sourceCell = new Cell(null, '#ff0000', '#222222'), figure = [];

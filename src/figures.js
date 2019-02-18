@@ -1,4 +1,4 @@
-import {makeTile} from './models/terminal.js';
+import {makeTile} from './models/cell.js';
 
 export function singleCell(brushCell, terminal) {
   return (start, end, activeFigure) => {
