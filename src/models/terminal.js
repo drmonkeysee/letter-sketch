@@ -14,7 +14,7 @@ export class Terminal {
     this._height = rows;
     const size = columns * rows, cells = [];
     for (let i = 0; i < size; ++i) {
-      cells[i] = new Cell();
+      cells.push(new Cell());
     }
     this._cells = cells;
   }
@@ -36,7 +36,6 @@ export class Terminal {
     }
   }
 }
-
 
 export function demoText(terminal, x, y) {
   const text = 'Hello World! yellow & green.', textLength = text.length, sourceCell = new Cell(null, '#ff0000', '#222222'), figure = [];
