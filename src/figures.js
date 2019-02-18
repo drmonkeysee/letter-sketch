@@ -7,6 +7,7 @@ export function singleCell(brushCell, terminal) {
 }
 
 // TODO: remove duplicate tiles when going over same cells
+// set of indices based on x,y?
 export function freeDraw(brushCell, terminal) {
   return (start, end, activeFigure) => {
     activeFigure = activeFigure || [];
