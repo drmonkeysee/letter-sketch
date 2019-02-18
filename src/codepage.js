@@ -19,4 +19,4 @@ export const CP437 = [
   '\u2261', '\u00b1', '\u2265', '\u2264', '\u2320', '\u2321', '\u00f7', '\u2248', '\u00b0', '\u2219', '\u00b7', '\u221a', '\u207f', '\u00b2', '\u25a0', '\u00a0',
 ],
 DEFAULT_GLYPH = CP437[DEFAULT],
-NULL_GLYPH = CP437[0];
+NIL_GLYPH = CP437[0];
