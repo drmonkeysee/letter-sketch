@@ -108,3 +108,15 @@ describe('Cell', function () {
     });
   });
 });
+
+describe('#makeTile', function () {
+  it('makes a tile', function () {
+    const cell = new Cell();
+    
+    const result = makeTile(10, 20, cell);
+
+    expect(result.x).to.equal(10);
+    expect(result.y).to.equal(20);
+    expect(result.cell).to.equal(cell);
+  });
+});
