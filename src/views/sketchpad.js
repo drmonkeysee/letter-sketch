@@ -6,7 +6,6 @@ export class SketchPad extends View {
   constructor(...args) {
     super(...args);
     this._sketchpad = this._doc.getElementById('sketchpad');
-    this._activeGesture = this._tool = null;
     this._grid = [];
     this._rows = this._columns = 0;
   }

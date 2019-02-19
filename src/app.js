@@ -3,16 +3,15 @@ import {checkCanvas, measureGlyph} from './dom.js';
 import brush from './models/brush.js';
 import {Terminal, demoText} from './models/terminal.js';
 import {ViewNotifier} from './refresh.js';
-import dispatch from './dispatch.js';
+import {CommandDispatcher} from './commands.js';
 import {VIEW_REGISTRY} from './views/index.js';
 import {currentTool} from './tools.js';
 
 class App {
-  constructor(win, notifier, dispatchBuilder) {
+  constructor(win) {
     this._win = win;
     this._doc = win.document;
-    this._notifier = notifier;
-    this._dispatchBuilder = dispatchBuilder;
+    this._notifier = new ViewNotifier();
     this._models = {};
   }
 
@@ -41,11 +40,11 @@ class App {
   }
 
   _wireCommands() {
-    this._dispatcher = this._dispatchBuilder.build(this._models);
+    this._dispatch = new CommandDispatcher(this._notifier, this._models);
   }
 
   _createViews() {
-    this._views = namemap(VIEW_REGISTRY, (n, viewCls) => new viewCls(this._doc, this._dispatcher));
+    this._views = namemap(VIEW_REGISTRY, (n, viewCls) => new viewCls(this._doc, this._dispatch));
   }
 
   _registerViews() {
@@ -53,9 +52,9 @@ class App {
   }
 
   _drawViews() {
-    const initState = this._initialState();
+    const initialState = this._initialState();
     for (const v of Object.values(this._views)) {
-      v.draw(initState);
+      v.draw(initialState);
     }
   }
 
@@ -79,8 +78,7 @@ let app = null;
 
 export default {
   start(win) {
-    const notifier = new ViewNotifier();
-    app = new App(win, notifier, dispatch(notifier));
+    app = new App(win);
     app.initialize();
   }
 };

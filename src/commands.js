@@ -75,7 +75,7 @@ class CommitDraw {
   }
 }
 
-export const COMMAND_REGISTRY = [
+const COMMAND_REGISTRY = [
   SetForegroundColor,
   SetBackgroundColor,
   SetFillColor,
@@ -85,3 +85,27 @@ export const COMMAND_REGISTRY = [
 ];
 
 export const COMMANDS = namemap(COMMAND_REGISTRY, (name, c) => Symbol(name));
+
+export class CommandDispatcher {
+  constructor(notifier, models) {
+    this._notifier = notifier;
+    this._bindCommands(models);
+  }
+
+  command(name, ...args) {
+    const cmdCls = this._commands[name];
+    if (!cmdCls) throw new Error(`Unknown command: ${name.toString()}`);
+    const cmd = new cmdCls(...args),
+          update = cmd.execute();
+    this._notifier.signal(update);
+  }
+
+  _bindCommands(models) {
+    // NOTE: create cmd factory per class that captures models for command ctor binding
+    this._commands = namemap(
+      COMMAND_REGISTRY,
+      (n, cmdCls) => (...args) => new cmdCls(models, ...args),
+      name => COMMANDS[name]
+    );
+  }
+}

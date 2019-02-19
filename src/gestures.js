@@ -2,7 +2,6 @@ class Gesture {
   constructor(figureStyle, sketchpad) {
     this._updateFigure = figureStyle;
     this._sketchpad = sketchpad;
-    this._activeFigure = this._start = this._end = null;
   }
 
   handleEvent(event) {
@@ -13,7 +12,7 @@ class Gesture {
   }
 
   get currentFigure() {
-    return this._activeFigure;
+    return this._activeFigure || [];
   }
 
   _drawFigure() {
@@ -43,6 +42,6 @@ export class MouseGesture extends Gesture {
   }
 
   onMouseup(event) {
-    return this._activeFigure;
+    return this.currentFigure;
   }
 }
