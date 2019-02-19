@@ -1,87 +1,60 @@
 import namemap from './namemap.js';
-import {EVENTS, makeUpdate} from './refresh.js';
+import {EVENTS} from './refresh.js';
 import {currentTool} from './tools.js';
 
-// TODO: rework these classes into closures
-class SetForegroundColor {
-  constructor(models, color) {
-    this._brushCell = models.brush.cell;
-    this._color = color;
-  }
-
-  execute() {
-    this._brushCell.update({foregroundColor: this._color});
-    return makeUpdate(EVENTS.onForegroundColorChanged, {color: this._brushCell.foregroundColor});
-  }
+function makeUpdate(event, data) {
+  return {event: event, ...data};
 }
 
-class SetBackgroundColor {
-  constructor(models, color) {
-    this._brushCell = models.brush.cell;
-    this._color = color;
-  }
-
-  execute() {
-    this._brushCell.update({backgroundColor: this._color});
-    return makeUpdate(EVENTS.onBackgroundColorChanged, {color: this._brushCell.backgroundColor});
-  }
+function setForegroundColor(models, color) {
+  return () => {
+    models.brush.cell.update({foregroundColor: color});
+    return makeUpdate(EVENTS.onForegroundColorChanged, {color: models.brush.cell.foregroundColor});
+  };
 }
 
-class SetFillColor {
-  constructor(models, color) {
-    this._brush = models.brush;
-    this._color = color;
-  }
-
-  execute() {
-    this._brush.fillColor = this._color;
-    return makeUpdate(EVENTS.onFillColorChanged, {color: this._brush.fillColor});
-  }
+function setBackgroundColor(models, color) {
+  return () => {
+    models.brush.cell.update({backgroundColor: color});
+    return makeUpdate(EVENTS.onBackgroundColorChanged, {color: models.brush.cell.backgroundColor});
+  };
 }
 
-class SetGlyph {
-  constructor(models, glyph) {
-    this._brushCell = models.brush.cell;
-    this._glyph = glyph;
-  }
-
-  execute() {
-    this._brushCell.update({glyph: this._glyph});
-    return makeUpdate(EVENTS.onGlyphChanged, {glyph: this._brushCell.glyph});
-  }
+function setFillColor(models, color) {
+  return () => {
+    models.brush.fillColor = color;
+    return makeUpdate(EVENTS.onFillColorChanged, {color: models.brush.fillColor});
+  };
 }
 
-class SetTool {
-  constructor(models, toolName) {
-    this._models = models;
-    this._toolName = toolName;
-  }
-
-  execute() {
-    this._models.currentTool = toolName;
-    return makeUpdate(EVENTS.onToolChanged, {tool: currentTool(this._models)});
-  }
+function setGlyph(models, glyph) {
+  return () => {
+    models.brush.cell.update({glyph: glyph});
+    return makeUpdate(EVENTS.onGlyphChanged, {glyph: models.brush.cell.glyph});
+  };
 }
 
-class CommitDraw {
-  constructor(models, figure) {
-    this._terminal = models.terminal;
-    this._figure = figure;
-  }
+function setTool(models, toolName) {
+  return () => {
+    models.currentTool = toolName;
+    return makeUpdate(EVENTS.onToolChanged, {tool: currentTool(models)});
+  };
+}
 
-  execute() {
-    this._terminal.update(this._figure);
-    return makeUpdate(EVENTS.onDrawCommitted, {figure: this._figure});
-  }
+function commitDraw(models, figure) {
+  return () => {
+    models.terminal.update(figure);
+    return makeUpdate(EVENTS.onDrawCommitted, {figure});
+  };
 }
 
 const COMMAND_REGISTRY = [
-  SetForegroundColor,
-  SetBackgroundColor,
-  SetFillColor,
-  SetGlyph,
-  SetTool,
-  CommitDraw
+  setForegroundColor,
+  setBackgroundColor,
+  setFillColor,
+  setGlyph,
+  setTool,
+  commitDraw
 ];
 
 export const COMMANDS = namemap(COMMAND_REGISTRY, (name, c) => Symbol(name));
@@ -93,18 +66,19 @@ export class CommandDispatcher {
   }
 
   command(name, ...args) {
-    const cmdCls = this._commands[name];
-    if (!cmdCls) throw new Error(`Unknown command: ${name.toString()}`);
-    const cmd = new cmdCls(...args),
-          update = cmd.execute();
+    const boundCmd = this._commands[name];
+    if (!boundCmd) throw new Error(`Unknown command: ${name.toString()}`);
+    const cmd = new boundCmd(...args),
+          update = cmd();
     this._notifier.signal(update);
   }
 
   _bindCommands(models) {
-    // NOTE: create cmd factory per class that captures models for command ctor binding
+    // NOTE: bind models to each command function via currying so only
+    // command-specific args are needed when invoked from the view layer.
     this._commands = namemap(
       COMMAND_REGISTRY,
-      (n, cmdCls) => (...args) => new cmdCls(models, ...args),
+      (n, mkCmd) => (...args) => mkCmd(models, ...args),
       name => COMMANDS[name]
     );
   }

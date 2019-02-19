@@ -11,10 +11,6 @@ const EVENT_NAMES = [
 
 export const EVENTS = namemap(EVENT_NAMES, (name, e) => Symbol(name));
 
-export function makeUpdate(event, data) {
-  return {event: event, ...data};
-}
-
 export class ViewNotifier {
   constructor() {
     this._notifications = {};
