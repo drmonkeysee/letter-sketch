@@ -6,7 +6,7 @@ function clamp(value = COLOR_CHANNEL_MIN) {
 
 export function channelsToCss(r, g, b) {
   return `rgb(${clamp(r)}, ${clamp(g)}, ${clamp(b)})`;
-};
+}
 
 export const COLORS = {
   black: channelsToCss(0x00, 0x00, 0x00),

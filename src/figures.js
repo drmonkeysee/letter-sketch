@@ -3,7 +3,7 @@ import {makeTile} from './models/cell.js';
 export function singleCell(brushCell, terminal) {
   return (start, end, activeFigure) => {
     return [makeTile(start.x, start.y, brushCell)];
-  }
+  };
 }
 
 // TODO: remove duplicate tiles when going over same cells
@@ -25,5 +25,5 @@ export function rectangle(brushCell, terminal) {
   return (start, end, previousShape) => {
     // draw rectangle, including restoration of last state? how to measure last state?
     return [];
-  }
+  };
 }

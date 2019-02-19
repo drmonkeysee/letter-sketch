@@ -71,7 +71,7 @@ class App {
         bg: this._models.brush.cell.backgroundColor,
         fill: this._models.brush.fillColor
       }
-    }
+    };
   }
 }
 
