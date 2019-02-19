@@ -59,65 +59,63 @@ describe('Cell', function () {
   });
 
   describe('#update()', function () {
-    let target;
-    
     beforeEach(function () {
-      target = new Cell('B', 'red', 'blue');
+      this.target = new Cell('B', 'red', 'blue');
     });
     
     it('does nothing if no arguments', function () {
-      target.update();
+      this.target.update();
 
-      expect(target.glyph).to.equal('B');
-      expect(target.foregroundColor).to.equal('red');
-      expect(target.backgroundColor).to.equal('blue');
+      expect(this.target.glyph).to.equal('B');
+      expect(this.target.foregroundColor).to.equal('red');
+      expect(this.target.backgroundColor).to.equal('blue');
     });
 
     it('updates all fields from other cell', function () {
       const other = new Cell('t', 'yellow', 'green');
 
-      target.update(other);
+      this.target.update(other);
 
-      expect(target.glyph).to.equal('t');
-      expect(target.foregroundColor).to.equal('yellow');
-      expect(target.backgroundColor).to.equal('green');
+      expect(this.target.glyph).to.equal('t');
+      expect(this.target.foregroundColor).to.equal('yellow');
+      expect(this.target.backgroundColor).to.equal('green');
     });
 
     it('updates single field', function () {
-      target.update({glyph: 't'});
+      this.target.update({glyph: 't'});
 
-      expect(target.glyph).to.equal('t');
-      expect(target.foregroundColor).to.equal('red');
-      expect(target.backgroundColor).to.equal('blue');
+      expect(this.target.glyph).to.equal('t');
+      expect(this.target.foregroundColor).to.equal('red');
+      expect(this.target.backgroundColor).to.equal('blue');
     });
 
     it('updates multiple fields', function () {
-      target.update({backgroundColor: 'green', foregroundColor: 'yellow'});
+      this.target.update({backgroundColor: 'green', foregroundColor: 'yellow'});
 
-      expect(target.glyph).to.equal('B');
-      expect(target.foregroundColor).to.equal('yellow');
-      expect(target.backgroundColor).to.equal('green');
+      expect(this.target.glyph).to.equal('B');
+      expect(this.target.foregroundColor).to.equal('yellow');
+      expect(this.target.backgroundColor).to.equal('green');
     });
 
     it('updates all fields from a literal', function () {
-      target.update({backgroundColor: 'green', glyph: 't', foregroundColor: 'yellow'});
+      this.target.update({backgroundColor: 'green', glyph: 't', foregroundColor: 'yellow'});
 
-      expect(target.glyph).to.equal('t');
-      expect(target.foregroundColor).to.equal('yellow');
-      expect(target.backgroundColor).to.equal('green');
+      expect(this.target.glyph).to.equal('t');
+      expect(this.target.foregroundColor).to.equal('yellow');
+      expect(this.target.backgroundColor).to.equal('green');
     });
 
-    it('can set fields to null', () => {
-      target.update({backgroundColor: null, foregroundColor: null});
+    it('can set fields to null', function () {
+      this.target.update({backgroundColor: null, foregroundColor: null});
 
-      expect(target.backgroundColor).to.be.null;
-      expect(target.foregroundColor).to.be.null;
+      expect(this.target.backgroundColor).to.be.null;
+      expect(this.target.foregroundColor).to.be.null;
     });
 
-    it('can set glyph to nil', () => {
-      target.update({glyph: null});
+    it('can set glyph to nil', function () {
+      this.target.update({glyph: null});
 
-      expect(target.glyph).to.equal('\u0000');
+      expect(this.target.glyph).to.equal('\u0000');
     });
   });
 });
