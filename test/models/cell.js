@@ -106,6 +106,19 @@ describe('Cell', function () {
       expect(target.foregroundColor).to.equal('yellow');
       expect(target.backgroundColor).to.equal('green');
     });
+
+    it('can set fields to null', () => {
+      target.update({backgroundColor: null, foregroundColor: null});
+
+      expect(target.backgroundColor).to.be.null;
+      expect(target.foregroundColor).to.be.null;
+    });
+
+    it('can set glyph to nil', () => {
+      target.update({glyph: null});
+
+      expect(target.glyph).to.equal('\u0000');
+    });
   });
 });
 
