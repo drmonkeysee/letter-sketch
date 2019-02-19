@@ -68,7 +68,7 @@ export class CommandDispatcher {
   command(name, ...args) {
     const boundCmd = this._commands[name];
     if (!boundCmd) throw new Error(`Unknown command: ${name.toString()}`);
-    const cmd = new boundCmd(...args),
+    const cmd = boundCmd(...args),
           update = cmd();
     this._notifier.signal(update);
   }

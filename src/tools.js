@@ -1,10 +1,10 @@
 import {MouseGesture} from './gestures.js';
 import {singleCell, freeDraw, rectangle} from './figures.js';
 
-function makeTool(models, gesture, figureStyle) {
+function makeTool(models, gestureCls, figureStyle) {
   return {
     startGesture(sketchpadView) {
-      return new gesture(figureStyle(models.brush.cell, models.terminal), sketchpadView);
+      return new gestureCls(figureStyle(models.brush.cell, models.terminal), sketchpadView);
     }
   };
 }
