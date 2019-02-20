@@ -7,8 +7,8 @@ describe('Cell', function () {
       const result = new Cell();
 
       expect(result.glyph).to.equal('\u0000');
-      expect(result.foregroundColor).to.be.null;
-      expect(result.backgroundColor).to.be.null;
+      expect(result.foregroundColor).to.not.exist;
+      expect(result.backgroundColor).to.not.exist;
     });
 
     it('sets nil glyph if given null', function () {
@@ -105,6 +105,16 @@ describe('Cell', function () {
       expect(this.target.backgroundColor).to.equal('green');
     });
 
+    it('updates all fields directly', function () {
+      this.target.backgroundColor = 'green';
+      this.target.glyph = 't';
+      this.target.foregroundColor = 'yellow';
+
+      expect(this.target.glyph).to.equal('t');
+      expect(this.target.foregroundColor).to.equal('yellow');
+      expect(this.target.backgroundColor).to.equal('green');
+    });
+
     it('can set fields to null', function () {
       this.target.update({backgroundColor: null, foregroundColor: null});
 
@@ -112,8 +122,22 @@ describe('Cell', function () {
       expect(this.target.foregroundColor).to.be.null;
     });
 
+    it('can set fields to null directly', function () {
+      this.target.backgroundColor = null;
+      this.target.foregroundColor = null;
+
+      expect(this.target.backgroundColor).to.be.null;
+      expect(this.target.foregroundColor).to.be.null;
+    });
+
     it('can set glyph to nil', function () {
       this.target.update({glyph: null});
+
+      expect(this.target.glyph).to.equal('\u0000');
+    });
+
+    it('can set glyph to nil directly', function () {
+      this.target.glyph = null;
 
       expect(this.target.glyph).to.equal('\u0000');
     });

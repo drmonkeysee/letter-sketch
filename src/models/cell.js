@@ -6,8 +6,7 @@ export class Cell {
   }
 
   get glyph() { return this._glyph; }
-  get foregroundColor() { return this._fgColor; }
-  get backgroundColor() { return this._bgColor; }
+  set glyph(value) { this._glyph = value || NIL_GLYPH; }
 
   isEmpty() {
     return this.glyph === NIL_GLYPH;
@@ -22,9 +21,9 @@ export class Cell {
   }
 
   _setFields(glyph, fgColor, bgColor) {
-    this._glyph = glyph || NIL_GLYPH;
-    this._fgColor = fgColor || null;
-    this._bgColor = bgColor || null;
+    this.glyph = glyph;
+    this.foregroundColor = fgColor;
+    this.backgroundColor = bgColor;
   }
 }
 
