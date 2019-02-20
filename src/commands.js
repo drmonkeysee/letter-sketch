@@ -3,34 +3,34 @@ import {EVENTS} from './refresh.js';
 import {currentTool} from './tools.js';
 
 function makeUpdate(event, data) {
-  return {event: event, ...data};
+  return {event, ...data};
 }
 
 function setForegroundColor(models, color) {
   return () => {
-    models.brush.cell.update({foregroundColor: color});
-    return makeUpdate(EVENTS.onForegroundColorChanged, {color: models.brush.cell.foregroundColor});
+    models.brush.cell.foregroundColor = color;
+    return makeUpdate(EVENTS.onForegroundColorChanged, {color});
   };
 }
 
 function setBackgroundColor(models, color) {
   return () => {
-    models.brush.cell.update({backgroundColor: color});
-    return makeUpdate(EVENTS.onBackgroundColorChanged, {color: models.brush.cell.backgroundColor});
+    models.brush.cell.backgroundColor = color;
+    return makeUpdate(EVENTS.onBackgroundColorChanged, {color});
   };
 }
 
 function setFillColor(models, color) {
   return () => {
     models.brush.fillColor = color;
-    return makeUpdate(EVENTS.onFillColorChanged, {color: models.brush.fillColor});
+    return makeUpdate(EVENTS.onFillColorChanged, {color});
   };
 }
 
 function setGlyph(models, glyph) {
   return () => {
-    models.brush.cell.update({glyph: glyph});
-    return makeUpdate(EVENTS.onGlyphChanged, {glyph: models.brush.cell.glyph});
+    models.brush.cell.glyph = glyph;
+    return makeUpdate(EVENTS.onGlyphChanged, {glyph});
   };
 }
 
