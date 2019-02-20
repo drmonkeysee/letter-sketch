@@ -74,11 +74,12 @@ class App {
   }
 }
 
-let app = null;
-
-export default {
-  start(win) {
-    app = new App(win);
-    app.initialize();
-  }
-};
+export default function () {
+  let app;
+  return {
+    start(win) {
+      app = new App(win);
+      app.initialize();
+    }
+  };
+}
