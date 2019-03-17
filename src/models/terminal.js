@@ -1,4 +1,5 @@
 import {Cell, makeTile} from './cell.js';
+const MAX_SIDE = 0xffff;
 
 export class Terminal {
   constructor(columns, rows) {
@@ -10,6 +11,10 @@ export class Terminal {
   }
 
   resize(columns, rows) {
+    if (columns <= 0 || columns > MAX_SIDE
+        || rows <= 0 || rows > MAX_SIDE) {
+      throw new Error(`Terminal dimensions must be within range [1, ${MAX_SIDE}], got arguments (columns: ${columns}, rows: ${rows})`);
+    }
     this._stride = columns;
     this._height = rows;
     const size = columns * rows, cells = [];
