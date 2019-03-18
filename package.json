@@ -5,7 +5,7 @@
   "browser": "main.js",
   "scripts": {
     "start": "parcel index.html",
-    "test": "mocha --require @babel/polyfill --require test/mochaBootstrap.js --recursive",
+    "test": "mocha --config test/.mocharc.json",
     "clean": "rm -rf dist",
     "scrub": "npm run clean && rm -r node_modules"
   },
