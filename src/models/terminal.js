@@ -13,7 +13,9 @@ export class Terminal {
   resize(columns, rows) {
     if (columns < MIN_DIM || columns > MAX_DIM
         || rows < MIN_DIM || rows > MAX_DIM) {
-      throw new Error(`Terminal dimensions must be in range [${MIN_DIM}, ${MAX_DIM}], got arguments (columns: ${columns}, rows: ${rows})`);
+      const msg = `Terminal dimensions must be in range [${MIN_DIM}, ${MAX_DIM}];`
+                  + ` got arguments {columns: ${columns}, rows: ${rows}}`;
+      throw new Error(msg);
     }
     this._stride = columns;
     this._height = rows;
