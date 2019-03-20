@@ -7,7 +7,7 @@ class ActiveFigure {
   }
 
   addTile(tile) {
-    // NOTE: shift/xor works as a key cuz terminal dimensions
+    // NOTE: shift/xor works as a key cuz terminal coordinates
     // cannot be greater than 0xffff
     const tilePosition = (tile.x << 16) ^ tile.y;
     if (!this._points.has(tilePosition)) {
