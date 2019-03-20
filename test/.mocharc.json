@@ -1,4 +1,4 @@
 {
-  "require": ["@babel/polyfill", "test/mochaBootstrap.js"],
+  "require": ["test/mochaBootstrap.js"],
   "recursive": true
 }

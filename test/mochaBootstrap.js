@@ -1,5 +1,5 @@
 require('@babel/register')({
   presets: [
-    ['@babel/preset-env', {useBuiltIns: 'entry'}]
+    ['@babel/preset-env', {useBuiltIns: 'usage'}]
   ]
 });
