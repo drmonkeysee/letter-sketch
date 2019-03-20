@@ -5,7 +5,7 @@
   "browser": "main.js",
   "scripts": {
     "start": "parcel index.html",
-    "test": "mocha --config test/.mocharc.json",
+    "test": "mocha",
     "clean": "rm -rf dist",
     "scrub": "npm run clean && rm -r node_modules"
   },
