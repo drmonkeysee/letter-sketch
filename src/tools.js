@@ -13,7 +13,7 @@ const TOOLS = {
   point(models) {
     return makeTool(models, MouseGesture, singleCell);
   },
-  pen(models) {
+  brush(models) {
     return makeTool(models, MouseGesture, freeDraw);
   },
   rect(models) {

@@ -31,7 +31,7 @@ class App {
   _createModels() {
     this._models.lettertype = lettertype();
     this._models.terminal = new Terminal(50, 20);
-    this._models.currentTool = 'pen';
+    this._models.currentTool = 'brush';
   }
 
   _syncModels() {
