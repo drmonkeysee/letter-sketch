@@ -9,6 +9,6 @@ export function channelsToCss(r, g, b) {
 }
 
 export const COLORS = {
-  black: channelsToCss(0x00, 0x00, 0x00),
-  white: channelsToCss(0xff, 0xff, 0xff)
+  black: channelsToCss(COLOR_CHANNEL_MIN, COLOR_CHANNEL_MIN, COLOR_CHANNEL_MIN),
+  white: channelsToCss(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX)
 };
