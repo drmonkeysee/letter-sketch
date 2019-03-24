@@ -1,4 +1,3 @@
-import {expect} from 'chai';
 import sinon from 'sinon';
 import {ViewNotifier, EVENTS} from '../src/refresh.js';
 
