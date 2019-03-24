@@ -8,28 +8,28 @@ function makeUpdate(event, data) {
 
 function setForegroundColor(models, color) {
   return () => {
-    models.brush.cell.foregroundColor = color;
+    models.lettertype.cell.foregroundColor = color;
     return makeUpdate(EVENTS.onForegroundColorChanged, {color});
   };
 }
 
 function setBackgroundColor(models, color) {
   return () => {
-    models.brush.cell.backgroundColor = color;
+    models.lettertype.cell.backgroundColor = color;
     return makeUpdate(EVENTS.onBackgroundColorChanged, {color});
   };
 }
 
 function setFillColor(models, color) {
   return () => {
-    models.brush.fillColor = color;
+    models.lettertype.fillColor = color;
     return makeUpdate(EVENTS.onFillColorChanged, {color});
   };
 }
 
 function setGlyph(models, glyph) {
   return () => {
-    models.brush.cell.glyph = glyph;
+    models.lettertype.cell.glyph = glyph;
     return makeUpdate(EVENTS.onGlyphChanged, {glyph});
   };
 }

@@ -4,7 +4,7 @@ import {singleCell, freeDraw, rectangle} from './figures.js';
 function makeTool(models, gestureCls, figureStyle) {
   return {
     startGesture(sketchpadView) {
-      return new gestureCls(figureStyle(models.brush.cell, models.terminal), sketchpadView);
+      return new gestureCls(figureStyle(models.lettertype.cell, models.terminal), sketchpadView);
     }
   };
 }
@@ -17,16 +17,16 @@ const TOOLS = {
     return makeTool(models, MouseGesture, freeDraw);
   },
   rect(models) {
-     //{/* draw border rect using current brush, use smart lines if single or double line selected */},
+     //{/* draw border rect using current lettertype, use smart lines if single or double line selected */},
     //return makeTool(models, SegmentStroke, rectangle);
   },
-  fillRect(models) {/* filled rect using current brush */},
-  ellipse(models) {/* draw border ellipse using current brush, use smart lines if single or double line selected */},
-  fillEllipse(models) {/* filled ellipse using current brush */},
-  line(models) {/* line segment from start to end using current brush, use smart lines? */},
-  fill(models) {/* floodfill (cardinal) all tiles matching current point with current brush */},
+  fillRect(models) {/* filled rect using current lettertype */},
+  ellipse(models) {/* draw border ellipse using current lettertype, use smart lines if single or double line selected */},
+  fillEllipse(models) {/* filled ellipse using current lettertype */},
+  line(models) {/* line segment from start to end using current lettertype, use smart lines? */},
+  fill(models) {/* floodfill (cardinal) all tiles matching current point with current lettertype */},
   text(models) {/* type text */},
-  replace(models) {/* swap all tiles matching current point with current brush */}
+  replace(models) {/* swap all tiles matching current point with current lettertype */}
 };
 
 export function currentTool(models) {

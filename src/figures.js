@@ -21,28 +21,28 @@ class ActiveFigure {
   }
 }
 
-export function singleCell(brushCell, terminal) {
+export function singleCell(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    return [makeTile(start.x, start.y, brushCell)];
+    return [makeTile(start.x, start.y, lettertypeCell)];
   };
 }
 
 // TODO: remove duplicate tiles when going over same cells
 // set of indices based on x,y?
-export function freeDraw(brushCell, terminal) {
+export function freeDraw(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
     activeFigure = activeFigure || new ActiveFigure();
-    activeFigure.addTile(makeTile(end.x, end.y, brushCell));
+    activeFigure.addTile(makeTile(end.x, end.y, lettertypeCell));
     return activeFigure;
   };
 }
 
-export function floodFill(brushCell, terminal) {
+export function floodFill(lettertypeCell, terminal) {
   // at start execute a floodfill
   // and return new figure
 }
 
-export function rectangle(brushCell, terminal) {
+export function rectangle(lettertypeCell, terminal) {
   return (start, end, previousShape) => {
     // draw rectangle, including restoration of last state? how to measure last state?
     return [];

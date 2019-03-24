@@ -60,7 +60,7 @@ export class ImageSurface extends View {
 
   _drawDemo(initialState) {
     const glyphDims = initialState.tileSize;
-    console.log('Brush dims: %o', glyphDims);
+    console.log('Lettertype dims: %o', glyphDims);
 
     const letters = ['A', 'a', 'W', '1', 'y', '@'],
           baseLines = ['alphabetic', 'bottom', 'hanging', 'ideographic', 'middle', 'top'],

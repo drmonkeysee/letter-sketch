@@ -1,6 +1,6 @@
 import namemap from './namemap.js';
 import {checkCanvas, measureGlyph} from './dom.js';
-import brush from './models/brush.js';
+import lettertype from './models/lettertype.js';
 import {Terminal, demoText} from './models/terminal.js';
 import {ViewNotifier} from './refresh.js';
 import {CommandDispatcher} from './commands.js';
@@ -29,14 +29,14 @@ class App {
   }
 
   _createModels() {
-    this._models.brush = brush();
+    this._models.lettertype = lettertype();
     this._models.terminal = new Terminal(50, 20);
     this._models.currentTool = 'pen';
   }
 
   _syncModels() {
-    this._models.brush.tileSize = measureGlyph(this._doc);
-    console.log('Tilesize: %o', this._models.brush.tileSize);
+    this._models.lettertype.tileSize = measureGlyph(this._doc);
+    console.log('Tilesize: %o', this._models.lettertype.tileSize);
   }
 
   _wireCommands() {
@@ -61,14 +61,14 @@ class App {
   _initialState() {
     return {
       figure: demoText(this._models.terminal, 9, 10),
-      tileSize: this._models.brush.tileSize,
+      tileSize: this._models.lettertype.tileSize,
       termSize: this._models.terminal.dimensions,
       tool: currentTool(this._models),
-      glyph: this._models.brush.cell.glyph,
+      glyph: this._models.lettertype.cell.glyph,
       colors: {
-        fg: this._models.brush.cell.foregroundColor,
-        bg: this._models.brush.cell.backgroundColor,
-        fill: this._models.brush.fillColor
+        fg: this._models.lettertype.cell.foregroundColor,
+        bg: this._models.lettertype.cell.backgroundColor,
+        fill: this._models.lettertype.fillColor
       }
     };
   }

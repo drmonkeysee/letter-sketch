@@ -64,7 +64,7 @@ body {
   }
 }
 
-#current-brush {
+#current-lettertype {
   display: flex;
 
   & > div {
