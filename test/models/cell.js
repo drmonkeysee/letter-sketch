@@ -144,7 +144,7 @@ describe('Cell', function () {
   });
 });
 
-describe('#makeTile', function () {
+describe('#makeTile()', function () {
   it('makes a tile', function () {
     const cell = new Cell();
     

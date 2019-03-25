@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
-import * as nmModule from '../src/namemap.js';
 import {CommandDispatcher, COMMANDS} from '../src/commands.js';
+import * as nmModule from '../src/namemap.js';
 import {EVENTS} from '../src/refresh.js';
 import * as toolModule from '../src/tools.js';
 
