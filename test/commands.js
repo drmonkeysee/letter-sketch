@@ -1,7 +1,9 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
 import * as nmModule from '../src/namemap.js';
-import {CommandDispatcher} from '../src/commands.js';
+import {CommandDispatcher, COMMANDS} from '../src/commands.js';
+import {EVENTS} from '../src/refresh.js';
+import * as toolModule from '../src/tools.js';
 
 describe('CommandDispatcher', function () {
   describe('#command()', function () {
@@ -35,6 +37,122 @@ describe('CommandDispatcher', function () {
 
     it('raises error if invalid command', function () {
       expect(() => this.target.command('notACommand')).to.throw('Unknown command: notACommand');
+    });
+  });
+});
+
+describe('commands', function () {
+  function getBinder(name, models) {
+    const d = new CommandDispatcher('fakeNotifier', models);
+    return d._commands[name];
+  }
+  
+  describe('#setForegroundColor()', function () {
+    beforeEach(function () {
+      this.models = {
+        lettertype: {
+          cell: {}
+        }
+      };
+      this.target = getBinder(COMMANDS.setForegroundColor, this.models);
+    });
+
+    it('sets the foreground color', function () {
+      const color = 'testColor',
+            cmd = this.target(color);
+
+      const result = cmd();
+
+      expect(this.models.lettertype.cell.foregroundColor).to.equal(color);
+      expect(result).to.eql({event: EVENTS.onForegroundColorChanged, color: color});
+    });
+  });
+
+  describe('#setBackgroundColor()', function () {
+    beforeEach(function () {
+      this.models = {
+        lettertype: {
+          cell: {}
+        }
+      };
+      this.target = getBinder(COMMANDS.setBackgroundColor, this.models);
+    });
+
+    it('sets the background color', function () {
+      const color = 'testColor',
+            cmd = this.target(color);
+
+      const result = cmd();
+
+      expect(this.models.lettertype.cell.backgroundColor).to.equal(color);
+      expect(result).to.eql({event: EVENTS.onBackgroundColorChanged, color: color});
+    });
+  });
+
+  describe('#setGlyph()', function () {
+    beforeEach(function () {
+      this.models = {
+        lettertype: {
+          cell: {}
+        }
+      };
+      this.target = getBinder(COMMANDS.setGlyph, this.models);
+    });
+
+    it('sets the cell glyph', function () {
+      const glyph = 'testGlyph',
+            cmd = this.target(glyph);
+
+      const result = cmd();
+
+      expect(this.models.lettertype.cell.glyph).to.equal(glyph);
+      expect(result).to.eql({event: EVENTS.onGlyphChanged, glyph: glyph});
+    });
+  });
+
+  describe('#setTool()', function () {
+    beforeEach(function () {
+      this.models = {};
+      this.currTool = sinon.stub(toolModule, 'currentTool').returns('testToolResult');
+      this.target = getBinder(COMMANDS.setTool, this.models);
+    });
+    afterEach(function () {
+      sinon.restore();
+    });
+
+    it('sets the current tool', function () {
+      const tool = 'testTool',
+            cmd = this.target(tool);
+
+      const result = cmd();
+
+      sinon.assert.calledWith(this.currTool, this.models);
+      expect(this.models.currentTool).to.equal(tool);
+      expect(result).to.eql({event: EVENTS.onToolChanged, tool: 'testToolResult'});
+    });
+  });
+
+  describe('#commitDraw()', function () {
+    beforeEach(function () {
+      this.models = {
+        terminal: {
+          update: sinon.fake()
+        }
+      };
+      this.target = getBinder(COMMANDS.commitDraw, this.models);
+    });
+    afterEach(function () {
+      sinon.restore();
+    });
+
+    it('updates the terminal', function () {
+      const figure = 'testFigure',
+            cmd = this.target(figure);
+
+      const result = cmd();
+
+      sinon.assert.calledWith(this.models.terminal.update, figure);
+      expect(result).to.eql({event: EVENTS.onDrawCommitted, figure: figure});
     });
   });
 });
