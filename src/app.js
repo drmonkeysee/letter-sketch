@@ -1,4 +1,3 @@
-import namemap from './namemap.js';
 import {checkCanvas, measureGlyph} from './dom.js';
 import lettertype from './models/lettertype.js';
 import {Terminal, demoText} from './models/terminal.js';
@@ -44,16 +43,16 @@ class App {
   }
 
   _createViews() {
-    this._views = namemap(VIEW_REGISTRY, (n, viewCls) => new viewCls(this._doc, this._dispatch));
+    this._views = VIEW_REGISTRY.map(viewCls => new viewCls(this._doc, this._dispatch));
   }
 
   _registerViews() {
-    this._notifier.register(...Object.values(this._views));
+    this._notifier.register(...this._views);
   }
 
   _drawViews() {
     const initialState = this._initialState();
-    for (const v of Object.values(this._views)) {
+    for (const v of this._views) {
       v.draw(initialState);
     }
   }
