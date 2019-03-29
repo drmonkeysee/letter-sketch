@@ -57,7 +57,7 @@ const COMMAND_REGISTRY = [
   commitDraw
 ];
 
-export const COMMANDS = namemap(COMMAND_REGISTRY, (name, c) => Symbol(name));
+export const COMMANDS = namemap(COMMAND_REGISTRY, (name, c) => name);
 
 export class CommandDispatcher {
   constructor(notifier, models) {
@@ -67,7 +67,7 @@ export class CommandDispatcher {
 
   command(name, ...args) {
     const boundCmd = this._commands[name];
-    if (!boundCmd) throw new Error(`Unknown command: ${name.toString()}`);
+    if (!boundCmd) throw new Error(`Unknown command: ${name}`);
     const cmd = boundCmd(...args),
           update = cmd();
     this._notifier.signal(update);
@@ -78,8 +78,7 @@ export class CommandDispatcher {
     // command-specific args are needed when invoked from the view layer.
     this._commands = namemap(
       COMMAND_REGISTRY,
-      (n, mkCmd) => (...args) => mkCmd(models, ...args),
-      name => COMMANDS[name]
+      (n, mkCmd) => (...args) => mkCmd(models, ...args)
     );
   }
 }

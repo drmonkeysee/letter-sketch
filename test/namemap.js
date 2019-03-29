@@ -33,20 +33,6 @@ describe('#namemap()', function () {
     expect(result).to.be.deep.equal(expected);
   });
 
-  it('uses custom name mapper', function () {
-    const items = this.makeItems(3),
-          mapName = name => name.toUpperCase();
-
-    const result = namemap(items, this.mapItem, mapName);
-
-    const expected = {
-      FOO0: 'Foo(foo0-10)',
-      FOO1: 'Foo(foo1-11)',
-      FOO2: 'Foo(foo2-12)'
-    };
-    expect(result).to.be.deep.equal(expected);
-  });
-
   it('creates map from string items', function () {
     const items = ['Foo', 'Bar', 'Baz'],
           mapItem = (n, i) => `${n}(${i})`;

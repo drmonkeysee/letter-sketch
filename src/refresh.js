@@ -1,15 +1,15 @@
 import namemap from './namemap.js';
 
 const EVENT_NAMES = [
-  'OnForegroundColorChanged',
-  'OnBackgroundColorChanged',
-  'OnFillColorChanged',
-  'OnGlyphChanged',
-  'OnToolChanged',
-  'OnDrawCommitted'
+  'onForegroundColorChanged',
+  'onBackgroundColorChanged',
+  'onFillColorChanged',
+  'onGlyphChanged',
+  'onToolChanged',
+  'onDrawCommitted'
 ];
 
-export const EVENTS = namemap(EVENT_NAMES, (name, e) => Symbol(name));
+export const EVENTS = namemap(EVENT_NAMES, (name, e) => name);
 
 export class ViewNotifier {
   constructor() {
