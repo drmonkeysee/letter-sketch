@@ -1,5 +1,6 @@
 import {MouseGesture} from './gestures.js';
 import {singleCell, freeDraw, rectangle} from './figures.js';
+import namemap from './namemap.js';
 
 function makeTool(models, gestureCls, figureStyle) {
   return {
@@ -9,7 +10,7 @@ function makeTool(models, gestureCls, figureStyle) {
   };
 }
 
-const TOOLS = {
+const TOOLS_REGISTRY = {
   point(models) {
     return makeTool(models, MouseGesture, singleCell);
   },
@@ -29,8 +30,10 @@ const TOOLS = {
   replace(models) {/* swap all tiles matching current point with current lettertype */}
 };
 
+export const TOOLS = namemap(Object.values(TOOLS_REGISTRY), (name, t) => name);
+
 export function currentTool(models) {
-  const tool = TOOLS[models.currentTool];
+  const tool = TOOLS_REGISTRY[models.currentTool];
   if (!tool) throw new Error(`Unknown tool: ${models.currentTool}`);
   return tool(models);
 }

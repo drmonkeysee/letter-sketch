@@ -5,7 +5,7 @@ import {Terminal, demoText} from './models/terminal.js';
 import {ViewNotifier} from './refresh.js';
 import {CommandDispatcher} from './commands.js';
 import {VIEW_REGISTRY} from './views/index.js';
-import {currentTool} from './tools.js';
+import {currentTool, TOOLS} from './tools.js';
 
 class App {
   constructor(win) {
@@ -31,7 +31,7 @@ class App {
   _createModels() {
     this._models.lettertype = lettertype();
     this._models.terminal = new Terminal(50, 20);
-    this._models.currentTool = 'brush';
+    this._models.currentTool = TOOLS.brush;
   }
 
   _syncModels() {
