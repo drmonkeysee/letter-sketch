@@ -37,7 +37,7 @@ function setGlyph(models, glyph) {
 function setTool(models, toolName) {
   return () => {
     models.currentTool = toolName;
-    return makeUpdate(EVENTS.onToolChanged, {tool: currentTool(models)});
+    return makeUpdate(EVENTS.onToolChanged, {tool: currentTool(models), name: toolName});
   };
 }
 

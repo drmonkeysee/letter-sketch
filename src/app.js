@@ -62,6 +62,7 @@ class App {
       figure: demoText(this._models.terminal, 9, 10),
       tileSize: this._models.lettertype.tileSize,
       termSize: this._models.terminal.dimensions,
+      toolName: this._models.currentTool,
       tool: currentTool(this._models),
       glyph: this._models.lettertype.cell.glyph,
       colors: {

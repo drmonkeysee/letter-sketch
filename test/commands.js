@@ -128,7 +128,7 @@ describe('commands', function () {
 
       sinon.assert.calledWith(this.currTool, this.models);
       expect(this.models.currentTool).to.equal(tool);
-      expect(result).to.eql({event: EVENTS.onToolChanged, tool: 'testToolResult'});
+      expect(result).to.eql({event: EVENTS.onToolChanged, tool: 'testToolResult', name: 'testTool'});
     });
   });
 
