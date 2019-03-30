@@ -1,6 +1,6 @@
-import {checkCanvas, measureGlyph} from './dom.js';
+import {measureGlyph} from './dom.js';
 import lettertype from './models/lettertype.js';
-import {Terminal, demoText} from './models/terminal.js';
+import {Terminal} from './models/terminal.js';
 import {ViewNotifier} from './refresh.js';
 import {CommandDispatcher} from './commands.js';
 import {VIEW_REGISTRY} from './views/index.js';
@@ -15,8 +15,6 @@ class App {
   }
 
   initialize() {
-    checkCanvas(this._doc);
-
     this._createModels();
     this._syncModels();
     this._wireCommands();
@@ -59,7 +57,6 @@ class App {
 
   _initialState() {
     return {
-      figure: demoText(this._models.terminal, 9, 10),
       tileSize: this._models.lettertype.tileSize,
       termSize: this._models.terminal.dimensions,
       toolName: this._models.currentTool,
