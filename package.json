@@ -7,7 +7,8 @@
     "start": "parcel index.html",
     "test": "mocha",
     "clean": "rm -rf dist",
-    "scrub": "npm run clean && rm -r node_modules"
+    "scrub": "npm run clean && rm -r node_modules",
+    "build": "parcel build index.html"
   },
   "repository": {
     "type": "git",
