@@ -102,7 +102,7 @@ body {
 
         &:last-child {
           transform: rotate(-45deg);
-        };
+        }
       }
 
       &.no-color {
