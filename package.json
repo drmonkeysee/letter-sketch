@@ -6,7 +6,7 @@
   "scripts": {
     "start": "parcel index.html",
     "test": "mocha",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist .cache",
     "scrub": "npm run clean && rm -r node_modules",
     "build": "parcel build index.html"
   },
