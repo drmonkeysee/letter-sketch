@@ -2,14 +2,14 @@
 
 set -euo pipefail
 
-pub_dir=pub
-
-rm -rf $pub_dir
-mkdir $pub_dir
-npm run build | tee /dev/stderr | awk 'NR > 6 {print $1}' | xargs -I {} mv -v {} $pub_dir
+rm -rf build_tmp
+mkdir build_tmp
+npm run build | tee /dev/stderr | awk 'NR > 6 {print $1}' | xargs -I {} mv -v {} build_tmp
 #git checkout gh-pages
-sed -E 's/(href|src)="\//\1="\/pub\//g' $pub_dir/index.html > index.html
-rm $pub_dir/index.html
+npm run clean
+mv -v build_tmp dist
+sed -E 's/(href|src)="\//\1="\/dist\//g' dist/index.html > index.html
+rm dist/index.html
 #git add -am 'publish site'
 #git push
 #git checkout master
