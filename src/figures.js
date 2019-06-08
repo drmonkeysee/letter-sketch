@@ -27,8 +27,6 @@ export function singleCell(lettertypeCell, terminal) {
   };
 }
 
-// TODO: remove duplicate tiles when going over same cells
-// set of indices based on x,y?
 export function freeDraw(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
     activeFigure = activeFigure || new ActiveFigure();
