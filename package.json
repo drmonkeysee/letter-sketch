@@ -8,7 +8,8 @@
     "test": "mocha",
     "clean": "rm -rf dist .cache",
     "scrub": "npm run clean && rm -r node_modules",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html",
+    "publish": "sh publish.sh"
   },
   "repository": {
     "type": "git",
