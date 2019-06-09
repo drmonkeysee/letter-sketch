@@ -2,15 +2,16 @@
 
 set -euo pipefail
 
-rm -rf build_tmp
-mkdir build_tmp
-npm run build | tee /dev/stderr | awk 'NR > 6 {print $1}' | xargs -I {} mv -v {} build_tmp
-npm run clean
+pub_dir=assets
+
+rm -rf $pub_dir
+mkdir $pub_dir
+npm run build | tee /dev/stderr | awk 'NR > 6 {print $1}' | xargs -I {} mv -v {} $pub_dir
 git checkout gh-pages
-mv -v build_tmp dist
-sed -E 's/(href|src)="\//\1="\/dist\//g' dist/index.html > index.html
-rm dist/index.html
-git add dist
-git commit -am 'publish site'
+replace="s/(href|src)=\"\//\1=\"\/$pub_dir\//g"
+sed -E $replace $pub_dir/index.html > index.html
+rm $pub_dir/index.html
+#git add $pub_dir
+#git commit -am 'publish site'
 #git push
 #git checkout master
