@@ -127,4 +127,4 @@ typings/
 # Project
 #
 dist/
-build_tmp/
+assets/
