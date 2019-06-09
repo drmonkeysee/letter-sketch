@@ -15,7 +15,12 @@ replace="s/(href|src)=\"\//\1=\"\/$pub_dir\//g"
 sed -E $replace $pub_dir/index.html > index.html
 rm $pub_dir/index.html
 
-git add $pub_dir index.html
-#git commit -m 'publish site'
-#git push
+git diff --quiet
+if [ $? -ne 0 ] ; then
+	git add $pub_dir index.html
+	#git commit -m 'publish site'
+	#git push
+else
+	echo 'No changes to publish'
+fi
 #git checkout master
