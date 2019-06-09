@@ -6,7 +6,7 @@ pub_dir=assets
 
 rm -rf $pub_dir
 mkdir $pub_dir
-npm run build | tee /dev/stderr | awk 'NR > 6 {print $1}' | xargs -I {} mv -v {} $pub_dir
+npm run build | tee /dev/stderr | awk 'NR > 6 {print $1}' | xargs -I {} cp -v {} $pub_dir
 
 git checkout gh-pages
 replace="s/(href|src)=\"\//\1=\"\/$pub_dir\//g"
