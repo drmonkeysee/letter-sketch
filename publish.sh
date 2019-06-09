@@ -28,6 +28,7 @@ if [ $has_diff -ne 0 ] ; then
 		#git push
 	else
 		echo '\nPublish cancelled\n'
+		exit
 	fi
 else
 	echo '\nNo changes to publish\n'
