@@ -10,6 +10,7 @@ git checkout gh-pages
 mv -v build_tmp dist
 sed -E 's/(href|src)="\//\1="\/dist\//g' dist/index.html > index.html
 rm dist/index.html
-#git add -am 'publish site'
+git add dist
+git commit -am 'publish site'
 #git push
 #git checkout master
