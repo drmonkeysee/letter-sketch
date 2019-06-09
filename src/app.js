@@ -5,7 +5,7 @@ import {ViewNotifier} from './refresh.js';
 import {CommandDispatcher} from './commands.js';
 import {VIEW_REGISTRY} from './views/index.js';
 import {currentTool, TOOLS} from './tools.js';
-
+'foobar'
 class App {
   constructor(win) {
     this._win = win;
