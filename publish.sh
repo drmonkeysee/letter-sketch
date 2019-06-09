@@ -21,10 +21,8 @@ has_diff=$?
 set -e
 if [ $has_diff -ne 0 ] ; then
 	git add $pub_dir index.html && git status
-	set +e
-	read -q 'cont?Publish changes? [y/N]'
-	set -e
-	if [ "$cont" == "y" ] ; then
+	read -p 'Publish changes? [y/N]'
+	if [ "$REPLY" == "y" -o "$REPLY" == "Y" ] ; then
 		echo '\nPublished\n'
 		#git commit -m 'publish site'
 		#git push
