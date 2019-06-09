@@ -23,9 +23,8 @@ if [ $has_diff -ne 0 ] ; then
 	git add $pub_dir index.html && git status
 	read -p 'Publish changes? [y/N]'
 	if [ "$REPLY" == "y" -o "$REPLY" == "Y" ] ; then
-		echo '\nPublished\n'
-		#git commit -m 'publish site'
-		#git push
+		git commit -m 'publish site'
+		git push
 	else
 		echo '\nPublish cancelled\n'
 		exit
