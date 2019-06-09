@@ -25,13 +25,13 @@ if [ $has_diff -ne 0 ] ; then
 	read -q 'cont?Publish changes? [y/N]'
 	set -e
 	if [ "$cont" == "y" ] ; then
-		echo 'Published'
+		echo '\nPublished\n'
 		#git commit -m 'publish site'
 		#git push
 	else
-		echo 'Publish cancelled'
+		echo '\nPublish cancelled\n'
 	fi
 else
-	echo 'No changes to publish'
+	echo '\nNo changes to publish\n'
 fi
 git checkout master
