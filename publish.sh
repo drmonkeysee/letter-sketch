@@ -20,10 +20,18 @@ git diff --quiet
 has_diff=$?
 set -e
 if [ $has_diff -ne 0 ] ; then
-	git add $pub_dir index.html
-	#git commit -m 'publish site'
-	#git push
+	git add $pub_dir index.html && git status
+	set +e
+	read -q 'cont?Publish changes? [y/N]'
+	set -e
+	if [ "$cont" == "y" ] ; then
+		echo 'Published'
+		#git commit -m 'publish site'
+		#git push
+	else
+		echo 'Publish cancelled'
+	fi
 else
 	echo 'No changes to publish'
 fi
-#git checkout master
+git checkout master
