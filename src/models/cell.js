@@ -1,4 +1,4 @@
-import {NIL_GLYPH} from '../codepage.js';
+import {CLEAR_GLYPH} from '../codepage.js';
 
 export class Cell {
   constructor(glyph, fgColor, bgColor) {
@@ -6,10 +6,10 @@ export class Cell {
   }
 
   get glyph() { return this._glyph; }
-  set glyph(value) { this._glyph = value || NIL_GLYPH; }
+  set glyph(value) { this._glyph = value || CLEAR_GLYPH; }
 
   isEmpty() {
-    return this.glyph === NIL_GLYPH;
+    return this.glyph === CLEAR_GLYPH;
   }
 
   update({

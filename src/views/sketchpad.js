@@ -11,11 +11,12 @@ export class SketchPad extends View {
   }
 
   draw(initialState) {
+    const termSize = initialState.terminal.dimensions
     this._tool = initialState.tool;
-    this._rows = initialState.termSize.height;
-    this._columns = initialState.termSize.width;
-    this._sketchpad.style.width = `${initialState.termSize.width * initialState.tileSize.width}px`;
-    this._sketchpad.style.height = `${initialState.termSize.height * initialState.tileSize.height}px`;
+    this._rows = termSize.height;
+    this._columns = termSize.width;
+    this._sketchpad.style.width = `${termSize.width * initialState.tileSize.width}px`;
+    this._sketchpad.style.height = `${termSize.height * initialState.tileSize.height}px`;
     this._sketchpad.style.gridTemplateColumns = `repeat(${this._columns}, 1fr)`;
     
     const cellHeight = `${initialState.tileSize.height}px`,
@@ -39,13 +40,14 @@ export class SketchPad extends View {
           gridCell.addEventListener(e, this._continueGesture.bind(this));
         }
 
-        // NOTE: end current gesture if user action leaves sketchpad
-        this._sketchpad.addEventListener('mouseleave', this._terminateGesture.bind(this));
-        
         this._grid.push(gridCell);
         this._sketchpad.appendChild(gridCell);
+        this.updateAt(x, y, initialState.terminal.getCell(x, y));
       }
     }
+
+    // NOTE: end current gesture if user action leaves sketchpad
+    this._sketchpad.addEventListener('mouseleave', this._terminateGesture.bind(this));
   }
 
   subscribe(notifier) {

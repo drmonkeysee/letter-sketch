@@ -58,7 +58,7 @@ class App {
   _initialState() {
     return {
       tileSize: this._models.lettertype.tileSize,
-      termSize: this._models.terminal.dimensions,
+      terminal: this._models.terminal,
       toolName: this._models.currentTool,
       tool: currentTool(this._models),
       glyph: this._models.lettertype.cell.glyph,
