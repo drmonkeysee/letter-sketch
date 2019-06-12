@@ -1,4 +1,5 @@
 import {Cell, makeTile} from './cell.js';
+
 const MIN_DIM = 1, MAX_DIM = 0x10000;
 
 export class Terminal {
