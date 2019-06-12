@@ -2,29 +2,45 @@ import {View} from './view.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
 
-export class SketchPad extends View {
+class Controls extends View {
   constructor(...args) {
     super(...args);
-    this._sketchpad = this._doc.getElementById('sketchpad');
-    this._grid = [];
-    this._rows = this._columns = 0;
+    this.rows = this.columns = 0;
+    this._letterSizeControl = this._doc.getElementById('letter-size');
+    this._columnsControl = this._doc.getElementById('column-count');
+    this._rowsControl = this._doc.getElementById('row-count');
+    this._resize = this._doc.getElementById('resize-sketchpad');
   }
 
   draw(initialState) {
-    const termSize = initialState.terminal.dimensions
+    const termSize = initialState.terminal.dimensions;
+    this._columnsControl.value = this.columns = termSize.width;
+    this._rowsControl.value = this.rows = termSize.height;
+  }
+}
+
+export class SketchPad extends View {
+  constructor(...args) {
+    super(...args);
+    this._controls = new Controls(...args);
+    this._sketchpad = this._doc.getElementById('sketchpad');
+    this._grid = [];
+  }
+
+  draw(initialState) {
+    this._controls.draw(initialState);
+    
     this._tool = initialState.tool;
-    this._rows = termSize.height;
-    this._columns = termSize.width;
-    this._sketchpad.style.width = `${termSize.width * initialState.tileSize.width}px`;
-    this._sketchpad.style.height = `${termSize.height * initialState.tileSize.height}px`;
-    this._sketchpad.style.gridTemplateColumns = `repeat(${this._columns}, 1fr)`;
+    this._sketchpad.style.width = `${this._controls.columns * initialState.tileSize.width}px`;
+    this._sketchpad.style.height = `${this._controls.rows * initialState.tileSize.height}px`;
+    this._sketchpad.style.gridTemplateColumns = `repeat(${this._controls.columns}, 1fr)`;
     
     const cellHeight = `${initialState.tileSize.height}px`,
           cellWidth = `${initialState.tileSize.width}px`,
           startEvents = ['mousedown'],
           strokeEvents = ['mouseover', 'mouseup'];
-    for (let y = 0; y < this._rows; ++y) {
-      for (let x = 0; x < this._columns; ++x) {
+    for (let y = 0; y < this._controls.rows; ++y) {
+      for (let x = 0; x < this._controls.columns; ++x) {
         const gridCell = this._doc.createElement('div');
         gridCell.appendChild(this._doc.createElement('span'));
 
@@ -56,7 +72,7 @@ export class SketchPad extends View {
   }
 
   updateAt(x, y, cell) {
-    const gridCell = this._grid[x + (y * this._columns)],
+    const gridCell = this._grid[x + (y * this._controls.columns)],
           gridText = gridCell.firstChild;
     gridText.textContent = cell.glyph;
     gridText.style.color = cell.foregroundColor;
