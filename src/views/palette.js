@@ -70,14 +70,6 @@ export class ColorPalette extends View {
         onSelectedHandler,
         colors => colors.bg,
         ...args
-      ),
-      new ColorSelection(
-        'fill-selection',
-        COMMANDS.setFillColor,
-        EVENTS.onFillColorChanged,
-        onSelectedHandler,
-        colors => colors.fill,
-        ...args
       )
     ];
     this._currentSelection = null;

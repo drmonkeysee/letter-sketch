@@ -64,8 +64,7 @@ class App {
       glyph: this._models.lettertype.cell.glyph,
       colors: {
         fg: this._models.lettertype.cell.foregroundColor,
-        bg: this._models.lettertype.cell.backgroundColor,
-        fill: this._models.lettertype.fillColor
+        bg: this._models.lettertype.cell.backgroundColor
       }
     };
   }

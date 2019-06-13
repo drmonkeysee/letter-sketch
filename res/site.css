@@ -1,4 +1,4 @@
-$canvas-outline: blue solid 1px;
+$pad-outline: blue solid 1px;
 $border-thin: solid 1px;
 $color-border-control: gray;
 $color-border-layout: black;
@@ -16,7 +16,7 @@ body {
 
 #sketchpad {
   display: grid;
-  outline: $canvas-outline;
+  outline: $pad-outline;
   user-select: none;
 
   div {
@@ -25,7 +25,7 @@ body {
     align-items: center;
 
     &:hover {
-      outline: $canvas-outline;
+      outline: $pad-outline;
       opacity: 0.8;
     }
 
@@ -116,16 +116,6 @@ body {
       }
     }
     
-    #fill-selection {
-      width: 100%;
-      height: 100%;
-      position: relative;
-
-      hr {
-        border-top-color: $color-border-layout;
-      }
-    }
-
     .tile-color {
       width: calc($color-selection-dim - (2 * $color-selection-border-thickness));
       height: calc($color-selection-dim - (2 * $color-selection-border-thickness));
@@ -162,8 +152,4 @@ body {
     width: 100px;
     height: 100px;
   }
-}
-
-#draw-surface {
-  outline: $canvas-outline;
 }

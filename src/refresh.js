@@ -3,7 +3,6 @@ import namemap from './namemap.js';
 const EVENT_NAMES = [
   'onForegroundColorChanged',
   'onBackgroundColorChanged',
-  'onFillColorChanged',
   'onGlyphChanged',
   'onToolChanged',
   'onDrawCommitted'

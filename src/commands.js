@@ -19,12 +19,6 @@ const COMMAND_REGISTRY = {
       return makeUpdate(EVENTS.onBackgroundColorChanged, {color});
     };
   },
-  setFillColor(models, color) {
-    return () => {
-      models.lettertype.fillColor = color;
-      return makeUpdate(EVENTS.onFillColorChanged, {color});
-    };
-  },
   setGlyph(models, glyph) {
     return () => {
       models.lettertype.cell.glyph = glyph;
