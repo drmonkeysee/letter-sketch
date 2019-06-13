@@ -31,7 +31,7 @@ function measureGlyph(doc, fontSize) {
 class Controls extends View {
   constructor(...args) {
     super(...args);
-    this.rows = this.columns = 0;
+    this.rows = this.columns = this.fontSize = 0;
     this.tileSize = {height: 0, width: 0};
     this._fontSizeControl = this._doc.getElementById('font-size');
     this._columnsControl = this._doc.getElementById('column-count');
@@ -43,7 +43,7 @@ class Controls extends View {
     const termSize = initialState.terminal.dimensions;
     this._columnsControl.value = this.columns = termSize.width;
     this._rowsControl.value = this.rows = termSize.height;
-    this._fontSizeControl.value = initialState.fontSize;
+    this._fontSizeControl.value = this.fontSize = initialState.fontSize;
     this.tileSize = measureGlyph(this._doc, initialState.fontSize);
     console.log('Tilesize: %o', this.tileSize);
   }
@@ -61,6 +61,7 @@ export class SketchPad extends View {
     this._controls.draw(initialState);
     
     this._tool = initialState.tool;
+    this._sketchpad.style.fontSize = `${this._controls.fontSize}px`;
     this._sketchpad.style.width = `${this._controls.columns * this._controls.tileSize.width}px`;
     this._sketchpad.style.height = `${this._controls.rows * this._controls.tileSize.height}px`;
     this._sketchpad.style.gridTemplateColumns = `repeat(${this._controls.columns}, 1fr)`;

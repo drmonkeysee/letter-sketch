@@ -11,10 +11,6 @@ body {
   font: $default-font-size 'Courier New';
 }
 
-#sketchpad, #glyph-ruler {
-  font-size: 18pt;
-}
-
 #sketchpad {
   display: grid;
   outline: $pad-outline;
