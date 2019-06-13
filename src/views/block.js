@@ -17,7 +17,6 @@ export class LetterBlock extends View {
       const blockCell = this._doc.createElement('div');
       blockCell.appendChild(blockText);
       
-      blockCell.style.height = `${1.5 * initialState.tileSize.height}px`;
       if (glyph === initialState.glyph) {
         blockCell.className = 'selected';
       }

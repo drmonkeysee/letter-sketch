@@ -6,7 +6,7 @@ class Controls extends View {
   constructor(...args) {
     super(...args);
     this.rows = this.columns = 0;
-    this._letterSizeControl = this._doc.getElementById('letter-size');
+    this._fontSizeControl = this._doc.getElementById('font-size');
     this._columnsControl = this._doc.getElementById('column-count');
     this._rowsControl = this._doc.getElementById('row-count');
     this._resize = this._doc.getElementById('resize-sketchpad');
@@ -16,6 +16,7 @@ class Controls extends View {
     const termSize = initialState.terminal.dimensions;
     this._columnsControl.value = this.columns = termSize.width;
     this._rowsControl.value = this.rows = termSize.height;
+    this._fontSizeControl.value = initialState.fontSize;
   }
 }
 
