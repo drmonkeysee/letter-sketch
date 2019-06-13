@@ -1,7 +1,7 @@
-import {View} from './view.js';
+import {DEFAULT_GLYPH, CP437} from '../codepage.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
-import {DEFAULT_GLYPH, CP437} from '../codepage.js';
+import {View} from './view.js';
 
 function measureGlyph(doc, fontSize) {
   const r = doc.getElementById('glyph-ruler');

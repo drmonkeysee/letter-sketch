@@ -1,9 +1,9 @@
+import {CommandDispatcher} from './commands.js';
 import lettertype from './models/lettertype.js';
 import {Terminal} from './models/terminal.js';
 import {ViewNotifier} from './refresh.js';
-import {CommandDispatcher} from './commands.js';
-import {VIEW_REGISTRY} from './views/index.js';
 import {currentTool, TOOLS} from './tools.js';
+import {VIEW_REGISTRY} from './views/index.js';
 
 class App {
   constructor(win) {

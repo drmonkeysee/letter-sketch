@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+
 import {channelsToCss, COLORS} from '../src/color.js';
 
 describe('#channelsToCss()', function () {

@@ -1,7 +1,7 @@
-import {View} from './view.js';
-import {TOOLS} from '../tools.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
+import {TOOLS} from '../tools.js';
+import {View} from './view.js';
 
 export class ToolSelector extends View {
   constructor(...args) {

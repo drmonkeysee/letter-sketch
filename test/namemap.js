@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+
 import namemap from '../src/namemap.js';
 
 describe('#namemap()', function () {

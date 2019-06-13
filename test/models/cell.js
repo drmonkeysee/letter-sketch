@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+
 import {Cell, makeTile} from '../../src/models/cell.js';
 
 describe('Cell', function () {

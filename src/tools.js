@@ -1,5 +1,5 @@
-import {MouseGesture} from './gestures.js';
 import {singleCell, freeDraw, rectangle} from './figures.js';
+import {MouseGesture} from './gestures.js';
 import namemap from './namemap.js';
 
 function makeTool(models, gestureCls, figureStyle) {

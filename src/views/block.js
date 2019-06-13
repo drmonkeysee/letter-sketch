@@ -1,7 +1,7 @@
-import {View} from './view.js';
 import {CP437} from '../codepage.js';
-import {EVENTS} from '../refresh.js';
 import {COMMANDS} from '../commands.js';
+import {EVENTS} from '../refresh.js';
+import {View} from './view.js';
 
 export class LetterBlock extends View {
   constructor(...args) {
