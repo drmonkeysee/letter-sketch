@@ -1,4 +1,3 @@
-import {measureGlyph} from './dom.js';
 import lettertype from './models/lettertype.js';
 import {Terminal} from './models/terminal.js';
 import {ViewNotifier} from './refresh.js';
@@ -16,7 +15,6 @@ class App {
 
   initialize() {
     this._createModels();
-    this._syncModels();
     this._wireCommands();
     this._createViews();
     this._registerViews();
@@ -29,11 +27,6 @@ class App {
     this._models.lettertype = lettertype();
     this._models.terminal = new Terminal(50, 20);
     this._models.currentTool = TOOLS.brush;
-  }
-
-  _syncModels() {
-    this._models.lettertype.tileSize = measureGlyph(this._doc);
-    console.log('Tilesize: %o', this._models.lettertype.tileSize);
   }
 
   _wireCommands() {

@@ -1,11 +1,38 @@
 import {View} from './view.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
+import {DEFAULT_GLYPH, CP437} from '../codepage.js';
+
+function measureGlyph(doc, fontSize) {
+  const r = doc.getElementById('glyph-ruler');
+  r.style.fontSize = `${fontSize}px`;
+  let dims = {
+    minHeight: 100, maxHeight: 0, minWidth: 100, maxWidth: 0
+  };
+  dims = CP437.reduce((acc, letter) => {
+    r.textContent = letter;
+    const {height, width} = r.getBoundingClientRect();
+    // NOTE: || operators guard against glyphs with dimensions of 0
+    return {
+      minHeight: Math.min(acc.minHeight, height || acc.minHeight),
+      maxHeight: Math.max(acc.maxHeight, height),
+      minWidth: Math.min(acc.minWidth, width || acc.minWidth),
+      maxWidth: Math.max(acc.maxWidth, width)
+    };
+  }, dims);
+  r.textContent = DEFAULT_GLYPH;
+  const {height, width} = r.getBoundingClientRect();
+  console.log('Font dims: %o', dims);
+  console.log('Bounding rect: %o', {height, width});
+  // NOTE: round to the nearest pixel to close rounding gaps
+  return {height: Math.round(height), width: Math.round(width)};
+}
 
 class Controls extends View {
   constructor(...args) {
     super(...args);
     this.rows = this.columns = 0;
+    this.tileSize = {height: 0, width: 0};
     this._fontSizeControl = this._doc.getElementById('font-size');
     this._columnsControl = this._doc.getElementById('column-count');
     this._rowsControl = this._doc.getElementById('row-count');
@@ -17,6 +44,8 @@ class Controls extends View {
     this._columnsControl.value = this.columns = termSize.width;
     this._rowsControl.value = this.rows = termSize.height;
     this._fontSizeControl.value = initialState.fontSize;
+    this.tileSize = measureGlyph(this._doc, initialState.fontSize);
+    console.log('Tilesize: %o', this.tileSize);
   }
 }
 
@@ -32,12 +61,12 @@ export class SketchPad extends View {
     this._controls.draw(initialState);
     
     this._tool = initialState.tool;
-    this._sketchpad.style.width = `${this._controls.columns * initialState.tileSize.width}px`;
-    this._sketchpad.style.height = `${this._controls.rows * initialState.tileSize.height}px`;
+    this._sketchpad.style.width = `${this._controls.columns * this._controls.tileSize.width}px`;
+    this._sketchpad.style.height = `${this._controls.rows * this._controls.tileSize.height}px`;
     this._sketchpad.style.gridTemplateColumns = `repeat(${this._controls.columns}, 1fr)`;
     
-    const cellHeight = `${initialState.tileSize.height}px`,
-          cellWidth = `${initialState.tileSize.width}px`,
+    const cellHeight = `${this._controls.tileSize.height}px`,
+          cellWidth = `${this._controls.tileSize.width}px`,
           startEvents = ['mousedown'],
           strokeEvents = ['mouseover', 'mouseup'];
     for (let y = 0; y < this._controls.rows; ++y) {
