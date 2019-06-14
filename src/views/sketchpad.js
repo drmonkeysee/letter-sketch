@@ -3,36 +3,20 @@ import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
 import {View} from './view.js';
 
-function measureGlyph(doc, fontSize) {
-  const r = doc.getElementById('glyph-ruler');
-  r.style.fontSize = `${fontSize}px`;
-  let dims = {
-    minHeight: 100, maxHeight: 0, minWidth: 100, maxWidth: 0
-  };
-  dims = CP437.reduce((acc, letter) => {
-    r.textContent = letter;
-    const {height, width} = r.getBoundingClientRect();
-    // NOTE: || operators guard against glyphs with dimensions of 0
-    return {
-      minHeight: Math.min(acc.minHeight, height || acc.minHeight),
-      maxHeight: Math.max(acc.maxHeight, height),
-      minWidth: Math.min(acc.minWidth, width || acc.minWidth),
-      maxWidth: Math.max(acc.maxWidth, width)
-    };
-  }, dims);
-  r.textContent = DEFAULT_GLYPH;
-  const {height, width} = r.getBoundingClientRect();
-  console.log('Font dims: %o', dims);
-  console.log('Bounding rect: %o', {height, width});
-  // NOTE: round to the nearest pixel to close rounding gaps
-  return {height: Math.round(height), width: Math.round(width)};
-}
+// press resize
+// call resize terminal command
+// send fontsize, columns, rows
+// resize terminal
+// fire resize event
+// remeasure glyph
+// clear sketchpad and redraw based on fontsize and dimensions
 
 class Controls extends View {
   constructor(...args) {
     super(...args);
     this.rows = this.columns = this.fontSize = 0;
     this.tileSize = {height: 0, width: 0};
+    this._ruler = this._doc.getElementById('glyph-ruler');
     this._fontSizeControl = this._doc.getElementById('font-size');
     this._columnsControl = this._doc.getElementById('column-count');
     this._rowsControl = this._doc.getElementById('row-count');
@@ -44,8 +28,32 @@ class Controls extends View {
     this._columnsControl.value = this.columns = termSize.width;
     this._rowsControl.value = this.rows = termSize.height;
     this._fontSizeControl.value = this.fontSize = initialState.fontSize;
-    this.tileSize = measureGlyph(this._doc, initialState.fontSize);
+    this.tileSize = this._measureGlyph(initialState.fontSize);
     console.log('Tilesize: %o', this.tileSize);
+  }
+
+  _measureGlyph(fontSize) {
+    this._ruler.style.fontSize = `${fontSize}px`;
+    let dims = {
+      minHeight: 100, maxHeight: 0, minWidth: 100, maxWidth: 0
+    };
+    dims = CP437.reduce((acc, letter) => {
+      this._ruler.textContent = letter;
+      const {height, width} = this._ruler.getBoundingClientRect();
+      // NOTE: || operators guard against glyphs with dimensions of 0
+      return {
+        minHeight: Math.min(acc.minHeight, height || acc.minHeight),
+        maxHeight: Math.max(acc.maxHeight, height),
+        minWidth: Math.min(acc.minWidth, width || acc.minWidth),
+        maxWidth: Math.max(acc.maxWidth, width)
+      };
+    }, dims);
+    this._ruler.textContent = DEFAULT_GLYPH;
+    const {height, width} = this._ruler.getBoundingClientRect();
+    console.log('Font dims: %o', dims);
+    console.log('Bounding rect: %o', {height, width});
+    // NOTE: round to the nearest pixel to close rounding gaps
+    return {height: Math.round(height), width: Math.round(width)};
   }
 }
 
