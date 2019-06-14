@@ -40,11 +40,11 @@ const COMMAND_REGISTRY = {
   checkResizeTerminal(models, dims) {
     return () => {
       const terminalSize = models.terminal.dimensions,
-            cmdEvent = dims.columns < terminalSize.width
+            event = dims.columns < terminalSize.width
                         || dims.rows < terminalSize.height
                         ? EVENTS.onTerminalResizeVerify
                         : EVENTS.onTerminalResizeReady;
-      return makeUpdate(cmdEvent, {dims});
+      return makeUpdate(event, {dims});
     };
   },
   commitResizeTerminal(models, dims) {

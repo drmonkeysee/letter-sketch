@@ -108,8 +108,8 @@ export class ColorPalette extends View {
   }
 
   _setSelection(selectionView) {
-    for (const selectionView of this._colorSelections) {
-      selectionView.deselect();
+    for (const view of this._colorSelections) {
+      view.deselect();
     }
     selectionView.select();
     this._currentSelection = selectionView;
