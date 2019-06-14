@@ -7,16 +7,16 @@
   </head>
   <body>
     <div id="tool-selections"></div>
-    <div id="sketchpad-controls">
+    <form id="sketchpad-controls">
       <label for="font-size">Font Size</label>
-      <input id="font-size" type="number" min="10" max="50">
+      <input id="font-size" type="number" min="10" max="50" required>
       <span>px</span>
       <label for="column-count">Columns</label>
-      <input id="column-count" type="number" min="10" max="100">
+      <input id="column-count" type="number" min="10" max="100" required>
       <label for="row-count">Rows</label>
-      <input id="row-count" type="number" min="10" max="100">
-      <button id="resize-sketchpad" type="button">Resize</button>
-    </div>
+      <input id="row-count" type="number" min="10" max="100" required>
+      <button disabled>Resize</button>
+    </form>
     <div id="sketchpad"></div>
     <span id="glyph-ruler"></span>
     <div id="letter-block"></div>

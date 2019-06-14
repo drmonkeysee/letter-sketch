@@ -16,26 +16,34 @@ class Controls extends View {
     super(...args);
     this.tileSize = {height: 0, width: 0};
     this._ruler = this._doc.getElementById('glyph-ruler');
-    this._fontSizeControl = this._doc.getElementById('font-size');
-    this._columnsControl = this._doc.getElementById('column-count');
-    this._rowsControl = this._doc.getElementById('row-count');
-    this._resize = this._doc.getElementById('resize-sketchpad');
+    this._form = this._doc.getElementById('sketchpad-controls');
+    this._button = this._form.querySelector('button');
+    this._inputControls = [
+      this._doc.getElementById('font-size'),
+      this._doc.getElementById('column-count'),
+      this._doc.getElementById('row-count')
+    ];
   }
 
-  get fontSize() { return parseInt(this._fontSizeControl.value, 10); }
-  get columns() { return parseInt(this._columnsControl.value, 10); }
-  get rows() { return parseInt(this._rowsControl.value, 10); }
+  get fontSize() { return parseInt(this._inputControls[0].value, 10); }
+  get columns() { return parseInt(this._inputControls[1].value, 10); }
+  get rows() { return parseInt(this._inputControls[2].value, 10); }
 
   draw(initialState) {
     const termSize = initialState.terminal.dimensions;
-    this._columnsControl.value = termSize.width;
-    this._rowsControl.value = termSize.height;
-    this._fontSizeControl.value = initialState.fontSize;
+    [initialState.fontSize, termSize.width, termSize.height]
+      .forEach((v, i) => {
+        const control = this._inputControls[i];
+        control.dataset.currentValue = control.value = v;
+      });
     
     this.tileSize = this._measureGlyph(initialState.fontSize);
     console.log('Tilesize: %o', this.tileSize);
 
-    this._resize.addEventListener('click', this._resizeSketchpad.bind(this));
+    for (const control of this._inputControls) {
+      control.addEventListener('input', this._updateButton.bind(this));
+    }
+    this._form.addEventListener('submit', this._resizeSketchpad.bind(this));
   }
 
   subscribe(notifier) {
@@ -50,6 +58,7 @@ class Controls extends View {
       rows: this.rows
     };
     this._dispatch.command(COMMANDS.checkResizeTerminal, dimensions);
+    event.preventDefault();
   }
 
   _measureGlyph(fontSize) {
@@ -82,13 +91,23 @@ class Controls extends View {
     if (confirm) {
       this._commitResize(update);
     } else {
-      // TODO: reset to original values
-      console.log('reset to original values');
+      for (const control of this._inputControls) {
+        control.value = control.dataset.currentValue;
+      }
+      this._updateButton();
     }
   }
 
   _commitResize(update) {
+    for (const control of this._inputControls) {
+      control.dataset.currentValue = control.value;
+    }
+    this._updateButton();
     this._dispatch.command(COMMANDS.commitResizeTerminal, update.dims);
+  }
+
+  _updateButton() {
+    this._button.disabled = this._inputControls.every(c => c.value == c.dataset.currentValue);
   }
 }
 
