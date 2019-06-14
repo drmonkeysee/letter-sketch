@@ -5,7 +5,10 @@ const EVENT_NAMES = [
   'onBackgroundColorChanged',
   'onGlyphChanged',
   'onToolChanged',
-  'onDrawCommitted'
+  'onDrawCommitted',
+  'onTerminalResizeVerify',
+  'onTerminalResizeReady',
+  'onTerminalResized'
 ];
 
 export const EVENTS = namemap(EVENT_NAMES, (name, e) => name);

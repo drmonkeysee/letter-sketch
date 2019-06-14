@@ -36,6 +36,28 @@ const COMMAND_REGISTRY = {
       models.terminal.update(figure);
       return makeUpdate(EVENTS.onDrawCommitted, {figure});
     };
+  },
+  checkResizeTerminal(models, dims) {
+    return () => {
+      const terminalSize = models.terminal.dimensions,
+            cmdEvent = dims.columns < terminalSize.width
+                        || dims.rows < terminalSize.height
+                        ? EVENTS.onTerminalResizeVerify
+                        : EVENTS.onTerminalResizeReady;
+      return makeUpdate(cmdEvent, {dims});
+    };
+  },
+  commitResizeTerminal(models, dims) {
+    return () => {
+      console.log('resized terminal: %o', dims);
+      // TODO finish this
+      /*const terminalSize = models.terminal.dimensions;
+      if (dims.columns != terminalSize.width
+          || dims.rows != terminalSize.height) {
+        models.terminal.resize(dims.columns, dims.rows);
+      }*/
+      return makeUpdate(EVENTS.onTerminalResized, {dims});
+    };
   }
 };
 

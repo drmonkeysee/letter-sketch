@@ -14,7 +14,6 @@ import {View} from './view.js';
 class Controls extends View {
   constructor(...args) {
     super(...args);
-    this.rows = this.columns = this.fontSize = 0;
     this.tileSize = {height: 0, width: 0};
     this._ruler = this._doc.getElementById('glyph-ruler');
     this._fontSizeControl = this._doc.getElementById('font-size');
@@ -23,13 +22,34 @@ class Controls extends View {
     this._resize = this._doc.getElementById('resize-sketchpad');
   }
 
+  get fontSize() { return parseInt(this._fontSizeControl.value, 10); }
+  get columns() { return parseInt(this._columnsControl.value, 10); }
+  get rows() { return parseInt(this._rowsControl.value, 10); }
+
   draw(initialState) {
     const termSize = initialState.terminal.dimensions;
-    this._columnsControl.value = this.columns = termSize.width;
-    this._rowsControl.value = this.rows = termSize.height;
-    this._fontSizeControl.value = this.fontSize = initialState.fontSize;
+    this._columnsControl.value = termSize.width;
+    this._rowsControl.value = termSize.height;
+    this._fontSizeControl.value = initialState.fontSize;
+    
     this.tileSize = this._measureGlyph(initialState.fontSize);
     console.log('Tilesize: %o', this.tileSize);
+
+    this._resize.addEventListener('click', this._resizeSketchpad.bind(this));
+  }
+
+  subscribe(notifier) {
+    notifier.subscribe(EVENTS.onTerminalResizeVerify, this._verifyResize.bind(this));
+    notifier.subscribe(EVENTS.onTerminalResizeReady, this._commitResize.bind(this));
+  }
+
+  _resizeSketchpad(event) {
+    const dimensions = {
+      fontSize: this.fontSize,
+      columns: this.columns,
+      rows: this.rows
+    };
+    this._dispatch.command(COMMANDS.checkResizeTerminal, dimensions);
   }
 
   _measureGlyph(fontSize) {
@@ -54,6 +74,21 @@ class Controls extends View {
     console.log('Bounding rect: %o', {height, width});
     // NOTE: round to the nearest pixel to close rounding gaps
     return {height: Math.round(height), width: Math.round(width)};
+  }
+
+  _verifyResize(update) {
+    const confirm = this._doc.defaultView
+                      .confirm('Reducing the drawing size may discard portions of your current sketch. Continue?');
+    if (confirm) {
+      this._commitResize(update);
+    } else {
+      // TODO: reset to original values
+      console.log('reset to original values');
+    }
+  }
+
+  _commitResize(update) {
+    this._dispatch.command(COMMANDS.commitResizeTerminal, update.dims);
   }
 }
 
@@ -106,6 +141,7 @@ export class SketchPad extends View {
   }
 
   subscribe(notifier) {
+    this._controls.subscribe(notifier);
     notifier.subscribe(EVENTS.onDrawCommitted, this._clearGesture.bind(this));
     notifier.subscribe(EVENTS.onToolChanged, this._updateTool.bind(this));
   }
