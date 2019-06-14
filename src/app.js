@@ -48,7 +48,6 @@ class App {
   _initialState() {
     return {
       fontSize: this._models.lettertype.fontSize,
-      tileSize: this._models.lettertype.tileSize,
       terminal: this._models.terminal,
       toolName: this._models.currentTool,
       tool: currentTool(this._models),
