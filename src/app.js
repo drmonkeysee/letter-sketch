@@ -1,8 +1,7 @@
 import {CommandDispatcher} from './commands.js';
-import lettertype from './models/lettertype.js';
-import {Terminal} from './models/terminal.js';
+import storage from './models/storage.js';
 import {ViewNotifier} from './refresh.js';
-import {currentTool, TOOLS} from './tools.js';
+import {currentTool} from './tools.js';
 import {VIEW_REGISTRY} from './views/index.js';
 
 class App {
@@ -24,9 +23,7 @@ class App {
   }
 
   _createModels() {
-    this._models.lettertype = lettertype();
-    this._models.terminal = new Terminal(50, 20);
-    this._models.currentTool = TOOLS.brush;
+    this._models = storage.load();
   }
 
   _wireCommands() {
