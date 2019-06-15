@@ -123,6 +123,28 @@ export class SketchPad extends View {
     this._controls.draw(initialState);
     
     this._tool = initialState.tool;
+    
+    this._drawSketchpad(initialState.terminal);
+    
+    // NOTE: end current gesture if user action leaves sketchpad
+    this._sketchpad.addEventListener('mouseleave', this._terminateGesture.bind(this));
+  }
+
+  subscribe(notifier) {
+    this._controls.subscribe(notifier);
+    notifier.subscribe(EVENTS.onDrawCommitted, this._clearGesture.bind(this));
+    notifier.subscribe(EVENTS.onToolChanged, this._updateTool.bind(this));
+  }
+
+  updateAt(x, y, cell) {
+    const gridCell = this._grid[x + (y * this._controls.columns)],
+          gridText = gridCell.firstChild;
+    gridText.textContent = cell.glyph;
+    gridText.style.color = cell.foregroundColor;
+    gridText.style.backgroundColor = cell.backgroundColor;
+  }
+
+  _drawSketchpad(terminal) {
     this._sketchpad.style.fontSize = `${this._controls.fontSize}px`;
     this._sketchpad.style.width = `${this._controls.columns * this._controls.tileSize.width}px`;
     this._sketchpad.style.height = `${this._controls.rows * this._controls.tileSize.height}px`;
@@ -151,26 +173,9 @@ export class SketchPad extends View {
 
         this._grid.push(gridCell);
         this._sketchpad.appendChild(gridCell);
-        this.updateAt(x, y, initialState.terminal.getCell(x, y));
+        this.updateAt(x, y, terminal.getCell(x, y));
       }
     }
-
-    // NOTE: end current gesture if user action leaves sketchpad
-    this._sketchpad.addEventListener('mouseleave', this._terminateGesture.bind(this));
-  }
-
-  subscribe(notifier) {
-    this._controls.subscribe(notifier);
-    notifier.subscribe(EVENTS.onDrawCommitted, this._clearGesture.bind(this));
-    notifier.subscribe(EVENTS.onToolChanged, this._updateTool.bind(this));
-  }
-
-  updateAt(x, y, cell) {
-    const gridCell = this._grid[x + (y * this._controls.columns)],
-          gridText = gridCell.firstChild;
-    gridText.textContent = cell.glyph;
-    gridText.style.color = cell.foregroundColor;
-    gridText.style.backgroundColor = cell.backgroundColor;
   }
 
   _startGesture(event) {
