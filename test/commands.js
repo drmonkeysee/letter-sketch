@@ -215,7 +215,7 @@ describe('commands', function () {
 
       const result = cmd();
 
-      expect(this.models.lettertype.fontSize).to.equal(15);
+      expect(this.models.lettertype.fontSize).to.equal(20);
       expect(result).to.eql({event: EVENTS.onTerminalResized, dims: dims});
       sinon.assert.notCalled(this.models.terminal.resize);
     });
