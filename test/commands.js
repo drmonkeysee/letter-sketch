@@ -156,4 +156,42 @@ describe('commands', function () {
       expect(result).to.eql({event: EVENTS.onDrawCommitted, figure: figure});
     });
   });
+
+  describe('#checkResizeTerminal()', function () {
+    beforeEach(function () {
+      this.models = {
+        terminal: {
+          dimensions: {height: 20, width: 20}
+        }
+      };
+      this.target = getBinder(COMMANDS.checkResizeTerminal, this.models);
+    });
+
+    it('signals ready commit', function () {
+      const dims = {columns: 30, rows: 40},
+            cmd = this.target(dims);
+
+      const result = cmd();
+
+      expect(result).to.eql({event: EVENTS.onTerminalResizeReady, dims: dims});
+    });
+
+    it('signals verify if columns lower than current value', function () {
+      const dims = {columns: 10, rows: 40},
+            cmd = this.target(dims);
+
+      const result = cmd();
+
+      expect(result).to.eql({event: EVENTS.onTerminalResizeVerify, dims: dims});
+    });
+
+    it('signals verify if rows lower than current value', function () {
+      const dims = {columns: 30, rows: 5},
+            cmd = this.target(dims);
+
+      const result = cmd();
+
+      expect(result).to.eql({event: EVENTS.onTerminalResizeVerify, dims: dims});
+    });
+  });
 });
