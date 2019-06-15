@@ -194,4 +194,30 @@ describe('commands', function () {
       expect(result).to.eql({event: EVENTS.onTerminalResizeVerify, dims: dims});
     });
   });
+
+  describe('#commitResizeTerminal()', function () {
+    beforeEach(function () {
+      this.models = {
+        lettertype: {fontSize: 15},
+        terminal: {
+          resize: sinon.fake()
+        }
+      };
+      this.target = getBinder(COMMANDS.commitResizeTerminal, this.models);
+    });
+    afterEach(function () {
+      sinon.restore();
+    });
+
+    it('updates the font size', function () {
+      const dims = {fontSize: 20},
+            cmd = this.target(dims);
+
+      const result = cmd();
+
+      expect(this.models.lettertype.fontSize).to.equal(15);
+      expect(result).to.eql({event: EVENTS.onTerminalResized, dims: dims});
+      sinon.assert.notCalled(this.models.terminal.resize);
+    });
+  });
 });
