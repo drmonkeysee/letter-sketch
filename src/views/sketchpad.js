@@ -14,8 +14,6 @@ import {View} from './view.js';
 class Controls extends View {
   constructor(...args) {
     super(...args);
-    this.tileSize = {height: 0, width: 0};
-    this._ruler = this._doc.getElementById('glyph-ruler');
     this._form = this._doc.getElementById('sketchpad-controls');
     this._button = this._form.querySelector('button');
     this._inputControls = [
@@ -36,14 +34,11 @@ class Controls extends View {
         const control = this._inputControls[i];
         control.dataset.currentValue = control.value = v;
       });
-    
-    this.tileSize = this._measureGlyph(initialState.fontSize);
-    console.log('Tilesize: %o', this.tileSize);
 
     for (const control of this._inputControls) {
       control.addEventListener('input', this._updateButton.bind(this));
     }
-    this._form.addEventListener('submit', this._resizeSketchpad.bind(this));
+    this._form.addEventListener('submit', this._updateSketchpadDims.bind(this));
   }
 
   subscribe(notifier) {
@@ -51,38 +46,14 @@ class Controls extends View {
     notifier.subscribe(EVENTS.onTerminalResizeReady, this._commitResize.bind(this));
   }
 
-  _resizeSketchpad(event) {
+  _updateSketchpadDims(event) {
+    event.preventDefault();
     const dimensions = {
       fontSize: this.fontSize,
       columns: this.columns,
       rows: this.rows
     };
     this._dispatch.command(COMMANDS.checkResizeTerminal, dimensions);
-    event.preventDefault();
-  }
-
-  _measureGlyph(fontSize) {
-    this._ruler.style.fontSize = `${fontSize}px`;
-    let dims = {
-      minHeight: 100, maxHeight: 0, minWidth: 100, maxWidth: 0
-    };
-    dims = CP437.reduce((acc, letter) => {
-      this._ruler.textContent = letter;
-      const {height, width} = this._ruler.getBoundingClientRect();
-      // NOTE: || operators guard against glyphs with dimensions of 0
-      return {
-        minHeight: Math.min(acc.minHeight, height || acc.minHeight),
-        maxHeight: Math.max(acc.maxHeight, height),
-        minWidth: Math.min(acc.minWidth, width || acc.minWidth),
-        maxWidth: Math.max(acc.maxWidth, width)
-      };
-    }, dims);
-    this._ruler.textContent = DEFAULT_GLYPH;
-    const {height, width} = this._ruler.getBoundingClientRect();
-    console.log('Font dims: %o', dims);
-    console.log('Bounding rect: %o', {height, width});
-    // NOTE: round to the nearest pixel to close rounding gaps
-    return {height: Math.round(height), width: Math.round(width)};
   }
 
   _verifyResize(update) {
@@ -115,17 +86,19 @@ export class SketchPad extends View {
   constructor(...args) {
     super(...args);
     this._controls = new Controls(...args);
+    this._ruler = this._doc.getElementById('glyph-ruler');
     this._sketchpad = this._doc.getElementById('sketchpad');
     this._grid = [];
+    this._stride = 0;
   }
 
   draw(initialState) {
     this._controls.draw(initialState);
-    
+
     this._tool = initialState.tool;
-    
-    this._drawSketchpad(initialState.terminal);
-    
+
+    this._drawSketchpad(initialState.terminal, initialState.fontSize);
+
     // NOTE: end current gesture if user action leaves sketchpad
     this._sketchpad.addEventListener('mouseleave', this._terminateGesture.bind(this));
   }
@@ -134,28 +107,40 @@ export class SketchPad extends View {
     this._controls.subscribe(notifier);
     notifier.subscribe(EVENTS.onDrawCommitted, this._clearGesture.bind(this));
     notifier.subscribe(EVENTS.onToolChanged, this._updateTool.bind(this));
+    notifier.subscribe(EVENTS.onTerminalResized, this._resizeSketchpad.bind(this));
   }
 
   updateAt(x, y, cell) {
-    const gridCell = this._grid[x + (y * this._controls.columns)],
+    const gridCell = this._grid[x + (y * this._stride)],
           gridText = gridCell.firstChild;
     gridText.textContent = cell.glyph;
     gridText.style.color = cell.foregroundColor;
     gridText.style.backgroundColor = cell.backgroundColor;
   }
 
-  _drawSketchpad(terminal) {
-    this._sketchpad.style.fontSize = `${this._controls.fontSize}px`;
-    this._sketchpad.style.width = `${this._controls.columns * this._controls.tileSize.width}px`;
-    this._sketchpad.style.height = `${this._controls.rows * this._controls.tileSize.height}px`;
-    this._sketchpad.style.gridTemplateColumns = `repeat(${this._controls.columns}, 1fr)`;
-    
-    const cellHeight = `${this._controls.tileSize.height}px`,
-          cellWidth = `${this._controls.tileSize.width}px`,
+  _drawSketchpad(terminal, fontSize) {
+    const tileSize = this._measureGlyph(fontSize),
+          termSize = terminal.dimensions;
+    this._stride = termSize.width;
+    console.log('Tilesize: %o', tileSize);
+    console.log('TermSize: %o', termSize);
+    this._sketchpad.style.fontSize = `${fontSize}px`;
+    this._sketchpad.style.width = `${termSize.width * tileSize.width}px`;
+    this._sketchpad.style.height = `${termSize.height * tileSize.height}px`;
+    this._sketchpad.style.gridTemplateColumns = `repeat(${termSize.width}, 1fr)`;
+
+    const cellHeight = `${tileSize.height}px`,
+          cellWidth = `${tileSize.width}px`,
           startEvents = ['mousedown'],
           strokeEvents = ['mouseover', 'mouseup'];
-    for (let y = 0; y < this._controls.rows; ++y) {
-      for (let x = 0; x < this._controls.columns; ++x) {
+
+    this._grid.length = 0;
+    while (this._sketchpad.firstChild) {
+      this._sketchpad.removeChild(this._sketchpad.firstChild);
+    }
+
+    for (let y = 0; y < termSize.height; ++y) {
+      for (let x = 0; x < termSize.width; ++x) {
         const gridCell = this._doc.createElement('div');
         gridCell.appendChild(this._doc.createElement('span'));
 
@@ -176,6 +161,30 @@ export class SketchPad extends View {
         this.updateAt(x, y, terminal.getCell(x, y));
       }
     }
+  }
+
+  _measureGlyph(fontSize) {
+    this._ruler.style.fontSize = `${fontSize}px`;
+    let dims = {
+      minHeight: 100, maxHeight: 0, minWidth: 100, maxWidth: 0
+    };
+    dims = CP437.reduce((acc, letter) => {
+      this._ruler.textContent = letter;
+      const {height, width} = this._ruler.getBoundingClientRect();
+      // NOTE: || operators guard against glyphs with dimensions of 0
+      return {
+        minHeight: Math.min(acc.minHeight, height || acc.minHeight),
+        maxHeight: Math.max(acc.maxHeight, height),
+        minWidth: Math.min(acc.minWidth, width || acc.minWidth),
+        maxWidth: Math.max(acc.maxWidth, width)
+      };
+    }, dims);
+    this._ruler.textContent = DEFAULT_GLYPH;
+    const {height, width} = this._ruler.getBoundingClientRect();
+    console.log('Font dims: %o', dims);
+    console.log('Bounding rect: %o', {height, width});
+    // NOTE: round to the nearest pixel to close rounding gaps
+    return {height: Math.round(height), width: Math.round(width)};
   }
 
   _startGesture(event) {
@@ -208,5 +217,9 @@ export class SketchPad extends View {
 
   _updateTool(update) {
     this._tool = update.tool;
+  }
+
+  _resizeSketchpad(update) {
+    this._drawSketchpad(update.terminal, update.fontSize);
   }
 }

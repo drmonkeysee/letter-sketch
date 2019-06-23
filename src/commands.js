@@ -57,7 +57,7 @@ const COMMAND_REGISTRY = {
         models.terminal.resize(dims.columns, dims.rows);
       }*/
       models.lettertype.fontSize = dims.fontSize;
-      return makeUpdate(EVENTS.onTerminalResized, {dims});
+      return makeUpdate(EVENTS.onTerminalResized, {terminal: models.terminal, fontSize: dims.fontSize});
     };
   }
 };
