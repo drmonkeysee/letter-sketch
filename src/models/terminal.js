@@ -1,4 +1,4 @@
-import {Cell, makeTile} from './cell.js';
+import {Cell} from './cell.js';
 
 const MIN_DIM = 1, MAX_DIM = 0x10000;
 
@@ -43,15 +43,4 @@ export class Terminal {
       this.updateCell(tile.x, tile.y, tile.cell);
     }
   }
-}
-
-export function demoText(terminal, x, y) {
-  const text = 'Hello World! yellow & green.', textLength = text.length, sourceCell = new Cell(null, '#ff0000', '#222222'), figure = [];
-  for (let i = 0; i < textLength; ++i) {
-    sourceCell.update({glyph: text[i]});
-    const targetX = x + i,
-          targetCell = terminal.updateCell(targetX, y, sourceCell);
-    figure.push(makeTile(targetX, y, targetCell));
-  }
-  return figure;
 }
