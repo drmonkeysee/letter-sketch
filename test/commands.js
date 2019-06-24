@@ -47,7 +47,7 @@ describe('commands', function () {
     const d = new CommandDispatcher('fakeNotifier', models);
     return d._commands[name];
   }
-  
+
   describe('#setForegroundColor()', function () {
     beforeEach(function () {
       this.models = {

@@ -43,7 +43,7 @@ body {
   grid-template-columns: repeat(16, 1fr);
   border-left: $border-thin $color-border-control;
   border-top: $border-thin $color-border-control;
-  
+
   div {
     border-right: $border-thin $color-border-control;
     border-bottom: $border-thin $color-border-control;
@@ -56,7 +56,7 @@ body {
       pointer-events: none;
     }
   }
-  
+
   .selected {
     background-color: aqua;
   }
@@ -113,7 +113,7 @@ body {
         outline: gold dotted 2px;
       }
     }
-    
+
     .tile-color {
       width: calc($color-selection-dim - (2 * $color-selection-border-thickness));
       height: calc($color-selection-dim - (2 * $color-selection-border-thickness));

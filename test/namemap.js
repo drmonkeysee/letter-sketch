@@ -37,7 +37,7 @@ describe('#namemap()', function () {
   it('creates map from string items', function () {
     const items = ['Foo', 'Bar', 'Baz'],
           mapItem = (n, i) => `${n}(${i})`;
-    
+
     const result = namemap(items, mapItem);
 
     const expected = {
@@ -51,7 +51,7 @@ describe('#namemap()', function () {
   it('creates map from string objects', function () {
     const items = [new String('Foo'), new String('Bar'), new String('Baz')],
           mapItem = (n, i) => `${n}(${i})`;
-    
+
     const result = namemap(items, mapItem);
 
     const expected = {

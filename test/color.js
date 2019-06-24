@@ -40,7 +40,7 @@ describe('COLORS', function () {
       expect(COLORS.black).to.equal('rgb(0, 0, 0)');
     });
   });
-  
+
   describe('#white', function () {
     it('exists', function () {
       expect(COLORS.white).to.equal('rgb(255, 255, 255)');

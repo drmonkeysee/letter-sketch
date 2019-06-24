@@ -81,7 +81,7 @@ export class ColorPalette extends View {
     for (const redStep of colorSteps) {
       const colorColumn = this._doc.createElement('div');
       this._palette.appendChild(colorColumn);
-      
+
       for (const greenStep of colorSteps) {
         for (const blueStep of colorSteps) {
           const colorCell = this._doc.createElement('div');

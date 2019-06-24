@@ -9,7 +9,7 @@ describe('ViewNotifier', function () {
   afterEach(function() {
     sinon.restore();
   });
-  
+
   describe('#register()', function () {
     it('registers single view', function () {
       const view = {subscribe: sinon.fake()};

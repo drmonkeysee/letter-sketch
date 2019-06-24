@@ -13,14 +13,14 @@ export class LetterBlock extends View {
     for (const glyph of CP437) {
       const blockText = this._doc.createElement('span');
       blockText.textContent = glyph;
-      
+
       const blockCell = this._doc.createElement('div');
       blockCell.appendChild(blockText);
-      
+
       if (glyph === initialState.glyph) {
         blockCell.className = 'selected';
       }
-      
+
       blockCell.addEventListener('click', this._pickGlyph.bind(this));
       this._block.appendChild(blockCell);
     }
