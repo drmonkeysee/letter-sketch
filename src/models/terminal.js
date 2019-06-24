@@ -1,6 +1,6 @@
 import {Cell} from './cell.js';
 
-const MIN_DIM = 1, MAX_DIM = 0x10000;
+const MIN_DIM = 0x1, MAX_DIM = 0x10000;
 
 export class Terminal {
   constructor(columns, rows) {
@@ -8,13 +8,14 @@ export class Terminal {
   }
 
   get dimensions() {
-    return {height: this._height, width: this._stride};
+    return {width: this._stride, height: this._height};
   }
 
   resize(columns, rows) {
     if (columns < MIN_DIM || columns > MAX_DIM
         || rows < MIN_DIM || rows > MAX_DIM) {
-      const msg = `Terminal dimensions must be in range [${MIN_DIM}, ${MAX_DIM}];`
+      const msg = 'Terminal dimensions must be in range '
+                  + `[${MIN_DIM}, ${MAX_DIM}];`
                   + ` got arguments {columns: ${columns}, rows: ${rows}}`;
       throw new Error(msg);
     }
