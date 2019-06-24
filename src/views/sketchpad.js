@@ -129,8 +129,8 @@ export class SketchPad extends View {
     this._sketchpad.style.height = `${termSize.height * tileSize.height}px`;
     this._sketchpad.style.gridTemplateColumns = `repeat(${termSize.width}, 1fr)`;
 
-    const cellHeight = `${tileSize.height}px`,
-          cellWidth = `${tileSize.width}px`,
+    const cellWidth = `${tileSize.width}px`,
+          cellHeight = `${tileSize.height}px`,
           startEvents = ['mousedown'],
           strokeEvents = ['mouseover', 'mouseup'];
 
@@ -144,8 +144,8 @@ export class SketchPad extends View {
         const gridCell = this._doc.createElement('div');
         gridCell.appendChild(this._doc.createElement('span'));
 
-        gridCell.style.height = cellHeight;
         gridCell.style.width = cellWidth;
+        gridCell.style.height = cellHeight;
         gridCell.dataset.x = x;
         gridCell.dataset.y = y;
 
@@ -166,25 +166,25 @@ export class SketchPad extends View {
   _measureGlyph(fontSize) {
     this._ruler.style.fontSize = `${fontSize}px`;
     let dims = {
-      minHeight: 100, maxHeight: 0, minWidth: 100, maxWidth: 0
+      minWidth: 100, maxWidth: 0, minHeight: 100, maxHeight: 0
     };
     dims = CP437.reduce((acc, letter) => {
       this._ruler.textContent = letter;
-      const {height, width} = this._ruler.getBoundingClientRect();
+      const {width, height} = this._ruler.getBoundingClientRect();
       // NOTE: || operators guard against glyphs with dimensions of 0
       return {
-        minHeight: Math.min(acc.minHeight, height || acc.minHeight),
-        maxHeight: Math.max(acc.maxHeight, height),
         minWidth: Math.min(acc.minWidth, width || acc.minWidth),
-        maxWidth: Math.max(acc.maxWidth, width)
+        maxWidth: Math.max(acc.maxWidth, width),
+        minHeight: Math.min(acc.minHeight, height || acc.minHeight),
+        maxHeight: Math.max(acc.maxHeight, height)
       };
     }, dims);
     this._ruler.textContent = DEFAULT_GLYPH;
-    const {height, width} = this._ruler.getBoundingClientRect();
+    const {width, height} = this._ruler.getBoundingClientRect();
     console.log('Font dims: %o', dims);
-    console.log('Bounding rect: %o', {height, width});
+    console.log('Bounding rect: %o', {width, height});
     // NOTE: round to the nearest pixel to close rounding gaps
-    return {height: Math.round(height), width: Math.round(width)};
+    return {width: Math.round(width), height: Math.round(height)};
   }
 
   _startGesture(event) {

@@ -63,7 +63,7 @@ describe('Cell', function () {
     beforeEach(function () {
       this.target = new Cell('B', 'red', 'blue');
     });
-    
+
     it('does nothing if no arguments', function () {
       this.target.update();
 
@@ -131,13 +131,13 @@ describe('Cell', function () {
       expect(this.target.foregroundColor).to.be.null;
     });
 
-    it('can set glyph to nil', function () {
+    it('can set glyph to blank', function () {
       this.target.update({glyph: null});
 
       expect(this.target.glyph).to.equal('\u0020');
     });
 
-    it('can set glyph to nil directly', function () {
+    it('can set glyph to blank directly', function () {
       this.target.glyph = null;
 
       expect(this.target.glyph).to.equal('\u0020');
@@ -148,7 +148,7 @@ describe('Cell', function () {
 describe('#makeTile()', function () {
   it('makes a tile', function () {
     const cell = new Cell();
-    
+
     const result = makeTile(10, 20, cell);
 
     expect(result.x).to.equal(10);
