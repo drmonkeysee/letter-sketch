@@ -8,7 +8,7 @@ function makeTool(models, gestureCls, figureStyle) {
       return new gestureCls(
         figureStyle(models.lettertype.cell, models.terminal), sketchpadView
       );
-    }
+    },
   };
 }
 

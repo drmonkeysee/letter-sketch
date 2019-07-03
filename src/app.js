@@ -68,6 +68,6 @@ export default function () {
     start(win) {
       app = new App(win);
       app.initialize();
-    }
+    },
   };
 }

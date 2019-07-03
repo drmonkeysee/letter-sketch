@@ -14,5 +14,5 @@ export default {
       terminal: new Terminal(50, 20),
       currentTool: TOOLS.brush,
     };
-  }
+  },
 };
