@@ -19,6 +19,7 @@ export class Terminal {
                   + ` got arguments {columns: ${columns}, rows: ${rows}}`;
       throw new Error(msg);
     }
+    if (columns === this._stride && rows === this._height) return;
     this._stride = columns;
     this._height = rows;
     const size = columns * rows, cells = [];

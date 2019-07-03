@@ -95,4 +95,25 @@ describe('Terminal', function () {
       expect(middleCell.backgroundColor).to.not.exist;
     });
   });
+
+  describe('#resize()', function () {
+    beforeEach(function () {
+      this.target = new Terminal(5, 5);
+      this.target.update([
+        {x: 0, y: 0, cell: new Cell('X')},
+        {x: 4, y: 0, cell: new Cell('X')},
+        {x: 2, y: 2, cell: new Cell('X')},
+        {x: 0, y: 4, cell: new Cell('X')},
+        {x: 4, y: 4, cell: new Cell('X')},
+      ]);
+    });
+
+    it('does nothing if resize matches current size', function () {
+      const originalCell = this.target.getCell(0, 0);
+
+      this.target.resize(5, 5);
+
+      expect(this.target.getCell(0, 0)).to.equal(originalCell);
+    });
+  });
 });
