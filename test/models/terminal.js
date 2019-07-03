@@ -97,23 +97,94 @@ describe('Terminal', function () {
   });
 
   describe('#resize()', function () {
+    before(function () {
+      this.assertFigureTransform = function (...coords) {
+        coords.forEach((c, i) =>  {
+          if (!c) return;
+          const [x, y] = c,
+                targetCell = this.target.getCell(x, y),
+                originalCell = this.originalFigure[i];
+          expect(targetCell).to.equal(
+            originalCell,
+            `new cell (${x}, ${y}) did not match original cell at index ${i}`
+          );
+        });
+      };
+    });
+
     beforeEach(function () {
       this.target = new Terminal(5, 5);
-      this.target.update([
-        {x: 0, y: 0, cell: new Cell('X')},
-        {x: 4, y: 0, cell: new Cell('X')},
-        {x: 2, y: 2, cell: new Cell('X')},
-        {x: 0, y: 4, cell: new Cell('X')},
-        {x: 4, y: 4, cell: new Cell('X')},
-      ]);
+      const testFigure = [
+              [0, 0],
+              [4, 0],
+              [2, 2],
+              [0, 4],
+              [4, 4],
+            ],
+            figureCell = new Cell('X');
+      this.originalFigure = [];
+      for (const [x, y] of testFigure) {
+        this.target.updateCell(x, y, figureCell);
+        this.originalFigure.push(this.target.getCell(x, y));
+      }
     });
 
     it('does nothing if resize matches current size', function () {
-      const originalCell = this.target.getCell(0, 0);
-
       this.target.resize(5, 5);
 
-      expect(this.target.getCell(0, 0)).to.equal(originalCell);
+      expect(this.target.getCell(0, 0)).to.equal(this.originalFigure[0]);
+    });
+
+    it('grows terminal by 1x1', function () {
+      this.target.resize(6, 6);
+
+      const expectedFigureAt = [
+        [0, 0],
+        [4, 0],
+        [2, 2],
+        [0, 4],
+        [4, 4],
+      ];
+      this.assertFigureTransform(...expectedFigureAt);
+    });
+
+    it('grows terminal by 2x2', function () {
+      this.target.resize(7, 7);
+
+      const expectedFigureAt = [
+        [1, 1],
+        [5, 1],
+        [3, 3],
+        [0, 5],
+        [5, 5],
+      ];
+      this.assertFigureTransform(...expectedFigureAt);
+    });
+
+    it('shrinks terminal by 1x1', function () {
+      this.target.resize(4, 4);
+
+      const expectedFigureAt = [
+        [0, 0],
+        null,
+        [2, 2],
+        null,
+        null,
+      ];
+      this.assertFigureTransform(...expectedFigureAt);
+    });
+
+    it('shrinks terminal by 2x2', function () {
+      this.target.resize(3, 3);
+
+      const expectedFigureAt = [
+        null,
+        null,
+        [1, 1],
+        null,
+        null,
+      ];
+      this.assertFigureTransform(...expectedFigureAt);
     });
   });
 });
