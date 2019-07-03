@@ -15,7 +15,7 @@ export class Cell {
   update({
     glyph = this.glyph,
     foregroundColor = this.foregroundColor,
-    backgroundColor = this.backgroundColor
+    backgroundColor = this.backgroundColor,
   } = {}) {
     this._setFields(glyph, foregroundColor, backgroundColor);
   }

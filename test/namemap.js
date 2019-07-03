@@ -29,7 +29,7 @@ describe('#namemap()', function () {
     const expected = {
       foo0: 'Foo(foo0-10)',
       foo1: 'Foo(foo1-11)',
-      foo2: 'Foo(foo2-12)'
+      foo2: 'Foo(foo2-12)',
     };
     expect(result).to.be.deep.equal(expected);
   });
@@ -43,7 +43,7 @@ describe('#namemap()', function () {
     const expected = {
       foo: 'foo(Foo)',
       bar: 'bar(Bar)',
-      baz: 'baz(Baz)'
+      baz: 'baz(Baz)',
     };
     expect(result).to.be.deep.equal(expected);
   });
@@ -57,7 +57,7 @@ describe('#namemap()', function () {
     const expected = {
       foo: 'foo(Foo)',
       bar: 'bar(Bar)',
-      baz: 'baz(Baz)'
+      baz: 'baz(Baz)',
     };
     expect(result).to.be.deep.equal(expected);
   });

@@ -19,7 +19,7 @@ class Controls extends View {
     this._inputControls = [
       this._doc.getElementById('font-size'),
       this._doc.getElementById('column-count'),
-      this._doc.getElementById('row-count')
+      this._doc.getElementById('row-count'),
     ];
   }
 
@@ -42,8 +42,12 @@ class Controls extends View {
   }
 
   subscribe(notifier) {
-    notifier.subscribe(EVENTS.onTerminalResizeVerify, this._verifyResize.bind(this));
-    notifier.subscribe(EVENTS.onTerminalResizeReady, this._commitResize.bind(this));
+    notifier.subscribe(
+      EVENTS.onTerminalResizeVerify, this._verifyResize.bind(this)
+    );
+    notifier.subscribe(
+      EVENTS.onTerminalResizeReady, this._commitResize.bind(this)
+    );
   }
 
   _updateSketchpadDims(event) {
@@ -51,14 +55,16 @@ class Controls extends View {
     const dimensions = {
       fontSize: this.fontSize,
       columns: this.columns,
-      rows: this.rows
+      rows: this.rows,
     };
     this._dispatch.command(COMMANDS.checkResizeTerminal, dimensions);
   }
 
   _verifyResize(update) {
-    const confirm = this._doc.defaultView
-                      .confirm('Reducing the drawing size may discard portions of your current sketch. Continue?');
+    const confirm = this._doc.defaultView.confirm(
+      'Reducing the drawing size may discard portions ' +
+      'of your current sketch. Continue?'
+    );
     if (confirm) {
       this._commitResize(update);
     } else {
@@ -78,7 +84,9 @@ class Controls extends View {
   }
 
   _updateButton() {
-    this._button.disabled = this._inputControls.every(c => c.value == c.dataset.currentValue);
+    this._button.disabled = this._inputControls.every(
+      c => c.value == c.dataset.currentValue
+    );
   }
 }
 
@@ -100,14 +108,18 @@ export class SketchPad extends View {
     this._drawSketchpad(initialState.terminal, initialState.fontSize);
 
     // NOTE: end current gesture if user action leaves sketchpad
-    this._sketchpad.addEventListener('mouseleave', this._terminateGesture.bind(this));
+    this._sketchpad.addEventListener(
+      'mouseleave', this._terminateGesture.bind(this)
+    );
   }
 
   subscribe(notifier) {
     this._controls.subscribe(notifier);
     notifier.subscribe(EVENTS.onDrawCommitted, this._clearGesture.bind(this));
     notifier.subscribe(EVENTS.onToolChanged, this._updateTool.bind(this));
-    notifier.subscribe(EVENTS.onTerminalResized, this._resizeSketchpad.bind(this));
+    notifier.subscribe(
+      EVENTS.onTerminalResized, this._resizeSketchpad.bind(this)
+    );
   }
 
   updateAt(x, y, cell) {
@@ -124,10 +136,11 @@ export class SketchPad extends View {
     this._stride = termSize.width;
     console.log('Tilesize: %o', tileSize);
     console.log('TermSize: %o', termSize);
-    this._sketchpad.style.fontSize = `${fontSize}px`;
-    this._sketchpad.style.width = `${termSize.width * tileSize.width}px`;
-    this._sketchpad.style.height = `${termSize.height * tileSize.height}px`;
-    this._sketchpad.style.gridTemplateColumns = `repeat(${termSize.width}, 1fr)`;
+    const style = this._sketchpad.style;
+    style.fontSize = `${fontSize}px`;
+    style.width = `${termSize.width * tileSize.width}px`;
+    style.height = `${termSize.height * tileSize.height}px`;
+    style.gridTemplateColumns = `repeat(${termSize.width}, 1fr)`;
 
     const cellWidth = `${tileSize.width}px`,
           cellHeight = `${tileSize.height}px`,
@@ -176,7 +189,7 @@ export class SketchPad extends View {
         minWidth: Math.min(acc.minWidth, width || acc.minWidth),
         maxWidth: Math.max(acc.maxWidth, width),
         minHeight: Math.min(acc.minHeight, height || acc.minHeight),
-        maxHeight: Math.max(acc.maxHeight, height)
+        maxHeight: Math.max(acc.maxHeight, height),
       };
     }, dims);
     this._ruler.textContent = DEFAULT_GLYPH;

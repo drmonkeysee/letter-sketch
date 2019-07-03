@@ -115,8 +115,12 @@ body {
     }
 
     .tile-color {
-      width: calc($color-selection-dim - (2 * $color-selection-border-thickness));
-      height: calc($color-selection-dim - (2 * $color-selection-border-thickness));
+      width: calc(
+        $color-selection-dim - (2 * $color-selection-border-thickness)
+      );
+      height: calc(
+        $color-selection-dim - (2 * $color-selection-border-thickness)
+      );
       position: absolute;
       border: $color-selection-border-thickness solid $color-border-control;
 

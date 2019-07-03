@@ -70,7 +70,7 @@ export class ColorPalette extends View {
         onSelectedHandler,
         colors => colors.bg,
         ...args
-      )
+      ),
     ];
     this._currentSelection = null;
     this._clearSelection = this._doc.getElementById('clear-selection');
@@ -86,7 +86,9 @@ export class ColorPalette extends View {
         for (const blueStep of colorSteps) {
           const colorCell = this._doc.createElement('div');
           colorCell.className = 'palette-cell';
-          colorCell.style.backgroundColor = channelsToCss(redStep, greenStep, blueStep);
+          colorCell.style.backgroundColor = channelsToCss(
+            redStep, greenStep, blueStep
+          );
           colorCell.addEventListener('click', this._pickColor.bind(this));
           colorColumn.appendChild(colorCell);
         }

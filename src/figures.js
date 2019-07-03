@@ -42,7 +42,8 @@ export function floodFill(lettertypeCell, terminal) {
 
 export function rectangle(lettertypeCell, terminal) {
   return (start, end, previousShape) => {
-    // draw rectangle, including restoration of last state? how to measure last state?
+    // draw rectangle, including restoration of last state?
+    // how to measure last state?
     return [];
   };
 }

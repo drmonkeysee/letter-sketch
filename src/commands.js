@@ -28,7 +28,9 @@ const COMMAND_REGISTRY = {
   setTool(models, toolName) {
     return () => {
       models.currentTool = toolName;
-      return makeUpdate(EVENTS.onToolChanged, {tool: currentTool(models), name: toolName});
+      return makeUpdate(
+        EVENTS.onToolChanged, {tool: currentTool(models), name: toolName}
+      );
     };
   },
   commitDraw(models, figure) {
@@ -42,8 +44,8 @@ const COMMAND_REGISTRY = {
       const terminalSize = models.terminal.dimensions,
             event = dims.columns < terminalSize.width
                         || dims.rows < terminalSize.height
-                        ? EVENTS.onTerminalResizeVerify
-                        : EVENTS.onTerminalResizeReady;
+                      ? EVENTS.onTerminalResizeVerify
+                      : EVENTS.onTerminalResizeReady;
       return makeUpdate(event, {dims});
     };
   },
@@ -57,12 +59,16 @@ const COMMAND_REGISTRY = {
         models.terminal.resize(dims.columns, dims.rows);
       }*/
       models.lettertype.fontSize = dims.fontSize;
-      return makeUpdate(EVENTS.onTerminalResized, {terminal: models.terminal, fontSize: dims.fontSize});
+      return makeUpdate(EVENTS.onTerminalResized, {
+        terminal: models.terminal, fontSize: dims.fontSize
+      });
     };
-  }
+  },
 };
 
-export const COMMANDS = namemap(Object.values(COMMAND_REGISTRY), (name, c) => name);
+export const COMMANDS = namemap(
+  Object.values(COMMAND_REGISTRY), (name, c) => name
+);
 
 export class CommandDispatcher {
   constructor(notifier, models) {

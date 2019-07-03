@@ -23,7 +23,7 @@ describe('ViewNotifier', function () {
       const views = [
         {subscribe: sinon.fake()},
         {subscribe: sinon.fake()},
-        {subscribe: sinon.fake()}
+        {subscribe: sinon.fake()},
       ];
 
       this.target.register(...views);
@@ -36,7 +36,7 @@ describe('ViewNotifier', function () {
     beforeEach(function () {
       this.update = {
         event: EVENTS.onForegroundColorChanged,
-        data: 'foo'
+        data: 'foo',
       };
     });
 
@@ -52,7 +52,9 @@ describe('ViewNotifier', function () {
     it('notifies multiple handlers', function () {
       const handlers = [sinon.fake(), sinon.fake(), sinon.fake()];
 
-      handlers.forEach(h => this.target.subscribe(EVENTS.onForegroundColorChanged, h));
+      handlers.forEach(
+        h => this.target.subscribe(EVENTS.onForegroundColorChanged, h)
+      );
       this.target.signal(this.update);
 
       handlers.forEach(h => sinon.assert.calledWith(h, this.update));
@@ -68,12 +70,14 @@ describe('ViewNotifier', function () {
     });
 
     it('notifies only handlers for target event', function () {
-      const handlers = [sinon.fake(), sinon.fake(), sinon.fake(), sinon.fake()],
+      const handlers = [
+              sinon.fake(), sinon.fake(), sinon.fake(), sinon.fake()
+            ],
             events = [
               EVENTS.onForegroundColorChanged,
               EVENTS.onGlyphChanged,
               EVENTS.onGlyphChanged,
-              EVENTS.onForegroundColorChanged
+              EVENTS.onForegroundColorChanged,
             ];
 
       handlers.forEach((h, i) => this.target.subscribe(events[i], h));

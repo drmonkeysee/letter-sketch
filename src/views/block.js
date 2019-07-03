@@ -33,11 +33,15 @@ export class LetterBlock extends View {
   _refreshGlyph(update) {
     const glyph = update.glyph;
     for (const cell of this._block.children) {
-      cell.className = cell.firstElementChild.textContent === glyph ? 'selected' : '';
+      cell.className = cell.firstElementChild.textContent === glyph
+                        ? 'selected'
+                        : '';
     }
   }
 
   _pickGlyph(event) {
-    this._dispatch.command(COMMANDS.setGlyph, event.target.firstElementChild.textContent);
+    this._dispatch.command(
+      COMMANDS.setGlyph, event.target.firstElementChild.textContent
+    );
   }
 }

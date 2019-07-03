@@ -8,7 +8,7 @@ const EVENT_NAMES = [
   'onDrawCommitted',
   'onTerminalResizeVerify',
   'onTerminalResizeReady',
-  'onTerminalResized'
+  'onTerminalResized',
 ];
 
 export const EVENTS = namemap(EVENT_NAMES, (name, e) => name);

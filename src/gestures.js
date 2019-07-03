@@ -5,7 +5,9 @@ class Gesture {
   }
 
   handleEvent(event) {
-    const eventName = event.type.replace(event.type[0], event.type[0].toUpperCase()),
+    const eventName = event.type.replace(
+            event.type[0], event.type[0].toUpperCase()
+          ),
           handlerName = `on${eventName}`;
     if (this[handlerName]) return this[handlerName](event);
     return null;
@@ -23,20 +25,27 @@ class Gesture {
 }
 
 function getPoint(target) {
-  return {x: parseInt(target.dataset.x, 10), y: parseInt(target.dataset.y, 10)};
+  return {
+    x: parseInt(target.dataset.x, 10),
+    y: parseInt(target.dataset.y, 10),
+  };
 }
 
 export class MouseGesture extends Gesture {
   onMousedown(event) {
     this._start = this._end = getPoint(event.target);
-    this._activeFigure = this._updateFigure(this._start, this._end, this._activeFigure);
+    this._activeFigure = this._updateFigure(
+      this._start, this._end, this._activeFigure
+    );
     this._drawFigure();
     return null;
   }
 
   onMouseover(event) {
     this._end = getPoint(event.target);
-    this._activeFigure = this._updateFigure(this._start, this._end, this._activeFigure);
+    this._activeFigure = this._updateFigure(
+      this._start, this._end, this._activeFigure
+    );
     this._drawFigure();
     return null;
   }

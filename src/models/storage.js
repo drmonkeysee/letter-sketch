@@ -9,10 +9,10 @@ export default {
     return {
       lettertype: {
         cell: new Cell(DEFAULT_GLYPH, COLORS.black),
-        fontSize: 24
+        fontSize: 24,
       },
       terminal: new Terminal(50, 20),
-      currentTool: TOOLS.brush
+      currentTool: TOOLS.brush,
     };
   }
 };

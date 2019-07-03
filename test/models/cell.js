@@ -91,7 +91,9 @@ describe('Cell', function () {
     });
 
     it('updates multiple fields', function () {
-      this.target.update({backgroundColor: 'green', foregroundColor: 'yellow'});
+      this.target.update(
+        {backgroundColor: 'green', foregroundColor: 'yellow'}
+      );
 
       expect(this.target.glyph).to.equal('B');
       expect(this.target.foregroundColor).to.equal('yellow');
@@ -99,7 +101,9 @@ describe('Cell', function () {
     });
 
     it('updates all fields from a literal', function () {
-      this.target.update({backgroundColor: 'green', glyph: 't', foregroundColor: 'yellow'});
+      this.target.update(
+        {backgroundColor: 'green', glyph: 't', foregroundColor: 'yellow'}
+      );
 
       expect(this.target.glyph).to.equal('t');
       expect(this.target.foregroundColor).to.equal('yellow');

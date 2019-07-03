@@ -37,7 +37,8 @@ describe('CommandDispatcher', function () {
     });
 
     it('raises error if invalid command', function () {
-      expect(() => this.target.command('notACommand')).to.throw('Unknown command: notACommand');
+      expect(() => this.target.command('notACommand'))
+                    .to.throw('Unknown command: notACommand');
     });
   });
 });
@@ -52,8 +53,8 @@ describe('commands', function () {
     beforeEach(function () {
       this.models = {
         lettertype: {
-          cell: {}
-        }
+          cell: {},
+        },
       };
       this.target = getBinder(COMMANDS.setForegroundColor, this.models);
     });
@@ -65,7 +66,9 @@ describe('commands', function () {
       const result = cmd();
 
       expect(this.models.lettertype.cell.foregroundColor).to.equal(color);
-      expect(result).to.eql({event: EVENTS.onForegroundColorChanged, color: color});
+      expect(result).to.eql(
+        {event: EVENTS.onForegroundColorChanged, color: color}
+      );
     });
   });
 
@@ -73,8 +76,8 @@ describe('commands', function () {
     beforeEach(function () {
       this.models = {
         lettertype: {
-          cell: {}
-        }
+          cell: {},
+        },
       };
       this.target = getBinder(COMMANDS.setBackgroundColor, this.models);
     });
@@ -86,7 +89,9 @@ describe('commands', function () {
       const result = cmd();
 
       expect(this.models.lettertype.cell.backgroundColor).to.equal(color);
-      expect(result).to.eql({event: EVENTS.onBackgroundColorChanged, color: color});
+      expect(result).to.eql(
+        {event: EVENTS.onBackgroundColorChanged, color: color}
+      );
     });
   });
 
@@ -94,8 +99,8 @@ describe('commands', function () {
     beforeEach(function () {
       this.models = {
         lettertype: {
-          cell: {}
-        }
+          cell: {},
+        },
       };
       this.target = getBinder(COMMANDS.setGlyph, this.models);
     });
@@ -114,7 +119,8 @@ describe('commands', function () {
   describe('#setTool()', function () {
     beforeEach(function () {
       this.models = {};
-      this.currTool = sinon.stub(toolModule, 'currentTool').returns('testToolResult');
+      this.currTool = sinon.stub(toolModule, 'currentTool')
+                        .returns('testToolResult');
       this.target = getBinder(COMMANDS.setTool, this.models);
     });
     afterEach(function () {
@@ -129,7 +135,9 @@ describe('commands', function () {
 
       sinon.assert.calledWith(this.currTool, this.models);
       expect(this.models.currentTool).to.equal(tool);
-      expect(result).to.eql({event: EVENTS.onToolChanged, tool: 'testToolResult', name: 'testTool'});
+      expect(result).to.eql(
+        {event: EVENTS.onToolChanged, tool: 'testToolResult', name: 'testTool'}
+      );
     });
   });
 
@@ -137,8 +145,8 @@ describe('commands', function () {
     beforeEach(function () {
       this.models = {
         terminal: {
-          update: sinon.fake()
-        }
+          update: sinon.fake(),
+        },
       };
       this.target = getBinder(COMMANDS.commitDraw, this.models);
     });
@@ -161,8 +169,8 @@ describe('commands', function () {
     beforeEach(function () {
       this.models = {
         terminal: {
-          dimensions: {height: 20, width: 20}
-        }
+          dimensions: {height: 20, width: 20},
+        },
       };
       this.target = getBinder(COMMANDS.checkResizeTerminal, this.models);
     });
@@ -182,7 +190,9 @@ describe('commands', function () {
 
       const result = cmd();
 
-      expect(result).to.eql({event: EVENTS.onTerminalResizeVerify, dims: dims});
+      expect(result).to.eql(
+        {event: EVENTS.onTerminalResizeVerify, dims: dims}
+      );
     });
 
     it('signals verify if rows lower than current value', function () {
@@ -191,7 +201,9 @@ describe('commands', function () {
 
       const result = cmd();
 
-      expect(result).to.eql({event: EVENTS.onTerminalResizeVerify, dims: dims});
+      expect(result).to.eql(
+        {event: EVENTS.onTerminalResizeVerify, dims: dims}
+      );
     });
   });
 
@@ -200,8 +212,8 @@ describe('commands', function () {
       this.models = {
         lettertype: {fontSize: 15},
         terminal: {
-          resize: sinon.fake()
-        }
+          resize: sinon.fake(),
+        },
       };
       this.target = getBinder(COMMANDS.commitResizeTerminal, this.models);
     });

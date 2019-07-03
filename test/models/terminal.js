@@ -68,7 +68,7 @@ describe('Terminal', function () {
               {x: 3, y: 2, cell: new Cell('^', '#ff0000', '#000000')},
               {x: 2, y: 3, cell: new Cell('<', '#00ff00', '#000000')},
               {x: 4, y: 3, cell: new Cell('>', '#0000ff', '#000000')},
-              {x: 3, y: 4, cell: new Cell('V', '#ffff00', '#000000')}
+              {x: 3, y: 4, cell: new Cell('V', '#ffff00', '#000000')},
             ];
 
       target.update(figure);

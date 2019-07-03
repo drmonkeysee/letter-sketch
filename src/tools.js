@@ -5,7 +5,9 @@ import namemap from './namemap.js';
 function makeTool(models, gestureCls, figureStyle) {
   return {
     startGesture(sketchpadView) {
-      return new gestureCls(figureStyle(models.lettertype.cell, models.terminal), sketchpadView);
+      return new gestureCls(
+        figureStyle(models.lettertype.cell, models.terminal), sketchpadView
+      );
     }
   };
 }
@@ -27,7 +29,7 @@ const TOOLS_REGISTRY = {
   line(models) {/* line segment from start to end using current lettertype, use smart lines? */},
   fill(models) {/* floodfill (cardinal) all tiles matching current point with current lettertype */},
   text(models) {/* type text */},
-  replace(models) {/* swap all tiles matching current point with current lettertype */}
+  replace(models) {/* swap all tiles matching current point with current lettertype */},
 };
 
 export const TOOLS = namemap(Object.values(TOOLS_REGISTRY), (name, t) => name);

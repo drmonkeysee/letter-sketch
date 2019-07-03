@@ -7,5 +7,5 @@ export const VIEW_REGISTRY = [
   LetterBlock,
   ColorPalette,
   SketchPad,
-  ToolSelector
+  ToolSelector,
 ];
