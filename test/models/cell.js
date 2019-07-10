@@ -7,7 +7,7 @@ describe('Cell', function () {
     it('sets defaults if no arguments', function () {
       const result = new Cell();
 
-      expect(result.glyph).to.equal('\u0020');
+      expect(result.glyph).to.equal(' ');
       expect(result.foregroundColor).to.not.exist;
       expect(result.backgroundColor).to.not.exist;
     });
@@ -15,13 +15,13 @@ describe('Cell', function () {
     it('sets nil glyph if given null', function () {
       const result = new Cell(null);
 
-      expect(result.glyph).to.equal('\u0020');
+      expect(result.glyph).to.equal(' ');
     });
 
     it('sets nil glyph if given empty string', function () {
       const result = new Cell('');
 
-      expect(result.glyph).to.equal('\u0020');
+      expect(result.glyph).to.equal(' ');
     });
 
     it('sets properties', function () {
@@ -138,13 +138,13 @@ describe('Cell', function () {
     it('can set glyph to blank', function () {
       this.target.update({glyph: null});
 
-      expect(this.target.glyph).to.equal('\u0020');
+      expect(this.target.glyph).to.equal(' ');
     });
 
     it('can set glyph to blank directly', function () {
       this.target.glyph = null;
 
-      expect(this.target.glyph).to.equal('\u0020');
+      expect(this.target.glyph).to.equal(' ');
     });
   });
 });

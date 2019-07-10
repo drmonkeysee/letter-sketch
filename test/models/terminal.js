@@ -10,7 +10,7 @@ describe('Terminal', function () {
 
       expect(target.dimensions).to.eql({width: 1, height: 1});
       const testCell = target.getCell(0, 0);
-      expect(testCell.glyph).to.equal('\u0020');
+      expect(testCell.glyph).to.equal(' ');
       expect(testCell.foregroundColor).to.not.exist;
       expect(testCell.backgroundColor).to.not.exist;
     });
@@ -20,7 +20,7 @@ describe('Terminal', function () {
 
       expect(target.dimensions).to.eql({width: 20, height: 10});
       const testCell = target.getCell(10, 5);
-      expect(testCell.glyph).to.equal('\u0020');
+      expect(testCell.glyph).to.equal(' ');
       expect(testCell.foregroundColor).to.not.exist;
       expect(testCell.backgroundColor).to.not.exist;
     });
@@ -90,7 +90,7 @@ describe('Terminal', function () {
       expect(bottomCell.foregroundColor).to.equal('#ffff00');
       expect(bottomCell.backgroundColor).to.equal('#000000');
       const middleCell = target.getCell(3, 3);
-      expect(middleCell.glyph).to.equal('\u0020');
+      expect(middleCell.glyph).to.equal(' ');
       expect(middleCell.foregroundColor).to.not.exist;
       expect(middleCell.backgroundColor).to.not.exist;
     });
