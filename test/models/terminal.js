@@ -97,23 +97,10 @@ describe('Terminal', function () {
   });
 
   describe('#resize()', function () {
-    function filledCellCount(terminal) {
-      const {columns, rows} = this.target.dimensions;
-      let filledCellCount = 0;
-      for (let y = 0; y < rows; ++y) {
-        for (let x = 0; x < columns; ++x) {
-          const cell = this.target.getCell(x, y);
-          if (!cell.isEmpty()) {
-            ++filledCellCount;
-          }
-        }
-      }
-      return filledCellCount;
-    }
-
     before(function () {
       this.assertFigureTransform = function (...coords) {
         coords.forEach((c, i) =>  {
+          if (!c) return;
           const [x, y] = c,
                 targetCell = this.target.getCell(x, y),
                 originalCell = this.originalFigure[i];
@@ -122,10 +109,6 @@ describe('Terminal', function () {
             `new cell (${x}, ${y}) did not match original cell at index ${i}`
           );
         });
-        expect(coords.length).to.equal(
-          filledCellCount(this.target),
-          'filled cell count does not match expected figure length'
-        );
       };
     });
 
@@ -183,7 +166,10 @@ describe('Terminal', function () {
 
       const expectedFigureAt = [
         [0, 0],
+        null,
         [2, 2],
+        null,
+        null,
       ];
       this.assertFigureTransform(...expectedFigureAt);
     });
@@ -192,7 +178,11 @@ describe('Terminal', function () {
       this.target.resize(3, 3);
 
       const expectedFigureAt = [
+        null,
+        null,
         [1, 1],
+        null,
+        null,
       ];
       this.assertFigureTransform(...expectedFigureAt);
     });
