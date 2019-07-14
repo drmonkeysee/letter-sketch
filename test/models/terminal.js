@@ -97,6 +97,20 @@ describe('Terminal', function () {
   });
 
   describe('#resize()', function () {
+    function filledCellCount(terminal) {
+      const {columns, rows} = this.target.dimensions;
+      let filledCellCount = 0;
+      for (let y = 0; y < rows; ++y) {
+        for (let x = 0; x < columns; ++x) {
+          const cell = this.target.getCell(x, y);
+          if (!cell.isEmpty()) {
+            ++filledCellCount;
+          }
+        }
+      }
+      return filledCellCount;
+    }
+
     before(function () {
       this.assertFigureTransform = function (adjustedFigure) {
         adjustedFigure.forEach((c, i) =>  {
@@ -109,17 +123,21 @@ describe('Terminal', function () {
             `new cell (${x}, ${y}) did not match original cell at index ${i}`
           );
         });
+        expect(coords.length).to.equal(
+          filledCellCount(this.target),
+          'filled cell count does not match expected figure length'
+        );
       };
     });
 
     beforeEach(function () {
       this.target = new Terminal(5, 5);
       const testFigure = [
-              [0, 0, 'X'],
-              [4, 0, 'X'],
+              [0, 0, 'N'],
+              [4, 0, 'E'],
               [2, 2, 'O'],
-              [0, 4, 'X'],
-              [4, 4, 'X'],
+              [0, 4, 'W'],
+              [4, 4, 'S'],
             ];
       this.originalFigure = [];
       for (const [x, y, glyph] of testFigure) {
