@@ -52,12 +52,7 @@ const COMMAND_REGISTRY = {
   commitResizeTerminal(models, dims) {
     return () => {
       console.log('resized terminal: %o', dims);
-      // TODO finish this
-      /*const terminalSize = models.terminal.dimensions;
-      if (dims.columns != terminalSize.width
-          || dims.rows != terminalSize.height) {
-        models.terminal.resize(dims.columns, dims.rows);
-      }*/
+      models.terminal.resize(dims.columns, dims.rows);
       models.lettertype.fontSize = dims.fontSize;
       return makeUpdate(EVENTS.onTerminalResized, {
         terminal: models.terminal, fontSize: dims.fontSize
