@@ -98,10 +98,10 @@ describe('Terminal', function () {
 
   describe('#resize()', function () {
     function filledCellCount(terminal) {
-      const {columns, rows} = terminal.dimensions;
+      const {width, height} = terminal.dimensions;
       let filledCellCount = 0;
-      for (let y = 0; y < rows; ++y) {
-        for (let x = 0; x < columns; ++x) {
+      for (let y = 0; y < height; ++y) {
+        for (let x = 0; x < width; ++x) {
           const cell = terminal.getCell(x, y);
           if (!cell.isEmpty()) {
             ++filledCellCount;
@@ -116,14 +116,16 @@ describe('Terminal', function () {
         this.target = new Terminal(cols, rows);
         this.originalFigure = [];
         for (const [x, y, glyph] of testFigure) {
-          this.target.updateCell(x, y, glyph);
+          this.target.updateCell(x, y, new Cell(glyph));
           this.originalFigure.push(this.target.getCell(x, y));
         }
       };
 
       this.assertFigureTransform = function (adjustedFigure) {
+        let adjustedLength = 0;
         adjustedFigure.forEach((c, i) =>  {
           if (!c) return;
+          ++adjustedLength;
           const [x, y] = c,
                 targetCell = this.target.getCell(x, y),
                 originalCell = this.originalFigure[i];
@@ -132,8 +134,8 @@ describe('Terminal', function () {
             `new cell (${x}, ${y}) did not match original cell at index ${i}`
           );
         });
-        expect(coords.length).to.equal(
-          filledCellCount(this.target),
+        expect(filledCellCount(this.target)).to.equal(
+          adjustedLength,
           'filled cell count does not match expected figure length'
         );
       };
@@ -177,7 +179,7 @@ describe('Terminal', function () {
           [1, 1],
           [5, 1],
           [3, 3],
-          [0, 5],
+          [1, 5],
           [5, 5],
         ];
         this.assertFigureTransform(expectedFigure);
@@ -215,7 +217,7 @@ describe('Terminal', function () {
         const expectedFigure = [
           null,
           null,
-          [1, 1],
+          [0, 0],
           null,
           null,
         ];
@@ -314,7 +316,7 @@ describe('Terminal', function () {
         const expectedFigure = [
           null,
           null,
-          [2, 2],
+          [0, 0],
           null,
           null,
           null,
