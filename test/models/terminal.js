@@ -98,11 +98,11 @@ describe('Terminal', function () {
 
   describe('#resize()', function () {
     function filledCellCount(terminal) {
-      const {columns, rows} = this.target.dimensions;
+      const {columns, rows} = terminal.dimensions;
       let filledCellCount = 0;
       for (let y = 0; y < rows; ++y) {
         for (let x = 0; x < columns; ++x) {
-          const cell = this.target.getCell(x, y);
+          const cell = terminal.getCell(x, y);
           if (!cell.isEmpty()) {
             ++filledCellCount;
           }
@@ -112,6 +112,15 @@ describe('Terminal', function () {
     }
 
     before(function () {
+      this.initTerminal = function (cols, rows, testFigure) {
+        this.target = new Terminal(cols, rows);
+        this.originalFigure = [];
+        for (const [x, y, glyph] of testFigure) {
+          this.target.updateCell(x, y, glyph);
+          this.originalFigure.push(this.target.getCell(x, y));
+        }
+      };
+
       this.assertFigureTransform = function (adjustedFigure) {
         adjustedFigure.forEach((c, i) =>  {
           if (!c) return;
@@ -130,91 +139,190 @@ describe('Terminal', function () {
       };
     });
 
-    beforeEach(function () {
-      this.target = new Terminal(5, 5);
-      const testFigure = [
-              [0, 0, 'N'],
-              [4, 0, 'E'],
-              [2, 2, 'O'],
-              [0, 4, 'W'],
-              [4, 4, 'S'],
-            ];
-      this.originalFigure = [];
-      for (const [x, y, glyph] of testFigure) {
-        this.target.updateCell(x, y, glyph);
-        this.originalFigure.push(this.target.getCell(x, y));
-      }
+    describe('for odd-sized terminal', function () {
+      beforeEach(function () {
+        const testFigure = [
+          [0, 0, 'N'],
+          [4, 0, 'E'],
+          [2, 2, 'A'],
+          [0, 4, 'W'],
+          [4, 4, 'S'],
+        ];
+        this.initTerminal(5, 5, testFigure);
+      });
+
+      it('does nothing if resize matches current size', function () {
+        this.target.resize(5, 5);
+
+        expect(this.target.getCell(0, 0)).to.equal(this.originalFigure[0]);
+      });
+
+      it('grows terminal by 1x1', function () {
+        this.target.resize(6, 6);
+
+        const expectedFigure = [
+          [0, 0],
+          [4, 0],
+          [2, 2],
+          [0, 4],
+          [4, 4],
+        ];
+        this.assertFigureTransform(expectedFigure);
+      });
+
+      it('grows terminal by 2x2', function () {
+        this.target.resize(7, 7);
+
+        const expectedFigure = [
+          [1, 1],
+          [5, 1],
+          [3, 3],
+          [0, 5],
+          [5, 5],
+        ];
+        this.assertFigureTransform(expectedFigure);
+      });
+
+      it('shrinks terminal by 1x1', function () {
+        this.target.resize(4, 4);
+
+        const expectedFigure = [
+          [0, 0],
+          null,
+          [2, 2],
+          null,
+          null,
+        ];
+        this.assertFigureTransform(expectedFigure);
+      });
+
+      it('shrinks terminal by 2x2', function () {
+        this.target.resize(3, 3);
+
+        const expectedFigure = [
+          null,
+          null,
+          [1, 1],
+          null,
+          null,
+        ];
+        this.assertFigureTransform(expectedFigure);
+      });
+
+      it('shrinks terminal to one cell', function () {
+        this.target.resize(1, 1);
+
+        const expectedFigure = [
+          null,
+          null,
+          [1, 1],
+          null,
+          null,
+        ];
+        this.assertFigureTransform(expectedFigure);
+      });
     });
 
-    it('does nothing if resize matches current size', function () {
-      this.target.resize(5, 5);
+    describe('for even-sized terminal', function () {
+      beforeEach(function () {
+        const testFigure = [
+          [0, 0, 'N'],
+          [5, 0, 'E'],
+          [2, 2, 'A'],
+          [3, 2, 'B'],
+          [2, 3, 'C'],
+          [3, 3, 'D'],
+          [0, 5, 'W'],
+          [5, 5, 'S'],
+        ];
+        this.initTerminal(6, 6, testFigure);
+      });
 
-      expect(this.target.getCell(0, 0)).to.equal(this.originalFigure[0]);
-    });
+      it('does nothing if resize matches current size', function () {
+        this.target.resize(6, 6);
 
-    it('grows terminal by 1x1', function () {
-      this.target.resize(6, 6);
+        expect(this.target.getCell(0, 0)).to.equal(this.originalFigure[0]);
+      });
 
-      const expectedFigure = [
-        [0, 0],
-        [4, 0],
-        [2, 2],
-        [0, 4],
-        [4, 4],
-      ];
-      this.assertFigureTransform(expectedFigure);
-    });
+      it('grows terminal by 1x1', function () {
+        this.target.resize(7, 7);
 
-    it('grows terminal by 2x2', function () {
-      this.target.resize(7, 7);
+        const expectedFigure = [
+          [0, 0],
+          [5, 0],
+          [2, 2],
+          [3, 2],
+          [2, 3],
+          [3, 3],
+          [0, 5],
+          [5, 5],
+        ];
+        this.assertFigureTransform(expectedFigure);
+      });
 
-      const expectedFigure = [
-        [1, 1],
-        [5, 1],
-        [3, 3],
-        [0, 5],
-        [5, 5],
-      ];
-      this.assertFigureTransform(expectedFigure);
-    });
+      it('grows terminal by 2x2', function () {
+        this.target.resize(8, 8);
 
-    it('shrinks terminal by 1x1', function () {
-      this.target.resize(4, 4);
+        const expectedFigure = [
+          [1, 1],
+          [6, 1],
+          [3, 3],
+          [4, 3],
+          [3, 4],
+          [4, 4],
+          [1, 6],
+          [6, 6],
+        ];
+        this.assertFigureTransform(expectedFigure);
+      });
 
-      const expectedFigure = [
-        [0, 0],
-        null,
-        [2, 2],
-        null,
-        null,
-      ];
-      this.assertFigureTransform(expectedFigure);
-    });
+      it('shrinks terminal by 1x1', function () {
+        this.target.resize(5, 5);
 
-    it('shrinks terminal by 2x2', function () {
-      this.target.resize(3, 3);
+        const expectedFigure = [
+          [0, 0],
+          null,
+          [2, 2],
+          [3, 2],
+          [2, 3],
+          [3, 3],
+          null,
+          null,
+        ];
+        this.assertFigureTransform(expectedFigure);
+      });
 
-      const expectedFigure = [
-        null,
-        null,
-        [1, 1],
-        null,
-        null,
-      ];
-      this.assertFigureTransform(expectedFigure);
-    });
+      it('shrinks terminal by 2x2', function () {
+        this.target.resize(4, 4);
 
-    it('shrinks terminal to one cell', function () {
-      this.target.resize(1, 1);
+        const expectedFigure = [
+          null,
+          null,
+          [1, 1],
+          [2, 1],
+          [1, 2],
+          [2, 2],
+          null,
+          null,
+        ];
+        this.assertFigureTransform(expectedFigure);
+      });
 
-      const expectedFigure = [
-        null,
-        null,
-        [1, 1],
-        null,
-        null,
-      ];
-      this.assertFigureTransform(expectedFigure);
+      it('shrinks terminal to one cell', function () {
+        this.target.resize(1, 1);
+
+        const expectedFigure = [
+          null,
+          null,
+          [2, 2],
+          null,
+          null,
+          null,
+          null,
+          null,
+        ];
+        this.assertFigureTransform(expectedFigure);
+      });
     });
   });
 });
