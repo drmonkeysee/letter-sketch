@@ -221,8 +221,8 @@ describe('commands', function () {
       sinon.restore();
     });
 
-    it('updates the font size', function () {
-      const dims = {fontSize: 20},
+    it('updates the model', function () {
+      const dims = {fontSize: 20, columns: 10, rows: 8},
             cmd = this.target(dims);
 
       const result = cmd();
@@ -233,7 +233,7 @@ describe('commands', function () {
         terminal: this.models.terminal,
         fontSize: dims.fontSize
       });
-      sinon.assert.notCalled(this.models.terminal.resize);
+      sinon.assert.calledWith(this.models.terminal.resize, 10, 8)
     });
   });
 });
