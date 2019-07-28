@@ -72,7 +72,6 @@ export class ColorPalette extends View {
         ...args
       ),
     ];
-    this._currentSelection = null;
     this._clearSelection = this._doc.getElementById('clear-selection');
   }
 
