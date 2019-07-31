@@ -68,4 +68,81 @@ describe('figures', function () {
       );
     });
   });
+
+  describe('#floodFill', function () {
+    beforeEach(function () {
+      this._terminal = new Terminal(3, 3);
+      this._cell = new Cell('A');
+      this._target = freeDraw(this._cell, this._terminal);
+    });
+
+    it('fills terminal from middle cell', function () {
+      const tile = {x: 1, y: 1};
+
+      const figure = this._target(tile);
+
+      const dims = this._terminal.dimensions;
+      expect(figure).to.have.lengthOf(dims.height * dims.width);
+      const expectedTiles = [
+        {x: 0, y: 0},
+        {x: 1, y: 0},
+        {x: 2, y: 0},
+        {x: 0, y: 1},
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+        {x: 0, y: 2},
+        {x: 1, y: 2},
+        {x: 2, y: 2},
+      ];
+      expectedTiles.forEach((t, i) =>
+        expect(figure[i]).to.eql({x: t.x, y: t.y, cell: this._cell})
+      );
+    });
+
+    it('fills terminal from edge cell', function () {
+      const tile = {x: 1, y: 2};
+
+      const figure = this._target(tile);
+
+      const dims = this._terminal.dimensions;
+      expect(figure).to.have.lengthOf(dims.height * dims.width);
+      const expectedTiles = [
+        {x: 0, y: 0},
+        {x: 1, y: 0},
+        {x: 2, y: 0},
+        {x: 0, y: 1},
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+        {x: 0, y: 2},
+        {x: 1, y: 2},
+        {x: 2, y: 2},
+      ];
+      expectedTiles.forEach((t, i) =>
+        expect(figure[i]).to.eql({x: t.x, y: t.y, cell: this._cell})
+      );
+    });
+
+    it('fills terminal from corner cell', function () {
+      const tile = {x: 0, y: 0};
+
+      const figure = this._target(tile);
+
+      const dims = this._terminal.dimensions;
+      expect(figure).to.have.lengthOf(dims.height * dims.width);
+      const expectedTiles = [
+        {x: 0, y: 0},
+        {x: 1, y: 0},
+        {x: 2, y: 0},
+        {x: 0, y: 1},
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+        {x: 0, y: 2},
+        {x: 1, y: 2},
+        {x: 2, y: 2},
+      ];
+      expectedTiles.forEach((t, i) =>
+        expect(figure[i]).to.eql({x: t.x, y: t.y, cell: this._cell})
+      );
+    });
+  });
 });
