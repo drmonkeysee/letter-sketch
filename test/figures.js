@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 
-import {singleCell, freeDraw} from '../src/figures.js';
+import {singleCell, freeDraw, floodFill} from '../src/figures.js';
 import {Cell} from '../src/models/cell.js';
 import {Terminal} from '../src/models/terminal.js';
 
@@ -73,7 +73,7 @@ describe('figures', function () {
     beforeEach(function () {
       this._terminal = new Terminal(3, 3);
       this._cell = new Cell('A');
-      this._target = freeDraw(this._cell, this._terminal);
+      this._target = floodFill(this._cell, this._terminal);
     });
 
     it('fills terminal from middle cell', function () {
