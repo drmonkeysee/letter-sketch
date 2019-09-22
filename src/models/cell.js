@@ -12,6 +12,12 @@ export class Cell {
     return this.glyph === CLEAR_GLYPH;
   }
 
+  equals(other) {
+    return this.glyph === other.glyph
+      && this.foregroundColor === other.foregroundColor
+      && this.backgroundColor === other.backgroundColor;
+  }
+
   update({
     glyph = this.glyph,
     foregroundColor = this.foregroundColor,

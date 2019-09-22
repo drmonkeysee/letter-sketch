@@ -59,6 +59,42 @@ describe('Cell', function () {
     });
   });
 
+  describe('#equals()', function () {
+    it('returns true for itself', function () {
+      const target = new Cell();
+
+      expect(target.equals(target)).to.be.true;
+    });
+
+    it('returns true for equal cells', function () {
+      const cell1 = new Cell('A', '#000', '#fff'),
+            cell2 = new Cell('A', '#000', '#fff');
+
+      expect(cell1.equals(cell2)).to.be.true;
+    });
+
+    it('returns false for different glyphs', function () {
+      const cell1 = new Cell('A', '#000', '#fff'),
+            cell2 = new Cell('B', '#000', '#fff');
+
+      expect(cell1.equals(cell2)).to.be.false;
+    });
+
+    it('returns false for different fg colors', function () {
+      const cell1 = new Cell('A', '#000', '#fff'),
+            cell2 = new Cell('A', '#555', '#fff');
+
+      expect(cell1.equals(cell2)).to.be.false;
+    });
+
+    it('returns false for different bg colors', function () {
+      const cell1 = new Cell('A', '#000', '#fff'),
+            cell2 = new Cell('A', '#000', '#999');
+
+      expect(cell1.equals(cell2)).to.be.false;
+    });
+  });
+
   describe('#update()', function () {
     beforeEach(function () {
       this.target = new Cell('B', 'red', 'blue');
