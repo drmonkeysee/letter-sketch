@@ -70,6 +70,26 @@ describe('figures', function () {
   });
 
   describe('#floodFill', function () {
+    function assertFigure(expTiles, expCell, actual) {
+      expect(actual).to.have.lengthOf(expTiles.length);
+      for (const tileExpected of expTiles) {
+        let foundTile = false;
+        for (const tileActual of actual) {
+          const sameTile = tileExpected.x === tileActual.x
+                            && tileExpected.y === tileActual.y;
+          if (!sameTile) continue;
+          expect(tileActual.cell).to.equal(expCell);
+          foundTile = true;
+        }
+        if (!foundTile) {
+          expect.fail(
+            `Expected tile {x: ${tileExpected.x}, y: ${tileExpected.y}}`
+            + ' not found in figure'
+          );
+        }
+      }
+    }
+
     beforeEach(function () {
       this._terminal = new Terminal(3, 3);
       this._cell = new Cell('A');
@@ -94,9 +114,7 @@ describe('figures', function () {
         {x: 1, y: 2},
         {x: 2, y: 2},
       ];
-      expectedTiles.forEach((t, i) =>
-        expect(figure[i]).to.eql({x: t.x, y: t.y, cell: this._cell})
-      );
+      assertFigure(expectedTiles, this._cell, figure);
     });
 
     it('fills terminal from edge cell', function () {
@@ -117,9 +135,7 @@ describe('figures', function () {
         {x: 1, y: 2},
         {x: 2, y: 2},
       ];
-      expectedTiles.forEach((t, i) =>
-        expect(figure[i]).to.eql({x: t.x, y: t.y, cell: this._cell})
-      );
+      assertFigure(expectedTiles, this._cell, figure);
     });
 
     it('fills terminal from corner cell', function () {
@@ -140,9 +156,7 @@ describe('figures', function () {
         {x: 1, y: 2},
         {x: 2, y: 2},
       ];
-      expectedTiles.forEach((t, i) =>
-        expect(figure[i]).to.eql({x: t.x, y: t.y, cell: this._cell})
-      );
+      assertFigure(expectedTiles, this._cell, figure);
     });
   });
 });
