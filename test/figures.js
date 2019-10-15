@@ -158,5 +158,129 @@ describe('figures', function () {
       ];
       assertFigure(expectedTiles, this._cell, figure);
     });
+
+    it('does not fill past solid line', function () {
+      const cell = new Cell('X'),
+            verticalLine = [
+              {x: 1, y: 0, cell},
+              {x: 1, y: 1, cell},
+              {x: 1, y: 2, cell},
+            ];
+      this._terminal.update(verticalLine);
+      const tile = {x: 0, y: 0};
+
+      const figure = this._target(tile);
+
+      expect(figure).to.have.lengthOf(3);
+      const expectedTiles = [
+        {x: 0, y: 0},
+        {x: 0, y: 1},
+        {x: 0, y: 2},
+      ];
+      assertFigure(expectedTiles, this._cell, figure);
+    });
+
+    it('does not fill past diagonal line', function () {
+      const cell = new Cell('X'),
+            diag = [
+              {x: 2, y: 0, cell},
+              {x: 1, y: 1, cell},
+              {x: 0, y: 2, cell},
+            ];
+      this._terminal.update(diag);
+      const tile = {x: 0, y: 0};
+
+      const figure = this._target(tile);
+
+      expect(figure).to.have.lengthOf(3);
+      const expectedTiles = [
+        {x: 0, y: 0},
+        {x: 0, y: 1},
+        {x: 1, y: 0},
+      ];
+      assertFigure(expectedTiles, this._cell, figure);
+    });
+
+    it('fills single tile', function () {
+      const tile = {x: 1, y: 1};
+      this._terminal.update([{cell: new Cell('X'), ...tile}]);
+
+      const figure = this._target(tile);
+
+      expect(figure).to.have.lengthOf(1);
+      assertFigure([tile], this._cell, figure);
+    });
+
+    it('fills solid line', function () {
+      const cell = new Cell('X'),
+            verticalLine = [
+              {x: 1, y: 0, cell},
+              {x: 1, y: 1, cell},
+              {x: 1, y: 2, cell},
+            ];
+      this._terminal.update(verticalLine);
+      const tile = {x: 1, y: 1};
+
+      const figure = this._target(tile);
+
+      expect(figure).to.have.lengthOf(3);
+      const expectedTiles = [
+        {x: 1, y: 0},
+        {x: 1, y: 1},
+        {x: 1, y: 2},
+      ];
+      assertFigure(expectedTiles, this._cell, figure);
+    });
+
+    it('does not fill diagonal line', function () {
+      const cell = new Cell('X'),
+            diag = [
+              {x: 2, y: 0, cell},
+              {x: 1, y: 1, cell},
+              {x: 0, y: 2, cell},
+            ];
+      this._terminal.update(diag);
+      const tile = {x: 0, y: 2};
+
+      const figure = this._target(tile);
+
+      expect(figure).to.have.lengthOf(1);
+      const expectedTiles = [
+        {x: 0, y: 2},
+      ];
+      assertFigure(expectedTiles, this._cell, figure);
+    });
+
+    it('fills contiguous shape', function () {
+      const cell = new Cell('X'),
+            square = [
+              {x: 1, y: 1, cell},
+              {x: 2, y: 1, cell},
+              {x: 3, y: 1, cell},
+              {x: 1, y: 2, cell},
+              {x: 3, y: 2, cell},
+              {x: 1, y: 3, cell},
+              {x: 2, y: 3, cell},
+              {x: 3, y: 3, cell},
+            ];
+      this._terminal.resize(5, 5);
+      this._terminal.update(square);
+      const tile = {x: 1, y: 1};
+
+      const figure = this._target(tile);
+
+      expect(figure).to.have.lengthOf(8);
+      const expectedTiles = [
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+        {x: 3, y: 1},
+        {x: 1, y: 2},
+        {x: 3, y: 2},
+        {x: 1, y: 3},
+        {x: 2, y: 3},
+        {x: 3, y: 3},
+      ];
+      assertFigure(expectedTiles, this._cell, figure);
+    });
   });
 });

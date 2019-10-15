@@ -52,12 +52,12 @@ export function freeDraw(lettertypeCell, terminal) {
 }
 
 export function floodFill(lettertypeCell, terminal) {
-  const dims = terminal.dimensions;
   return (start, end, activeFigure) => {
     const visited = new Set([hashTile(start)]),
           neighborQueue = [start],
           figure = [makeTile(start.x, start.y, lettertypeCell)],
-          originalCell = terminal.getCell(start.x, start.y);
+          originalCell = terminal.getCell(start.x, start.y),
+          dims = terminal.dimensions;
 
     while (neighborQueue.length > 0) {
       const current = neighborQueue.shift();
