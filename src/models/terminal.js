@@ -40,7 +40,6 @@ export class Terminal {
   updateCell(x, y, cell) {
     const targetCell = this.getCell(x, y);
     targetCell.update(cell);
-    return targetCell;
   }
 
   update(figure) {

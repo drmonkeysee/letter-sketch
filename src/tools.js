@@ -6,7 +6,9 @@ function makeTool(models, gestureCls, figureStyle) {
   return {
     startGesture(sketchpadView) {
       return new gestureCls(
-        figureStyle(models.lettertype.cell, models.terminal), sketchpadView
+        figureStyle(models.lettertype.cell, models.terminal),
+        sketchpadView,
+        models.terminal
       );
     },
   };
