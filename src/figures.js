@@ -79,8 +79,17 @@ export function floodFill(lettertypeCell, terminal) {
 
 export function rectangle(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    // draw rectangle, including restoration of last state?
-    // how to measure last state?
-    return [];
+    const figure = [];
+    for (let y = start.y; y <= end.y; ++y) {
+      if (y === start.y || y === end.y) {
+        for (let x = start.x; x <= end.x; ++x) {
+          figure.push(makeTile(x, y, lettertypeCell));
+        }
+      } else {
+        figure.push(makeTile(start.x, y, lettertypeCell));
+        figure.push(makeTile(end.x, y, lettertypeCell));
+      }
+    }
+    return figure;
   };
 }
