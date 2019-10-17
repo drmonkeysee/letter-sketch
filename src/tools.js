@@ -1,4 +1,4 @@
-import {singleCell, freeDraw, floodFill} from './figures.js';
+import {singleCell, freeDraw, floodFill, rectangle} from './figures.js';
 import {MouseGesture} from './gestures.js';
 import namemap from './namemap.js';
 
@@ -23,8 +23,7 @@ const TOOLS_REGISTRY = {
     return makeTool(models, MouseGesture, floodFill);
   },
   rect(models) {
-     //{/* draw border rect using current lettertype, use smart lines if single or double line selected */},
-    //return makeTool(models, SegmentStroke, rectangle);
+    return makeTool(models, MouseGesture, rectangle);
   },
   fillRect(models) {/* filled rect using current lettertype */},
   ellipse(models) {/* draw border ellipse using current lettertype, use smart lines if single or double line selected */},
