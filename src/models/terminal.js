@@ -43,8 +43,8 @@ export class Terminal {
   }
 
   update(figure) {
-    for (const tile of figure) {
-      this.updateCell(tile.x, tile.y, tile.cell);
+    for (const {x, y, cell} of figure) {
+      this.updateCell(x, y, cell);
     }
   }
 

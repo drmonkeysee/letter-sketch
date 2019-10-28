@@ -101,8 +101,8 @@ describe('figures', function () {
 
       const figure = this._target(tile);
 
-      const dims = this._terminal.dimensions;
-      expect(figure).to.have.lengthOf(dims.height * dims.width);
+      const {height, width} = this._terminal.dimensions;
+      expect(figure).to.have.lengthOf(height * width);
       const expected = [
         {x: 0, y: 0},
         {x: 1, y: 0},
@@ -122,8 +122,8 @@ describe('figures', function () {
 
       const figure = this._target(tile);
 
-      const dims = this._terminal.dimensions;
-      expect(figure).to.have.lengthOf(dims.height * dims.width);
+      const {height, width} = this._terminal.dimensions;
+      expect(figure).to.have.lengthOf(height * width);
       const expected = [
         {x: 0, y: 0},
         {x: 1, y: 0},
@@ -143,8 +143,8 @@ describe('figures', function () {
 
       const figure = this._target(tile);
 
-      const dims = this._terminal.dimensions;
-      expect(figure).to.have.lengthOf(dims.height * dims.width);
+      const {height, width} = this._terminal.dimensions;
+      expect(figure).to.have.lengthOf(height * width);
       const expected = [
         {x: 0, y: 0},
         {x: 1, y: 0},

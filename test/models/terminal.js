@@ -47,14 +47,11 @@ describe('Terminal', function () {
       target.updateCell(5, 2, newCell);
 
       const updatedCell = target.getCell(5, 2);
-      // expect cell instance to not have been replaced
       expect(updatedCell).to.equal(targetCell);
       expect(updatedCell).to.not.equal(newCell);
-      // expect cell to have new values
       expect(updatedCell.glyph).to.equal('A');
       expect(updatedCell.foregroundColor).to.equal('#222222');
       expect(updatedCell.backgroundColor).to.equal('#232323');
-      // expect source cell to not have been changed
       expect(updatedCell.glyph).to.equal(newCell.glyph);
       expect(updatedCell.foregroundColor).to.equal(newCell.foregroundColor);
       expect(updatedCell.backgroundColor).to.equal(newCell.backgroundColor);

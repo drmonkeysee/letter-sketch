@@ -3,14 +3,6 @@ import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
 import {View} from './view.js';
 
-// press resize
-// call resize terminal command
-// send fontsize, columns, rows
-// resize terminal
-// fire resize event
-// remeasure glyph
-// clear sketchpad and redraw based on fontsize and dimensions
-
 class Controls extends View {
   constructor(...args) {
     super(...args);
