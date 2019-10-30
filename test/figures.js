@@ -1,6 +1,8 @@
 import {expect} from 'chai';
 
-import {singleCell, freeDraw, floodFill, rectangle} from '../src/figures.js';
+import {
+  singleCell, freeDraw, floodFill, rectangle, filledRectangle,
+} from '../src/figures.js';
 import {Cell} from '../src/models/cell.js';
 import {Terminal} from '../src/models/terminal.js';
 
@@ -413,6 +415,151 @@ describe('figures', function () {
         {x: 3, y: 5},
         {x: 3, y: 6},
         {x: 4, y: 3},
+        {x: 4, y: 6},
+        {x: 5, y: 3},
+        {x: 5, y: 4},
+        {x: 5, y: 5},
+        {x: 5, y: 6},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+  });
+
+  describe('#filledRectangle', function () {
+    beforeEach(function () {
+      this._terminal = new Terminal(7, 7);
+      this._cell = new Cell('A');
+      this._target = filledRectangle(this._cell, this._terminal);
+    });
+
+    it('creates a single tile figure', function () {
+      const tile = {x: 3, y: 3};
+
+      const figure = this._target(tile, tile);
+
+      expect(figure).to.have.lengthOf(1);
+      expect(figure[0]).to.eql({cell: this._cell, ...tile});
+    });
+
+    it('creates a 2-tile horizontal rect', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 4, y: 3};
+
+      const figure = this._target(start, end);
+
+      expect(figure).to.have.lengthOf(2);
+      const expected = [start, end];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a 2-tile vertical rect', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 3, y: 4};
+
+      const figure = this._target(start, end);
+
+      expect(figure).to.have.lengthOf(2);
+      const expected = [start, end];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a 4-tile square', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 4, y: 4};
+
+      const figure = this._target(start, end);
+
+      expect(figure).to.have.lengthOf(4);
+      const expected = [
+        {x: 3, y: 3},
+        {x: 3, y: 4},
+        {x: 4, y: 3},
+        {x: 4, y: 4},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates an LT solid square', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 5, y: 5};
+
+      const figure = this._target(start, end);
+
+      expect(figure).to.have.lengthOf(9);
+      const expected = [
+        {x: 3, y: 3},
+        {x: 3, y: 4},
+        {x: 3, y: 5},
+        {x: 4, y: 3},
+        {x: 4, y: 4},
+        {x: 4, y: 5},
+        {x: 5, y: 3},
+        {x: 5, y: 4},
+        {x: 5, y: 5},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates an RB solid square', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 1, y: 1};
+
+      const figure = this._target(start, end);
+
+      expect(figure).to.have.lengthOf(9);
+      const expected = [
+        {x: 1, y: 1},
+        {x: 1, y: 2},
+        {x: 1, y: 3},
+        {x: 2, y: 1},
+        {x: 2, y: 2},
+        {x: 2, y: 3},
+        {x: 3, y: 1},
+        {x: 3, y: 2},
+        {x: 3, y: 3},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a solid horizontal rect', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 6, y: 5};
+
+      const figure = this._target(start, end);
+
+      expect(figure).to.have.lengthOf(12);
+      const expected = [
+        {x: 3, y: 3},
+        {x: 4, y: 3},
+        {x: 5, y: 3},
+        {x: 6, y: 3},
+        {x: 3, y: 4},
+        {x: 4, y: 4},
+        {x: 5, y: 4},
+        {x: 6, y: 4},
+        {x: 3, y: 5},
+        {x: 4, y: 5},
+        {x: 5, y: 5},
+        {x: 6, y: 5},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a solid vertical rect', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 5, y: 6};
+
+      const figure = this._target(start, end);
+
+      expect(figure).to.have.lengthOf(12);
+      const expected = [
+        {x: 3, y: 3},
+        {x: 3, y: 4},
+        {x: 3, y: 5},
+        {x: 3, y: 6},
+        {x: 4, y: 3},
+        {x: 4, y: 4},
+        {x: 4, y: 5},
         {x: 4, y: 6},
         {x: 5, y: 3},
         {x: 5, y: 4},
