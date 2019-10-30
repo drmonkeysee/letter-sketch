@@ -18,6 +18,16 @@ function* neighbors(tile, dims) {
   if (bottom < dims.height) yield {x, y: bottom};
 }
 
+function drawRect(start, end, figureStyle) {
+  const [top, bottom] = start.y < end.y
+                        ? [start.y, end.y]
+                        : [end.y, start.y],
+        [left, right] = start.x < end.x
+                        ? [start.x, end.x]
+                        : [end.x, start.x];
+    return figureStyle(top, right, bottom, left);
+}
+
 class ActiveFigure {
   constructor() {
     this._tiles = [];
@@ -79,25 +89,33 @@ export function floodFill(lettertypeCell, terminal) {
 
 export function rectangle(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    const figure = [],
-          [topY, bottomY] = start.y < end.y
-                            ? [start.y, end.y]
-                            : [end.y, start.y],
-          [leftX, rightX] = start.x < end.x
-                            ? [start.x, end.x]
-                            : [end.x, start.x];
+    return drawRect(start, end, (t, r, b, l) => {
+      const figure = [];
+      for (let y = t; y <= b; ++y) {
+        if (y === t || y === b) {
+          for (let x = l; x <= r; ++x) {
+            figure.push(makeTile(x, y, lettertypeCell));
+          }
+        } else {
+          figure.push(makeTile(l, y, lettertypeCell));
+          figure.push(makeTile(r, y, lettertypeCell));
+        }
+      }
+      return figure;
+    });
+  };
+}
 
-    for (let y = topY; y <= bottomY; ++y) {
-      if (y === topY || y === bottomY) {
-        for (let x = leftX; x <= rightX; ++x) {
+export function filledRectangle(lettertypeCell, terminal) {
+  return (start, end, activeFigure) => {
+    return drawRect(start, end, (t, r, b, l) => {
+      const figure = [];
+      for (let y = t; y <= b; ++y) {
+        for (let x = l; x <= r; ++x) {
           figure.push(makeTile(x, y, lettertypeCell));
         }
-      } else {
-        figure.push(makeTile(leftX, y, lettertypeCell));
-        figure.push(makeTile(rightX, y, lettertypeCell));
       }
-    }
-
-    return figure;
+      return figure;
+    });
   };
 }
