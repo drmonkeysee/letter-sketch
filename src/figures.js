@@ -79,17 +79,25 @@ export function floodFill(lettertypeCell, terminal) {
 
 export function rectangle(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    const figure = [];
-    for (let y = start.y; y <= end.y; ++y) {
-      if (y === start.y || y === end.y) {
-        for (let x = start.x; x <= end.x; ++x) {
+    const figure = [],
+          [topY, bottomY] = start.y < end.y
+                            ? [start.y, end.y]
+                            : [end.y, start.y],
+          [leftX, rightX] = start.x < end.x
+                            ? [start.x, end.x]
+                            : [end.x, start.x];
+
+    for (let y = topY; y <= bottomY; ++y) {
+      if (y === topY || y === bottomY) {
+        for (let x = leftX; x <= rightX; ++x) {
           figure.push(makeTile(x, y, lettertypeCell));
         }
       } else {
-        figure.push(makeTile(start.x, y, lettertypeCell));
-        figure.push(makeTile(end.x, y, lettertypeCell));
+        figure.push(makeTile(leftX, y, lettertypeCell));
+        figure.push(makeTile(rightX, y, lettertypeCell));
       }
     }
+
     return figure;
   };
 }
