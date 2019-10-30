@@ -30,7 +30,7 @@
     "@babel/register": "^7.6.2",
     "chai": "^4.2.0",
     "lodash.template": "^4.5.0",
-    "mocha": "^6.2.1",
+    "mocha": "^6.2.2",
     "parcel-bundler": "^1.12.4",
     "precss": "^4.0.0",
     "sinon": "^7.5.0"
