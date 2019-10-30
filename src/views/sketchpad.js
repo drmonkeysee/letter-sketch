@@ -99,9 +99,9 @@ export class SketchPad extends View {
 
     this._drawSketchpad(initialState.terminal, initialState.fontSize);
 
-    // NOTE: end current gesture if user action leaves sketchpad
-    this._sketchpad.addEventListener(
-      'mouseleave', this._terminateGesture.bind(this)
+    // NOTE: end current gesture if mouseup outside sketchpad
+    this._doc.addEventListener(
+      'mouseup', this._continueGesture.bind(this)
     );
   }
 
@@ -209,15 +209,6 @@ export class SketchPad extends View {
   _clearGesture(update) {
     console.log('clear active gesture');
     this._activeGesture = null;
-  }
-
-  _terminateGesture(update) {
-    if (!this._activeGesture) return;
-    const figure = this._activeGesture.currentFigure;
-    if (figure) {
-      this._dispatch.command(COMMANDS.commitDraw, figure);
-      console.log('generated figure on terminate: %o', figure);
-    }
   }
 
   _updateTool(update) {
