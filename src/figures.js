@@ -28,6 +28,17 @@ function drawRect(start, end, figureStyle) {
     return figureStyle(top, right, bottom, left);
 }
 
+function ellipseHitCheck(xOrigin, yOrigin, xRadius, yRadius) {
+  const xFactor = yRadius**2,
+        yFactor = xRadius**2,
+        containsThreshold = xFactor + yFactor;
+  return (x, y) => {
+    return (xFactor * (x - xOrigin)**2)
+            + (yFactor * (y - yOrigin)**2)
+            <= containsThreshold;
+  };
+}
+
 class ActiveFigure {
   constructor() {
     this._tiles = [];
@@ -113,6 +124,32 @@ export function filledRectangle(lettertypeCell, terminal) {
       for (let y = t; y <= b; ++y) {
         for (let x = l; x <= r; ++x) {
           figure.push(makeTile(x, y, lettertypeCell));
+        }
+      }
+      return figure;
+    });
+  };
+}
+
+export function filledEllipse(lettertypeCell, terminal) {
+  return (start, end, activeFigure) => {
+    // NOTE: define a bounding box one larger than the current gesture
+    // so the extreme ends of the axes can be trimmed to draw a
+    // well-balanced ellipse.
+    // TODO: cursor is off when end < start
+    // TODO: catch figure cells drawn outside of sketchpad
+    const near = {x: end.x + 1, y: end.y + 1},
+          hRadius = near.x - start.x,
+          vRadius = near.y - start.y,
+          far = {x: start.x - hRadius, y: start.y - vRadius},
+          inEllipse = ellipseHitCheck(start.x, start.y, hRadius, vRadius);
+    return drawRect(far, near, (t, r, b, l) => {
+      const figure = [];
+      for (let y = t + 1; y < b; ++y) {
+        for (let x = l + 1; x < r; ++x) {
+          if (inEllipse(x, y)) {
+            figure.push(makeTile(x, y, lettertypeCell));
+          }
         }
       }
       return figure;
