@@ -64,7 +64,7 @@ class ActiveFigure {
 
 export function singleCell(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    return [makeTile(start.x, start.y, lettertypeCell)];
+    return activeFigure || [makeTile(start.x, start.y, lettertypeCell)];
   };
 }
 
@@ -80,6 +80,8 @@ export function floodFill(lettertypeCell, terminal) {
   const dims = terminal.dimensions;
 
   return (start, end, activeFigure) => {
+    if (activeFigure) return activeFigure;
+
     const visited = new Set([hashTile(start)]),
           neighborQueue = [start],
           figure = [makeTile(start.x, start.y, lettertypeCell)],
