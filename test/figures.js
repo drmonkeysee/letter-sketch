@@ -2,7 +2,7 @@ import {expect} from 'chai';
 
 import {
   singleCell, freeDraw, floodFill, rectangle, filledRectangle,
-  filledEllipse,
+  ellipse, filledEllipse,
 } from '../src/figures.js';
 import {Cell} from '../src/models/cell.js';
 import {Terminal} from '../src/models/terminal.js';
@@ -568,6 +568,23 @@ describe('figures', function () {
         {x: 5, y: 6},
       ];
       assertUnorderedFigure(expected, this._cell, figure);
+    });
+  });
+
+  describe('#ellipse', function () {
+    beforeEach(function () {
+      this._terminal = new Terminal(7, 7);
+      this._cell = new Cell('A');
+      this._target = ellipse(this._cell, this._terminal);
+    });
+
+    it('creates a single tile figure', function () {
+      const tile = {x: 3, y: 3};
+
+      const figure = this._target(tile, tile);
+
+      expect(figure).to.have.lengthOf(1);
+      expect(figure[0]).to.eql({cell: this._cell, ...tile});
     });
   });
 

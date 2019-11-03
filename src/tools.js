@@ -1,6 +1,6 @@
 import {
   singleCell, freeDraw, floodFill, rectangle, filledRectangle,
-  filledEllipse,
+  ellipse, filledEllipse,
 } from './figures.js';
 import {MouseGesture} from './gestures.js';
 import namemap from './namemap.js';
@@ -33,7 +33,9 @@ const TOOLS_REGISTRY = {
   fillRect(models) {
     return makeTool(models, MouseGesture, filledRectangle);
   },
-  ellipse(models) {/* draw border ellipse using current lettertype, use smart lines if single or double line selected */},
+  ellipse(models) {
+    return makeTool(models, MouseGesture, ellipse);
+  },
   fillEllipse(models) {
     return makeTool(models, MouseGesture, filledEllipse);
   },
