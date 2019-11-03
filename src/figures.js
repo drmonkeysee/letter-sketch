@@ -77,12 +77,13 @@ export function freeDraw(lettertypeCell, terminal) {
 }
 
 export function floodFill(lettertypeCell, terminal) {
+  const dims = terminal.dimensions;
+
   return (start, end, activeFigure) => {
     const visited = new Set([hashTile(start)]),
           neighborQueue = [start],
           figure = [makeTile(start.x, start.y, lettertypeCell)],
-          originalCell = terminal.getCell(start.x, start.y),
-          dims = terminal.dimensions;
+          originalCell = terminal.getCell(start.x, start.y);
 
     while (neighborQueue.length > 0) {
       const current = neighborQueue.shift();
@@ -135,15 +136,59 @@ export function filledRectangle(lettertypeCell, terminal) {
   };
 }
 
-export function filledEllipse(lettertypeCell, terminal) {
+export function ellipse(lettertypeCell, terminal) {
+  const {width, height} = terminal.dimensions;
+
   return (start, end, activeFigure) => {
-    // TODO: catch figure cells drawn outside of sketchpad
     const hRadius = end.x - start.x,
           vRadius = end.y - start.y,
           far = {x: start.x - hRadius, y: start.y - vRadius},
           inEllipse = ellipseHitCheck(start.x, start.y, hRadius, vRadius);
+
     return drawRect(far, end, (t, r, b, l) => {
       const figure = [];
+      t = Math.max(0, t);
+      r = Math.min(r, width - 1);
+      b = Math.min(b, height - 1);
+      l = Math.max(0, l);
+      for (let y = t; y <= b; ++y) {
+        let prevXHit = false;
+        for (let x = l; x <= r; ++x) {
+          const hit = inEllipse(x, y);
+          if (y === t || y === b || x === l || x === r) {
+            if (hit) {
+              figure.push(makeTile(x, y, lettertypeCell));
+            }
+          } else {
+            if (!prevXHit && hit) {
+              figure.push(makeTile(x, y, lettertypeCell));
+            } else if (prevXHit && !hit) {
+              figure.push(makeTile(x - 1, y, lettertypeCell));
+            }
+          }
+          prevXHit = hit;
+        }
+      }
+      return figure;
+    });
+  };
+}
+
+export function filledEllipse(lettertypeCell, terminal) {
+  const {width, height} = terminal.dimensions;
+
+  return (start, end, activeFigure) => {
+    const hRadius = end.x - start.x,
+          vRadius = end.y - start.y,
+          far = {x: start.x - hRadius, y: start.y - vRadius},
+          inEllipse = ellipseHitCheck(start.x, start.y, hRadius, vRadius);
+
+    return drawRect(far, end, (t, r, b, l) => {
+      const figure = [];
+      t = Math.max(0, t);
+      r = Math.min(r, width - 1);
+      b = Math.min(b, height - 1);
+      l = Math.max(0, l);
       for (let y = t; y <= b; ++y) {
         for (let x = l; x <= r; ++x) {
           if (inEllipse(x, y)) {
