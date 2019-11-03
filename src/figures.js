@@ -109,15 +109,13 @@ export function rectangle(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
     return drawRect(start, end, (t, r, b, l) => {
       const figure = [];
-      for (let y = t; y <= b; ++y) {
-        if (y === t || y === b) {
-          for (let x = l; x <= r; ++x) {
-            figure.push(makeTile(x, y, lettertypeCell));
-          }
-        } else {
-          figure.push(makeTile(l, y, lettertypeCell));
-          figure.push(makeTile(r, y, lettertypeCell));
-        }
+      for (let x = l; x <= r; ++x) {
+        figure.push(makeTile(x, t, lettertypeCell));
+        figure.push(makeTile(x, b, lettertypeCell));
+      }
+      for (let y = t + 1; y < b; ++y) {
+        figure.push(makeTile(l, y, lettertypeCell));
+        figure.push(makeTile(r, y, lettertypeCell));
       }
       return figure;
     });
