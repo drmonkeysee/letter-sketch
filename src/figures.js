@@ -31,7 +31,7 @@ function drawRect(start, end, figureStyle) {
 function ellipseHitCheck(xOrigin, yOrigin, xRadius, yRadius) {
   const xFactor = yRadius**2,
         yFactor = xRadius**2,
-        containsThreshold = xFactor + yFactor;
+        containsThreshold = xFactor * yFactor;
   return (x, y) => {
     return (xFactor * (x - xOrigin)**2)
             + (yFactor * (y - yOrigin)**2)
