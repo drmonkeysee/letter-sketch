@@ -43,13 +43,86 @@ function ellipseHitCheck(xOrigin, yOrigin, xRadius, yRadius) {
   };
 }
 
+// NOTE: Bresenham midpoint ellipse algorithm
+// calculating lower-right quadrant using +x goes right and +y goes down
+// https://dai.fmph.uniba.sk/upload/0/01/Ellipse.pdf
+function bresenhamEllipse(rx, ry, plot) {
+  const rx2 = rx**2,
+        ry2 = ry**2,
+        rx2Factor = 2 * rx2,
+        ry2Factor = 2 * ry2;
+
+  // TODO: figure out what to do here and for very thin long ellipses
+  if (rx < 1 || ry < 1) return;
+
+  let x = rx,
+      y = 0,
+      err = 0,
+      dx = ry2 * (1 - (2 * rx)),
+      dy = rx2,
+      stopx = ry2Factor * rx,
+      stopy = 0;
+  while (stopx >= stopy) {
+    plot(x, y++);
+    stopy += rx2Factor;
+    err += dy;
+    dy += rx2Factor;
+    if ((2 * err) + dx > 0) {
+      --x;
+      stopx -= ry2Factor;
+      err += dx;
+      dx += ry2Factor;
+    }
+  }
+
+  x = 0;
+  y = ry;
+  err = 0;
+  dx = ry2;
+  dy = rx2 * (1 - (2 * ry));
+  stopx = 0;
+  stopy = rx2Factor * ry;
+  while (stopx <= stopy) {
+    plot(x++, y);
+    stopx += ry2Factor;
+    err += dx;
+    dx += ry2Factor;
+    if ((2 * err) + dy > 0) {
+      --y;
+      stopy -= rx2Factor;
+      err += dy;
+      dy += rx2Factor;
+    }
+  }
+}
+
+function plotEllipse(x, y, center, dims, figure, cell) {
+  const {width, height} = dims,
+        posX = center.x + x,
+        negX = center.x - x,
+        posY = center.y + y,
+        negY = center.y - y;
+  if (posX < width && posY < height) {
+    figure.add(makeTile(posX, posY, cell));
+  }
+  if (negX >= 0 && posY < height) {
+    figure.add(makeTile(negX, posY, cell));
+  }
+  if (posX < width && negY >= 0) {
+    figure.add(makeTile(posX, negY, cell));
+  }
+  if (negX >= 0 && negY >= 0) {
+    figure.add(makeTile(negX, negY, cell));
+  }
+}
+
 class ActiveFigure {
   constructor() {
     this._tiles = [];
     this._points = new Set();
   }
 
-  addTile(tile) {
+  add(tile) {
     const h = hashTile(tile);
     if (!this._points.has(h)) {
       this._tiles.push(tile);
@@ -71,7 +144,7 @@ export function singleCell(lettertypeCell, terminal) {
 export function freeDraw(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
     activeFigure = activeFigure || new ActiveFigure();
-    activeFigure.addTile(makeTile(end.x, end.y, lettertypeCell));
+    activeFigure.add(makeTile(end.x, end.y, lettertypeCell));
     return activeFigure;
   };
 }
@@ -137,40 +210,15 @@ export function filledRectangle(lettertypeCell, terminal) {
 }
 
 export function ellipse(lettertypeCell, terminal) {
-  const {width, height} = terminal.dimensions;
-
   return (start, end, activeFigure) => {
-    const hRadius = end.x - start.x,
-          vRadius = end.y - start.y,
-          far = {x: start.x - hRadius, y: start.y - vRadius},
-          inEllipse = ellipseHitCheck(start.x, start.y, hRadius, vRadius);
-
-    return drawRect(far, end, (t, r, b, l) => {
-      const figure = [];
-      t = Math.max(0, t);
-      r = Math.min(r, width - 1);
-      b = Math.min(b, height - 1);
-      l = Math.max(0, l);
-      for (let y = t; y <= b; ++y) {
-        let prevXHit = false;
-        for (let x = l; x <= r; ++x) {
-          const hit = inEllipse(x, y);
-          if (y === t || y === b || x === l || x === r) {
-            if (hit) {
-              figure.push(makeTile(x, y, lettertypeCell));
-            }
-          } else {
-            if (!prevXHit && hit) {
-              figure.push(makeTile(x, y, lettertypeCell));
-            } else if (prevXHit && !hit) {
-              figure.push(makeTile(x - 1, y, lettertypeCell));
-            }
-          }
-          prevXHit = hit;
-        }
-      }
-      return figure;
-    });
+    const xRadius = Math.abs(end.x - start.x),
+          yRadius = Math.abs(end.y - start.y),
+          figure = new ActiveFigure(),
+          plot = (x, y) => plotEllipse(
+            x, y, start, terminal.dimensions, figure, lettertypeCell
+          );
+    bresenhamEllipse(xRadius, yRadius, plot);
+    return figure;
   };
 }
 
