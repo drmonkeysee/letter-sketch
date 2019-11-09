@@ -52,9 +52,6 @@ function bresenhamEllipse(rx, ry, plot) {
         rx2Factor = 2 * rx2,
         ry2Factor = 2 * ry2;
 
-  // TODO: figure out what to do here and for very thin long ellipses
-  if (rx < 1 || ry < 1) return;
-
   let x = rx,
       y = 0,
       err = 0,
@@ -75,6 +72,8 @@ function bresenhamEllipse(rx, ry, plot) {
     }
   }
 
+  const lx = x, ly = y;
+
   x = 0;
   y = ry;
   err = 0;
@@ -94,11 +93,28 @@ function bresenhamEllipse(rx, ry, plot) {
       dy += rx2Factor;
     }
   }
+
+  // NOTE: midpoint algorithm finishes too early
+  // on the major axis if the minor axis is too thin
+  // TODO: this still causes breaks at certain radii
+
+  // NOTE: finish the y axis if x axis is 1 cell wide
+  if (rx === 1) {
+    while (y >= ly) {
+      plot(0, y--);
+    }
+  }
+
+  // NOTE: finish the x axis if y axis is 1 cell wide
+  if (ry === 1) {
+    while (x <= lx) {
+      plot(x++, 0);
+    }
+  }
 }
 
-function plotEllipse(x, y, center, dims, figure, cell) {
-  const {width, height} = dims,
-        posX = center.x + x,
+function plotEllipse(x, y, center, width, height, figure, cell) {
+  const posX = center.x + x,
         negX = center.x - x,
         posY = center.y + y,
         negY = center.y - y;
@@ -210,14 +226,39 @@ export function filledRectangle(lettertypeCell, terminal) {
 }
 
 export function ellipse(lettertypeCell, terminal) {
+  const {width, height} = terminal.dimensions;
   return (start, end, activeFigure) => {
     const xRadius = Math.abs(end.x - start.x),
           yRadius = Math.abs(end.y - start.y),
           figure = new ActiveFigure(),
           plot = (x, y) => plotEllipse(
-            x, y, start, terminal.dimensions, figure, lettertypeCell
+            x, y, start, width, height, figure, lettertypeCell
           );
-    bresenhamEllipse(xRadius, yRadius, plot);
+    if (!xRadius && !yRadius) {
+      figure.add(makeTile(start.x, start.y, lettertypeCell));
+    } else if (!xRadius) {
+      for (let y = 0; y <= yRadius; ++y) {
+        const posY = start.y + y, negY = start.y - y;
+        if (posY < height) {
+          figure.add(makeTile(start.x, posY, lettertypeCell));
+        }
+        if (negY >= 0) {
+          figure.add(makeTile(start.x, negY, lettertypeCell));
+        }
+      }
+    } else if (!yRadius) {
+      for (let x = 0; x <= xRadius; ++x) {
+        const posX = start.x + x, negX = start.x - x;
+        if (posX < width) {
+          figure.add(makeTile(posX, start.y, lettertypeCell));
+        }
+        if (negX >= 0) {
+          figure.add(makeTile(negX, start.y, lettertypeCell));
+        }
+      }
+    } else {
+      bresenhamEllipse(xRadius, yRadius, plot);
+    }
     return figure;
   };
 }
