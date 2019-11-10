@@ -21,7 +21,7 @@ class Gesture {
 
   _drawFigure() {
     // NOTE: on each draw refresh clear the previous frame
-    // with current terminal contents before drawing the new one
+    // with current terminal contents before drawing the new one.
     for (const {x, y} of this._prevDrawTiles) {
       const cell = this._terminal.getCell(x, y);
       this._sketchpad.updateAt(x, y, cell);

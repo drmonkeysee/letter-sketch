@@ -1,7 +1,7 @@
 import {makeTile} from './models/cell.js';
 
 // NOTE: shift/xor works as a key cuz terminal coordinates
-// cannot be greater than 0xffff
+// cannot be greater than 0xffff.
 function hashTile(tile) {
   return (tile.x << 16) ^ tile.y;
 }
@@ -44,7 +44,7 @@ function ellipseHitCheck(xOrigin, yOrigin, xRadius, yRadius) {
 }
 
 // NOTE: Bresenham midpoint ellipse algorithm
-// calculating lower-right quadrant using +x goes right and +y goes down
+// calculating lower-right quadrant using +x goes right and +y goes down.
 // https://dai.fmph.uniba.sk/upload/0/01/Ellipse.pdf
 function bresenhamEllipse(rx, ry, plot) {
   const rx2 = rx**2,
@@ -72,7 +72,10 @@ function bresenhamEllipse(rx, ry, plot) {
     }
   }
 
-  const lx = x, ly = y;
+  // NOTE: capture the end values of x and y
+  // after the first tangent arc is plotted
+  // for use below in finishing thin ellipses.
+  const ex = x, ey = y;
 
   x = 0;
   y = ry;
@@ -94,22 +97,13 @@ function bresenhamEllipse(rx, ry, plot) {
     }
   }
 
-  // NOTE: midpoint algorithm finishes too early
-  // on the major axis if the minor axis is too thin
-  // TODO: this still causes breaks at certain radii
-
-  // NOTE: finish the y axis if x axis is 1 cell wide
-  if (rx === 1) {
-    while (y >= ly) {
-      plot(0, y--);
-    }
+  // NOTE: midpoint algorithm finishes an arc too early
+  // on the major axis if the minor axis is too thin.
+  while (y >= ey) {
+    plot(x - 1, y--);
   }
-
-  // NOTE: finish the x axis if y axis is 1 cell wide
-  if (ry === 1) {
-    while (x <= lx) {
-      plot(x++, 0);
-    }
+  while (x <= ex) {
+    plot(x++, y);
   }
 }
 
