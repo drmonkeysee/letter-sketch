@@ -28,19 +28,41 @@ function drawRect(start, end, figureStyle) {
     return figureStyle(top, right, bottom, left);
 }
 
-// NOTE: scale radius slightly past the bounding box so the grid
-// snaps to a more visually well-balanced ellipse.
-const RADIUS_SCALING_FACTOR = 1.05;
+function drawEllipse(start, end, width, height, lettertypeCell, plotStyle) {
+  const xRadius = Math.abs(end.x - start.x),
+        yRadius = Math.abs(end.y - start.y),
+        figure = new ActiveFigure(),
+        plot = (x, y) => plotStyle(
+          x, y, start, width, height, figure, lettertypeCell
+        );
 
-function ellipseHitCheck(xOrigin, yOrigin, xRadius, yRadius) {
-  const xFactor = (yRadius * RADIUS_SCALING_FACTOR)**2,
-        yFactor = (xRadius * RADIUS_SCALING_FACTOR)**2,
-        containsThreshold = xFactor * yFactor;
-  return (x, y) => {
-    return (xFactor * (x - xOrigin)**2)
-            + (yFactor * (y - yOrigin)**2)
-            <= containsThreshold;
-  };
+  if (!xRadius && !yRadius) {
+    figure.add(makeTile(start.x, start.y, lettertypeCell));
+  } else if (!xRadius) {
+    for (let y = 0; y <= yRadius; ++y) {
+      const posY = start.y + y, negY = start.y - y;
+      if (posY < height) {
+        figure.add(makeTile(start.x, posY, lettertypeCell));
+      }
+      if (negY >= 0) {
+        figure.add(makeTile(start.x, negY, lettertypeCell));
+      }
+    }
+  } else if (!yRadius) {
+    for (let x = 0; x <= xRadius; ++x) {
+      const posX = start.x + x, negX = start.x - x;
+      if (posX < width) {
+        figure.add(makeTile(posX, start.y, lettertypeCell));
+      }
+      if (negX >= 0) {
+        figure.add(makeTile(negX, start.y, lettertypeCell));
+      }
+    }
+  } else {
+    bresenhamEllipse(xRadius, yRadius, plot);
+  }
+
+  return figure;
 }
 
 // NOTE: Bresenham midpoint ellipse algorithm
@@ -123,6 +145,21 @@ function plotEllipse(x, y, center, width, height, figure, cell) {
   }
   if (negX >= 0 && negY >= 0) {
     figure.add(makeTile(negX, negY, cell));
+  }
+}
+
+function plotFilledEllipse(x, y, center, width, height, figure, cell) {
+  const posX = Math.min(center.x + x, width - 1),
+        negX = Math.max(0, center.x - x),
+        posY = Math.min(center.y + y, height - 1),
+        negY = Math.max(0, center.y - y);
+  for (let px = posX; px >= center.x; --px) {
+    figure.add(makeTile(px, posY, cell));
+    figure.add(makeTile(px, negY, cell));
+  }
+  for (let px = negX; px < center.x; ++px) {
+    figure.add(makeTile(px, posY, cell));
+    figure.add(makeTile(px, negY, cell));
   }
 }
 
@@ -222,64 +259,15 @@ export function filledRectangle(lettertypeCell, terminal) {
 export function ellipse(lettertypeCell, terminal) {
   const {width, height} = terminal.dimensions;
   return (start, end, activeFigure) => {
-    const xRadius = Math.abs(end.x - start.x),
-          yRadius = Math.abs(end.y - start.y),
-          figure = new ActiveFigure(),
-          plot = (x, y) => plotEllipse(
-            x, y, start, width, height, figure, lettertypeCell
-          );
-    if (!xRadius && !yRadius) {
-      figure.add(makeTile(start.x, start.y, lettertypeCell));
-    } else if (!xRadius) {
-      for (let y = 0; y <= yRadius; ++y) {
-        const posY = start.y + y, negY = start.y - y;
-        if (posY < height) {
-          figure.add(makeTile(start.x, posY, lettertypeCell));
-        }
-        if (negY >= 0) {
-          figure.add(makeTile(start.x, negY, lettertypeCell));
-        }
-      }
-    } else if (!yRadius) {
-      for (let x = 0; x <= xRadius; ++x) {
-        const posX = start.x + x, negX = start.x - x;
-        if (posX < width) {
-          figure.add(makeTile(posX, start.y, lettertypeCell));
-        }
-        if (negX >= 0) {
-          figure.add(makeTile(negX, start.y, lettertypeCell));
-        }
-      }
-    } else {
-      bresenhamEllipse(xRadius, yRadius, plot);
-    }
-    return figure;
+    return drawEllipse(start, end, width, height, lettertypeCell, plotEllipse);
   };
 }
 
 export function filledEllipse(lettertypeCell, terminal) {
   const {width, height} = terminal.dimensions;
-
   return (start, end, activeFigure) => {
-    const hRadius = end.x - start.x,
-          vRadius = end.y - start.y,
-          far = {x: start.x - hRadius, y: start.y - vRadius},
-          inEllipse = ellipseHitCheck(start.x, start.y, hRadius, vRadius);
-
-    return drawRect(far, end, (t, r, b, l) => {
-      const figure = [];
-      t = Math.max(0, t);
-      r = Math.min(r, width - 1);
-      b = Math.min(b, height - 1);
-      l = Math.max(0, l);
-      for (let y = t; y <= b; ++y) {
-        for (let x = l; x <= r; ++x) {
-          if (inEllipse(x, y)) {
-            figure.push(makeTile(x, y, lettertypeCell));
-          }
-        }
-      }
-      return figure;
-    });
+    return drawEllipse(
+      start, end, width, height, lettertypeCell, plotFilledEllipse
+    );
   };
 }
