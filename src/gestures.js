@@ -15,9 +15,7 @@ class Gesture {
     return null;
   }
 
-  get currentFigure() {
-    return this._activeFigure || [];
-  }
+  get currentFigure() { return this._activeFigure || []; }
 
   _drawFigure() {
     // NOTE: on each draw refresh clear the previous frame

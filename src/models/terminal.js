@@ -8,9 +8,7 @@ export class Terminal {
     this.resize(columns, rows);
   }
 
-  get dimensions() {
-    return {width: this._stride, height: this._height};
-  }
+  get dimensions() { return {width: this._stride, height: this._height}; }
 
   resize(columns, rows) {
     if (columns < MIN_DIM || columns > MAX_DIM
