@@ -191,6 +191,8 @@ class ActiveFigure {
     this._points = new Set();
   }
 
+  get length() { return this._tiles.length; }
+
   add(tile) {
     const h = hashTile(tile);
     if (!this._points.has(h)) {
