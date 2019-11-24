@@ -51,7 +51,7 @@ describe('figures', function () {
       figure = this._target({x: 2, y: 0}, null, figure);
 
       expect(figure).to.have.lengthOf(1);
-      expect(figure[0]).to.eql({x: 2, y: 0, cell: this._cell});
+      expect(figure[0]).to.eql({x: 1, y: 2, cell: this._cell});
     });
   });
 
@@ -267,6 +267,8 @@ describe('figures', function () {
               {x: 3, y: 3, cell},
             ];
       this._terminal.resize(5, 5);
+      // NOTE: reset target after resizing terminal
+      this._target = floodFill(this._cell, this._terminal);
       this._terminal.update(square);
       const tile = {x: 1, y: 1};
 
@@ -299,8 +301,9 @@ describe('figures', function () {
 
       const figure = this._target(tile, tile);
 
-      expect(figure).to.have.lengthOf(1);
-      expect(figure[0]).to.eql({cell: this._cell, ...tile});
+      const figureList = [...figure];
+      expect(figureList).to.have.lengthOf(1);
+      expect(figureList[0]).to.eql({cell: this._cell, ...tile});
     });
 
     it('creates a 2-tile horizontal rect', function () {
@@ -309,9 +312,10 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(2);
+      const figureList = [...figure];
+      expect(figureList).to.have.lengthOf(2);
       const expected = [start, end];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, this._cell, figureList);
     });
 
     it('creates a 2-tile vertical rect', function () {
@@ -320,9 +324,10 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(2);
+      const figureList = [...figure];
+      expect(figureList).to.have.lengthOf(2);
       const expected = [start, end];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, this._cell, figureList);
     });
 
     it('creates a 4-tile square', function () {
@@ -331,14 +336,15 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(4);
+      const figureList = [...figure];
+      expect(figureList).to.have.lengthOf(4);
       const expected = [
         {x: 3, y: 3},
         {x: 3, y: 4},
         {x: 4, y: 3},
         {x: 4, y: 4},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, this._cell, figureList);
     });
 
     it('creates an LT open square', function () {
@@ -347,7 +353,8 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(8);
+      const figureList = [...figure];
+      expect(figureList).to.have.lengthOf(8);
       const expected = [
         {x: 3, y: 3},
         {x: 3, y: 4},
@@ -358,7 +365,7 @@ describe('figures', function () {
         {x: 5, y: 4},
         {x: 5, y: 5},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, this._cell, figureList);
     });
 
     it('creates an RB open square', function () {
@@ -367,7 +374,8 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(8);
+      const figureList = [...figure];
+      expect(figureList).to.have.lengthOf(8);
       const expected = [
         {x: 1, y: 1},
         {x: 1, y: 2},
@@ -378,7 +386,7 @@ describe('figures', function () {
         {x: 3, y: 2},
         {x: 3, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, this._cell, figureList);
     });
 
     it('creates an open horizontal rect', function () {
@@ -387,7 +395,8 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(10);
+      const figureList = [...figure];
+      expect(figureList).to.have.lengthOf(10);
       const expected = [
         {x: 3, y: 3},
         {x: 4, y: 3},
@@ -400,7 +409,7 @@ describe('figures', function () {
         {x: 5, y: 5},
         {x: 6, y: 5},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, this._cell, figureList);
     });
 
     it('creates an open vertical rect', function () {
@@ -409,7 +418,8 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(10);
+      const figureList = [...figure];
+      expect(figureList).to.have.lengthOf(10);
       const expected = [
         {x: 3, y: 3},
         {x: 3, y: 4},
@@ -422,7 +432,7 @@ describe('figures', function () {
         {x: 5, y: 5},
         {x: 5, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, this._cell, figureList);
     });
   });
 

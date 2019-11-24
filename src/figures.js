@@ -228,14 +228,14 @@ export function floodFill(lettertypeCell, terminal) {
 export function rectangle(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
     return drawRect(start, end, (t, r, b, l) => {
-      const figure = [];
+      const figure = new ActiveFigure();
       for (let x = l; x <= r; ++x) {
-        figure.push(makeTile(x, t, lettertypeCell));
-        figure.push(makeTile(x, b, lettertypeCell));
+        figure.add(makeTile(x, t, lettertypeCell));
+        figure.add(makeTile(x, b, lettertypeCell));
       }
       for (let y = t + 1; y < b; ++y) {
-        figure.push(makeTile(l, y, lettertypeCell));
-        figure.push(makeTile(r, y, lettertypeCell));
+        figure.add(makeTile(l, y, lettertypeCell));
+        figure.add(makeTile(r, y, lettertypeCell));
       }
       return figure;
     });
