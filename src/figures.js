@@ -18,23 +18,43 @@ function* neighbors(tile, dims) {
   if (bottom < dims.height) yield {x, y: bottom};
 }
 
-function drawRect(start, end, figureStyle) {
+function drawRect(start, end, lettertypeCell, plotStyle) {
   const [top, bottom] = start.y < end.y
                         ? [start.y, end.y]
                         : [end.y, start.y],
         [left, right] = start.x < end.x
                         ? [start.x, end.x]
                         : [end.x, start.x];
-    return figureStyle(top, right, bottom, left);
+    return plotStyle(top, right, bottom, left, lettertypeCell);
+}
+
+function plotRect(top, right, bottom, left, lettertypeCell) {
+  const figure = new ActiveFigure();
+  for (let x = left; x <= right; ++x) {
+    figure.add(makeTile(x, top, lettertypeCell));
+    figure.add(makeTile(x, bottom, lettertypeCell));
+  }
+  for (let y = top + 1; y < bottom; ++y) {
+    figure.add(makeTile(left, y, lettertypeCell));
+    figure.add(makeTile(right, y, lettertypeCell));
+  }
+  return figure;
+}
+
+function plotFilledRect(top, right, bottom, left, lettertypeCell) {
+  const figure = [];
+  for (let y = top; y <= bottom; ++y) {
+    for (let x = left; x <= right; ++x) {
+      figure.push(makeTile(x, y, lettertypeCell));
+    }
+  }
+  return figure;
 }
 
 function drawEllipse(start, end, width, height, lettertypeCell, plotStyle) {
   const xRadius = Math.abs(end.x - start.x),
         yRadius = Math.abs(end.y - start.y),
-        figure = new ActiveFigure(),
-        plot = (x, y) => plotStyle(
-          x, y, start, width, height, figure, lettertypeCell
-        );
+        figure = new ActiveFigure();
 
   if (!xRadius && !yRadius) {
     figure.add(makeTile(start.x, start.y, lettertypeCell));
@@ -59,7 +79,9 @@ function drawEllipse(start, end, width, height, lettertypeCell, plotStyle) {
       }
     }
   } else {
-    bresenhamEllipse(xRadius, yRadius, plot);
+    bresenhamEllipse(xRadius, yRadius, (x, y) => plotStyle(
+      x, y, start, width, height, figure, lettertypeCell
+    ));
   }
 
   return figure;
@@ -227,32 +249,13 @@ export function floodFill(lettertypeCell, terminal) {
 
 export function rectangle(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    return drawRect(start, end, (t, r, b, l) => {
-      const figure = new ActiveFigure();
-      for (let x = l; x <= r; ++x) {
-        figure.add(makeTile(x, t, lettertypeCell));
-        figure.add(makeTile(x, b, lettertypeCell));
-      }
-      for (let y = t + 1; y < b; ++y) {
-        figure.add(makeTile(l, y, lettertypeCell));
-        figure.add(makeTile(r, y, lettertypeCell));
-      }
-      return figure;
-    });
+    return drawRect(start, end, lettertypeCell, plotRect);
   };
 }
 
 export function filledRectangle(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    return drawRect(start, end, (t, r, b, l) => {
-      const figure = [];
-      for (let y = t; y <= b; ++y) {
-        for (let x = l; x <= r; ++x) {
-          figure.push(makeTile(x, y, lettertypeCell));
-        }
-      }
-      return figure;
-    });
+    return drawRect(start, end, lettertypeCell, plotFilledRect);
   };
 }
 
