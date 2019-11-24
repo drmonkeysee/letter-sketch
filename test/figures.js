@@ -67,9 +67,8 @@ describe('figures', function () {
 
       const figure = this._target(tile, tile);
 
-      const figureList = [...figure];
-      expect(figureList).to.have.lengthOf(1);
-      expect(figureList[0]).to.eql({x: 1, y: 2, cell: this._cell});
+      expect(figure).to.have.lengthOf(1);
+      expect([...figure][0]).to.eql({x: 1, y: 2, cell: this._cell});
     });
 
     it('continues current figure', function () {
@@ -84,8 +83,8 @@ describe('figures', function () {
         figure = this._target(tiles[0], tile, figure);
       }
 
+      expect(figure).to.have.lengthOf(tiles.length);
       const figureList = [...figure];
-      expect(figureList).to.have.lengthOf(tiles.length);
       tiles.forEach((t, i) =>
         expect(figureList[i]).to.eql({x: t.x, y: t.y, cell: this._cell})
       );
@@ -104,8 +103,6 @@ describe('figures', function () {
 
       const figure = this._target(tile);
 
-      const {height, width} = this._terminal.dimensions;
-      expect(figure).to.have.lengthOf(height * width);
       const expected = [
         {x: 0, y: 0},
         {x: 1, y: 0},
@@ -125,8 +122,6 @@ describe('figures', function () {
 
       const figure = this._target(tile);
 
-      const {height, width} = this._terminal.dimensions;
-      expect(figure).to.have.lengthOf(height * width);
       const expected = [
         {x: 0, y: 0},
         {x: 1, y: 0},
@@ -146,8 +141,6 @@ describe('figures', function () {
 
       const figure = this._target(tile);
 
-      const {height, width} = this._terminal.dimensions;
-      expect(figure).to.have.lengthOf(height * width);
       const expected = [
         {x: 0, y: 0},
         {x: 1, y: 0},
@@ -174,7 +167,6 @@ describe('figures', function () {
 
       const figure = this._target(tile);
 
-      expect(figure).to.have.lengthOf(3);
       const expected = [
         {x: 0, y: 0},
         {x: 0, y: 1},
@@ -195,7 +187,6 @@ describe('figures', function () {
 
       const figure = this._target(tile);
 
-      expect(figure).to.have.lengthOf(3);
       const expected = [
         {x: 0, y: 0},
         {x: 0, y: 1},
@@ -210,7 +201,6 @@ describe('figures', function () {
 
       const figure = this._target(tile);
 
-      expect(figure).to.have.lengthOf(1);
       assertUnorderedFigure([tile], this._cell, figure);
     });
 
@@ -226,7 +216,6 @@ describe('figures', function () {
 
       const figure = this._target(tile);
 
-      expect(figure).to.have.lengthOf(3);
       const expected = [
         {x: 1, y: 0},
         {x: 1, y: 1},
@@ -247,7 +236,6 @@ describe('figures', function () {
 
       const figure = this._target(tile);
 
-      expect(figure).to.have.lengthOf(1);
       const expected = [
         {x: 0, y: 2},
       ];
@@ -274,7 +262,6 @@ describe('figures', function () {
 
       const figure = this._target(tile);
 
-      expect(figure).to.have.lengthOf(8);
       const expected = [
         {x: 1, y: 1},
         {x: 2, y: 1},
@@ -301,9 +288,8 @@ describe('figures', function () {
 
       const figure = this._target(tile, tile);
 
-      const figureList = [...figure];
-      expect(figureList).to.have.lengthOf(1);
-      expect(figureList[0]).to.eql({cell: this._cell, ...tile});
+      expect(figure).to.have.lengthOf(1);
+      expect([...figure][0]).to.eql({cell: this._cell, ...tile});
     });
 
     it('creates a 2-tile horizontal rect', function () {
@@ -312,10 +298,8 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      const figureList = [...figure];
-      expect(figureList).to.have.lengthOf(2);
       const expected = [start, end];
-      assertUnorderedFigure(expected, this._cell, figureList);
+      assertUnorderedFigure(expected, this._cell, figure);
     });
 
     it('creates a 2-tile vertical rect', function () {
@@ -324,10 +308,8 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      const figureList = [...figure];
-      expect(figureList).to.have.lengthOf(2);
       const expected = [start, end];
-      assertUnorderedFigure(expected, this._cell, figureList);
+      assertUnorderedFigure(expected, this._cell, figure);
     });
 
     it('creates a 4-tile square', function () {
@@ -336,15 +318,13 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      const figureList = [...figure];
-      expect(figureList).to.have.lengthOf(4);
       const expected = [
         {x: 3, y: 3},
         {x: 3, y: 4},
         {x: 4, y: 3},
         {x: 4, y: 4},
       ];
-      assertUnorderedFigure(expected, this._cell, figureList);
+      assertUnorderedFigure(expected, this._cell, figure);
     });
 
     it('creates an LT open square', function () {
@@ -353,8 +333,6 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      const figureList = [...figure];
-      expect(figureList).to.have.lengthOf(8);
       const expected = [
         {x: 3, y: 3},
         {x: 3, y: 4},
@@ -365,7 +343,7 @@ describe('figures', function () {
         {x: 5, y: 4},
         {x: 5, y: 5},
       ];
-      assertUnorderedFigure(expected, this._cell, figureList);
+      assertUnorderedFigure(expected, this._cell, figure);
     });
 
     it('creates an RB open square', function () {
@@ -374,8 +352,6 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      const figureList = [...figure];
-      expect(figureList).to.have.lengthOf(8);
       const expected = [
         {x: 1, y: 1},
         {x: 1, y: 2},
@@ -386,7 +362,7 @@ describe('figures', function () {
         {x: 3, y: 2},
         {x: 3, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figureList);
+      assertUnorderedFigure(expected, this._cell, figure);
     });
 
     it('creates an open horizontal rect', function () {
@@ -395,8 +371,6 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      const figureList = [...figure];
-      expect(figureList).to.have.lengthOf(10);
       const expected = [
         {x: 3, y: 3},
         {x: 4, y: 3},
@@ -409,7 +383,7 @@ describe('figures', function () {
         {x: 5, y: 5},
         {x: 6, y: 5},
       ];
-      assertUnorderedFigure(expected, this._cell, figureList);
+      assertUnorderedFigure(expected, this._cell, figure);
     });
 
     it('creates an open vertical rect', function () {
@@ -418,8 +392,6 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      const figureList = [...figure];
-      expect(figureList).to.have.lengthOf(10);
       const expected = [
         {x: 3, y: 3},
         {x: 3, y: 4},
@@ -432,7 +404,7 @@ describe('figures', function () {
         {x: 5, y: 5},
         {x: 5, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figureList);
+      assertUnorderedFigure(expected, this._cell, figure);
     });
   });
 
@@ -458,7 +430,6 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(2);
       const expected = [start, end];
       assertUnorderedFigure(expected, this._cell, figure);
     });
@@ -469,7 +440,6 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(2);
       const expected = [start, end];
       assertUnorderedFigure(expected, this._cell, figure);
     });
@@ -480,7 +450,6 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(4);
       const expected = [
         {x: 3, y: 3},
         {x: 3, y: 4},
@@ -496,7 +465,6 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(9);
       const expected = [
         {x: 3, y: 3},
         {x: 3, y: 4},
@@ -517,7 +485,6 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(9);
       const expected = [
         {x: 1, y: 1},
         {x: 1, y: 2},
@@ -538,7 +505,6 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(12);
       const expected = [
         {x: 3, y: 3},
         {x: 4, y: 3},
@@ -562,7 +528,6 @@ describe('figures', function () {
 
       const figure = this._target(start, end);
 
-      expect(figure).to.have.lengthOf(12);
       const expected = [
         {x: 3, y: 3},
         {x: 3, y: 4},
@@ -594,7 +559,158 @@ describe('figures', function () {
       const figure = this._target(tile, tile);
 
       expect(figure).to.have.lengthOf(1);
-      expect(figure[0]).to.eql({cell: this._cell, ...tile});
+      expect([...figure][0]).to.eql({cell: this._cell, ...tile});
+    });
+
+    it('creates a vertical figure', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 3, y: 6};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 3, y: 0},
+        {x: 3, y: 1},
+        {x: 3, y: 2},
+        {x: 3, y: 3},
+        {x: 3, y: 4},
+        {x: 3, y: 5},
+        {x: 3, y: 6},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a horizontal figure', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 6, y: 3};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 0, y: 3},
+        {x: 1, y: 3},
+        {x: 2, y: 3},
+        {x: 3, y: 3},
+        {x: 4, y: 3},
+        {x: 5, y: 3},
+        {x: 6, y: 3},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a 2x2 ellipse', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 4, y: 4};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 2, y: 3},
+        {x: 3, y: 2},
+        {x: 3, y: 4},
+        {x: 4, y: 3},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a thin vertical ellipse', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 4, y: 6};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 3, y: 0},
+        {x: 2, y: 1},
+        {x: 4, y: 1},
+        {x: 2, y: 2},
+        {x: 4, y: 2},
+        {x: 2, y: 3},
+        {x: 4, y: 3},
+        {x: 2, y: 4},
+        {x: 4, y: 4},
+        {x: 2, y: 5},
+        {x: 4, y: 5},
+        {x: 3, y: 6},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a thin horizontal ellipse', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 6, y: 4};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 0, y: 3},
+        {x: 1, y: 2},
+        {x: 1, y: 4},
+        {x: 2, y: 2},
+        {x: 2, y: 4},
+        {x: 3, y: 2},
+        {x: 3, y: 4},
+        {x: 4, y: 2},
+        {x: 4, y: 4},
+        {x: 5, y: 2},
+        {x: 5, y: 4},
+        {x: 6, y: 3},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a full ellipse', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 6, y: 6};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 2, y: 0},
+        {x: 3, y: 0},
+        {x: 4, y: 0},
+        {x: 1, y: 1},
+        {x: 5, y: 1},
+        {x: 0, y: 2},
+        {x: 6, y: 2},
+        {x: 0, y: 3},
+        {x: 6, y: 3},
+        {x: 0, y: 4},
+        {x: 6, y: 4},
+        {x: 1, y: 5},
+        {x: 5, y: 5},
+        {x: 2, y: 6},
+        {x: 3, y: 6},
+        {x: 4, y: 6},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a top-left full ellipse', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 0, y: 0};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 2, y: 0},
+        {x: 3, y: 0},
+        {x: 4, y: 0},
+        {x: 1, y: 1},
+        {x: 5, y: 1},
+        {x: 0, y: 2},
+        {x: 6, y: 2},
+        {x: 0, y: 3},
+        {x: 6, y: 3},
+        {x: 0, y: 4},
+        {x: 6, y: 4},
+        {x: 1, y: 5},
+        {x: 5, y: 5},
+        {x: 2, y: 6},
+        {x: 3, y: 6},
+        {x: 4, y: 6},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
     });
   });
 
@@ -611,7 +727,211 @@ describe('figures', function () {
       const figure = this._target(tile, tile);
 
       expect(figure).to.have.lengthOf(1);
-      expect(figure[0]).to.eql({cell: this._cell, ...tile});
+      expect([...figure][0]).to.eql({cell: this._cell, ...tile});
+    });
+
+    it('creates a vertical figure', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 3, y: 6};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 3, y: 0},
+        {x: 3, y: 1},
+        {x: 3, y: 2},
+        {x: 3, y: 3},
+        {x: 3, y: 4},
+        {x: 3, y: 5},
+        {x: 3, y: 6},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a horizontal figure', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 6, y: 3};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 0, y: 3},
+        {x: 1, y: 3},
+        {x: 2, y: 3},
+        {x: 3, y: 3},
+        {x: 4, y: 3},
+        {x: 5, y: 3},
+        {x: 6, y: 3},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a 2x2 ellipse', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 4, y: 4};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 2, y: 3},
+        {x: 3, y: 2},
+        {x: 3, y: 3},
+        {x: 3, y: 4},
+        {x: 4, y: 3},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a thin vertical ellipse', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 4, y: 6};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 3, y: 0},
+        {x: 2, y: 1},
+        {x: 3, y: 1},
+        {x: 4, y: 1},
+        {x: 2, y: 2},
+        {x: 3, y: 2},
+        {x: 4, y: 2},
+        {x: 2, y: 3},
+        {x: 3, y: 3},
+        {x: 4, y: 3},
+        {x: 2, y: 4},
+        {x: 3, y: 4},
+        {x: 4, y: 4},
+        {x: 2, y: 5},
+        {x: 3, y: 5},
+        {x: 4, y: 5},
+        {x: 3, y: 6},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a thin horizontal ellipse', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 6, y: 4};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 0, y: 3},
+        {x: 1, y: 2},
+        {x: 1, y: 3},
+        {x: 1, y: 4},
+        {x: 2, y: 2},
+        {x: 2, y: 3},
+        {x: 2, y: 4},
+        {x: 2, y: 2},
+        {x: 2, y: 3},
+        {x: 3, y: 4},
+        {x: 4, y: 2},
+        {x: 4, y: 3},
+        {x: 4, y: 4},
+        {x: 5, y: 2},
+        {x: 5, y: 3},
+        {x: 5, y: 4},
+        {x: 6, y: 3},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a full ellipse', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 6, y: 6};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 2, y: 0},
+        {x: 3, y: 0},
+        {x: 4, y: 0},
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+        {x: 3, y: 1},
+        {x: 4, y: 1},
+        {x: 5, y: 1},
+        {x: 0, y: 2},
+        {x: 1, y: 2},
+        {x: 2, y: 2},
+        {x: 3, y: 2},
+        {x: 4, y: 2},
+        {x: 5, y: 2},
+        {x: 6, y: 2},
+        {x: 0, y: 3},
+        {x: 1, y: 3},
+        {x: 2, y: 3},
+        {x: 3, y: 3},
+        {x: 4, y: 3},
+        {x: 5, y: 3},
+        {x: 6, y: 3},
+        {x: 0, y: 4},
+        {x: 1, y: 4},
+        {x: 2, y: 4},
+        {x: 3, y: 4},
+        {x: 4, y: 4},
+        {x: 5, y: 4},
+        {x: 6, y: 4},
+        {x: 1, y: 5},
+        {x: 2, y: 5},
+        {x: 3, y: 5},
+        {x: 4, y: 5},
+        {x: 5, y: 5},
+        {x: 2, y: 6},
+        {x: 3, y: 6},
+        {x: 4, y: 6},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a top-left full ellipse', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 0, y: 0};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 2, y: 0},
+        {x: 3, y: 0},
+        {x: 4, y: 0},
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+        {x: 3, y: 1},
+        {x: 4, y: 1},
+        {x: 5, y: 1},
+        {x: 0, y: 2},
+        {x: 1, y: 2},
+        {x: 2, y: 2},
+        {x: 3, y: 2},
+        {x: 4, y: 2},
+        {x: 5, y: 2},
+        {x: 6, y: 2},
+        {x: 0, y: 3},
+        {x: 1, y: 3},
+        {x: 2, y: 3},
+        {x: 3, y: 3},
+        {x: 4, y: 3},
+        {x: 5, y: 3},
+        {x: 6, y: 3},
+        {x: 0, y: 4},
+        {x: 1, y: 4},
+        {x: 2, y: 4},
+        {x: 3, y: 4},
+        {x: 4, y: 4},
+        {x: 5, y: 4},
+        {x: 6, y: 4},
+        {x: 1, y: 5},
+        {x: 2, y: 5},
+        {x: 3, y: 5},
+        {x: 4, y: 5},
+        {x: 5, y: 5},
+        {x: 2, y: 6},
+        {x: 3, y: 6},
+        {x: 4, y: 6},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
     });
   });
 });
