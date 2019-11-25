@@ -26,8 +26,8 @@
   },
   "homepage": "https://github.com/drmonkeysee/letter-sketch#readme",
   "devDependencies": {
-    "@babel/polyfill": "^7.6.0",
-    "@babel/register": "^7.6.2",
+    "@babel/polyfill": "^7.7.0",
+    "@babel/register": "^7.7.4",
     "chai": "^4.2.0",
     "lodash.template": "^4.5.0",
     "mocha": "^6.2.2",
