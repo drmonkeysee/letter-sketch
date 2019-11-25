@@ -39,9 +39,10 @@ const TOOLS_REGISTRY = {
   fillEllipse(models) {
     return makeTool(models, MouseGesture, filledEllipse);
   },
-  line(models) {/* line segment from start to end using current lettertype, use smart lines? */},
+  segment(models) {/* line segment from start to end using current lettertype, use smart lines? */},
   text(models) {/* type text */},
   replace(models) {/* swap all tiles matching current point with current lettertype */},
+  lineDraw(models) {/* **come up with better name**, freedraw with connectable line characters */},
 };
 
 export const TOOLS = namemap(Object.values(TOOLS_REGISTRY), (name, t) => name);
