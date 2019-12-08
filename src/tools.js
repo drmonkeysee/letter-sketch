@@ -1,6 +1,6 @@
 import {
   singleCell, freeDraw, floodFill, rectangle, filledRectangle,
-  ellipse, filledEllipse, lineSegment
+  ellipse, filledEllipse, lineSegment,
 } from './figures.js';
 import {MouseGesture} from './gestures.js';
 import namemap from './namemap.js';
