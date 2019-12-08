@@ -1,6 +1,6 @@
 import {
   singleCell, freeDraw, floodFill, rectangle, filledRectangle,
-  ellipse, filledEllipse,
+  ellipse, filledEllipse, lineSegment
 } from './figures.js';
 import {MouseGesture} from './gestures.js';
 import namemap from './namemap.js';
@@ -39,7 +39,9 @@ const TOOLS_REGISTRY = {
   fillEllipse(models) {
     return makeTool(models, MouseGesture, filledEllipse);
   },
-  line(models) {/* line segment from start to end using current lettertype */},
+  line(models) {
+    return makeTool(models, MouseGesture, lineSegment);
+  },
   text(models) {/* type text */},
   replace(models) {/* swap all tiles matching current point with current lettertype */},
 };
