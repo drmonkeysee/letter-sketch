@@ -1060,5 +1060,77 @@ describe('figures', function () {
       ];
       assertUnorderedFigure(expected, this._cell, figure);
     });
+
+    it('creates a positive slope', function () {
+      const start = {x: 0, y: 0},
+            end = {x: 6, y: 6};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 0, y: 0},
+        {x: 1, y: 1},
+        {x: 2, y: 2},
+        {x: 3, y: 3},
+        {x: 4, y: 4},
+        {x: 5, y: 5},
+        {x: 6, y: 6},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a negative slope', function () {
+      const start = {x: 0, y: 6},
+            end = {x: 6, y: 0};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 0, y: 6},
+        {x: 1, y: 5},
+        {x: 2, y: 4},
+        {x: 3, y: 3},
+        {x: 4, y: 2},
+        {x: 5, y: 1},
+        {x: 6, y: 0},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a partial positive slope', function () {
+      const start = {x: 0, y: 0},
+            end = {x: 6, y: 3};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 0, y: 0},
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+        {x: 3, y: 2},
+        {x: 4, y: 2},
+        {x: 5, y: 3},
+        {x: 6, y: 3},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('creates a partial negative slope', function () {
+      const start = {x: 0, y: 6},
+            end = {x: 6, y: 3};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 0, y: 6},
+        {x: 1, y: 5},
+        {x: 2, y: 5},
+        {x: 3, y: 4},
+        {x: 4, y: 4},
+        {x: 5, y: 3},
+        {x: 6, y: 3},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
   });
 });
