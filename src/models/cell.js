@@ -18,6 +18,10 @@ export class Cell {
       && this.backgroundColor === other.backgroundColor;
   }
 
+  clone() {
+    return new Cell(this.glyph, this.foregroundColor, this.backgroundColor);
+  }
+
   update({
     glyph = this.glyph,
     foregroundColor = this.foregroundColor,
