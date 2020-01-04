@@ -308,3 +308,11 @@ export function lineSegment(lettertypeCell, terminal) {
     return drawLineSegment(start.x, start.y, end.x, end.y, lettertypeCell);
   };
 }
+
+export function cellBuffer(lettertypeCell, terminal) {
+  return (start, end, activeFigure) => {
+    activeFigure = activeFigure || [];
+    activeFigure.push(makeTile(end.x, end.y, lettertypeCell.clone()));
+    return activeFigure;
+  };
+}

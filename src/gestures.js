@@ -62,3 +62,48 @@ export class MouseGesture extends Gesture {
     return this.currentFigure;
   }
 }
+
+export class CursorGesture extends Gesture {
+  onMousedown(event) {
+    this._start = getPoint(event.target);
+    this._setCursor();
+    return null;
+  }
+
+  // TODO: move the cell definitions and advancement to custom active figure
+  onKeydown(event) {
+    this._activeFigure = this._updateFigure(
+      this._start, this._end, this._activeFigure
+    );
+    const latest = this._activeFigure[this._activeFigure.length - 1];
+    latest.cell.glyph = event.key;
+    if (this._timer) {
+      clearInterval(this._timer);
+    }
+    this._drawFigure();
+    this._setCursor();
+    return null;
+  }
+
+  _setCursor() {
+    if (this._end) {
+      this._end = {x: this._end.x + 1, y: this._end.y};
+    } else {
+      this._end = this._start;
+    }
+    this._currentCell = this._terminal.getCell(
+      this._end.x, this._end.y
+    );
+    this._cursor = this._currentCell.clone();
+    this._cursor.glyph = '|';
+    this._cursorOn = false;
+    this._toggleCursor();
+    this._timer = setInterval(this._toggleCursor.bind(this), 600);
+  }
+
+  _toggleCursor() {
+    const cursorUpdate = this._cursorOn ? this._currentCell : this._cursor;
+    this._sketchpad.updateAt(this._end.x, this._end.y, cursorUpdate);
+    this._cursorOn = !this._cursorOn;
+  }
+}

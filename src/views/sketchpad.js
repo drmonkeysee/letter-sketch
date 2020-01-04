@@ -166,6 +166,8 @@ export class SketchPad extends View {
         this.updateAt(x, y, terminal.getCell(x, y));
       }
     }
+
+    this._doc.addEventListener('keydown', this._continueGesture.bind(this));
   }
 
   _measureGlyph(fontSize) {
