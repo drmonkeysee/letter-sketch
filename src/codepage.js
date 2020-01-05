@@ -1,4 +1,4 @@
-const DEFAULT = 0x41, CLEAR = 0x20;
+const DEFAULT = 0x41, CLEAR = 0x20, CURSOR = 0x7c;
 
 export const CP437 = [
   '\u2400', '\u263a', '\u263b', '\u2665', '\u2666', '\u2663', '\u2660', '\u2022', '\u25d8', '\u25cb', '\u25d9', '\u2642', '\u2640', '\u266a', '\u266b', '\u263c',
@@ -19,4 +19,5 @@ export const CP437 = [
   '\u2261', '\u00b1', '\u2265', '\u2264', '\u2320', '\u2321', '\u00f7', '\u2248', '\u00b0', '\u2219', '\u00b7', '\u221a', '\u207f', '\u00b2', '\u25a0', '\u00a0',
 ],
 DEFAULT_GLYPH = CP437[DEFAULT],
-CLEAR_GLYPH = CP437[CLEAR];
+CLEAR_GLYPH = CP437[CLEAR],
+CURSOR_GLYPH = CP437[CURSOR];
