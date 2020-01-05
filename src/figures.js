@@ -30,7 +30,7 @@ function drawRect(start, end, lettertypeCell, plotStyle) {
 }
 
 function plotRect(top, right, bottom, left, lettertypeCell) {
-  const figure = new OverlappableFigure();
+  const figure = new PlotFigure();
   for (let x = left; x <= right; ++x) {
     figure.add(makeTile(x, top, lettertypeCell));
     figure.add(makeTile(x, bottom, lettertypeCell));
@@ -55,7 +55,7 @@ function plotFilledRect(top, right, bottom, left, lettertypeCell) {
 function drawEllipse(start, end, width, height, lettertypeCell, plotStyle) {
   const xRadius = Math.abs(end.x - start.x),
         yRadius = Math.abs(end.y - start.y),
-        figure = new OverlappableFigure();
+        figure = new PlotFigure();
 
   if (!xRadius && !yRadius) {
     figure.add(makeTile(start.x, start.y, lettertypeCell));
@@ -194,7 +194,7 @@ function drawLineSegment(x0, y0, x1, y1, cell) {
         dy = -Math.abs(y1 - y0),
         sx = x0 < x1 ? 1 : -1,
         sy = y0 < y1 ? 1 : -1,
-        figure = new OverlappableFigure();
+        figure = new PlotFigure();
   let err = dx + dy;
   while (true) {
     figure.add(makeTile(x0, y0, cell));
@@ -228,7 +228,7 @@ class ActiveFigure {
   }
 }
 
-class OverlappableFigure extends ActiveFigure {
+class PlotFigure extends ActiveFigure {
   constructor() {
     super();
     this._points = new Set();
@@ -268,7 +268,7 @@ export function singleCell(lettertypeCell, terminal) {
 
 export function freeDraw(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    activeFigure = activeFigure || new OverlappableFigure();
+    activeFigure = activeFigure || new PlotFigure();
     activeFigure.add(makeTile(end.x, end.y, lettertypeCell));
     return activeFigure;
   };
