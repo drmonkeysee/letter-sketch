@@ -1,4 +1,4 @@
-import {CLEAR_GLYPH, CURSOR_GLYPH} from './codepage.js';
+import {CURSOR_GLYPH, TRANSPARENT_GLYPH} from './codepage.js';
 import {makeTile, Cell} from './models/cell.js';
 
 // NOTE: shift/xor works as a key cuz terminal coordinates
@@ -252,11 +252,11 @@ class TextFigure extends ActiveFigure {
       lettertypeCell.backgroundColor
     );
     this.cursorOff = new Cell(
-      CLEAR_GLYPH,
+      TRANSPARENT_GLYPH,
       lettertypeCell.foregroundColor,
       lettertypeCell.backgroundColor
     );
-    this.nextKey = CLEAR_GLYPH;
+    this.nextKey = TRANSPARENT_GLYPH;
   }
 }
 
