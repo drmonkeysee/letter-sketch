@@ -95,21 +95,6 @@ describe('Cell', function () {
     });
   });
 
-  describe('#clone()', function () {
-    beforeEach(function () {
-      this.target = new Cell('B', 'red', 'blue');
-    });
-
-    it('clones the current cell', function () {
-      const c = this.target.clone();
-
-      expect(c.glyph).to.equal('B');
-      expect(c.foregroundColor).to.equal('red');
-      expect(c.backgroundColor).to.equal('blue');
-      expect(c).to.not.equal(this.target);
-    });
-  });
-
   describe('#update()', function () {
     beforeEach(function () {
       this.target = new Cell('B', 'red', 'blue');
