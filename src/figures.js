@@ -1,4 +1,5 @@
-import {makeTile} from './models/cell.js';
+import {CLEAR_GLYPH, CURSOR_GLYPH} from './codepage.js';
+import {makeTile, Cell} from './models/cell.js';
 
 // NOTE: shift/xor works as a key cuz terminal coordinates
 // cannot be greater than 0xffff.
@@ -29,7 +30,7 @@ function drawRect(start, end, lettertypeCell, plotStyle) {
 }
 
 function plotRect(top, right, bottom, left, lettertypeCell) {
-  const figure = new ActiveFigure();
+  const figure = new OverlappableFigure();
   for (let x = left; x <= right; ++x) {
     figure.add(makeTile(x, top, lettertypeCell));
     figure.add(makeTile(x, bottom, lettertypeCell));
@@ -54,7 +55,7 @@ function plotFilledRect(top, right, bottom, left, lettertypeCell) {
 function drawEllipse(start, end, width, height, lettertypeCell, plotStyle) {
   const xRadius = Math.abs(end.x - start.x),
         yRadius = Math.abs(end.y - start.y),
-        figure = new ActiveFigure();
+        figure = new OverlappableFigure();
 
   if (!xRadius && !yRadius) {
     figure.add(makeTile(start.x, start.y, lettertypeCell));
@@ -193,7 +194,7 @@ function drawLineSegment(x0, y0, x1, y1, cell) {
         dy = -Math.abs(y1 - y0),
         sx = x0 < x1 ? 1 : -1,
         sy = y0 < y1 ? 1 : -1,
-        figure = new ActiveFigure();
+        figure = new OverlappableFigure();
   let err = dx + dy;
   while (true) {
     figure.add(makeTile(x0, y0, cell));
@@ -214,21 +215,48 @@ function drawLineSegment(x0, y0, x1, y1, cell) {
 class ActiveFigure {
   constructor() {
     this._tiles = [];
-    this._points = new Set();
   }
 
   get length() { return this._tiles.length; }
 
   add(tile) {
-    const h = hashTile(tile);
-    if (!this._points.has(h)) {
-      this._tiles.push(tile);
-      this._points.add(h);
-    }
+    this._tiles.push(tile);
   }
 
   *[Symbol.iterator]() {
     yield* this._tiles;
+  }
+}
+
+class OverlappableFigure extends ActiveFigure {
+  constructor() {
+    super();
+    this._points = new Set();
+  }
+
+  add(tile) {
+    const h = hashTile(tile);
+    if (!this._points.has(h)) {
+      super.add(tile);
+      this._points.add(h);
+    }
+  }
+}
+
+class TextFigure extends ActiveFigure {
+  constructor(lettertypeCell) {
+    super();
+    this.cursorOn = new Cell(
+      CURSOR_GLYPH,
+      lettertypeCell.foregroundColor,
+      lettertypeCell.backgroundColor
+    );
+    this.cursorOff = new Cell(
+      CLEAR_GLYPH,
+      lettertypeCell.foregroundColor,
+      lettertypeCell.backgroundColor
+    );
+    this.nextKey = CLEAR_GLYPH;
   }
 }
 
@@ -240,7 +268,7 @@ export function singleCell(lettertypeCell, terminal) {
 
 export function freeDraw(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    activeFigure = activeFigure || new ActiveFigure();
+    activeFigure = activeFigure || new OverlappableFigure();
     activeFigure.add(makeTile(end.x, end.y, lettertypeCell));
     return activeFigure;
   };
@@ -309,10 +337,16 @@ export function lineSegment(lettertypeCell, terminal) {
   };
 }
 
-export function cellBuffer(lettertypeCell, terminal) {
+export function textBuffer(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    activeFigure = activeFigure || [];
-    activeFigure.push(makeTile(end.x, end.y, lettertypeCell.clone()));
+    // NOTE: initializing a new figure does not advance the text buffer
+    if (!activeFigure) return new TextFigure(lettertypeCell);
+    const cell = new Cell(
+      activeFigure.nextKey,
+      lettertypeCell.foregroundColor,
+      lettertypeCell.backgroundColor
+    );
+    activeFigure.add(makeTile(end.x, end.y, cell));
     return activeFigure;
   };
 }
