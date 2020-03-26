@@ -194,6 +194,10 @@ export class SketchPad extends View {
     return {width: Math.round(width), height: Math.round(height)};
   }
 
+  // TODO: rework this so individual tools manage the gesture
+  // lifetimes and events so text tool can manage gestures
+  // rework handlers to not be start/contineu/clear but just delegating
+  // events to tools and reacting to returned figures
   _startGesture(event) {
     this._activeGesture = this._tool.startGesture(this);
     this._continueGesture(event);
