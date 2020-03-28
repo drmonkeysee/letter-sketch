@@ -14,11 +14,7 @@ class Tool {
 
   start(sketchpadView) {
     if (this._gesture) return;
-    this._gesture = new this.gestureCls(
-      this.figureStyle(this.models.lettertype.cell, this.models.terminal),
-      sketchpadView,
-      this.models.terminal
-    );
+    this._gesture = this._createGesture(sketchpadView);
   }
 
   forward(event) {
@@ -28,6 +24,52 @@ class Tool {
 
   committed(update) {
     this._gesture = null;
+  }
+
+  cleanup(update) {
+    this.committed(update);
+    return null;
+  }
+
+  _createGesture(sketchpadView) {
+    return new this.gestureCls(
+      this.figureStyle(this.models.lettertype.cell, this.models.terminal),
+      sketchpadView,
+      this.models.terminal
+    );
+  }
+}
+
+class TextTool extends Tool {
+  constructor(models) {
+    super(models, CursorGesture, textBuffer);
+  }
+
+  start(sketchpadView) {
+    if (this._gesture) {
+      this._pendingGesture = this._createGesture(sketchpadView);
+    } else {
+      super.start(sketchpadView);
+    }
+  }
+
+  forward(event) {
+    const gesture = super.forward(event);
+    if (this._pendingGesture) {
+      this._pendingGesture.handleEvent(event);
+    }
+    return gesture;
+  }
+
+  committed(update) {
+    this._gesture = this._pendingGesture;
+    this._pendingGesture = null;
+  }
+
+  cleanup(update) {
+    const figure = this._gesture.cleanup();
+    this._gesture = this._pendingGesture = null;
+    return figure;
   }
 }
 
@@ -57,7 +99,7 @@ const TOOLS_REGISTRY = {
     return new Tool(models, MouseGesture, lineSegment);
   },
   text(models) {
-    return new Tool(models, CursorGesture, textBuffer);
+    return new TextTool(models);
   },
   replace(models) {/* swap all tiles matching current point with current lettertype */},
 };

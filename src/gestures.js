@@ -66,7 +66,14 @@ export class MouseGesture extends Gesture {
 }
 
 export class CursorGesture extends Gesture {
+  constructor(...args) {
+    super(...args);
+    this._started = false;
+  }
+
   onMousedown(event) {
+    if (this._started) return this.cleanup();
+    this._started = true;
     this._start = this._end = getPoint(event.target);
     this._activeFigure = this._updateFigure(
       this._start, this._end, this._activeFigure
@@ -85,19 +92,28 @@ export class CursorGesture extends Gesture {
     this._activeFigure = this._updateFigure(
       this._start, this._end, this._activeFigure
     );
-    if (this._timer) {
-      clearInterval(this._timer);
-    }
+    clearInterval(this._timer);
     this._drawFigure();
     this._end = {x: this._end.x + 1, y: this._end.y};
     this._setCursor();
     return null;
   }
 
+  cleanup() {
+    this._clearCursor();
+    return this._activeFigure;
+  }
+
   _setCursor() {
     this._cursorOn = true;
     this._toggleCursor();
     this._timer = setInterval(this._toggleCursor.bind(this), 600);
+  }
+
+  _clearCursor() {
+    this._cursorOn = false;
+    this._toggleCursor();
+    clearInterval(this._timer);
   }
 
   _toggleCursor() {
