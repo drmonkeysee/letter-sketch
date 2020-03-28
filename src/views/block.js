@@ -6,15 +6,15 @@ import {View} from './view.js';
 export class LetterBlock extends View {
   constructor(...args) {
     super(...args);
-    this._block = this._doc.getElementById('letter-block');
+    this._block = this.doc.getElementById('letter-block');
   }
 
   draw(initialState) {
     for (const glyph of CP437) {
-      const blockText = this._doc.createElement('span');
+      const blockText = this.doc.createElement('span');
       blockText.textContent = glyph;
 
-      const blockCell = this._doc.createElement('div');
+      const blockCell = this.doc.createElement('div');
       blockCell.appendChild(blockText);
 
       if (glyph === initialState.glyph) {
@@ -40,7 +40,7 @@ export class LetterBlock extends View {
   }
 
   _pickGlyph(event) {
-    this._dispatch.command(
+    this.dispatch.command(
       COMMANDS.setGlyph, event.target.firstElementChild.textContent
     );
   }

@@ -6,20 +6,20 @@ import {View} from './view.js';
 export class ToolSelector extends View {
   constructor(...args) {
     super(...args);
-    this._toolSelector = this._doc.getElementById('tool-selections');
+    this._toolSelector = this.doc.getElementById('tool-selections');
     this._toolSelections = [];
   }
 
   draw(initialState) {
     for (const tool of Object.values(TOOLS)) {
-      const radio = this._doc.createElement('input');
+      const radio = this.doc.createElement('input');
       radio.type = 'radio';
       radio.id = `tool-selection-${tool}`;
       radio.name = 'tool-selection';
       radio.value = tool;
       radio.checked = tool === initialState.toolName;
       radio.addEventListener('input', this._pickTool.bind(this));
-      const label = this._doc.createElement('label');
+      const label = this.doc.createElement('label');
       label.htmlFor = radio.id;
       label.innerText = tool;
       this._toolSelector.appendChild(radio);
@@ -33,7 +33,7 @@ export class ToolSelector extends View {
   }
 
   _pickTool(event) {
-    this._dispatch.command(COMMANDS.setTool, event.target.value);
+    this.dispatch.command(COMMANDS.setTool, event.target.value);
   }
 
   _refreshTool(update) {

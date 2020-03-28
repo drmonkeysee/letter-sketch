@@ -6,20 +6,20 @@ import {View} from './view.js';
 class ColorSelection extends View {
   constructor(id, cmd, refreshEvent, onSelected, colorInitializer, ...args) {
     super(...args);
-    this._selection = this._doc.getElementById(id);
-    this._cmd = cmd;
-    this._refreshEvent = refreshEvent;
-    this._onSelected = onSelected;
-    this._colorInitializer = colorInitializer;
+    this._selection = this.doc.getElementById(id);
+    this.cmd = cmd;
+    this.refreshEvent = refreshEvent;
+    this.onSelected = onSelected;
+    this.colorInitializer = colorInitializer;
   }
 
   draw(initialState) {
-    this._setColor(this._colorInitializer(initialState.colors));
-    this._selection.addEventListener('click', e => this._onSelected(this));
+    this._setColor(this.colorInitializer(initialState.colors));
+    this._selection.addEventListener('click', e => this.onSelected(this));
   }
 
   subscribe(notifier) {
-    notifier.subscribe(this._refreshEvent, this._refreshColor.bind(this));
+    notifier.subscribe(this.refreshEvent, this._refreshColor.bind(this));
   }
 
   select() {
@@ -31,7 +31,7 @@ class ColorSelection extends View {
   }
 
   pick(color) {
-    this._dispatch.command(this._cmd, color);
+    this.dispatch.command(this.cmd, color);
   }
 
   _refreshColor(update) {
@@ -52,7 +52,7 @@ class ColorSelection extends View {
 export class ColorPalette extends View {
   constructor(...args) {
     super(...args);
-    this._palette = this._doc.getElementById('palette');
+    this._palette = this.doc.getElementById('palette');
     const onSelectedHandler = this._setSelection.bind(this);
     this._colorSelections = [
       new ColorSelection(
@@ -72,18 +72,18 @@ export class ColorPalette extends View {
         ...args
       ),
     ];
-    this._clearSelection = this._doc.getElementById('clear-selection');
+    this._clearSelection = this.doc.getElementById('clear-selection');
   }
 
   draw(initialState) {
     const colorSteps = [0x00, 0x80, 0xff];
     for (const redStep of colorSteps) {
-      const colorColumn = this._doc.createElement('div');
+      const colorColumn = this.doc.createElement('div');
       this._palette.appendChild(colorColumn);
 
       for (const greenStep of colorSteps) {
         for (const blueStep of colorSteps) {
-          const colorCell = this._doc.createElement('div');
+          const colorCell = this.doc.createElement('div');
           colorCell.className = 'palette-cell';
           colorCell.style.backgroundColor = channelsToCss(
             redStep, greenStep, blueStep

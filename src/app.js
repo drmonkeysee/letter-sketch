@@ -6,7 +6,7 @@ import {VIEW_REGISTRY} from './views/index.js';
 
 class App {
   constructor(win) {
-    this._win = win;
+    this.win = win;
     this._doc = win.document;
     this._notifier = new ViewNotifier();
     this._models = {};

@@ -67,7 +67,7 @@ export const COMMANDS = namemap(
 
 export class CommandDispatcher {
   constructor(notifier, models) {
-    this._notifier = notifier;
+    this.notifier = notifier;
     this._bindCommands(models);
   }
 
@@ -76,7 +76,7 @@ export class CommandDispatcher {
     if (!boundCmd) throw new Error(`Unknown command: ${name}`);
     const cmd = boundCmd(...args),
           update = cmd();
-    this._notifier.signal(update);
+    this.notifier.signal(update);
   }
 
   _bindCommands(models) {

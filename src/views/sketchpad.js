@@ -6,12 +6,12 @@ import {View} from './view.js';
 class Controls extends View {
   constructor(...args) {
     super(...args);
-    this._form = this._doc.getElementById('sketchpad-controls');
+    this._form = this.doc.getElementById('sketchpad-controls');
     this._button = this._form.querySelector('button');
     this._inputControls = [
-      this._doc.getElementById('font-size'),
-      this._doc.getElementById('column-count'),
-      this._doc.getElementById('row-count'),
+      this.doc.getElementById('font-size'),
+      this.doc.getElementById('column-count'),
+      this.doc.getElementById('row-count'),
     ];
   }
 
@@ -49,11 +49,11 @@ class Controls extends View {
       columns: this.columns,
       rows: this.rows,
     };
-    this._dispatch.command(COMMANDS.checkResizeTerminal, dimensions);
+    this.dispatch.command(COMMANDS.checkResizeTerminal, dimensions);
   }
 
   _verifyResize(update) {
-    const confirm = this._doc.defaultView.confirm(
+    const confirm = this.doc.defaultView.confirm(
       'Reducing the drawing size may discard portions ' +
       'of your current sketch. Continue?'
     );
@@ -72,7 +72,7 @@ class Controls extends View {
       control.dataset.currentValue = control.value;
     }
     this._updateButton();
-    this._dispatch.command(COMMANDS.commitResizeTerminal, update.dims);
+    this.dispatch.command(COMMANDS.commitResizeTerminal, update.dims);
   }
 
   _updateButton() {
@@ -86,8 +86,8 @@ export class SketchPad extends View {
   constructor(...args) {
     super(...args);
     this._controls = new Controls(...args);
-    this._ruler = this._doc.getElementById('glyph-ruler');
-    this._sketchpad = this._doc.getElementById('sketchpad');
+    this._ruler = this.doc.getElementById('glyph-ruler');
+    this._sketchpad = this.doc.getElementById('sketchpad');
     this._grid = [];
     this._stride = 0;
   }
@@ -100,7 +100,7 @@ export class SketchPad extends View {
     this._drawSketchpad(initialState.terminal, initialState.fontSize);
 
     // NOTE: end current gesture if mouseup outside sketchpad
-    this._doc.addEventListener(
+    this.doc.addEventListener(
       'mouseup', this._continueGesture.bind(this)
     );
   }
@@ -146,8 +146,8 @@ export class SketchPad extends View {
 
     for (let y = 0; y < termSize.height; ++y) {
       for (let x = 0; x < termSize.width; ++x) {
-        const gridCell = this._doc.createElement('div');
-        gridCell.appendChild(this._doc.createElement('span'));
+        const gridCell = this.doc.createElement('div');
+        gridCell.appendChild(this.doc.createElement('span'));
 
         gridCell.style.width = cellWidth;
         gridCell.style.height = cellHeight;
@@ -167,7 +167,7 @@ export class SketchPad extends View {
       }
     }
 
-    this._doc.addEventListener('keydown', this._continueGesture.bind(this));
+    this.doc.addEventListener('keydown', this._continueGesture.bind(this));
   }
 
   _measureGlyph(fontSize) {
@@ -207,7 +207,7 @@ export class SketchPad extends View {
     if (!this._activeGesture) return;
     const figure = this._activeGesture.handleEvent(event);
     if (figure) {
-      this._dispatch.command(COMMANDS.commitDraw, figure);
+      this.dispatch.command(COMMANDS.commitDraw, figure);
       console.log('generated figure: %o', figure);
     }
   }

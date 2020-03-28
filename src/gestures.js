@@ -3,8 +3,8 @@ import {CP_LOOKUP} from './codepage.js';
 class Gesture {
   constructor(figureStyle, sketchpad, terminal) {
     this._updateFigure = figureStyle;
-    this._sketchpad = sketchpad;
-    this._terminal = terminal;
+    this.sketchpad = sketchpad;
+    this.terminal = terminal;
     this._prevDrawTiles = [];
   }
 
@@ -23,12 +23,12 @@ class Gesture {
     // NOTE: on each draw refresh clear the previous frame
     // with current terminal contents before drawing the new one.
     for (const {x, y} of this._prevDrawTiles) {
-      const cell = this._terminal.getCell(x, y);
-      this._sketchpad.updateAt(x, y, cell);
+      const cell = this.terminal.getCell(x, y);
+      this.sketchpad.updateAt(x, y, cell);
     }
     this._prevDrawTiles.length = 0;
     for (const {x, y, cell} of this._activeFigure) {
-      this._sketchpad.updateAt(x, y, cell)
+      this.sketchpad.updateAt(x, y, cell)
       this._prevDrawTiles.push({x, y});
     }
   }
@@ -104,7 +104,7 @@ export class CursorGesture extends Gesture {
     const cursorCell = this._cursorOn
                           ? this._activeFigure.cursorOn
                           : this._activeFigure.cursorOff;
-    this._sketchpad.updateAt(this._end.x, this._end.y, cursorCell);
+    this.sketchpad.updateAt(this._end.x, this._end.y, cursorCell);
     this._cursorOn = !this._cursorOn;
   }
 }
