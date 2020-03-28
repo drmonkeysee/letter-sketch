@@ -33,10 +33,10 @@ const COMMAND_REGISTRY = {
       );
     };
   },
-  commitDraw(models, figure) {
+  commitDraw(models, figure, cleanup = false) {
     return () => {
       models.terminal.update(figure);
-      return makeUpdate(EVENTS.onDrawCommitted, {figure});
+      return makeUpdate(EVENTS.onDrawCommitted, {figure, cleanup});
     };
   },
   checkResizeTerminal(models, dims) {

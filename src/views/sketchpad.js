@@ -208,11 +208,21 @@ export class SketchPad extends View {
   }
 
   _committed(update) {
-    console.log('commit figure');
-    this._tool.committed(update);
+    // NOTE: a cleanup update came from the previously selected tool and has
+    // already been committed.
+    if (!update.cleanup) {
+      console.log('commit figure');
+      this._tool.committed(update);
+    }
   }
 
   _updateTool(update) {
+    // NOTE: capture any incomplete figure and commit before switching tools
+    const figure = this._tool.cleanup();
+    if (figure) {
+      this.dispatch.command(COMMANDS.commitDraw, figure, true);
+      console.log('got cleanup figure: %o', figure);
+    }
     this._tool = update.tool;
   }
 
