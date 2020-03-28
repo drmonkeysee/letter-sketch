@@ -107,7 +107,7 @@ export class SketchPad extends View {
 
   subscribe(notifier) {
     this._controls.subscribe(notifier);
-    notifier.subscribe(EVENTS.onDrawCommitted, this._clearGesture.bind(this));
+    notifier.subscribe(EVENTS.onDrawCommitted, this._committed.bind(this));
     notifier.subscribe(EVENTS.onToolChanged, this._updateTool.bind(this));
     notifier.subscribe(
       EVENTS.onTerminalResized, this._resizeSketchpad.bind(this)
@@ -194,27 +194,22 @@ export class SketchPad extends View {
     return {width: Math.round(width), height: Math.round(height)};
   }
 
-  // TODO: rework this so individual tools manage the gesture
-  // lifetimes and events so text tool can manage gestures
-  // rework handlers to not be start/contineu/clear but just delegating
-  // events to tools and reacting to returned figures
   _startGesture(event) {
-    this._activeGesture = this._tool.startGesture(this);
+    this._tool.start(this);
     this._continueGesture(event);
   }
 
   _continueGesture(event) {
-    if (!this._activeGesture) return;
-    const figure = this._activeGesture.handleEvent(event);
+    const figure = this._tool.forward(event);
     if (figure) {
       this.dispatch.command(COMMANDS.commitDraw, figure);
       console.log('generated figure: %o', figure);
     }
   }
 
-  _clearGesture(update) {
-    console.log('clear active gesture');
-    this._activeGesture = null;
+  _committed(update) {
+    console.log('commit figure');
+    this._tool.committed(update);
   }
 
   _updateTool(update) {

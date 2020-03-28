@@ -2,9 +2,9 @@ import {CP_LOOKUP} from './codepage.js';
 
 class Gesture {
   constructor(figureStyle, sketchpad, terminal) {
-    this._updateFigure = figureStyle;
     this.sketchpad = sketchpad;
     this.terminal = terminal;
+    this._updateFigure = figureStyle;
     this._prevDrawTiles = [];
   }
 

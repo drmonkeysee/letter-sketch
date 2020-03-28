@@ -5,45 +5,59 @@ import {
 import {MouseGesture, CursorGesture} from './gestures.js';
 import namemap from './namemap.js';
 
-function makeTool(models, gestureCls, figureStyle) {
-  return {
-    startGesture(sketchpadView) {
-      return new gestureCls(
-        figureStyle(models.lettertype.cell, models.terminal),
-        sketchpadView,
-        models.terminal
-      );
-    },
-  };
+class Tool {
+  constructor(models, gestureCls, figureStyle) {
+    this.models = models;
+    this.gestureCls = gestureCls;
+    this.figureStyle = figureStyle;
+  }
+
+  start(sketchpadView) {
+    if (this._gesture) return;
+    this._gesture = new this.gestureCls(
+      this.figureStyle(this.models.lettertype.cell, this.models.terminal),
+      sketchpadView,
+      this.models.terminal
+    );
+  }
+
+  forward(event) {
+    if (!this._gesture) return;
+    return this._gesture.handleEvent(event);
+  }
+
+  committed(update) {
+    this._gesture = null;
+  }
 }
 
 const TOOLS_REGISTRY = {
   point(models) {
-    return makeTool(models, MouseGesture, singleCell);
+    return new Tool(models, MouseGesture, singleCell);
   },
   brush(models) {
-    return makeTool(models, MouseGesture, freeDraw);
+    return new Tool(models, MouseGesture, freeDraw);
   },
   fill(models) {
-    return makeTool(models, MouseGesture, floodFill);
+    return new Tool(models, MouseGesture, floodFill);
   },
   rect(models) {
-    return makeTool(models, MouseGesture, rectangle);
+    return new Tool(models, MouseGesture, rectangle);
   },
   fillRect(models) {
-    return makeTool(models, MouseGesture, filledRectangle);
+    return new Tool(models, MouseGesture, filledRectangle);
   },
   ellipse(models) {
-    return makeTool(models, MouseGesture, ellipse);
+    return new Tool(models, MouseGesture, ellipse);
   },
   fillEllipse(models) {
-    return makeTool(models, MouseGesture, filledEllipse);
+    return new Tool(models, MouseGesture, filledEllipse);
   },
   line(models) {
-    return makeTool(models, MouseGesture, lineSegment);
+    return new Tool(models, MouseGesture, lineSegment);
   },
   text(models) {
-    return makeTool(models, CursorGesture, textBuffer);
+    return new Tool(models, CursorGesture, textBuffer);
   },
   replace(models) {/* swap all tiles matching current point with current lettertype */},
 };
