@@ -17,8 +17,6 @@ class Gesture {
     return null;
   }
 
-  get currentFigure() { return this._activeFigure || []; }
-
   _drawFigure() {
     // NOTE: on each draw refresh clear the previous frame
     // with current terminal contents before drawing the new one.
@@ -61,7 +59,7 @@ export class MouseGesture extends Gesture {
   }
 
   onMouseup(event) {
-    return this.currentFigure;
+    return this._activeFigure;
   }
 }
 
