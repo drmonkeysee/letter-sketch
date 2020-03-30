@@ -12,13 +12,10 @@ class Tool {
     this.figureStyle = figureStyle;
   }
 
-  start(sketchpadView) {
-    if (this._gesture) return;
-    this._gesture = this._createGesture(sketchpadView);
-  }
-
-  forward(event) {
-    if (!this._gesture) return;
+  forward(sketchpadView, event) {
+    if (!this._gesture) {
+      this._gesture = this._createGesture(sketchpadView);
+    }
     return this._gesture.handleEvent(event);
   }
 

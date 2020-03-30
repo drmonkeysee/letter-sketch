@@ -101,8 +101,9 @@ export class SketchPad extends View {
 
     // NOTE: end current gesture if mouseup outside sketchpad
     this.doc.addEventListener(
-      'mouseup', this._continueGesture.bind(this)
+      'mouseup', this._handleGesture.bind(this)
     );
+    this.doc.addEventListener('keydown', this._handleGesture.bind(this));
   }
 
   subscribe(notifier) {
@@ -136,8 +137,7 @@ export class SketchPad extends View {
 
     const cellWidth = `${tileSize.width}px`,
           cellHeight = `${tileSize.height}px`,
-          startEvents = ['mousedown'],
-          strokeEvents = ['mouseover', 'mouseup'];
+          strokeEvents = ['mousedown', 'mouseover', 'mouseup'];
 
     this._grid.length = 0;
     while (this._sketchpad.firstChild) {
@@ -154,11 +154,8 @@ export class SketchPad extends View {
         gridCell.dataset.x = x;
         gridCell.dataset.y = y;
 
-        for (const e of startEvents) {
-          gridCell.addEventListener(e, this._startGesture.bind(this));
-        }
         for (const e of strokeEvents) {
-          gridCell.addEventListener(e, this._continueGesture.bind(this));
+          gridCell.addEventListener(e, this._handleGesture.bind(this));
         }
 
         this._grid.push(gridCell);
@@ -166,8 +163,6 @@ export class SketchPad extends View {
         this.updateAt(x, y, terminal.getCell(x, y));
       }
     }
-
-    this.doc.addEventListener('keydown', this._continueGesture.bind(this));
   }
 
   _measureGlyph(fontSize) {
@@ -194,13 +189,8 @@ export class SketchPad extends View {
     return {width: Math.round(width), height: Math.round(height)};
   }
 
-  _startGesture(event) {
-    this._tool.start(this);
-    this._continueGesture(event);
-  }
-
-  _continueGesture(event) {
-    const figure = this._tool.forward(event);
+  _handleGesture(event) {
+    const figure = this._tool.forward(this, event);
     if (figure) {
       this.dispatch.command(COMMANDS.commitDraw, figure);
       console.log('generated figure: %o', figure);

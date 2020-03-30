@@ -6,6 +6,7 @@ class Gesture {
     this.terminal = terminal;
     this._updateFigure = figureStyle;
     this._prevDrawTiles = [];
+    this._started = false;
   }
 
   handleEvent(event) {
@@ -41,6 +42,7 @@ function getPoint(target) {
 
 export class MouseGesture extends Gesture {
   onMousedown(event) {
+    this._started = true;
     this._start = this._end = getPoint(event.target);
     this._activeFigure = this._updateFigure(
       this._start, this._end, this._activeFigure
@@ -50,6 +52,7 @@ export class MouseGesture extends Gesture {
   }
 
   onMouseover(event) {
+    if (!this._started) return null;
     this._end = getPoint(event.target);
     this._activeFigure = this._updateFigure(
       this._start, this._end, this._activeFigure
@@ -64,11 +67,6 @@ export class MouseGesture extends Gesture {
 }
 
 export class CursorGesture extends Gesture {
-  constructor(...args) {
-    super(...args);
-    this._started = false;
-  }
-
   onMousedown(event) {
     if (this._started) return this.cleanup();
     this._started = true;
