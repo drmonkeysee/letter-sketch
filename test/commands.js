@@ -161,7 +161,21 @@ describe('commands', function () {
       const result = cmd();
 
       sinon.assert.calledWith(this.models.terminal.update, figure);
-      expect(result).to.eql({event: EVENTS.onDrawCommitted, figure: figure});
+      expect(result).to.eql(
+        {event: EVENTS.onDrawCommitted, figure: figure, cleanup: false}
+      );
+    });
+
+    it('updates the terminal with cleanup flag', function () {
+      const figure = 'testFigure',
+            cmd = this.target(figure, true);
+
+      const result = cmd();
+
+      sinon.assert.calledWith(this.models.terminal.update, figure);
+      expect(result).to.eql(
+        {event: EVENTS.onDrawCommitted, figure: figure, cleanup: true}
+      );
     });
   });
 
