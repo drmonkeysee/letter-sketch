@@ -42,20 +42,13 @@ class TextTool extends Tool {
     super(models, CursorGesture, textBuffer);
   }
 
-  start(sketchpadView) {
-    if (this._gesture) {
+  forward(sketchpadView, event) {
+    const figure = super.forward(sketchpadView, event);
+    if (figure) {
       this._pendingGesture = this._createGesture(sketchpadView);
-    } else {
-      super.start(sketchpadView);
-    }
-  }
-
-  forward(event) {
-    const gesture = super.forward(event);
-    if (this._pendingGesture) {
       this._pendingGesture.handleEvent(event);
     }
-    return gesture;
+    return figure;
   }
 
   committed(update) {
