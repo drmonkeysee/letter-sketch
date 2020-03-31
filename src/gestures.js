@@ -80,9 +80,6 @@ export class CursorGesture extends Gesture {
 
   onKeydown(event) {
     // TODO: handle control characters
-    // TODO: handle new mousedown events that clears old
-    // gesture, commits the text, and creates new gesture
-    // (or does it just move the gesture around?)
     this._activeFigure.nextKey = event.key;
     if (!CP_LOOKUP.has(this._activeFigure.nextKey)) return null;
     this._activeFigure = this._updateFigure(
