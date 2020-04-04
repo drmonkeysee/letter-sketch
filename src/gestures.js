@@ -79,6 +79,7 @@ export class CursorGesture extends Gesture {
   }
 
   onKeydown(event) {
+    if (!this._started) return null;
     // TODO: handle control characters
     this._activeFigure.nextKey = event.key;
     if (!CP_LOOKUP.has(this._activeFigure.nextKey)) return null;
