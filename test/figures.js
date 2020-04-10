@@ -1,8 +1,9 @@
 import {expect} from 'chai';
+import {CURSOR_GLYPH, TRANSPARENT_GLYPH} from '../src/codepage.js';
 
 import {
   singleCell, freeDraw, floodFill, rectangle, filledRectangle,
-  ellipse, filledEllipse, lineSegment,
+  ellipse, filledEllipse, lineSegment, textBuffer,
 } from '../src/figures.js';
 import {Cell} from '../src/models/cell.js';
 import {Terminal} from '../src/models/terminal.js';
@@ -1131,6 +1132,96 @@ describe('figures', function () {
         {x: 6, y: 3},
       ];
       assertUnorderedFigure(expected, this._cell, figure);
+    });
+  });
+
+  describe('#textBuffer', function () {
+    beforeEach(function () {
+      this._terminal = new Terminal(5, 5);
+      this._cell = new Cell('A', '#ff0000', '#0000ff');
+      this._target = textBuffer(this._cell, this._terminal);
+    });
+
+    function assertBuffer(expected, srcCell, actual) {
+      expect(actual).to.have.lengthOf(expected.length);
+      actual = [...actual];
+      for (const [i, [char, tile]] of expected.entries()) {
+        const cell = new Cell(
+          char, srcCell.foregroundColor, srcCell.backgroundColor
+        );
+        expect(actual[i]).to.eql({cell, ...tile});
+      }
+    }
+
+    it('returns empty figure on initial call', function () {
+      const tile = {x: 1, y: 1};
+
+      const figure = this._target(tile, tile);
+
+      expect(figure).to.have.lengthOf(0);
+      expect(figure.nextKey).to.equal(TRANSPARENT_GLYPH);
+      expect(figure.cursorOn).to.eql(
+        new Cell(
+          CURSOR_GLYPH, this._cell.foregroundColor, this._cell.backgroundColor
+        )
+      );
+      expect(figure.cursorOff).to.eql(
+        new Cell(
+          TRANSPARENT_GLYPH,
+          this._cell.foregroundColor,
+          this._cell.backgroundColor
+        )
+      );
+    });
+
+    it('prints single character', function () {
+      const tile = {x: 1, y: 1};
+      let figure = this._target(tile, tile);
+      figure.nextKey = 'G';
+
+      figure = this._target(tile, tile, figure);
+
+      expect(figure).to.have.lengthOf(1);
+      const cell = new Cell(
+        'G', this._cell.foregroundColor, this._cell.backgroundColor
+      );
+      expect([...figure][0]).to.eql({cell, ...tile});
+    });
+
+    it('prints multiple characters', function () {
+      const start = {x: 1, y: 1},
+            tiles = [
+              ['T', {x: 1, y: 1}],
+              ['e', {x: 1, y: 2}],
+              ['s', {x: 1, y: 3}],
+              ['t', {x: 1, y: 4}],
+            ];
+      let figure = this._target(start, start);
+
+      for (const [char, tile] of tiles) {
+        figure.nextKey = char;
+        figure = this._target(start, tile, figure);
+      }
+
+      assertBuffer(tiles, this._cell, figure);
+    });
+
+    it('prints non-contiguous characters', function () {
+      const start = {x: 1, y: 1},
+            tiles = [
+              ['T', {x: 0, y: 1}],
+              ['e', {x: 3, y: 4}],
+              ['s', {x: 2, y: 2}],
+              ['t', {x: 1, y: 0}],
+            ];
+      let figure = this._target(start, start);
+
+      for (const [char, tile] of tiles) {
+        figure.nextKey = char;
+        figure = this._target(start, tile, figure);
+      }
+
+      assertBuffer(tiles, this._cell, figure);
     });
   });
 });
