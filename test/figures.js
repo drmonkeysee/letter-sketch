@@ -1139,7 +1139,7 @@ describe('figures', function () {
     beforeEach(function () {
       this._terminal = new Terminal(5, 5);
       this._cell = new Cell('A', '#ff0000', '#0000ff');
-      this._target = textBuffer(this._cell, this._terminal);
+      this._figure = textBuffer(this._cell, this._terminal)();
     });
 
     function assertBuffer(expected, srcCell, actual) {
@@ -1154,18 +1154,13 @@ describe('figures', function () {
     }
 
     it('returns empty figure on initial call', function () {
-      const tile = {x: 1, y: 1};
-
-      const figure = this._target(tile, tile);
-
-      expect(figure).to.have.lengthOf(0);
-      expect(figure.nextKey).to.equal(TRANSPARENT_GLYPH);
-      expect(figure.cursorOn).to.eql(
+      expect(this._figure).to.have.lengthOf(0);
+      expect(this._figure.cursorOn).to.eql(
         new Cell(
           CURSOR_GLYPH, this._cell.foregroundColor, this._cell.backgroundColor
         )
       );
-      expect(figure.cursorOff).to.eql(
+      expect(this._figure.cursorOff).to.eql(
         new Cell(
           TRANSPARENT_GLYPH,
           this._cell.foregroundColor,
@@ -1176,16 +1171,14 @@ describe('figures', function () {
 
     it('prints single character', function () {
       const tile = {x: 1, y: 1};
-      let figure = this._target(tile, tile);
-      figure.nextKey = 'G';
 
-      figure = this._target(tile, tile, figure);
+      this._figure.advance(tile, 'G')
 
-      expect(figure).to.have.lengthOf(1);
+      expect(this._figure).to.have.lengthOf(1);
       const cell = new Cell(
         'G', this._cell.foregroundColor, this._cell.backgroundColor
       );
-      expect([...figure][0]).to.eql({cell, ...tile});
+      expect([...this._figure][0]).to.eql({cell, ...tile});
     });
 
     it('prints multiple characters', function () {
@@ -1196,14 +1189,12 @@ describe('figures', function () {
               ['s', {x: 1, y: 3}],
               ['t', {x: 1, y: 4}],
             ];
-      let figure = this._target(start, start);
 
       for (const [char, tile] of tiles) {
-        figure.nextKey = char;
-        figure = this._target(start, tile, figure);
+        this._figure.advance(tile, char);
       }
 
-      assertBuffer(tiles, this._cell, figure);
+      assertBuffer(tiles, this._cell, this._figure);
     });
 
     it('prints non-contiguous characters', function () {
@@ -1214,14 +1205,12 @@ describe('figures', function () {
               ['s', {x: 2, y: 2}],
               ['t', {x: 1, y: 0}],
             ];
-      let figure = this._target(start, start);
 
       for (const [char, tile] of tiles) {
-        figure.nextKey = char;
-        figure = this._target(start, tile, figure);
+        this._figure.advance(tile, char);
       }
 
-      assertBuffer(tiles, this._cell, figure);
+      assertBuffer(tiles, this._cell, this._figure);
     });
   });
 });
