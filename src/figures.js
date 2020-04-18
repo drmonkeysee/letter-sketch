@@ -246,17 +246,15 @@ class PlotFigure extends ActiveFigure {
 class TextFigure extends ActiveFigure {
   constructor(lettertypeCell) {
     super();
-    this.cursorOn = new Cell(
-      CURSOR_GLYPH,
-      lettertypeCell.foregroundColor,
-      lettertypeCell.backgroundColor
-    );
-    this.cursorOff = new Cell(
-      TRANSPARENT_GLYPH,
-      lettertypeCell.foregroundColor,
-      lettertypeCell.backgroundColor
-    );
-    this.nextKey = TRANSPARENT_GLYPH;
+    this._fgColor = lettertypeCell.foregroundColor;
+    this._bgColor = lettertypeCell.backgroundColor;
+    this.cursorOn = new Cell(CURSOR_GLYPH, this._fgColor, this._bgColor);
+    this.cursorOff = new Cell(TRANSPARENT_GLYPH, this._fgColor, this._bgColor);
+  }
+
+  advance(point, glyph) {
+    const cell = new Cell(glyph, this._fgColor, this._bgColor);
+    this.add(makeTile(point.x, point.y, cell));
   }
 }
 
@@ -339,14 +337,6 @@ export function lineSegment(lettertypeCell, terminal) {
 
 export function textBuffer(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    // NOTE: initializing a new figure does not advance the text buffer
-    if (!activeFigure) return new TextFigure(lettertypeCell);
-    const cell = new Cell(
-      activeFigure.nextKey,
-      lettertypeCell.foregroundColor,
-      lettertypeCell.backgroundColor
-    );
-    activeFigure.add(makeTile(end.x, end.y, cell));
-    return activeFigure;
+    return activeFigure || new TextFigure(lettertypeCell);
   };
 }

@@ -21,6 +21,7 @@ class Gesture {
   _drawFigure() {
     // NOTE: on each draw refresh clear the previous frame
     // with current terminal contents before drawing the new one.
+    // TODO: i hate this
     for (const {x, y} of this._prevDrawTiles) {
       const cell = this.terminal.getCell(x, y);
       this.sketchpad.updateAt(x, y, cell);
@@ -67,35 +68,77 @@ export class MouseGesture extends Gesture {
 }
 
 export class CursorGesture extends Gesture {
+  constructor(...args) {
+    super(...args);
+    this._dimensions = this.terminal.dimensions;
+  }
+
   onMousedown(event) {
     if (this._started) return this.cleanup();
     this._started = true;
     this._start = this._end = getPoint(event.target);
-    this._activeFigure = this._updateFigure(
-      this._start, this._end, this._activeFigure
-    );
+    this._activeFigure = this._updateFigure(this._start, this._end);
     this._setCursor();
     return null;
   }
 
   onKeydown(event) {
     if (!this._started) return null;
-    // TODO: handle control characters
-    this._activeFigure.nextKey = event.key;
-    if (!CP_LOOKUP.has(this._activeFigure.nextKey)) return null;
-    this._activeFigure = this._updateFigure(
-      this._start, this._end, this._activeFigure
-    );
-    clearInterval(this._timer);
-    this._drawFigure();
-    this._end = {x: this._end.x + 1, y: this._end.y};
-    this._setCursor();
+    // TODO: clicking on cell and not typing anything
+    // should not destroy original cell contents
+    switch (event.key) {
+      case 'Backspace':
+        // TODO: back up one and remove latest tile
+        break;
+      case 'Enter':
+        // TODO: move cursor and mark sentinal
+        break;
+      case 'Escape':
+        // TODO: terminate figure
+        break;
+      default:
+        this._advanceCharacter(event.key);
+        break;
+    }
     return null;
   }
 
   cleanup() {
+    // TODO: figure with cursor off end of map
+    // currently throws when passed to terminal
+    if (!this._started) return null;
     this._clearCursor();
     return this._activeFigure;
+  }
+
+  _advanceCharacter(key) {
+    // NOTE: ignore keystroke if not a valid character
+    // or cursor is off the edge of the grid.
+    if (this._end.y >= this._dimensions.height || !CP_LOOKUP.has(key)) return;
+
+    this._activeFigure.advance(this._end, key);
+    clearInterval(this._timer);
+    this._drawFigure();
+    this._advanceCursor();
+  }
+
+  _advanceCursor() {
+    let {x: newX, y: newY} = this._end;
+    ++newX;
+    if (newX >= this._dimensions.width) {
+      newX = 0;
+      ++newY;
+    }
+    // NOTE: always set `end` even when out of bounds to allow
+    // the cursor to "leave" the sketchpad area, otherwise
+    // the user can't type up to the end of the grid.
+    this._end = {x: newX, y: newY};
+    if (newY < this._dimensions.height) {
+      this._setCursor();
+    } else {
+      this._clearCursor();
+    }
+    console.log('NEW END: %o', this._end);
   }
 
   _setCursor() {
