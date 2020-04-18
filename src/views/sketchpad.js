@@ -30,7 +30,9 @@ class Controls extends View {
     for (const control of this._inputControls) {
       control.addEventListener('input', this._updateButton.bind(this));
     }
-    this._form.addEventListener('submit', this._updateSketchpadDims.bind(this));
+    this._form.addEventListener(
+      'submit', this._updateSketchpadDims.bind(this)
+    );
   }
 
   subscribe(notifier) {
@@ -116,8 +118,13 @@ export class SketchPad extends View {
   }
 
   updateAt(x, y, cell) {
-    const gridCell = this._grid[x + (y * this._stride)],
-          gridText = gridCell.firstChild;
+    const gridIdx = x + (y * this._stride),
+          gridCell = this._grid[gridIdx];
+    if (!gridCell) {
+      console.warn('Invalid grid index: %d: (%d, %d)', gridIdx, x, y);
+      return;
+    }
+    const gridText = gridCell.firstChild;
     gridText.textContent = cell.glyph;
     gridText.style.color = cell.foregroundColor;
     gridText.style.backgroundColor = cell.backgroundColor;
