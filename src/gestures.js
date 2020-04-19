@@ -84,8 +84,6 @@ export class CursorGesture extends Gesture {
 
   onKeydown(event) {
     if (!this._started) return null;
-    // TODO: clicking on cell and not typing anything
-    // should not destroy original cell contents
     switch (event.key) {
       case 'Backspace':
         // TODO: back up one and remove latest tile
@@ -94,8 +92,7 @@ export class CursorGesture extends Gesture {
         // TODO: move cursor and mark sentinal
         break;
       case 'Escape':
-        // TODO: terminate figure
-        break;
+        return this.cleanup();
       default:
         this._advanceCharacter(event.key);
         break;
@@ -104,10 +101,13 @@ export class CursorGesture extends Gesture {
   }
 
   cleanup() {
-    // TODO: figure with cursor off end of map
-    // currently throws when passed to terminal
     if (!this._started) return null;
     this._clearCursor();
+    // NOTE: restore the cell under the cursor on cleanup
+    const cell = this.terminal.getCell(this._end.x, this._end.y);
+    if (cell) {
+      this.sketchpad.updateAt(this._end.x, this._end.y, cell);
+    }
     return this._activeFigure;
   }
 
