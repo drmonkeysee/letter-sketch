@@ -1139,7 +1139,8 @@ describe('figures', function () {
     beforeEach(function () {
       this._terminal = new Terminal(5, 5);
       this._cell = new Cell('A', '#ff0000', '#0000ff');
-      this._figure = textBuffer(this._cell, this._terminal)();
+      this._target = textBuffer(this._cell, this._terminal)
+      this._figure = this._target();
     });
 
     function assertBuffer(expected, srcCell, actual) {
@@ -1152,6 +1153,12 @@ describe('figures', function () {
         expect(actual[i]).to.eql({cell, ...tile});
       }
     }
+
+    it('returns existing active figure', function () {
+      const nextFigure = this._target(null, null, this._figure);
+
+      expect(nextFigure).to.equal(this._figure);
+    });
 
     it('returns empty figure on initial call', function () {
       expect(this._figure).to.have.lengthOf(0);
