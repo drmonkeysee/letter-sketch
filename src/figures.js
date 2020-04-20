@@ -256,6 +256,10 @@ class TextFigure extends ActiveFigure {
     const cell = new Cell(glyph, this._fgColor, this._bgColor);
     this.add(makeTile(point.x, point.y, cell));
   }
+
+  reverse() {
+    this._tiles.pop();
+  }
 }
 
 export function singleCell(lettertypeCell, terminal) {

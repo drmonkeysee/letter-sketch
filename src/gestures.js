@@ -86,7 +86,7 @@ export class CursorGesture extends Gesture {
     if (!this._started) return null;
     switch (event.key) {
       case 'Backspace':
-        // TODO: back up one and remove latest tile
+        this._reverseCharacter();
         break;
       case 'Enter':
         // TODO: move cursor and mark sentinal
@@ -103,11 +103,7 @@ export class CursorGesture extends Gesture {
   cleanup() {
     if (!this._started) return null;
     this._clearCursor();
-    // NOTE: restore the cell under the cursor on cleanup
-    const cell = this.terminal.getCell(this._end.x, this._end.y);
-    if (cell) {
-      this.sketchpad.updateAt(this._end.x, this._end.y, cell);
-    }
+    this._restoreCell();
     return this._activeFigure;
   }
 
@@ -120,6 +116,12 @@ export class CursorGesture extends Gesture {
     clearInterval(this._timer);
     this._drawFigure();
     this._advanceCursor();
+  }
+
+  _reverseCharacter() {
+    this._activeFigure.reverse();
+    clearInterval(this._timer);
+    this._reverseCursor();
   }
 
   _advanceCursor() {
@@ -141,6 +143,20 @@ export class CursorGesture extends Gesture {
     console.log('NEW END: %o', this._end);
   }
 
+  _reverseCursor() {
+    let {x: newX, y: newY} = this._end;
+    --newX;
+    if (newX < 0) {
+      newX = this._dimensions.width - 1;
+      --newY;
+    }
+    if (newX >= this._start.x && newY >= this._start.y) {
+      this._restoreCell();
+      this._end = {x: newX, y: newY};
+    }
+    this._setCursor();
+  }
+
   _setCursor() {
     this._cursorOn = true;
     this._toggleCursor();
@@ -159,5 +175,12 @@ export class CursorGesture extends Gesture {
                           : this._activeFigure.cursorOff;
     this.sketchpad.updateAt(this._end.x, this._end.y, cursorCell);
     this._cursorOn = !this._cursorOn;
+  }
+
+  _restoreCell(point) {
+    const cell = this.terminal.getCell(this._end.x, this._end.y);
+    if (cell) {
+      this.sketchpad.updateAt(this._end.x, this._end.y, cell);
+    }
   }
 }
