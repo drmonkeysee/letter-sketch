@@ -92,6 +92,7 @@ const TOOLS_REGISTRY = {
     return new TextTool(models);
   },
   replace(models) {/* swap all tiles matching current point with current lettertype */},
+  eyedrop(models) {/* select colors and character from current tile */},
 };
 
 export const TOOLS = namemap(Object.values(TOOLS_REGISTRY), (name, t) => name);
