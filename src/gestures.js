@@ -23,7 +23,7 @@ class Cursor {
   get position() { return this._position; }
 
   get isValidPosition() {
-    return this._position.y >= 0 && this._position.y < this._dimensions.height;
+    return this.position.y >= 0 && this.position.y < this._dimensions.height;
   }
 
   start() {
@@ -34,7 +34,7 @@ class Cursor {
 
   advance() {
     clearInterval(this._timer);
-    let {x: newX, y: newY} = this._position;
+    let {x: newX, y: newY} = this.position;
     ++newX;
     if (newX >= this._dimensions.width) {
       newX = 0;
@@ -49,12 +49,12 @@ class Cursor {
     } else {
       this.stop();
     }
-    console.log('NEW CURSOR POS: %o', this._position);
+    console.log('NEW CURSOR POS: %o', this.position);
   }
 
   reverse() {
     clearInterval(this._timer);
-    let {x: newX, y: newY} = this._position;
+    let {x: newX, y: newY} = this.position;
     --newX;
     if (newX < 0) {
       newX = this._dimensions.width - 1;
@@ -65,7 +65,18 @@ class Cursor {
       this._position = {x: newX, y: newY};
     }
     this.start();
-    console.log('REV CURSOR POS: %o', this._position);
+    console.log('REV CURSOR POS: %o', this.position);
+  }
+
+  newline() {
+    clearInterval(this._timer);
+    let newY = this.position.y + 1;
+    if (newY < this._dimensions.height) {
+      this._restoreCell();
+      this._position = {x: this._initialPosition.x, y: newY};
+    }
+    this.start();
+    console.log('NL CURSOR POS: %o', this.position);
   }
 
   stop() {
@@ -81,17 +92,17 @@ class Cursor {
 
   _toggle() {
     this.sketchpad.updateAt(
-      this._position.x,
-      this._position.y,
+      this.position.x,
+      this.position.y,
       this._on ? this.onState : this.offState
     );
     this._on = !this._on;
   }
 
   _restoreCell(point) {
-    const cell = this.terminal.getCell(this._position.x, this._position.y);
+    const cell = this.terminal.getCell(this.position.x, this.position.y);
     if (cell) {
-      this.sketchpad.updateAt(this._position.x, this._position.y, cell);
+      this.sketchpad.updateAt(this.position.x, this.position.y, cell);
     }
   }
 }
@@ -182,6 +193,7 @@ export class CursorGesture extends Gesture {
         break;
       case 'Enter':
         // TODO: move cursor and mark sentinal
+        this._cursor.newline();
         break;
       case 'Escape':
         return this.cleanup();
