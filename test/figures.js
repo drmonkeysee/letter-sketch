@@ -1219,5 +1219,40 @@ describe('figures', function () {
 
       assertBuffer(tiles, this._cell, this._figure);
     });
+
+    it('does nothing for empty reverse', function () {
+      this._figure.reverse();
+
+      expect(this._figure).to.have.lengthOf(0);
+      expect(this._figure.cursorOn).to.eql(
+        new Cell(
+          CURSOR_GLYPH, this._cell.foregroundColor, this._cell.backgroundColor
+        )
+      );
+      expect(this._figure.cursorOff).to.eql(
+        new Cell(
+          TRANSPARENT_GLYPH,
+          this._cell.foregroundColor,
+          this._cell.backgroundColor
+        )
+      );
+    });
+
+    it('removes trailing character for reverse', function () {
+      const start = {x: 1, y: 1},
+            tiles = [
+              ['T', {x: 1, y: 1}],
+              ['e', {x: 1, y: 2}],
+              ['s', {x: 1, y: 3}],
+              ['t', {x: 1, y: 4}],
+            ];
+      for (const [char, tile] of tiles) {
+        this._figure.advance(tile, char);
+      }
+
+      this._figure.reverse();
+
+      assertBuffer(tiles.slice(0, -1), this._cell, this._figure);
+    });
   });
 });
