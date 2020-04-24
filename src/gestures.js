@@ -173,7 +173,9 @@ export class CursorGesture extends Gesture {
   }
 
   onKeydown(event) {
-    if (!this._started) return null;
+    if (!this._started || event.altKey
+        || event.ctrlKey || event.metaKey) return null;
+    event.preventDefault();
     switch (event.key) {
       case 'Backspace':
         this._reverseCharacter();
