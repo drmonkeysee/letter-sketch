@@ -1,5 +1,12 @@
 import {CP_LOOKUP} from './codepage.js';
 
+function getPoint(target) {
+  return {
+    x: parseInt(target.dataset.x, 10),
+    y: parseInt(target.dataset.y, 10),
+  };
+}
+
 const CURSOR_INTERVAL_MS = 600;
 
 class Cursor {
@@ -121,13 +128,6 @@ class Gesture {
       this._prevDrawTiles.push({x, y});
     }
   }
-}
-
-function getPoint(target) {
-  return {
-    x: parseInt(target.dataset.x, 10),
-    y: parseInt(target.dataset.y, 10),
-  };
 }
 
 export class MouseGesture extends Gesture {
