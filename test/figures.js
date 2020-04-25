@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {CURSOR_GLYPH, TRANSPARENT_GLYPH} from '../src/codepage.js';
+import {CURSOR_GLYPH, TRANSPARENT_GLYPH, NEWLINE} from '../src/codepage.js';
 
 import {
   singleCell, freeDraw, floodFill, rectangle, filledRectangle,
@@ -1143,8 +1143,8 @@ describe('figures', function () {
       this._figure = this._target();
     });
 
-    function assertBuffer(expected, srcCell, actual) {
-      expect(actual).to.have.lengthOf(expected.length);
+    function assertBuffer(expected, srcCell, actual, expectedLength) {
+      expect(actual).to.have.lengthOf(expectedLength || expected.length);
       actual = [...actual];
       for (const [i, [char, tile]] of expected.entries()) {
         const cell = new Cell(
@@ -1221,21 +1221,10 @@ describe('figures', function () {
     });
 
     it('does nothing for empty reverse', function () {
-      this._figure.reverse();
+      const tile = this._figure.reverse();
 
+      expect(tile).to.be.undefined;
       expect(this._figure).to.have.lengthOf(0);
-      expect(this._figure.cursorOn).to.eql(
-        new Cell(
-          CURSOR_GLYPH, this._cell.foregroundColor, this._cell.backgroundColor
-        )
-      );
-      expect(this._figure.cursorOff).to.eql(
-        new Cell(
-          TRANSPARENT_GLYPH,
-          this._cell.foregroundColor,
-          this._cell.backgroundColor
-        )
-      );
     });
 
     it('removes trailing character for reverse', function () {
@@ -1250,9 +1239,43 @@ describe('figures', function () {
         this._figure.advance(tile, char);
       }
 
-      this._figure.reverse();
+      const tile = this._figure.reverse();
 
       assertBuffer(tiles.slice(0, -1), this._cell, this._figure);
+      expect(tile).to.eql({
+          x: 1,
+          y: 4,
+          cell: new Cell(
+            't', this._cell.foregroundColor, this._cell.backgroundColor
+          ),
+        }
+      );
+    });
+
+    it('adds sentinel for newline', function () {
+      const tile = {x: 1, y: 3};
+
+      this._figure.newline(tile);
+
+      const sentinel = this._figure.reverse();
+      expect(sentinel).to.eql({x: 1, y: 3, cell: NEWLINE});
+    });
+
+    it('does not include sentinels in iterator', function () {
+      const start = {x: 1, y: 1},
+            tiles = [
+              ['T', {x: 0, y: 1}],
+              ['e', {x: 3, y: 4}],
+              ['s', {x: 2, y: 2}],
+              ['t', {x: 1, y: 1}],
+            ];
+
+      for (const [char, tile] of tiles) {
+        this._figure.advance(tile, char);
+        this._figure.newline({x: tile.x + 1, y: tile.y - 1});
+      }
+
+      assertBuffer(tiles, this._cell, this._figure, 8);
     });
   });
 });

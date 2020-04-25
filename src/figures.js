@@ -1,4 +1,4 @@
-import {CURSOR_GLYPH, TRANSPARENT_GLYPH} from './codepage.js';
+import {CURSOR_GLYPH, TRANSPARENT_GLYPH, NEWLINE} from './codepage.js';
 import {makeTile, Cell} from './models/cell.js';
 
 // NOTE: shift/xor works as a key cuz terminal coordinates
@@ -257,8 +257,19 @@ class TextFigure extends ActiveFigure {
     this.add(makeTile(point.x, point.y, cell));
   }
 
+  // NOTE: store a newline sentinel to stay aligned with
+  // the cursor position.
+  newline(point) {
+    this.add(makeTile(point.x, point.y, NEWLINE));
+  }
+
   reverse() {
-    this._tiles.pop();
+    return this._tiles.pop();
+  }
+
+  // NOTE: newline sentinels are not part of the final figure
+  *[Symbol.iterator]() {
+    yield* this._tiles.filter(t => t.cell !== NEWLINE);
   }
 }
 
