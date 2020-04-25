@@ -10,100 +10,49 @@ function getPoint(target) {
 const CURSOR_INTERVAL_MS = 600;
 
 class Cursor {
-  constructor(onState, offState, sketchpad, terminal, position) {
+  constructor(onState, offState, draw, restore) {
     this.onState = onState;
     this.offState = offState;
-    this.sketchpad = sketchpad;
-    this.terminal = terminal;
-    this._dimensions = terminal.dimensions;
-    this._initialPosition = this._position = position;
+    this.draw = draw;
+    this.restore = restore;
     this._on = false;
   }
 
   get position() { return this._position; }
 
-  get isValidPosition() {
-    return this.position.y >= 0 && this.position.y < this._dimensions.height;
+  set(point) {
+    clearInterval(this._timer);
+    this._start(point);
   }
 
-  start() {
+  reset(point) {
+    this._on = false;
+    clearInterval(this._timer);
+    this.restore(this.position);
+    if (point) {
+      this._start(point);
+    }
+  }
+
+  clear() {
+    clearInterval(this._timer);
+  }
+
+  _start(point) {
     this._on = true;
+    // NOTE: copy point to prevent external updates
+    this._position = Object.assign({}, point);
     this._toggle();
     this._timer = setInterval(this._toggle.bind(this), CURSOR_INTERVAL_MS);
   }
 
-  advance() {
-    clearInterval(this._timer);
-    let {x: newX, y: newY} = this.position;
-    ++newX;
-    if (newX >= this._dimensions.width) {
-      newX = 0;
-      ++newY;
-    }
-    // NOTE: always set `position` even when out of bounds to allow
-    // the cursor to "leave" the sketchpad area, otherwise
-    // the user can't type up to the end of the grid.
-    this._position = {x: newX, y: newY};
-    if (newY < this._dimensions.height) {
-      this.start();
-    } else {
-      this.stop();
-    }
-    console.log('NEW CURSOR POS: %o', this.position);
-  }
-
-  reverse() {
-    clearInterval(this._timer);
-    let {x: newX, y: newY} = this.position;
-    --newX;
-    if (newX < 0) {
-      newX = this._dimensions.width - 1;
-      --newY;
-    }
-    if (newX >= this._initialPosition.x || newY > this._initialPosition.y) {
-      this._restoreCell();
-      this._position = {x: newX, y: newY};
-    }
-    this.start();
-    console.log('REV CURSOR POS: %o', this.position);
-  }
-
-  newline() {
-    clearInterval(this._timer);
-    let newY = this.position.y + 1;
-    if (newY < this._dimensions.height) {
-      this._restoreCell();
-      this._position = {x: this._initialPosition.x, y: newY};
-    }
-    this.start();
-    console.log('NL CURSOR POS: %o', this.position);
-  }
-
-  stop() {
-    this._on = false;
-    this._toggle();
-    clearInterval(this._timer);
-  }
-
-  clear() {
-    this.stop();
-    this._restoreCell();
-  }
-
   _toggle() {
-    this.sketchpad.updateAt(
+    this.draw(
       this.position.x,
       this.position.y,
       this._on ? this.onState : this.offState
     );
     this._on = !this._on;
-  }
-
-  _restoreCell(point) {
-    const cell = this.terminal.getCell(this.position.x, this.position.y);
-    if (cell) {
-      this.sketchpad.updateAt(this.position.x, this.position.y, cell);
-    }
   }
 }
 
@@ -171,15 +120,17 @@ export class CursorGesture extends Gesture {
   onMousedown(event) {
     if (this._started) return this.cleanup();
     this._started = true;
+    this._dimensions = this.terminal.dimensions;
     this._activeFigure = this._updateFigure();
+    this._start = this._end = getPoint(event.target);
     this._cursor = new Cursor(
       this._activeFigure.cursorOn,
       this._activeFigure.cursorOff,
-      this.sketchpad,
-      this.terminal,
-      getPoint(event.target)
+      this._drawCursor.bind(this),
+      this._restoreCell.bind(this)
     );
-    this._cursor.start();
+    this._cursor.set(this._start);
+    console.log('START CURSOR POS: %o', this._start);
     return null;
   }
 
@@ -192,8 +143,7 @@ export class CursorGesture extends Gesture {
         this._reverseCharacter();
         break;
       case 'Enter':
-        // TODO: move cursor and mark sentinal
-        this._cursor.newline();
+        this._newline();
         break;
       case 'Escape':
         return this.cleanup();
@@ -206,22 +156,70 @@ export class CursorGesture extends Gesture {
 
   cleanup() {
     if (!this._started) return null;
-    this._cursor.clear();
+    this._cursor.reset();
     return this._activeFigure;
+  }
+
+  get _isValidPosition() {
+    return this._end.y >= 0 && this._end.y < this._dimensions.height;
   }
 
   _advanceCharacter(key) {
     // NOTE: ignore keystroke if not a valid character
     // or cursor is off the edge of the grid.
-    if (!this._cursor.isValidPosition || !CP_LOOKUP.has(key)) return;
+    if (!this._isValidPosition || !CP_LOOKUP.has(key)) return;
 
-    this._activeFigure.advance(this._cursor.position, key);
+    this._activeFigure.advance(this._end, key);
+    this._advanceCursor();
     this._drawFigure();
-    this._cursor.advance();
+  }
+
+  _advanceCursor() {
+    let {x: newX, y: newY} = this._end;
+    ++newX;
+    if (newX >= this._dimensions.width) {
+      newX = 0;
+      ++newY;
+    }
+    // NOTE: always set `end` even when out of bounds to allow
+    // the cursor to "leave" the sketchpad area, otherwise
+    // the user can't type up to the end of the grid.
+    this._end = {x: newX, y: newY};
+    if (newY < this._dimensions.height) {
+      this._cursor.set(this._end);
+    } else {
+      this._cursor.clear();
+    }
+    console.log('NEW CURSOR POS: %o', this._end);
   }
 
   _reverseCharacter() {
-    this._activeFigure.reverse();
-    this._cursor.reverse();
+    const tile = this._activeFigure.reverse();
+    if (tile) {
+      this._end = {x: tile.x, y: tile.y};
+      this._cursor.reset(this._end);
+    }
+    console.log('REVERSE CURSOR POS: %o', this._end);
+  }
+
+  _newline() {
+    this._activeFigure.newline(this._end);
+    let newY = this._end.y + 1;
+    if (newY < this._dimensions.height) {
+      this._end = {x: this._start.x, y: newY};
+      this._cursor.reset(this._end);
+    }
+    console.log('NL CURSOR POS: %o', this._end);
+  }
+
+  _drawCursor(x, y, state) {
+    this.sketchpad.updateAt(x, y, state);
+  }
+
+  _restoreCell(point) {
+    const cell = this.terminal.getCell(point.x, point.y);
+    if (cell) {
+      this.sketchpad.updateAt(point.x, point.y, cell);
+    }
   }
 }

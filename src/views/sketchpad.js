@@ -121,7 +121,7 @@ export class SketchPad extends View {
     const gridIdx = x + (y * this._stride),
           gridCell = this._grid[gridIdx];
     if (!gridCell) {
-      console.warn('Invalid grid index: %d: (%d, %d)', gridIdx, x, y);
+      console.warn('Invalid grid index %d: (%d, %d)', gridIdx, x, y);
       return;
     }
     const gridText = gridCell.firstChild;
