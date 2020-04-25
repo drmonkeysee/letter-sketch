@@ -41,16 +41,14 @@ class Cursor {
   _start(point) {
     this._on = true;
     // NOTE: copy point to prevent external updates
-    this._position = Object.assign({}, point);
+    this._position = {...point};
     this._toggle();
     this._timer = setInterval(this._toggle.bind(this), CURSOR_INTERVAL_MS);
   }
 
   _toggle() {
     this.draw(
-      this.position.x,
-      this.position.y,
-      this._on ? this.onState : this.offState
+      this.position.x, this.position.y, this._on ? this.onState : this.offState
     );
     this._on = !this._on;
   }
