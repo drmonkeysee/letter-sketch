@@ -84,7 +84,7 @@ describe('ViewNotifier', function () {
       this.target.signal(this.update);
 
       handlers.forEach((h, i) => {
-        if (events[i] == EVENTS.onForegroundColorChanged) {
+        if (events[i] === EVENTS.onForegroundColorChanged) {
           sinon.assert.calledWith(h, this.update);
         } else {
           sinon.assert.notCalled(h);

@@ -79,7 +79,7 @@ class Controls extends View {
 
   _updateButton() {
     this._button.disabled = this._inputControls.every(
-      c => c.value == c.dataset.currentValue
+      c => c.value === c.dataset.currentValue
     );
   }
 }
