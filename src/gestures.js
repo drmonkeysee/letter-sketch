@@ -216,8 +216,6 @@ export class CursorGesture extends Gesture {
 
   _restoreCell(point) {
     const cell = this.terminal.getCell(point.x, point.y);
-    if (cell) {
-      this.sketchpad.updateAt(point.x, point.y, cell);
-    }
+    this.sketchpad.updateAt(point.x, point.y, cell);
   }
 }
