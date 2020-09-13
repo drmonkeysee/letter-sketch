@@ -145,6 +145,12 @@ export class CursorGesture extends Gesture {
         break;
       case 'Escape':
         return this.cleanup();
+      case ' ':
+        // NOTE: convert plain space (ClEAR GLYPH) to
+        // cursor off state (TRANSPARENT GLYPH)
+        // in order to preserve background color.
+        this._advanceCharacter(this._cursor.offState.glyph);
+        break;
       default:
         this._advanceCharacter(event.key);
         break;
