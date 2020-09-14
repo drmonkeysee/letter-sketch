@@ -3,9 +3,9 @@ import {CURSOR_GLYPH, TRANSPARENT_GLYPH, NEWLINE} from '../src/codepage.js';
 
 import {
   singleCell, freeDraw, floodFill, rectangle, filledRectangle,
-  ellipse, filledEllipse, lineSegment, textBuffer,
+  ellipse, filledEllipse, lineSegment, textBuffer, replace
 } from '../src/figures.js';
-import {Cell} from '../src/models/cell.js';
+import {Cell, makeTile} from '../src/models/cell.js';
 import {Terminal} from '../src/models/terminal.js';
 
 function assertUnorderedFigure(expTiles, expCell, actual) {
@@ -1276,6 +1276,84 @@ describe('figures', function () {
       }
 
       assertBuffer(tiles, this._cell, this._figure, 8);
+    });
+  });
+
+  describe('#replace', function () {
+    beforeEach(function () {
+      this._terminal = new Terminal(4, 4);
+      const terminalState = [
+        new Cell(), new Cell(), new Cell('b', '#ffffff'), new Cell('b'),
+        new Cell('a', '#ffffff'), new Cell(), new Cell('b'),
+          new Cell('b', '#ff0000', '#0000ff'),
+        new Cell('a'), new Cell('c'), new Cell(),
+          new Cell('b', '#ff0000', '#0000ff'),
+        new Cell('a'), new Cell('a'), new Cell('a', '#ff0000', '#0000ff'),
+          new Cell('a', '#ff0000', '#0000ff'),
+      ];
+      let x = 0, y = 0;
+      this._terminal.update(
+        terminalState.map(c => {
+          const t = makeTile(x++, y, c);
+          if (x >= 4) {
+            x = 0;
+            ++y;
+          }
+          return t;
+        })
+      );
+      this._cell = new Cell('X', '#00ff00', '#00ff00');
+      this._target = replace(this._cell, this._terminal);
+    });
+
+    it('returns existing active figure', function () {
+      const existingFigure = [];
+
+      const nextFigure = this._target(null, null, existingFigure);
+
+      expect(nextFigure).to.equal(existingFigure);
+    });
+
+    it('does nothing if new cell matches target cell', function () {
+      this._target = replace(
+        new Cell('b', '#ff0000', '#0000ff'), this._terminal
+      );
+
+      const figure = this._target({x: 3, y: 1});
+
+      expect(figure).to.be.empty;
+    });
+
+    it('replaces default tiles', function () {
+      const figure = this._target({x: 0, y: 0});
+
+      const expected = [
+        {x: 0, y: 0},
+        {x: 1, y: 0},
+        {x: 1, y: 1},
+        {x: 2, y: 2},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('replaces basic glyph tiles', function () {
+      const figure = this._target({x: 0, y: 2});
+
+      const expected = [
+        {x: 0, y: 2},
+        {x: 1, y: 3},
+        {x: 1, y: 3},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
+    });
+
+    it('replaces single tile', function () {
+      const figure = this._target({x: 2, y: 0});
+
+      const expected = [
+        {x: 2, y: 0},
+      ];
+      assertUnorderedFigure(expected, this._cell, figure);
     });
   });
 });

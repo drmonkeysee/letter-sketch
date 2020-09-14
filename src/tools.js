@@ -1,6 +1,6 @@
 import {
   singleCell, freeDraw, floodFill, rectangle, filledRectangle,
-  ellipse, filledEllipse, lineSegment, textBuffer
+  ellipse, filledEllipse, lineSegment, textBuffer, replace
 } from './figures.js';
 import {MouseGesture, CursorGesture} from './gestures.js';
 import namemap from './namemap.js';
@@ -91,7 +91,9 @@ const TOOLS_REGISTRY = {
   text(models) {
     return new TextTool(models);
   },
-  replace(models) {/* swap all tiles matching current point with current lettertype */},
+  swap(models) {
+    return new Tool(models, MouseGesture, replace);
+  },
   eyedrop(models) {/* select colors and character from current tile */},
 };
 

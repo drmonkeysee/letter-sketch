@@ -355,3 +355,23 @@ export function textBuffer(lettertypeCell, terminal) {
     return activeFigure || new TextFigure(lettertypeCell);
   };
 }
+
+export function replace(lettertypeCell, terminal) {
+  return (start, end, activeFigure) => {
+    if (activeFigure) return activeFigure;
+
+    const targetCell = terminal.getCell(start.x, start.y),
+          figure = [];
+    if (targetCell.equals(lettertypeCell)) return figure;
+
+    const {width, height} = terminal.dimensions;
+    for (let y = 0; y < height; ++y) {
+      for (let x = 0; x < width; ++x) {
+        const c = terminal.getCell(x, y);
+        if (!c.equals(targetCell)) continue;
+        figure.push(makeTile(x, y, lettertypeCell));
+      }
+    }
+    return figure;
+  };
+}
