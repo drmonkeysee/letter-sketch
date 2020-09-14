@@ -274,9 +274,8 @@ class TextFigure extends ActiveFigure {
 }
 
 export function singleCell(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => {
-    return activeFigure || [makeTile(start.x, start.y, lettertypeCell)];
-  };
+  return (start, end, activeFigure) =>
+    activeFigure || [makeTile(start.x, start.y, lettertypeCell)];
 }
 
 export function freeDraw(lettertypeCell, terminal) {
@@ -317,46 +316,44 @@ export function floodFill(lettertypeCell, terminal) {
 }
 
 export function rectangle(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => {
-    return drawRect(start, end, lettertypeCell, plotRect);
-  };
+  return (start, end, activeFigure) => drawRect(
+    start, end, lettertypeCell, plotRect
+  );
 }
 
 export function filledRectangle(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => {
-    return drawRect(start, end, lettertypeCell, plotFilledRect);
-  };
+  return (start, end, activeFigure) => drawRect(
+    start, end, lettertypeCell, plotFilledRect
+  );
 }
 
 export function ellipse(lettertypeCell, terminal) {
   const {width, height} = terminal.dimensions;
-  return (start, end, activeFigure) => {
-    return drawEllipse(start, end, width, height, lettertypeCell, plotEllipse);
-  };
+  return (start, end, activeFigure) => drawEllipse(
+    start, end, width, height, lettertypeCell, plotEllipse
+  );
 }
 
 export function filledEllipse(lettertypeCell, terminal) {
   const {width, height} = terminal.dimensions;
-  return (start, end, activeFigure) => {
-    return drawEllipse(
-      start, end, width, height, lettertypeCell, plotFilledEllipse
-    );
-  };
+  return (start, end, activeFigure) => drawEllipse(
+    start, end, width, height, lettertypeCell, plotFilledEllipse
+  );
 }
 
 export function lineSegment(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => {
-    return drawLineSegment(start.x, start.y, end.x, end.y, lettertypeCell);
-  };
+  return (start, end, activeFigure) => drawLineSegment(
+    start.x, start.y, end.x, end.y, lettertypeCell
+  );
 }
 
 export function textBuffer(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => {
-    return activeFigure || new TextFigure(lettertypeCell);
-  };
+  return (start, end, activeFigure) =>
+    activeFigure || new TextFigure(lettertypeCell);
 }
 
 export function replace(lettertypeCell, terminal) {
+  const {width, height} = terminal.dimensions;
   return (start, end, activeFigure) => {
     if (activeFigure) return activeFigure;
 
@@ -364,7 +361,6 @@ export function replace(lettertypeCell, terminal) {
           figure = [];
     if (targetCell.equals(lettertypeCell)) return figure;
 
-    const {width, height} = terminal.dimensions;
     for (let y = 0; y < height; ++y) {
       for (let x = 0; x < width; ++x) {
         const c = terminal.getCell(x, y);
