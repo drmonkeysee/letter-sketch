@@ -65,8 +65,8 @@ class TextTool extends Tool {
 
 class EyedropTool extends Tool {
   constructor(models) {
-    // NOTE: no figureStyle for this tool
-    super(models, SampleCell, (...args) => null);
+    // NOTE: empty figureStyle used to terminate gesture immediately
+    super(models, SampleCell, () => () => []);
   }
 }
 

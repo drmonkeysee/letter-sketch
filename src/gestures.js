@@ -55,11 +55,10 @@ class Cursor {
 }
 
 class Gesture {
-  constructor(figureStyle, sketchpad, terminal) {
+  constructor(updateFigure, sketchpad, terminal) {
+    this.updateFigure = updateFigure;
     this.sketchpad = sketchpad;
     this.terminal = terminal;
-    this._updateFigure = figureStyle;
-    this._prevDrawTiles = [];
     this._started = false;
   }
 
@@ -70,6 +69,13 @@ class Gesture {
           handlerName = `on${eventName}`;
     if (this[handlerName]) return this[handlerName](event);
     return null;
+  }
+}
+
+class DrawGesture extends Gesture {
+  constructor(...args) {
+    super(...args);
+    this._prevDrawTiles = [];
   }
 
   _drawFigure() {
@@ -88,11 +94,11 @@ class Gesture {
   }
 }
 
-export class MouseGesture extends Gesture {
+export class MouseGesture extends DrawGesture {
   onMousedown(event) {
     this._started = true;
     this._start = this._end = getPoint(event.target);
-    this._activeFigure = this._updateFigure(
+    this._activeFigure = this.updateFigure(
       this._start, this._end, this._activeFigure
     );
     this._drawFigure();
@@ -102,7 +108,7 @@ export class MouseGesture extends Gesture {
   onMouseover(event) {
     if (!this._started) return null;
     this._end = getPoint(event.target);
-    this._activeFigure = this._updateFigure(
+    this._activeFigure = this.updateFigure(
       this._start, this._end, this._activeFigure
     );
     this._drawFigure();
@@ -114,12 +120,12 @@ export class MouseGesture extends Gesture {
   }
 }
 
-export class CursorGesture extends Gesture {
+export class CursorGesture extends DrawGesture {
   onMousedown(event) {
     if (this._started) return this.cleanup();
     this._started = true;
     this._dimensions = this.terminal.dimensions;
-    this._activeFigure = this._updateFigure();
+    this._activeFigure = this.updateFigure();
     this._start = this._end = getPoint(event.target);
     this._cursor = new Cursor(
       this._activeFigure.cursorOn,
@@ -231,6 +237,6 @@ export class SampleCell extends Gesture {
     this._started = true;
     const point = getPoint(event.target);
     this.sketchpad.commitCellSampling(this.terminal.getCell(point.x, point.y));
-    return [];
+    return this.updateFigure();
   }
 }
