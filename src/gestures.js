@@ -225,3 +225,12 @@ export class CursorGesture extends Gesture {
     this.sketchpad.updateAt(point.x, point.y, cell);
   }
 }
+
+class SampleCell extends Gesture {
+  onMousedown(event) {
+    this._started = true;
+    const point = getPoint(event.target);
+    this.sketchpad.commitCellSampling(this.terminal.getCell(point.x, point.y));
+    return [];
+  }
+}

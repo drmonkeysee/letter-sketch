@@ -2,7 +2,7 @@ import {
   singleCell, freeDraw, floodFill, rectangle, filledRectangle,
   ellipse, filledEllipse, lineSegment, textBuffer, replace
 } from './figures.js';
-import {MouseGesture, CursorGesture} from './gestures.js';
+import {MouseGesture, CursorGesture, SampleCell} from './gestures.js';
 import namemap from './namemap.js';
 
 class Tool {
@@ -63,6 +63,13 @@ class TextTool extends Tool {
   }
 }
 
+class EyedropTool extends Tool {
+  constructor(models) {
+    // NOTE: no figureStyle for this tool
+    super(models, SampleCell, (...args) => null);
+  }
+}
+
 const TOOLS_REGISTRY = {
   point(models) {
     return new Tool(models, MouseGesture, singleCell);
@@ -94,7 +101,9 @@ const TOOLS_REGISTRY = {
   swap(models) {
     return new Tool(models, MouseGesture, replace);
   },
-  eyedrop(models) {/* select colors and character from current tile */},
+  eyedrop(models) {
+    return new EyedropTool(models);
+  },
 };
 
 export const TOOLS = namemap(Object.values(TOOLS_REGISTRY), (name, t) => name);

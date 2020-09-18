@@ -130,6 +130,12 @@ export class SketchPad extends View {
     gridText.style.backgroundColor = cell.backgroundColor;
   }
 
+  commitCellSampling(cell) {
+    this.dispatch.command(COMMANDS.setForegroundColor, cell.foregroundColor);
+    this.dispatch.command(COMMANDS.setBackgroundColor, cell.backgroundColor);
+    this.dispatch.command(COMMANDS.setGlyph, cell.glyph);
+  }
+
   _drawSketchpad(terminal, fontSize) {
     const tileSize = this._measureGlyph(fontSize),
           termSize = terminal.dimensions;
