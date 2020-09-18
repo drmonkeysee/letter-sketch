@@ -226,7 +226,7 @@ export class CursorGesture extends Gesture {
   }
 }
 
-class SampleCell extends Gesture {
+export class SampleCell extends Gesture {
   onMousedown(event) {
     this._started = true;
     const point = getPoint(event.target);
