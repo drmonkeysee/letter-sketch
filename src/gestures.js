@@ -233,7 +233,7 @@ export class CursorGesture extends DrawGesture {
 }
 
 export class SampleCell extends Gesture {
-  onMousedown(event) {
+  onMouseup(event) {
     this._started = true;
     const point = getPoint(event.target);
     this.sketchpad.commitCellSampling(this.terminal.getCell(point.x, point.y));
