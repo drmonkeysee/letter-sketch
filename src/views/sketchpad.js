@@ -1,4 +1,4 @@
-import {DEFAULT_GLYPH, CP437} from '../codepage.js';
+import {SIGILS, CP} from '../codepage.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
 import {View} from './view.js';
@@ -183,7 +183,7 @@ export class SketchPad extends View {
     let dims = {
       minWidth: 100, maxWidth: 0, minHeight: 100, maxHeight: 0
     };
-    dims = CP437.reduce((acc, letter) => {
+    dims = [...CP.glyphs()].reduce((acc, letter) => {
       this._ruler.textContent = letter;
       const {width, height} = this._ruler.getBoundingClientRect();
       // NOTE: || operators guard against glyphs with dimensions of 0
@@ -194,7 +194,7 @@ export class SketchPad extends View {
         maxHeight: Math.max(acc.maxHeight, height),
       };
     }, dims);
-    this._ruler.textContent = DEFAULT_GLYPH;
+    this._ruler.textContent = SIGILS.DEFAULT;
     const {width, height} = this._ruler.getBoundingClientRect();
     console.log('Font dims: %o', dims);
     console.log('Bounding rect: %o', {width, height});

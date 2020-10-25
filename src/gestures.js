@@ -1,4 +1,4 @@
-import {CP_LOOKUP} from './codepage.js';
+import {CP} from './codepage.js';
 
 function getPoint(target) {
   return {
@@ -177,7 +177,7 @@ export class CursorGesture extends DrawGesture {
   _advanceCharacter(key) {
     // NOTE: ignore keystroke if not a valid character
     // or cursor is off the edge of the grid.
-    if (!this._isValidPosition || !CP_LOOKUP.has(key)) return;
+    if (!this._isValidPosition || !CP.contains(key)) return;
 
     this._activeFigure.advance(this._end, key);
     this._advanceCursor();

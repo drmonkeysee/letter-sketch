@@ -1,4 +1,4 @@
-import {CP437} from '../codepage.js';
+import {CP} from '../codepage.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
 import {View} from './view.js';
@@ -10,7 +10,7 @@ export class LetterBlock extends View {
   }
 
   draw(initialState) {
-    for (const glyph of CP437) {
+    for (const glyph of CP.glyphs()) {
       const blockText = this.doc.createElement('span');
       blockText.textContent = glyph;
 

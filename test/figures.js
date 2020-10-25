@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {CURSOR_GLYPH, TRANSPARENT_GLYPH, NEWLINE} from '../src/codepage.js';
+import {SIGILS} from '../src/codepage.js';
 
 import {
   singleCell, freeDraw, floodFill, rectangle, filledRectangle,
@@ -1164,12 +1164,12 @@ describe('figures', function () {
       expect(this._figure).to.have.lengthOf(0);
       expect(this._figure.cursorOn).to.eql(
         new Cell(
-          CURSOR_GLYPH, this._cell.foregroundColor, this._cell.backgroundColor
+          SIGILS.CURSOR, this._cell.foregroundColor, this._cell.backgroundColor
         )
       );
       expect(this._figure.cursorOff).to.eql(
         new Cell(
-          TRANSPARENT_GLYPH,
+          SIGILS.TRANSPARENT,
           this._cell.foregroundColor,
           this._cell.backgroundColor
         )
@@ -1258,7 +1258,7 @@ describe('figures', function () {
       this._figure.newline(tile);
 
       const sentinel = this._figure.reverse();
-      expect(sentinel).to.eql({x: 1, y: 3, cell: NEWLINE});
+      expect(sentinel).to.eql({x: 1, y: 3, cell: SIGILS.NEWLINE});
     });
 
     it('does not include sentinels in iterator', function () {

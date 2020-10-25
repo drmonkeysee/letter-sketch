@@ -1,4 +1,4 @@
-import {DEFAULT_GLYPH} from '../codepage.js';
+import {SIGILS} from '../codepage.js';
 import {COLORS} from '../color.js';
 import {TOOLS} from '../tools.js';
 import {Cell} from './cell.js';
@@ -8,7 +8,7 @@ export default {
   load() {
     return {
       lettertype: {
-        cell: new Cell(DEFAULT_GLYPH, COLORS.black),
+        cell: new Cell(SIGILS.DEFAULT, COLORS.black),
         fontSize: 24,
       },
       terminal: new Terminal(50, 20),

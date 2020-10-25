@@ -1,6 +1,4 @@
-const DEFAULT = 0x41, CLEAR = 0x20, CURSOR = 0x7c, TRANSPARENT = 0xff;
-
-export const CP437 = [
+const CP437 = [
   '\u2400', '\u263a', '\u263b', '\u2665',
   '\u2666', '\u2663', '\u2660', '\u2022',
   '\u25d8', '\u25cb', '\u25d9', '\u2642',
@@ -66,9 +64,24 @@ export const CP437 = [
   '\u00b0', '\u2219', '\u00b7', '\u221a',
   '\u207f', '\u00b2', '\u25a0', '\u00a0',
 ],
-DEFAULT_GLYPH = CP437[DEFAULT],
-CLEAR_GLYPH = CP437[CLEAR],
-CURSOR_GLYPH = CP437[CURSOR],
-TRANSPARENT_GLYPH = CP437[TRANSPARENT],
-CP_LOOKUP = new Set(CP437),
-NEWLINE = '\n';
+CP_LOOKUP = new Set(CP437);
+
+export const SIGILS = {
+  DEFAULT: 0x41,
+  CLEAR: 0x20,
+  CURSOR: 0x7c,
+  TRANSPARENT: 0xff,
+  NEWLINE: '\n',
+};
+
+export const CP = {
+  *glyphs() {
+    yield* CP437;
+  },
+  glyph(idx) {
+    return CP437[idx];
+  },
+  contains(glyph) {
+    return CP_LOOKUP.has(glyph);
+  },
+};
