@@ -78,6 +78,9 @@ export const CP = {
   *glyphs() {
     yield* CP437;
   },
+  *enumerate() {
+    yield* CP437.entries();
+  },
   glyph(idx) {
     return CP437[idx];
   },
