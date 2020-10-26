@@ -254,8 +254,8 @@ class TextFigure extends ActiveFigure {
     );
   }
 
-  advance(point, glyph) {
-    const cell = new Cell(glyph, this._fgColor, this._bgColor);
+  advance(point, glyphId) {
+    const cell = new Cell(glyphId, this._fgColor, this._bgColor);
     this.add(makeTile(point.x, point.y, cell));
   }
 

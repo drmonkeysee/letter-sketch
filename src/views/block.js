@@ -10,14 +10,15 @@ export class LetterBlock extends View {
   }
 
   draw(initialState) {
-    for (const glyph of CP.glyphs()) {
+    for (const [id, glyph] of CP.enumerate()) {
       const blockText = this.doc.createElement('span');
+      blockText.dataset.id = id;
       blockText.textContent = glyph;
 
       const blockCell = this.doc.createElement('div');
       blockCell.appendChild(blockText);
 
-      if (glyph === initialState.glyph) {
+      if (id === initialState.glyphId) {
         blockCell.className = 'selected';
       }
 
@@ -31,17 +32,16 @@ export class LetterBlock extends View {
   }
 
   _refreshGlyph(update) {
-    const glyph = update.glyph;
+    const glyphId = update.glyphId;
     for (const cell of this._block.children) {
-      cell.className = cell.firstElementChild.textContent === glyph
+      cell.className = cell.firstElementChild.dataset.id === glyphId.toString()
                         ? 'selected'
                         : '';
     }
   }
 
   _pickGlyph(event) {
-    this.dispatch.command(
-      COMMANDS.setGlyph, event.target.firstElementChild.textContent
-    );
+    const glyphId = parseInt(event.target.firstElementChild.dataset.id, 10);
+    this.dispatch.command(COMMANDS.setGlyph, glyphId);
   }
 }

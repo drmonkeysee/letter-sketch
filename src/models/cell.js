@@ -1,33 +1,37 @@
 import {SIGILS} from '../codepage.js';
 
 export class Cell {
-  constructor(glyph, fgColor, bgColor) {
-    this._setFields(glyph, fgColor, bgColor);
+  constructor(glyphId, fgColor, bgColor) {
+    this._setFields(glyphId, fgColor, bgColor);
   }
 
-  get glyph() { return this._glyph; }
-  set glyph(value) { this._glyph = value || SIGILS.CLEAR; }
+  get glyphId() { return this._glyphId; }
+  set glyphId(value) {
+    this._glyphId = value === undefined || value === null
+                    ? SIGILS.CLEAR
+                    : value;
+  }
 
   isEmpty() {
-    return this.glyph === SIGILS.CLEAR;
+    return this.glyphId === SIGILS.CLEAR;
   }
 
   equals(other) {
-    return this.glyph === other.glyph
+    return this.glyphId === other.glyphId
       && this.foregroundColor === other.foregroundColor
       && this.backgroundColor === other.backgroundColor;
   }
 
   update({
-    glyph = this.glyph,
+    glyphId = this.glyphId,
     foregroundColor = this.foregroundColor,
     backgroundColor = this.backgroundColor,
   } = {}) {
-    this._setFields(glyph, foregroundColor, backgroundColor);
+    this._setFields(glyphId, foregroundColor, backgroundColor);
   }
 
-  _setFields(glyph, fgColor, bgColor) {
-    this.glyph = glyph;
+  _setFields(glyphId, fgColor, bgColor) {
+    this.glyphId = glyphId;
     this.foregroundColor = fgColor;
     this.backgroundColor = bgColor;
   }

@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {SIGILS} from '../src/codepage.js';
+import {SIGILS, CP} from '../src/codepage.js';
 
 import {
   singleCell, freeDraw, floodFill, rectangle, filledRectangle,
@@ -32,7 +32,7 @@ describe('figures', function () {
   describe('#singleCell', function () {
     beforeEach(function () {
       this._terminal = new Terminal(3, 3);
-      this._cell = new Cell('A');
+      this._cell = new Cell(CP.id('A'));
       this._target = singleCell(this._cell, this._terminal);
     });
 
@@ -59,7 +59,7 @@ describe('figures', function () {
   describe('#freeDraw', function () {
     beforeEach(function () {
       this._terminal = new Terminal(3, 3);
-      this._cell = new Cell('A');
+      this._cell = new Cell(CP.id('A'));
       this._target = freeDraw(this._cell, this._terminal);
     });
 
@@ -95,7 +95,7 @@ describe('figures', function () {
   describe('#floodFill', function () {
     beforeEach(function () {
       this._terminal = new Terminal(3, 3);
-      this._cell = new Cell('A');
+      this._cell = new Cell(CP.id('A'));
       this._target = floodFill(this._cell, this._terminal);
     });
 
@@ -157,7 +157,7 @@ describe('figures', function () {
     });
 
     it('does not fill past solid line', function () {
-      const cell = new Cell('X'),
+      const cell = new Cell(CP.id('X')),
             verticalLine = [
               {x: 1, y: 0, cell},
               {x: 1, y: 1, cell},
@@ -177,7 +177,7 @@ describe('figures', function () {
     });
 
     it('does not fill past diagonal line', function () {
-      const cell = new Cell('X'),
+      const cell = new Cell(CP.id('X')),
             diag = [
               {x: 2, y: 0, cell},
               {x: 1, y: 1, cell},
@@ -198,7 +198,7 @@ describe('figures', function () {
 
     it('fills single tile', function () {
       const tile = {x: 1, y: 1};
-      this._terminal.update([{cell: new Cell('X'), ...tile}]);
+      this._terminal.update([{cell: new Cell(CP.id('X')), ...tile}]);
 
       const figure = this._target(tile);
 
@@ -206,7 +206,7 @@ describe('figures', function () {
     });
 
     it('fills solid line', function () {
-      const cell = new Cell('X'),
+      const cell = new Cell(CP.id('X')),
             verticalLine = [
               {x: 1, y: 0, cell},
               {x: 1, y: 1, cell},
@@ -226,7 +226,7 @@ describe('figures', function () {
     });
 
     it('does not fill diagonal line', function () {
-      const cell = new Cell('X'),
+      const cell = new Cell(CP.id('X')),
             diag = [
               {x: 2, y: 0, cell},
               {x: 1, y: 1, cell},
@@ -244,7 +244,7 @@ describe('figures', function () {
     });
 
     it('fills contiguous shape', function () {
-      const cell = new Cell('X'),
+      const cell = new Cell(CP.id('X')),
             square = [
               {x: 1, y: 1, cell},
               {x: 2, y: 1, cell},
@@ -280,7 +280,7 @@ describe('figures', function () {
   describe('#rectangle', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
-      this._cell = new Cell('A');
+      this._cell = new Cell(CP.id('A'));
       this._target = rectangle(this._cell, this._terminal);
     });
 
@@ -412,7 +412,7 @@ describe('figures', function () {
   describe('#filledRectangle', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
-      this._cell = new Cell('A');
+      this._cell = new Cell(CP.id('A'));
       this._target = filledRectangle(this._cell, this._terminal);
     });
 
@@ -550,7 +550,7 @@ describe('figures', function () {
   describe('#ellipse', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
-      this._cell = new Cell('A');
+      this._cell = new Cell(CP.id('A'));
       this._target = ellipse(this._cell, this._terminal);
     });
 
@@ -750,7 +750,7 @@ describe('figures', function () {
   describe('#filledEllipse', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
-      this._cell = new Cell('A');
+      this._cell = new Cell(CP.id('A'));
       this._target = filledEllipse(this._cell, this._terminal);
     });
 
@@ -1019,7 +1019,7 @@ describe('figures', function () {
   describe('#lineSegment', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
-      this._cell = new Cell('A');
+      this._cell = new Cell(CP.id('A'));
       this._target = lineSegment(this._cell, this._terminal);
     });
 
@@ -1138,7 +1138,7 @@ describe('figures', function () {
   describe('#textBuffer', function () {
     beforeEach(function () {
       this._terminal = new Terminal(5, 5);
-      this._cell = new Cell('A', '#ff0000', '#0000ff');
+      this._cell = new Cell(CP.id('A'), '#ff0000', '#0000ff');
       this._target = textBuffer(this._cell, this._terminal)
       this._figure = this._target();
     });
@@ -1283,13 +1283,15 @@ describe('figures', function () {
     beforeEach(function () {
       this._terminal = new Terminal(4, 4);
       const terminalState = [
-        new Cell(), new Cell(), new Cell('b', '#ffffff'), new Cell('b'),
-        new Cell('a', '#ffffff'), new Cell(), new Cell('b'),
-          new Cell('b', '#ff0000', '#0000ff'),
-        new Cell('a'), new Cell('c'), new Cell(),
-          new Cell('b', '#ff0000', '#0000ff'),
-        new Cell('a'), new Cell('a'), new Cell('a', '#ff0000', '#0000ff'),
-          new Cell('a', '#ff0000', '#0000ff'),
+        new Cell(), new Cell(), new Cell(CP.id('b'), '#ffffff'),
+          new Cell(CP.id('b')),
+        new Cell(CP.id('a'), '#ffffff'), new Cell(), new Cell(CP.id('b')),
+          new Cell(CP.id('b'), '#ff0000', '#0000ff'),
+        new Cell(CP.id('a')), new Cell(CP.id('c')), new Cell(),
+          new Cell(CP.id('b'), '#ff0000', '#0000ff'),
+        new Cell(CP.id('a')), new Cell(CP.id('a')),
+          new Cell(CP.id('a'), '#ff0000', '#0000ff'),
+          new Cell(CP.id('a'), '#ff0000', '#0000ff'),
       ];
       let x = 0, y = 0;
       this._terminal.update(
@@ -1302,7 +1304,7 @@ describe('figures', function () {
           return t;
         })
       );
-      this._cell = new Cell('X', '#00ff00', '#00ff00');
+      this._cell = new Cell(CP.id('X'), '#00ff00', '#00ff00');
       this._target = replace(this._cell, this._terminal);
     });
 
@@ -1316,7 +1318,7 @@ describe('figures', function () {
 
     it('does nothing if new cell matches target cell', function () {
       this._target = replace(
-        new Cell('b', '#ff0000', '#0000ff'), this._terminal
+        new Cell(CP.id('b'), '#ff0000', '#0000ff'), this._terminal
       );
 
       const figure = this._target({x: 3, y: 1});

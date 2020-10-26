@@ -19,10 +19,10 @@ const COMMAND_REGISTRY = {
       return makeUpdate(EVENTS.onBackgroundColorChanged, {color});
     };
   },
-  setGlyph(models, glyph) {
+  setGlyph(models, glyphId) {
     return () => {
-      models.lettertype.cell.glyph = glyph;
-      return makeUpdate(EVENTS.onGlyphChanged, {glyph});
+      models.lettertype.cell.glyphId = glyphId;
+      return makeUpdate(EVENTS.onGlyphChanged, {glyphId});
     };
   },
   setTool(models, toolName) {

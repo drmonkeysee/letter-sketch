@@ -53,7 +53,7 @@ class App {
       terminal: this._models.terminal,
       toolName: this._models.currentTool,
       tool: currentTool(this._models),
-      glyph: this._models.lettertype.cell.glyph,
+      glyphId: this._models.lettertype.cell.glyphId,
       colors: {
         fg: this._models.lettertype.cell.foregroundColor,
         bg: this._models.lettertype.cell.backgroundColor,

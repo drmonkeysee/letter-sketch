@@ -106,13 +106,13 @@ describe('commands', function () {
     });
 
     it('sets the cell glyph', function () {
-      const glyph = 'testGlyph',
+      const glyph = 0x55,
             cmd = this.target(glyph);
 
       const result = cmd();
 
-      expect(this.models.lettertype.cell.glyph).to.equal(glyph);
-      expect(result).to.eql({event: EVENTS.onGlyphChanged, glyph: glyph});
+      expect(this.models.lettertype.cell.glyphId).to.equal(glyph);
+      expect(result).to.eql({event: EVENTS.onGlyphChanged, glyphId: glyph});
     });
   });
 

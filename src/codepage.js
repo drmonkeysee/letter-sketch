@@ -63,8 +63,7 @@ const CP437 = [
   '\u2320', '\u2321', '\u00f7', '\u2248',
   '\u00b0', '\u2219', '\u00b7', '\u221a',
   '\u207f', '\u00b2', '\u25a0', '\u00a0',
-],
-CP_LOOKUP = new Set(CP437);
+];
 
 export const SIGILS = {
   DEFAULT: 0x41,
@@ -81,10 +80,10 @@ export const CP = {
   *enumerate() {
     yield* CP437.entries();
   },
-  glyph(idx) {
-    return CP437[idx];
+  glyph(id) {
+    return CP437[id];
   },
-  contains(glyph) {
-    return CP_LOOKUP.has(glyph);
+  id(glyph) {
+    return CP437.indexOf(glyph);
   },
 };

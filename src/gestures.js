@@ -155,10 +155,10 @@ export class CursorGesture extends DrawGesture {
         // NOTE: convert plain space (ClEAR GLYPH) to
         // cursor off state (TRANSPARENT GLYPH)
         // in order to preserve background color.
-        this._advanceCharacter(this._cursor.offState.glyph);
+        this._advanceCharacter(this._cursor.offState.glyphId);
         break;
       default:
-        this._advanceCharacter(event.key);
+        this._advanceCharacter(CP.id(event.key));
         break;
     }
     return null;
@@ -174,12 +174,12 @@ export class CursorGesture extends DrawGesture {
     return this._end.y >= 0 && this._end.y < this._dimensions.height;
   }
 
-  _advanceCharacter(key) {
+  _advanceCharacter(glyphId) {
     // NOTE: ignore keystroke if not a valid character
     // or cursor is off the edge of the grid.
-    if (!this._isValidPosition || !CP.contains(key)) return;
+    if (!this._isValidPosition || glyphId < 0) return;
 
-    this._activeFigure.advance(this._end, key);
+    this._activeFigure.advance(this._end, glyphId);
     this._advanceCursor();
     this._drawFigure();
   }

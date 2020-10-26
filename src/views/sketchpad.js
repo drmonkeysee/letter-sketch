@@ -125,7 +125,7 @@ export class SketchPad extends View {
       return;
     }
     const gridText = gridCell.firstChild;
-    gridText.textContent = cell.glyph;
+    gridText.textContent = CP.glyph(cell.glyphId);
     gridText.style.color = cell.foregroundColor;
     gridText.style.backgroundColor = cell.backgroundColor;
   }
@@ -133,7 +133,7 @@ export class SketchPad extends View {
   commitCellSampling(cell) {
     this.dispatch.command(COMMANDS.setForegroundColor, cell.foregroundColor);
     this.dispatch.command(COMMANDS.setBackgroundColor, cell.backgroundColor);
-    this.dispatch.command(COMMANDS.setGlyph, cell.glyph);
+    this.dispatch.command(COMMANDS.setGlyph, cell.glyphId);
   }
 
   _drawSketchpad(terminal, fontSize) {
@@ -194,7 +194,7 @@ export class SketchPad extends View {
         maxHeight: Math.max(acc.maxHeight, height),
       };
     }, dims);
-    this._ruler.textContent = SIGILS.DEFAULT;
+    this._ruler.textContent = CP.glyph(SIGILS.DEFAULT);
     const {width, height} = this._ruler.getBoundingClientRect();
     console.log('Font dims: %o', dims);
     console.log('Bounding rect: %o', {width, height});
