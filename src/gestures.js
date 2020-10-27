@@ -235,8 +235,14 @@ export class CursorGesture extends DrawGesture {
 export class SampleCell extends Gesture {
   onMouseup(event) {
     this._started = true;
+    event.stopPropagation();
     const point = getPoint(event.target);
-    this.sketchpad.commitCellSampling(this.terminal.getCell(point.x, point.y));
+    // NOTE: mouseup may fire outside sketchpad, skip action if invalid point
+    if (!Number.isNaN(point.x) && !Number.isNaN(point.y)) {
+      this.sketchpad.commitCellSampling(
+        this.terminal.getCell(point.x, point.y)
+      );
+    }
     return this.updateFigure();
   }
 }
