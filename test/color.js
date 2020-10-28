@@ -1,49 +1,81 @@
 import {expect} from 'chai';
 
-import {channelsToCss, COLORS} from '../src/color.js';
+import color from '../src/color.js';
 
-describe('#channelsToCss()', function () {
-  it('parses undefined for all channels', function () {
-    const result = channelsToCss();
+describe('#cssColor()', function () {
+  it('returns expected value for id', function () {
+    const result = color.cssColor(5);
 
-    expect(result).to.equal('rgb(0, 0, 0)');
+    expect(result).to.equal('rgb(0, 128, 255)');
   });
 
-  it('parses valid channels', function () {
-    const r = 0x22, g = 0x77, b = 0xbb;
+  it('returns undefined if invalid id', function () {
+    const result = color.cssColor(1000);
 
-    const result = channelsToCss(r, g, b);
+    expect(result).to.be.undefined;
+  });
+});
 
-    expect(result).to.equal('rgb(34, 119, 187)');
+describe('#id()', function () {
+  it('returns expected id for value', function () {
+    const result = color.id('rgb(0, 128, 255)');
+
+    expect(result).to.equal(5);
   });
 
-  it('clamps low values', function () {
-    const r = -20, g = -1, b = -1024;
+  it('returns invalid id for unknown color', function () {
+    const result = color.id('foobar');
 
-    const result = channelsToCss(r, g, b);
-
-    expect(result).to.equal('rgb(0, 0, 0)');
+    expect(result).to.equal(-1);
   });
 
-  it('clamps high values', function () {
-    const r = 300, g = 256, b = 1024;
+  it('returns id for hex color', function () {
+    const result = color.id('#80ff00');
 
-    const result = channelsToCss(r, g, b);
+    expect(result).to.equal(15);
+  });
 
-    expect(result).to.equal('rgb(255, 255, 255)');
+  it('returns id for short hex color', function () {
+    const result = color.id('#fff');
+
+    expect(result).to.equal(26);
+  });
+
+  it('returns invalid id for malformed hex string', function () {
+    const result = color.id('#foobar');
+
+    expect(result).to.equal(-1);
+  });
+
+  it('returns invalid id for invalid hex string', function () {
+    const result = color.id('#barf');
+
+    expect(result).to.equal(-1);
   });
 });
 
 describe('COLORS', function () {
   describe('#black', function () {
     it('exists', function () {
-      expect(COLORS.black).to.equal('rgb(0, 0, 0)');
+      expect(color.COLORS.black).to.equal(0);
+    });
+
+    it('matches expected css color', function () {
+      const result = color.cssColor(color.COLORS.black);
+
+      expect(result).to.equal('rgb(0, 0, 0)');
     });
   });
 
   describe('#white', function () {
     it('exists', function () {
-      expect(COLORS.white).to.equal('rgb(255, 255, 255)');
+      expect(color.COLORS.white).to.equal(26);
+    });
+
+    it('matches expected css color', function () {
+      const result = color.cssColor(color.COLORS.white);
+
+      expect(result).to.equal('rgb(255, 255, 255)');
     });
   });
 });
