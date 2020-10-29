@@ -1,9 +1,5 @@
 const COLOR_CHANNEL_MIN = 0x00, COLOR_CHANNEL_MAX = 0xff;
 
-function channelsToCss(r, g, b) {
-  return `rgb(${r}, ${g}, ${b})`;
-}
-
 function hexToRgb(hexString) {
   let r, g, b;
   if (hexString.length === 3) {
@@ -27,7 +23,7 @@ function generatePalette() {
   for (const redStep of colorSteps) {
     for (const greenStep of colorSteps) {
       for (const blueStep of colorSteps) {
-        colors.push(channelsToCss(redStep, greenStep, blueStep));
+        colors.push(`rgb(${redStep}, ${greenStep}, ${blueStep})`);
       }
     }
   }
