@@ -1,8 +1,8 @@
 import {SIGILS} from '../codepage.js';
 
 export class Cell {
-  constructor(glyphId, fgColor, bgColor) {
-    this._setFields(glyphId, fgColor, bgColor);
+  constructor(glyphId, fgColorId, bgColorId) {
+    this._setFields(glyphId, fgColorId, bgColorId);
   }
 
   get glyphId() { return this._glyphId; }
@@ -18,22 +18,22 @@ export class Cell {
 
   equals(other) {
     return this.glyphId === other.glyphId
-      && this.foregroundColor === other.foregroundColor
-      && this.backgroundColor === other.backgroundColor;
+      && this.fgColorId === other.fgColorId
+      && this.bgColorId === other.bgColorId;
   }
 
   update({
     glyphId = this.glyphId,
-    foregroundColor = this.foregroundColor,
-    backgroundColor = this.backgroundColor,
+    fgColorId = this.fgColorId,
+    bgColorId = this.bgColorId,
   } = {}) {
-    this._setFields(glyphId, foregroundColor, backgroundColor);
+    this._setFields(glyphId, fgColorId, bgColorId);
   }
 
-  _setFields(glyphId, fgColor, bgColor) {
+  _setFields(glyphId, fgColorId, bgColorId) {
     this.glyphId = glyphId;
-    this.foregroundColor = fgColor;
-    this.backgroundColor = bgColor;
+    this.fgColorId = fgColorId;
+    this.bgColorId = bgColorId;
   }
 }
 
