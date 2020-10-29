@@ -55,8 +55,8 @@ class App {
       tool: currentTool(this._models),
       glyphId: this._models.lettertype.cell.glyphId,
       colors: {
-        fg: this._models.lettertype.cell.foregroundColor,
-        bg: this._models.lettertype.cell.backgroundColor,
+        fg: this._models.lettertype.cell.fgColorId,
+        bg: this._models.lettertype.cell.bgColorId,
       },
     };
   }

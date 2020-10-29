@@ -60,14 +60,14 @@ describe('commands', function () {
     });
 
     it('sets the foreground color', function () {
-      const color = 'testColor',
+      const color = 22,
             cmd = this.target(color);
 
       const result = cmd();
 
-      expect(this.models.lettertype.cell.foregroundColor).to.equal(color);
+      expect(this.models.lettertype.cell.fgColorId).to.equal(color);
       expect(result).to.eql(
-        {event: EVENTS.onForegroundColorChanged, color: color}
+        {event: EVENTS.onForegroundColorChanged, colorId: color}
       );
     });
   });
@@ -83,14 +83,14 @@ describe('commands', function () {
     });
 
     it('sets the background color', function () {
-      const color = 'testColor',
+      const color = 22,
             cmd = this.target(color);
 
       const result = cmd();
 
-      expect(this.models.lettertype.cell.backgroundColor).to.equal(color);
+      expect(this.models.lettertype.cell.bgColorId).to.equal(color);
       expect(result).to.eql(
-        {event: EVENTS.onBackgroundColorChanged, color: color}
+        {event: EVENTS.onBackgroundColorChanged, colorId: color}
       );
     });
   });

@@ -7,16 +7,16 @@ function makeUpdate(event, data) {
 }
 
 const COMMAND_REGISTRY = {
-  setForegroundColor(models, color) {
+  setForegroundColor(models, colorId) {
     return () => {
-      models.lettertype.cell.foregroundColor = color;
-      return makeUpdate(EVENTS.onForegroundColorChanged, {color});
+      models.lettertype.cell.fgColorId = colorId;
+      return makeUpdate(EVENTS.onForegroundColorChanged, {colorId});
     };
   },
-  setBackgroundColor(models, color) {
+  setBackgroundColor(models, colorId) {
     return () => {
-      models.lettertype.cell.backgroundColor = color;
-      return makeUpdate(EVENTS.onBackgroundColorChanged, {color});
+      models.lettertype.cell.bgColorId = colorId;
+      return makeUpdate(EVENTS.onBackgroundColorChanged, {colorId});
     };
   },
   setGlyph(models, glyphId) {

@@ -30,21 +30,22 @@ class ColorSelection extends View {
     this._selection.classList.remove('selected');
   }
 
-  pick(color) {
-    this.dispatch.command(this.cmd, color);
+  pick(colorId) {
+    this.dispatch.command(this.cmd, colorId);
   }
 
   _refreshColor(update) {
-    this._setColor(update.color);
+    this._setColor(update.colorId);
   }
 
-  _setColor(color) {
-    if (color) {
-      this._selection.classList.remove('no-color');
-      this._selection.style.backgroundColor = color;
-    } else {
+  _setColor(colorId) {
+    // TODO: clean this up if i remove clear color
+    if (colorId === null || colorId === undefined) {
       this._selection.classList.add('no-color');
       this._selection.style.backgroundColor = null;
+    } else {
+      this._selection.classList.remove('no-color');
+      this._selection.style.backgroundColor = color.cssColor(colorId);
     }
   }
 }
@@ -90,7 +91,8 @@ export class ColorPalette extends View {
     }
     this._setSelection(this._colorSelections[0]);
 
-    this._clearSelection.addEventListener('click', this._pickColor.bind(this));
+    // TODO: disable for now, think about removing this
+    //this._clearSelection.addEventListener('click', this._pickColor.bind(this));
   }
 
   subscribe(notifier) {
@@ -108,6 +110,7 @@ export class ColorPalette extends View {
   }
 
   _pickColor(event) {
-    this._currentSelection.pick(event.target.style.backgroundColor);
+    const colorId = parseInt(event.target.dataset.id, 10);
+    this._currentSelection.pick(colorId);
   }
 }

@@ -246,8 +246,8 @@ class PlotFigure extends ActiveFigure {
 class TextFigure extends ActiveFigure {
   constructor(lettertypeCell) {
     super();
-    this._fgColor = lettertypeCell.foregroundColor;
-    this._bgColor = lettertypeCell.backgroundColor;
+    this._fgColor = lettertypeCell.fgColorId;
+    this._bgColor = lettertypeCell.bgColorId;
     this.cursorOn = new Cell(SIGILS.CURSOR, this._fgColor, this._bgColor);
     this.cursorOff = new Cell(
       SIGILS.TRANSPARENT, this._fgColor, this._bgColor

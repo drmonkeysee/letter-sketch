@@ -32,6 +32,7 @@ export class Cell {
 
   _setFields(glyphId, fgColorId, bgColorId) {
     this.glyphId = glyphId;
+    // TODO: if clear color is removed default these for null/undefined
     this.fgColorId = fgColorId;
     this.bgColorId = bgColorId;
   }

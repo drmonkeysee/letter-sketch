@@ -1,6 +1,7 @@
 import {expect} from 'chai';
 
 import {SIGILS, CP} from '../../src/codepage.js';
+import color from '../../src/color.js';
 import {Cell} from '../../src/models/cell.js';
 import {Terminal} from '../../src/models/terminal.js';
 
@@ -12,8 +13,8 @@ describe('Terminal', function () {
       expect(target.dimensions).to.eql({width: 1, height: 1});
       const testCell = target.getCell(0, 0);
       expect(testCell.glyphId).to.equal(SIGILS.CLEAR);
-      expect(testCell.foregroundColor).to.not.exist;
-      expect(testCell.backgroundColor).to.not.exist;
+      expect(testCell.fgColorId).to.not.exist;
+      expect(testCell.bgColorId).to.not.exist;
     });
 
     it('creates terminal', function () {
@@ -22,8 +23,8 @@ describe('Terminal', function () {
       expect(target.dimensions).to.eql({width: 20, height: 10});
       const testCell = target.getCell(10, 5);
       expect(testCell.glyphId).to.equal(SIGILS.CLEAR);
-      expect(testCell.foregroundColor).to.not.exist;
-      expect(testCell.backgroundColor).to.not.exist;
+      expect(testCell.fgColorId).to.not.exist;
+      expect(testCell.bgColorId).to.not.exist;
     });
 
     it('throws if less than min', function () {
@@ -42,7 +43,7 @@ describe('Terminal', function () {
   describe('#updateCell()', function () {
     it('updates given cell', function () {
       const target = new Terminal(10, 5),
-            newCell = new Cell(0x42, '#222222', '#232323'),
+            newCell = new Cell(0x42, 16, 20),
             targetCell = target.getCell(5, 2);
 
       target.updateCell(5, 2, newCell);
@@ -51,11 +52,11 @@ describe('Terminal', function () {
       expect(updatedCell).to.equal(targetCell);
       expect(updatedCell).to.not.equal(newCell);
       expect(updatedCell.glyphId).to.equal(0x42);
-      expect(updatedCell.foregroundColor).to.equal('#222222');
-      expect(updatedCell.backgroundColor).to.equal('#232323');
+      expect(updatedCell.fgColorId).to.equal(16);
+      expect(updatedCell.bgColorId).to.equal(20);
       expect(updatedCell.glyphId).to.equal(newCell.glyphId);
-      expect(updatedCell.foregroundColor).to.equal(newCell.foregroundColor);
-      expect(updatedCell.backgroundColor).to.equal(newCell.backgroundColor);
+      expect(updatedCell.fgColorId).to.equal(newCell.fgColorId);
+      expect(updatedCell.bgColorId).to.equal(newCell.bgColorId);
     });
   });
 
@@ -63,34 +64,42 @@ describe('Terminal', function () {
     it('updates all cells in figure', function () {
       const target = new Terminal(5, 5),
             figure = [
-              {x: 3, y: 2, cell: new Cell(CP.id('^'), '#ff0000', '#000000')},
-              {x: 2, y: 3, cell: new Cell(CP.id('<'), '#00ff00', '#000000')},
-              {x: 4, y: 3, cell: new Cell(CP.id('>'), '#0000ff', '#000000')},
-              {x: 3, y: 4, cell: new Cell(CP.id('V'), '#ffff00', '#000000')},
+              {x: 3, y: 2, cell: new Cell(
+                CP.id('^'), color.id('#ff0000'), color.id('#000000')
+              )},
+              {x: 2, y: 3, cell: new Cell(
+                CP.id('<'), color.id('#00ff00'), color.id('#000000')
+              )},
+              {x: 4, y: 3, cell: new Cell(
+                CP.id('>'), color.id('#0000ff'), color.id('#000000')
+              )},
+              {x: 3, y: 4, cell: new Cell(
+                CP.id('V'), color.id('#ffff00'), color.id('#000000')
+              )},
             ];
 
       target.update(figure);
 
       const topCell = target.getCell(3, 2);
       expect(topCell.glyphId).to.equal(CP.id('^'));
-      expect(topCell.foregroundColor).to.equal('#ff0000');
-      expect(topCell.backgroundColor).to.equal('#000000');
+      expect(topCell.fgColorId).to.equal(color.id('#ff0000'));
+      expect(topCell.bgColorId).to.equal(color.id('#000000'));
       const leftCell = target.getCell(2, 3);
       expect(leftCell.glyphId).to.equal(CP.id('<'));
-      expect(leftCell.foregroundColor).to.equal('#00ff00');
-      expect(leftCell.backgroundColor).to.equal('#000000');
+      expect(leftCell.fgColorId).to.equal(color.id('#00ff00'));
+      expect(leftCell.bgColorId).to.equal(color.id('#000000'));
       const rightCell = target.getCell(4, 3);
       expect(rightCell.glyphId).to.equal(CP.id('>'));
-      expect(rightCell.foregroundColor).to.equal('#0000ff');
-      expect(rightCell.backgroundColor).to.equal('#000000');
+      expect(rightCell.fgColorId).to.equal(color.id('#0000ff'));
+      expect(rightCell.bgColorId).to.equal(color.id('#000000'));
       const bottomCell = target.getCell(3, 4);
       expect(bottomCell.glyphId).to.equal(CP.id('V'));
-      expect(bottomCell.foregroundColor).to.equal('#ffff00');
-      expect(bottomCell.backgroundColor).to.equal('#000000');
+      expect(bottomCell.fgColorId).to.equal(color.id('#ffff00'));
+      expect(bottomCell.bgColorId).to.equal(color.id('#000000'));
       const middleCell = target.getCell(3, 3);
       expect(middleCell.glyphId).to.equal(SIGILS.CLEAR);
-      expect(middleCell.foregroundColor).to.not.exist;
-      expect(middleCell.backgroundColor).to.not.exist;
+      expect(middleCell.fgColorId).to.not.exist;
+      expect(middleCell.bgColorId).to.not.exist;
     });
   });
 

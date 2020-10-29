@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+import color from '../src/color.js';
 import {SIGILS, CP} from '../src/codepage.js';
 
 import {
@@ -1138,7 +1139,9 @@ describe('figures', function () {
   describe('#textBuffer', function () {
     beforeEach(function () {
       this._terminal = new Terminal(5, 5);
-      this._cell = new Cell(CP.id('A'), '#ff0000', '#0000ff');
+      this._cell = new Cell(
+        CP.id('A'), color.id('#ff0000'), color.id('#0000ff')
+      );
       this._target = textBuffer(this._cell, this._terminal)
       this._figure = this._target();
     });
@@ -1148,7 +1151,7 @@ describe('figures', function () {
       actual = [...actual];
       for (const [i, [char, tile]] of expected.entries()) {
         const cell = new Cell(
-          char, srcCell.foregroundColor, srcCell.backgroundColor
+          char, srcCell.fgColorId, srcCell.bgColorId
         );
         expect(actual[i]).to.eql({cell, ...tile});
       }
@@ -1164,14 +1167,14 @@ describe('figures', function () {
       expect(this._figure).to.have.lengthOf(0);
       expect(this._figure.cursorOn).to.eql(
         new Cell(
-          SIGILS.CURSOR, this._cell.foregroundColor, this._cell.backgroundColor
+          SIGILS.CURSOR, this._cell.fgColorId, this._cell.bgColorId
         )
       );
       expect(this._figure.cursorOff).to.eql(
         new Cell(
           SIGILS.TRANSPARENT,
-          this._cell.foregroundColor,
-          this._cell.backgroundColor
+          this._cell.fgColorId,
+          this._cell.bgColorId
         )
       );
     });
@@ -1183,7 +1186,7 @@ describe('figures', function () {
 
       expect(this._figure).to.have.lengthOf(1);
       const cell = new Cell(
-        'G', this._cell.foregroundColor, this._cell.backgroundColor
+        'G', this._cell.fgColorId, this._cell.bgColorId
       );
       expect([...this._figure][0]).to.eql({cell, ...tile});
     });
@@ -1246,7 +1249,7 @@ describe('figures', function () {
           x: 1,
           y: 4,
           cell: new Cell(
-            't', this._cell.foregroundColor, this._cell.backgroundColor
+            't', this._cell.fgColorId, this._cell.bgColorId
           ),
         }
       );
@@ -1285,13 +1288,14 @@ describe('figures', function () {
       const terminalState = [
         new Cell(), new Cell(), new Cell(CP.id('b'), '#ffffff'),
           new Cell(CP.id('b')),
-        new Cell(CP.id('a'), '#ffffff'), new Cell(), new Cell(CP.id('b')),
-          new Cell(CP.id('b'), '#ff0000', '#0000ff'),
+        new Cell(CP.id('a'), color.id('#ffffff')), new Cell(),
+          new Cell(CP.id('b')),
+          new Cell(CP.id('b'), color.id('#ff0000'), color.id('#0000ff')),
         new Cell(CP.id('a')), new Cell(CP.id('c')), new Cell(),
-          new Cell(CP.id('b'), '#ff0000', '#0000ff'),
+          new Cell(CP.id('b'), color.id('#ff0000'), color.id('#0000ff')),
         new Cell(CP.id('a')), new Cell(CP.id('a')),
-          new Cell(CP.id('a'), '#ff0000', '#0000ff'),
-          new Cell(CP.id('a'), '#ff0000', '#0000ff'),
+          new Cell(CP.id('a'), color.id('#ff0000'), color.id('#0000ff')),
+          new Cell(CP.id('a'), color.id('#ff0000'), color.id('#0000ff')),
       ];
       let x = 0, y = 0;
       this._terminal.update(
@@ -1304,7 +1308,9 @@ describe('figures', function () {
           return t;
         })
       );
-      this._cell = new Cell(CP.id('X'), '#00ff00', '#00ff00');
+      this._cell = new Cell(
+        CP.id('X'), color.id('#00ff00'), color.id('#00ff00')
+      );
       this._target = replace(this._cell, this._terminal);
     });
 
@@ -1318,7 +1324,8 @@ describe('figures', function () {
 
     it('does nothing if new cell matches target cell', function () {
       this._target = replace(
-        new Cell(CP.id('b'), '#ff0000', '#0000ff'), this._terminal
+        new Cell(CP.id('b'), color.id('#ff0000'), color.id('#0000ff')),
+        this._terminal
       );
 
       const figure = this._target({x: 3, y: 1});
