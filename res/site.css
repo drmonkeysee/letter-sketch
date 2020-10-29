@@ -148,10 +148,11 @@ body {
 }
 
 #palette {
-  display: flex;
+  width: 300px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 
   .palette-cell {
-    width: 100px;
     height: 100px;
   }
 }

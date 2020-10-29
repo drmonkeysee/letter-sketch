@@ -1,4 +1,4 @@
-import {channelsToCss} from '../color.js';
+import color from '../color.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
 import {View} from './view.js';
@@ -76,22 +76,13 @@ export class ColorPalette extends View {
   }
 
   draw(initialState) {
-    const colorSteps = [0x00, 0x80, 0xff];
-    for (const redStep of colorSteps) {
-      const colorColumn = this.doc.createElement('div');
-      this._palette.appendChild(colorColumn);
-
-      for (const greenStep of colorSteps) {
-        for (const blueStep of colorSteps) {
-          const colorCell = this.doc.createElement('div');
-          colorCell.className = 'palette-cell';
-          colorCell.style.backgroundColor = channelsToCss(
-            redStep, greenStep, blueStep
-          );
-          colorCell.addEventListener('click', this._pickColor.bind(this));
-          colorColumn.appendChild(colorCell);
-        }
-      }
+    for (const [colorId, colorValue] of color.enumerate()) {
+      const colorCell = this.doc.createElement('div');
+      colorCell.className = 'palette-cell';
+      colorCell.dataset.id = colorId;
+      colorCell.style.backgroundColor = colorValue;
+      colorCell.addEventListener('click', this._pickColor.bind(this));
+      this._palette.appendChild(colorCell);
     }
 
     for (const selectionView of this._colorSelections) {
