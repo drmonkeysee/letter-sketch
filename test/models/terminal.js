@@ -13,8 +13,8 @@ describe('Terminal', function () {
       expect(target.dimensions).to.eql({width: 1, height: 1});
       const testCell = target.getCell(0, 0);
       expect(testCell.glyphId).to.equal(SIGILS.CLEAR);
-      expect(testCell.fgColorId).to.not.exist;
-      expect(testCell.bgColorId).to.not.exist;
+      expect(testCell.fgColorId).to.be.undefined;
+      expect(testCell.bgColorId).to.be.undefined;
     });
 
     it('creates terminal', function () {
@@ -23,8 +23,8 @@ describe('Terminal', function () {
       expect(target.dimensions).to.eql({width: 20, height: 10});
       const testCell = target.getCell(10, 5);
       expect(testCell.glyphId).to.equal(SIGILS.CLEAR);
-      expect(testCell.fgColorId).to.not.exist;
-      expect(testCell.bgColorId).to.not.exist;
+      expect(testCell.fgColorId).to.be.undefined;
+      expect(testCell.bgColorId).to.be.undefined;
     });
 
     it('throws if less than min', function () {
@@ -98,8 +98,8 @@ describe('Terminal', function () {
       expect(bottomCell.bgColorId).to.equal(color.id('#000000'));
       const middleCell = target.getCell(3, 3);
       expect(middleCell.glyphId).to.equal(SIGILS.CLEAR);
-      expect(middleCell.fgColorId).to.not.exist;
-      expect(middleCell.bgColorId).to.not.exist;
+      expect(middleCell.fgColorId).to.be.undefined;
+      expect(middleCell.bgColorId).to.be.undefined;
     });
   });
 
