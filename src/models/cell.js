@@ -1,5 +1,5 @@
 import {SIGILS} from '../codepage.js';
-import color from '../color.js';
+import palette from '../palette.js';
 
 export class Cell {
   constructor(glyphId, fgColorId, bgColorId) {
@@ -16,14 +16,14 @@ export class Cell {
   get fgColorId() { return this._fgColorId; }
   set fgColorId(value) {
     this._fgColorId = value === undefined || value === null
-                    ? color.COLORS.black
+                    ? palette.COLORS.black
                     : value;
   }
 
   get bgColorId() { return this._bgColorId; }
   set bgColorId(value) {
     this._bgColorId = value === undefined || value === null
-                    ? color.COLORS.white
+                    ? palette.COLORS.white
                     : value;
   }
 

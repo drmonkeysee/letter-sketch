@@ -1,9 +1,9 @@
 import {expect} from 'chai';
 
 import {SIGILS, CP} from '../../src/codepage.js';
-import color from '../../src/color.js';
 import {Cell} from '../../src/models/cell.js';
 import {Terminal} from '../../src/models/terminal.js';
+import palette from '../../src/palette.js';
 
 describe('Terminal', function () {
   describe('#ctor()', function () {
@@ -13,8 +13,8 @@ describe('Terminal', function () {
       expect(target.dimensions).to.eql({width: 1, height: 1});
       const testCell = target.getCell(0, 0);
       expect(testCell.glyphId).to.equal(SIGILS.CLEAR);
-      expect(testCell.fgColorId).to.be.undefined;
-      expect(testCell.bgColorId).to.be.undefined;
+      expect(testCell.fgColorId).to.equal(palette.COLORS.black);
+      expect(testCell.bgColorId).to.equal(palette.COLORS.white);
     });
 
     it('creates terminal', function () {
@@ -23,8 +23,8 @@ describe('Terminal', function () {
       expect(target.dimensions).to.eql({width: 20, height: 10});
       const testCell = target.getCell(10, 5);
       expect(testCell.glyphId).to.equal(SIGILS.CLEAR);
-      expect(testCell.fgColorId).to.be.undefined;
-      expect(testCell.bgColorId).to.be.undefined;
+      expect(testCell.fgColorId).to.equal(palette.COLORS.black);
+      expect(testCell.bgColorId).to.equal(palette.COLORS.white);
     });
 
     it('throws if less than min', function () {
@@ -65,16 +65,16 @@ describe('Terminal', function () {
       const target = new Terminal(5, 5),
             figure = [
               {x: 3, y: 2, cell: new Cell(
-                CP.id('^'), color.id('#ff0000'), color.id('#000000')
+                CP.id('^'), palette.id('#ff0000'), palette.id('#000000')
               )},
               {x: 2, y: 3, cell: new Cell(
-                CP.id('<'), color.id('#00ff00'), color.id('#000000')
+                CP.id('<'), palette.id('#00ff00'), palette.id('#000000')
               )},
               {x: 4, y: 3, cell: new Cell(
-                CP.id('>'), color.id('#0000ff'), color.id('#000000')
+                CP.id('>'), palette.id('#0000ff'), palette.id('#000000')
               )},
               {x: 3, y: 4, cell: new Cell(
-                CP.id('V'), color.id('#ffff00'), color.id('#000000')
+                CP.id('V'), palette.id('#ffff00'), palette.id('#000000')
               )},
             ];
 
@@ -82,24 +82,24 @@ describe('Terminal', function () {
 
       const topCell = target.getCell(3, 2);
       expect(topCell.glyphId).to.equal(CP.id('^'));
-      expect(topCell.fgColorId).to.equal(color.id('#ff0000'));
-      expect(topCell.bgColorId).to.equal(color.id('#000000'));
+      expect(topCell.fgColorId).to.equal(palette.id('#ff0000'));
+      expect(topCell.bgColorId).to.equal(palette.id('#000000'));
       const leftCell = target.getCell(2, 3);
       expect(leftCell.glyphId).to.equal(CP.id('<'));
-      expect(leftCell.fgColorId).to.equal(color.id('#00ff00'));
-      expect(leftCell.bgColorId).to.equal(color.id('#000000'));
+      expect(leftCell.fgColorId).to.equal(palette.id('#00ff00'));
+      expect(leftCell.bgColorId).to.equal(palette.id('#000000'));
       const rightCell = target.getCell(4, 3);
       expect(rightCell.glyphId).to.equal(CP.id('>'));
-      expect(rightCell.fgColorId).to.equal(color.id('#0000ff'));
-      expect(rightCell.bgColorId).to.equal(color.id('#000000'));
+      expect(rightCell.fgColorId).to.equal(palette.id('#0000ff'));
+      expect(rightCell.bgColorId).to.equal(palette.id('#000000'));
       const bottomCell = target.getCell(3, 4);
       expect(bottomCell.glyphId).to.equal(CP.id('V'));
-      expect(bottomCell.fgColorId).to.equal(color.id('#ffff00'));
-      expect(bottomCell.bgColorId).to.equal(color.id('#000000'));
+      expect(bottomCell.fgColorId).to.equal(palette.id('#ffff00'));
+      expect(bottomCell.bgColorId).to.equal(palette.id('#000000'));
       const middleCell = target.getCell(3, 3);
       expect(middleCell.glyphId).to.equal(SIGILS.CLEAR);
-      expect(middleCell.fgColorId).to.be.undefined;
-      expect(middleCell.bgColorId).to.be.undefined;
+      expect(middleCell.fgColorId).to.equal(palette.COLORS.black);
+      expect(middleCell.bgColorId).to.equal(palette.COLORS.white);
     });
   });
 

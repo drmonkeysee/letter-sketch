@@ -1,8 +1,8 @@
 import {expect} from 'chai';
 
 import {SIGILS} from '../../src/codepage.js';
-import color from '../../src/color.js';
 import {Cell, makeTile} from '../../src/models/cell.js';
+import palette from '../../src/palette.js';
 
 describe('Cell', function () {
   describe('#ctor()', function () {
@@ -10,8 +10,8 @@ describe('Cell', function () {
       const result = new Cell();
 
       expect(result.glyphId).to.equal(SIGILS.CLEAR);
-      expect(result.fgColorId).to.equal(color.COLORS.black);
-      expect(result.bgColorId).to.equal(color.COLORS.white);
+      expect(result.fgColorId).to.equal(palette.COLORS.black);
+      expect(result.bgColorId).to.equal(palette.COLORS.white);
     });
 
     it('sets nil glyph if given null', function () {
@@ -161,16 +161,16 @@ describe('Cell', function () {
     it('can set colors to defaults', function () {
       this.target.update({bgColorId: null, fgColorId: null});
 
-      expect(this.target.bgColorId).to.equal(color.COLORS.white);
-      expect(this.target.fgColorId).to.equal(color.COLORS.black);
+      expect(this.target.bgColorId).to.equal(palette.COLORS.white);
+      expect(this.target.fgColorId).to.equal(palette.COLORS.black);
     });
 
     it('can set colors to defaults directly', function () {
       this.target.bgColorId = null;
       this.target.fgColorId = null;
 
-      expect(this.target.bgColorId).to.equal(color.COLORS.white);
-      expect(this.target.fgColorId).to.equal(color.COLORS.black);
+      expect(this.target.bgColorId).to.equal(palette.COLORS.white);
+      expect(this.target.fgColorId).to.equal(palette.COLORS.black);
     });
 
     it('can set glyph to blank', function () {

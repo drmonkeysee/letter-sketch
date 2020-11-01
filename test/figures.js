@@ -1,6 +1,6 @@
 import {expect} from 'chai';
-import color from '../src/color.js';
 import {SIGILS, CP} from '../src/codepage.js';
+import palette from '../src/palette.js';
 
 import {
   singleCell, freeDraw, floodFill, rectangle, filledRectangle,
@@ -1140,7 +1140,7 @@ describe('figures', function () {
     beforeEach(function () {
       this._terminal = new Terminal(5, 5);
       this._cell = new Cell(
-        CP.id('A'), color.id('#ff0000'), color.id('#0000ff')
+        CP.id('A'), palette.id('#ff0000'), palette.id('#0000ff')
       );
       this._target = textBuffer(this._cell, this._terminal)
       this._figure = this._target();
@@ -1288,14 +1288,14 @@ describe('figures', function () {
       const terminalState = [
         new Cell(), new Cell(), new Cell(CP.id('b'), '#ffffff'),
           new Cell(CP.id('b')),
-        new Cell(CP.id('a'), color.id('#ffffff')), new Cell(),
+        new Cell(CP.id('a'), palette.id('#ffffff')), new Cell(),
           new Cell(CP.id('b')),
-          new Cell(CP.id('b'), color.id('#ff0000'), color.id('#0000ff')),
+          new Cell(CP.id('b'), palette.id('#ff0000'), palette.id('#0000ff')),
         new Cell(CP.id('a')), new Cell(CP.id('c')), new Cell(),
-          new Cell(CP.id('b'), color.id('#ff0000'), color.id('#0000ff')),
+          new Cell(CP.id('b'), palette.id('#ff0000'), palette.id('#0000ff')),
         new Cell(CP.id('a')), new Cell(CP.id('a')),
-          new Cell(CP.id('a'), color.id('#ff0000'), color.id('#0000ff')),
-          new Cell(CP.id('a'), color.id('#ff0000'), color.id('#0000ff')),
+          new Cell(CP.id('a'), palette.id('#ff0000'), palette.id('#0000ff')),
+          new Cell(CP.id('a'), palette.id('#ff0000'), palette.id('#0000ff')),
       ];
       let x = 0, y = 0;
       this._terminal.update(
@@ -1309,7 +1309,7 @@ describe('figures', function () {
         })
       );
       this._cell = new Cell(
-        CP.id('X'), color.id('#00ff00'), color.id('#00ff00')
+        CP.id('X'), palette.id('#00ff00'), palette.id('#00ff00')
       );
       this._target = replace(this._cell, this._terminal);
     });
@@ -1324,7 +1324,7 @@ describe('figures', function () {
 
     it('does nothing if new cell matches target cell', function () {
       this._target = replace(
-        new Cell(CP.id('b'), color.id('#ff0000'), color.id('#0000ff')),
+        new Cell(CP.id('b'), palette.id('#ff0000'), palette.id('#0000ff')),
         this._terminal
       );
 

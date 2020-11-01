@@ -1,5 +1,5 @@
-import color from '../color.js';
 import {COMMANDS} from '../commands.js';
+import palette from '../palette.js';
 import {EVENTS} from '../refresh.js';
 import {View} from './view.js';
 
@@ -39,7 +39,7 @@ class ColorSelection extends View {
   }
 
   _setColor(colorId) {
-    this._selection.style.backgroundColor = color.cssColor(colorId);
+    this._selection.style.backgroundColor = palette.cssColor(colorId);
   }
 }
 
@@ -69,7 +69,7 @@ export class ColorPalette extends View {
   }
 
   draw(initialState) {
-    for (const [colorId, colorValue] of color.enumerate()) {
+    for (const [colorId, colorValue] of palette.enumerate()) {
       const colorCell = this.doc.createElement('div');
       colorCell.className = 'palette-cell';
       colorCell.dataset.id = colorId;

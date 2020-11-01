@@ -1,6 +1,6 @@
 import {SIGILS, CP} from '../codepage.js';
-import color from '../color.js';
 import {COMMANDS} from '../commands.js';
+import palette from '../palette.js';
 import {EVENTS} from '../refresh.js';
 import {View} from './view.js';
 
@@ -127,8 +127,8 @@ export class SketchPad extends View {
     }
     const gridText = gridCell.firstChild;
     gridText.textContent = CP.glyph(cell.glyphId);
-    gridText.style.color = color.cssColor(cell.fgColorId);
-    gridText.style.backgroundColor = color.cssColor(cell.bgColorId);
+    gridText.style.color = palette.cssColor(cell.fgColorId);
+    gridText.style.backgroundColor = palette.cssColor(cell.bgColorId);
   }
 
   commitCellSampling(cell) {

@@ -1,5 +1,4 @@
 import {SIGILS} from '../codepage.js';
-import color from '../color.js';
 import {TOOLS} from '../tools.js';
 import {Cell} from './cell.js';
 import {Terminal} from './terminal.js';
