@@ -8,9 +8,7 @@ export default {
   load() {
     return {
       lettertype: {
-        cell: new Cell(
-          SIGILS.DEFAULT, color.COLORS.black, color.COLORS.white
-        ),
+        cell: new Cell(SIGILS.DEFAULT),
         fontSize: 24,
       },
       terminal: new Terminal(50, 20),
