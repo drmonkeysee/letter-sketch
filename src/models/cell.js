@@ -1,4 +1,5 @@
 import {SIGILS} from '../codepage.js';
+import color from '../color.js';
 
 export class Cell {
   constructor(glyphId, fgColorId, bgColorId) {
@@ -9,6 +10,20 @@ export class Cell {
   set glyphId(value) {
     this._glyphId = value === undefined || value === null
                     ? SIGILS.CLEAR
+                    : value;
+  }
+
+  get fgColorId() { return this._fgColorId; }
+  set fgColorId(value) {
+    this._fgColorId = value === undefined || value === null
+                    ? color.COLORS.black
+                    : value;
+  }
+
+  get bgColorId() { return this._bgColorId; }
+  set bgColorId(value) {
+    this._bgColorId = value === undefined || value === null
+                    ? color.COLORS.white
                     : value;
   }
 
@@ -32,7 +47,6 @@ export class Cell {
 
   _setFields(glyphId, fgColorId, bgColorId) {
     this.glyphId = glyphId;
-    // TODO: if clear color is removed default these for null/undefined
     this.fgColorId = fgColorId;
     this.bgColorId = bgColorId;
   }
