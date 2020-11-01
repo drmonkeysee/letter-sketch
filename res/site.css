@@ -78,40 +78,8 @@ body {
   #color-selections {
     position: relative;
 
-    .color-selection {
-      overflow: hidden;
-
-      hr {
-        border: none;
-        border-top: $border-thin;
-        width: 200%;
-        height: 0;
-        padding: 0;
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        left: -50%;
-        visibility: hidden;
-        pointer-events: none;
-
-        &:first-child {
-          transform: rotate(45deg);
-        }
-
-        &:last-child {
-          transform: rotate(-45deg);
-        }
-      }
-
-      &.no-color {
-        hr {
-          visibility: visible;
-        }
-      }
-
-      &.selected {
-        outline: gold dotted 2px;
-      }
+    .selected {
+      outline: gold dotted 2px;
     }
 
     .tile-color {
@@ -138,12 +106,6 @@ body {
       top: $color-selection-offset;
       left: $color-selection-offset;
     }
-  }
-
-  #clear-selection {
-    display: flex;
-    align-items: center;
-    text-align: center;
   }
 }
 

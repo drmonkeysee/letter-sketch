@@ -39,14 +39,7 @@ class ColorSelection extends View {
   }
 
   _setColor(colorId) {
-    // TODO: clean this up if i remove clear color
-    if (colorId === null || colorId === undefined) {
-      this._selection.classList.add('no-color');
-      this._selection.style.backgroundColor = null;
-    } else {
-      this._selection.classList.remove('no-color');
-      this._selection.style.backgroundColor = color.cssColor(colorId);
-    }
+    this._selection.style.backgroundColor = color.cssColor(colorId);
   }
 }
 
@@ -73,7 +66,6 @@ export class ColorPalette extends View {
         ...args
       ),
     ];
-    this._clearSelection = this.doc.getElementById('clear-selection');
   }
 
   draw(initialState) {
@@ -90,9 +82,6 @@ export class ColorPalette extends View {
       selectionView.draw(initialState);
     }
     this._setSelection(this._colorSelections[0]);
-
-    // TODO: disable for now, think about removing this
-    //this._clearSelection.addEventListener('click', this._pickColor.bind(this));
   }
 
   subscribe(notifier) {
