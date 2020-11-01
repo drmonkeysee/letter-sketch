@@ -49,7 +49,7 @@ export default {
     return PALETTE.indexOf(color);
   },
   COLORS: {
-    black: 0,
-    white: PALETTE.length - 1,
+    BLACK: 0,
+    WHITE: PALETTE.length - 1,
   },
 };

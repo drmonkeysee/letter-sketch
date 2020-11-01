@@ -10,8 +10,8 @@ describe('Cell', function () {
       const result = new Cell();
 
       expect(result.glyphId).to.equal(SIGILS.CLEAR);
-      expect(result.fgColorId).to.equal(palette.COLORS.black);
-      expect(result.bgColorId).to.equal(palette.COLORS.white);
+      expect(result.fgColorId).to.equal(palette.COLORS.BLACK);
+      expect(result.bgColorId).to.equal(palette.COLORS.WHITE);
     });
 
     it('sets nil glyph if given null', function () {
@@ -161,16 +161,16 @@ describe('Cell', function () {
     it('can set colors to defaults', function () {
       this.target.update({bgColorId: null, fgColorId: null});
 
-      expect(this.target.bgColorId).to.equal(palette.COLORS.white);
-      expect(this.target.fgColorId).to.equal(palette.COLORS.black);
+      expect(this.target.fgColorId).to.equal(palette.COLORS.BLACK);
+      expect(this.target.bgColorId).to.equal(palette.COLORS.WHITE);
     });
 
     it('can set colors to defaults directly', function () {
-      this.target.bgColorId = null;
       this.target.fgColorId = null;
+      this.target.bgColorId = null;
 
-      expect(this.target.bgColorId).to.equal(palette.COLORS.white);
-      expect(this.target.fgColorId).to.equal(palette.COLORS.black);
+      expect(this.target.fgColorId).to.equal(palette.COLORS.BLACK);
+      expect(this.target.bgColorId).to.equal(palette.COLORS.WHITE);
     });
 
     it('can set glyph to blank', function () {

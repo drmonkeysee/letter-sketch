@@ -57,11 +57,11 @@ describe('#id()', function () {
 describe('COLORS', function () {
   describe('#black', function () {
     it('exists', function () {
-      expect(palette.COLORS.black).to.equal(0);
+      expect(palette.COLORS.BLACK).to.equal(0);
     });
 
     it('matches expected css color', function () {
-      const result = palette.cssColor(palette.COLORS.black);
+      const result = palette.cssColor(palette.COLORS.BLACK);
 
       expect(result).to.equal('rgb(0, 0, 0)');
     });
@@ -69,11 +69,11 @@ describe('COLORS', function () {
 
   describe('#white', function () {
     it('exists', function () {
-      expect(palette.COLORS.white).to.equal(26);
+      expect(palette.COLORS.WHITE).to.equal(26);
     });
 
     it('matches expected css color', function () {
-      const result = palette.cssColor(palette.COLORS.white);
+      const result = palette.cssColor(palette.COLORS.WHITE);
 
       expect(result).to.equal('rgb(255, 255, 255)');
     });

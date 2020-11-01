@@ -16,14 +16,14 @@ export class Cell {
   get fgColorId() { return this._fgColorId; }
   set fgColorId(value) {
     this._fgColorId = value === undefined || value === null
-                    ? palette.COLORS.black
+                    ? palette.COLORS.BLACK
                     : value;
   }
 
   get bgColorId() { return this._bgColorId; }
   set bgColorId(value) {
     this._bgColorId = value === undefined || value === null
-                    ? palette.COLORS.white
+                    ? palette.COLORS.WHITE
                     : value;
   }
 
