@@ -1,4 +1,4 @@
-import {CP} from '../codepage.js';
+import codepage from '../codepage.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
 import {View} from './view.js';
@@ -10,7 +10,7 @@ export class LetterBlock extends View {
   }
 
   draw(initialState) {
-    for (const [id, glyph] of CP.enumerate()) {
+    for (const [id, glyph] of codepage.enumerate()) {
       const blockText = this.doc.createElement('span');
       blockText.dataset.id = id;
       blockText.textContent = glyph;

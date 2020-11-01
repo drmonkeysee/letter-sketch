@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {SIGILS, CP} from '../src/codepage.js';
+import codepage from '../src/codepage.js';
 import palette from '../src/palette.js';
 
 import {
@@ -33,7 +33,7 @@ describe('figures', function () {
   describe('#singleCell', function () {
     beforeEach(function () {
       this._terminal = new Terminal(3, 3);
-      this._cell = new Cell(CP.id('A'));
+      this._cell = new Cell(codepage.id('A'));
       this._target = singleCell(this._cell, this._terminal);
     });
 
@@ -60,7 +60,7 @@ describe('figures', function () {
   describe('#freeDraw', function () {
     beforeEach(function () {
       this._terminal = new Terminal(3, 3);
-      this._cell = new Cell(CP.id('A'));
+      this._cell = new Cell(codepage.id('A'));
       this._target = freeDraw(this._cell, this._terminal);
     });
 
@@ -96,7 +96,7 @@ describe('figures', function () {
   describe('#floodFill', function () {
     beforeEach(function () {
       this._terminal = new Terminal(3, 3);
-      this._cell = new Cell(CP.id('A'));
+      this._cell = new Cell(codepage.id('A'));
       this._target = floodFill(this._cell, this._terminal);
     });
 
@@ -158,7 +158,7 @@ describe('figures', function () {
     });
 
     it('does not fill past solid line', function () {
-      const cell = new Cell(CP.id('X')),
+      const cell = new Cell(codepage.id('X')),
             verticalLine = [
               {x: 1, y: 0, cell},
               {x: 1, y: 1, cell},
@@ -178,7 +178,7 @@ describe('figures', function () {
     });
 
     it('does not fill past diagonal line', function () {
-      const cell = new Cell(CP.id('X')),
+      const cell = new Cell(codepage.id('X')),
             diag = [
               {x: 2, y: 0, cell},
               {x: 1, y: 1, cell},
@@ -199,7 +199,7 @@ describe('figures', function () {
 
     it('fills single tile', function () {
       const tile = {x: 1, y: 1};
-      this._terminal.update([{cell: new Cell(CP.id('X')), ...tile}]);
+      this._terminal.update([{cell: new Cell(codepage.id('X')), ...tile}]);
 
       const figure = this._target(tile);
 
@@ -207,7 +207,7 @@ describe('figures', function () {
     });
 
     it('fills solid line', function () {
-      const cell = new Cell(CP.id('X')),
+      const cell = new Cell(codepage.id('X')),
             verticalLine = [
               {x: 1, y: 0, cell},
               {x: 1, y: 1, cell},
@@ -227,7 +227,7 @@ describe('figures', function () {
     });
 
     it('does not fill diagonal line', function () {
-      const cell = new Cell(CP.id('X')),
+      const cell = new Cell(codepage.id('X')),
             diag = [
               {x: 2, y: 0, cell},
               {x: 1, y: 1, cell},
@@ -245,7 +245,7 @@ describe('figures', function () {
     });
 
     it('fills contiguous shape', function () {
-      const cell = new Cell(CP.id('X')),
+      const cell = new Cell(codepage.id('X')),
             square = [
               {x: 1, y: 1, cell},
               {x: 2, y: 1, cell},
@@ -281,7 +281,7 @@ describe('figures', function () {
   describe('#rectangle', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
-      this._cell = new Cell(CP.id('A'));
+      this._cell = new Cell(codepage.id('A'));
       this._target = rectangle(this._cell, this._terminal);
     });
 
@@ -413,7 +413,7 @@ describe('figures', function () {
   describe('#filledRectangle', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
-      this._cell = new Cell(CP.id('A'));
+      this._cell = new Cell(codepage.id('A'));
       this._target = filledRectangle(this._cell, this._terminal);
     });
 
@@ -551,7 +551,7 @@ describe('figures', function () {
   describe('#ellipse', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
-      this._cell = new Cell(CP.id('A'));
+      this._cell = new Cell(codepage.id('A'));
       this._target = ellipse(this._cell, this._terminal);
     });
 
@@ -751,7 +751,7 @@ describe('figures', function () {
   describe('#filledEllipse', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
-      this._cell = new Cell(CP.id('A'));
+      this._cell = new Cell(codepage.id('A'));
       this._target = filledEllipse(this._cell, this._terminal);
     });
 
@@ -1020,7 +1020,7 @@ describe('figures', function () {
   describe('#lineSegment', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
-      this._cell = new Cell(CP.id('A'));
+      this._cell = new Cell(codepage.id('A'));
       this._target = lineSegment(this._cell, this._terminal);
     });
 
@@ -1140,7 +1140,7 @@ describe('figures', function () {
     beforeEach(function () {
       this._terminal = new Terminal(5, 5);
       this._cell = new Cell(
-        CP.id('A'), palette.id('#ff0000'), palette.id('#0000ff')
+        codepage.id('A'), palette.id('#ff0000'), palette.id('#0000ff')
       );
       this._target = textBuffer(this._cell, this._terminal)
       this._figure = this._target();
@@ -1167,12 +1167,12 @@ describe('figures', function () {
       expect(this._figure).to.have.lengthOf(0);
       expect(this._figure.cursorOn).to.eql(
         new Cell(
-          SIGILS.CURSOR, this._cell.fgColorId, this._cell.bgColorId
+          codepage.SIGILS.CURSOR, this._cell.fgColorId, this._cell.bgColorId
         )
       );
       expect(this._figure.cursorOff).to.eql(
         new Cell(
-          SIGILS.TRANSPARENT,
+          codepage.SIGILS.TRANSPARENT,
           this._cell.fgColorId,
           this._cell.bgColorId
         )
@@ -1261,7 +1261,7 @@ describe('figures', function () {
       this._figure.newline(tile);
 
       const sentinel = this._figure.reverse();
-      expect(sentinel).to.eql({x: 1, y: 3, cell: SIGILS.NEWLINE});
+      expect(sentinel).to.eql({x: 1, y: 3, cell: codepage.SIGILS.NEWLINE});
     });
 
     it('does not include sentinels in iterator', function () {
@@ -1286,16 +1286,24 @@ describe('figures', function () {
     beforeEach(function () {
       this._terminal = new Terminal(4, 4);
       const terminalState = [
-        new Cell(), new Cell(), new Cell(CP.id('b'), '#ffffff'),
-          new Cell(CP.id('b')),
-        new Cell(CP.id('a'), palette.id('#ffffff')), new Cell(),
-          new Cell(CP.id('b')),
-          new Cell(CP.id('b'), palette.id('#ff0000'), palette.id('#0000ff')),
-        new Cell(CP.id('a')), new Cell(CP.id('c')), new Cell(),
-          new Cell(CP.id('b'), palette.id('#ff0000'), palette.id('#0000ff')),
-        new Cell(CP.id('a')), new Cell(CP.id('a')),
-          new Cell(CP.id('a'), palette.id('#ff0000'), palette.id('#0000ff')),
-          new Cell(CP.id('a'), palette.id('#ff0000'), palette.id('#0000ff')),
+        new Cell(), new Cell(), new Cell(codepage.id('b'), '#ffffff'),
+          new Cell(codepage.id('b')),
+        new Cell(codepage.id('a'), palette.id('#ffffff')), new Cell(),
+          new Cell(codepage.id('b')),
+          new Cell(
+            codepage.id('b'), palette.id('#ff0000'), palette.id('#0000ff')
+          ),
+        new Cell(codepage.id('a')), new Cell(codepage.id('c')), new Cell(),
+          new Cell(
+            codepage.id('b'), palette.id('#ff0000'), palette.id('#0000ff')
+          ),
+        new Cell(codepage.id('a')), new Cell(codepage.id('a')),
+          new Cell(
+            codepage.id('a'), palette.id('#ff0000'), palette.id('#0000ff')
+          ),
+          new Cell(
+            codepage.id('a'), palette.id('#ff0000'), palette.id('#0000ff')
+          ),
       ];
       let x = 0, y = 0;
       this._terminal.update(
@@ -1309,7 +1317,7 @@ describe('figures', function () {
         })
       );
       this._cell = new Cell(
-        CP.id('X'), palette.id('#00ff00'), palette.id('#00ff00')
+        codepage.id('X'), palette.id('#00ff00'), palette.id('#00ff00')
       );
       this._target = replace(this._cell, this._terminal);
     });
@@ -1324,7 +1332,9 @@ describe('figures', function () {
 
     it('does nothing if new cell matches target cell', function () {
       this._target = replace(
-        new Cell(CP.id('b'), palette.id('#ff0000'), palette.id('#0000ff')),
+        new Cell(
+          codepage.id('b'), palette.id('#ff0000'), palette.id('#0000ff')
+        ),
         this._terminal
       );
 

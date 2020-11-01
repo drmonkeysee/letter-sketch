@@ -65,15 +65,7 @@ const CP437 = [
   '\u207f', '\u00b2', '\u25a0', '\u00a0',
 ];
 
-export const SIGILS = {
-  DEFAULT: 0x41,
-  CLEAR: 0x20,
-  CURSOR: 0x7c,
-  TRANSPARENT: 0xff,
-  NEWLINE: '\n',
-};
-
-export const CP = {
+export default {
   *glyphs() {
     yield* CP437;
   },
@@ -85,5 +77,12 @@ export const CP = {
   },
   id(glyph) {
     return CP437.indexOf(glyph);
+  },
+  SIGILS: {
+    DEFAULT: 0x41,
+    CLEAR: 0x20,
+    CURSOR: 0x7c,
+    TRANSPARENT: 0xff,
+    NEWLINE: '\n',
   },
 };

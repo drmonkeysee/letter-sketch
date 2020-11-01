@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 
-import {SIGILS} from '../../src/codepage.js';
+import codepage from '../../src/codepage.js';
 import {Cell, makeTile} from '../../src/models/cell.js';
 import palette from '../../src/palette.js';
 
@@ -9,7 +9,7 @@ describe('Cell', function () {
     it('sets defaults if no arguments', function () {
       const result = new Cell();
 
-      expect(result.glyphId).to.equal(SIGILS.CLEAR);
+      expect(result.glyphId).to.equal(codepage.SIGILS.CLEAR);
       expect(result.fgColorId).to.equal(palette.COLORS.BLACK);
       expect(result.bgColorId).to.equal(palette.COLORS.WHITE);
     });
@@ -17,7 +17,7 @@ describe('Cell', function () {
     it('sets nil glyph if given null', function () {
       const result = new Cell(null);
 
-      expect(result.glyphId).to.equal(SIGILS.CLEAR);
+      expect(result.glyphId).to.equal(codepage.SIGILS.CLEAR);
     });
 
     it('sets NUL glyph if given 0', function () {
@@ -176,13 +176,13 @@ describe('Cell', function () {
     it('can set glyph to blank', function () {
       this.target.update({glyphId: null});
 
-      expect(this.target.glyphId).to.equal(SIGILS.CLEAR);
+      expect(this.target.glyphId).to.equal(codepage.SIGILS.CLEAR);
     });
 
     it('can set glyph to blank directly', function () {
       this.target.glyphId = null;
 
-      expect(this.target.glyphId).to.equal(SIGILS.CLEAR);
+      expect(this.target.glyphId).to.equal(codepage.SIGILS.CLEAR);
     });
   });
 });

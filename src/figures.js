@@ -1,4 +1,4 @@
-import {SIGILS} from './codepage.js';
+import codepage from './codepage.js';
 import {makeTile, Cell} from './models/cell.js';
 
 // NOTE: shift/xor works as a key cuz terminal coordinates
@@ -248,9 +248,11 @@ class TextFigure extends ActiveFigure {
     super();
     this._fgColor = lettertypeCell.fgColorId;
     this._bgColor = lettertypeCell.bgColorId;
-    this.cursorOn = new Cell(SIGILS.CURSOR, this._fgColor, this._bgColor);
+    this.cursorOn = new Cell(
+      codepage.SIGILS.CURSOR, this._fgColor, this._bgColor
+    );
     this.cursorOff = new Cell(
-      SIGILS.TRANSPARENT, this._fgColor, this._bgColor
+      codepage.SIGILS.TRANSPARENT, this._fgColor, this._bgColor
     );
   }
 
@@ -262,7 +264,7 @@ class TextFigure extends ActiveFigure {
   // NOTE: store a newline sentinel to stay aligned with
   // the cursor position.
   newline(point) {
-    this.add(makeTile(point.x, point.y, SIGILS.NEWLINE));
+    this.add(makeTile(point.x, point.y, codepage.SIGILS.NEWLINE));
   }
 
   reverse() {
@@ -271,7 +273,7 @@ class TextFigure extends ActiveFigure {
 
   // NOTE: newline sentinels are not part of the final figure
   *[Symbol.iterator]() {
-    yield* this._tiles.filter(t => t.cell !== SIGILS.NEWLINE);
+    yield* this._tiles.filter(t => t.cell !== codepage.SIGILS.NEWLINE);
   }
 }
 

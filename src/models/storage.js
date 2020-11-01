@@ -1,4 +1,4 @@
-import {SIGILS} from '../codepage.js';
+import codepage from '../codepage.js';
 import {TOOLS} from '../tools.js';
 import {Cell} from './cell.js';
 import {Terminal} from './terminal.js';
@@ -7,7 +7,7 @@ export default {
   load() {
     return {
       lettertype: {
-        cell: new Cell(SIGILS.DEFAULT),
+        cell: new Cell(codepage.SIGILS.DEFAULT),
         fontSize: 24,
       },
       terminal: new Terminal(50, 20),

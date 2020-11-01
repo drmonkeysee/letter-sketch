@@ -1,4 +1,4 @@
-import {SIGILS} from '../codepage.js';
+import codepage from '../codepage.js';
 import palette from '../palette.js';
 
 export class Cell {
@@ -9,7 +9,7 @@ export class Cell {
   get glyphId() { return this._glyphId; }
   set glyphId(value) {
     this._glyphId = value === undefined || value === null
-                    ? SIGILS.CLEAR
+                    ? codepage.SIGILS.CLEAR
                     : value;
   }
 
@@ -28,7 +28,7 @@ export class Cell {
   }
 
   isEmpty() {
-    return this.glyphId === SIGILS.CLEAR;
+    return this.glyphId === codepage.SIGILS.CLEAR;
   }
 
   equals(other) {

@@ -1,4 +1,4 @@
-import {SIGILS, CP} from '../codepage.js';
+import codepage from '../codepage.js';
 import {COMMANDS} from '../commands.js';
 import palette from '../palette.js';
 import {EVENTS} from '../refresh.js';
@@ -126,7 +126,7 @@ export class SketchPad extends View {
       return;
     }
     const gridText = gridCell.firstChild;
-    gridText.textContent = CP.glyph(cell.glyphId);
+    gridText.textContent = codepage.glyph(cell.glyphId);
     gridText.style.color = palette.cssColor(cell.fgColorId);
     gridText.style.backgroundColor = palette.cssColor(cell.bgColorId);
   }
@@ -184,7 +184,7 @@ export class SketchPad extends View {
     let dims = {
       minWidth: 100, maxWidth: 0, minHeight: 100, maxHeight: 0
     };
-    dims = [...CP.glyphs()].reduce((acc, letter) => {
+    dims = [...codepage.glyphs()].reduce((acc, letter) => {
       this._ruler.textContent = letter;
       const {width, height} = this._ruler.getBoundingClientRect();
       // NOTE: || operators guard against glyphs with dimensions of 0
@@ -195,7 +195,7 @@ export class SketchPad extends View {
         maxHeight: Math.max(acc.maxHeight, height),
       };
     }, dims);
-    this._ruler.textContent = CP.glyph(SIGILS.DEFAULT);
+    this._ruler.textContent = codepage.glyph(codepage.SIGILS.DEFAULT);
     const {width, height} = this._ruler.getBoundingClientRect();
     console.log('Font dims: %o', dims);
     console.log('Bounding rect: %o', {width, height});
