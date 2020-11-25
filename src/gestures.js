@@ -1,4 +1,4 @@
-import {CP} from './codepage.js';
+import codepage from './codepage.js';
 
 function getPoint(target) {
   return {
@@ -158,7 +158,7 @@ export class CursorGesture extends DrawGesture {
         this._advanceCharacter(this._cursor.offState.glyphId);
         break;
       default:
-        this._advanceCharacter(CP.id(event.key));
+        this._advanceCharacter(codepage.id(event.key));
         break;
     }
     return null;
