@@ -7,6 +7,7 @@ pub_dir=assets
 
 rm -rf $build_dir
 mkdir $build_dir
+npm run clean
 npm run build | tee /dev/stderr | awk 'NR > 6 {print $1}' | xargs -I {} cp -v {} $build_dir
 
 git checkout gh-pages
@@ -32,4 +33,4 @@ if [ $has_diff -ne 0 ] ; then
 else
 	echo '\nNo changes to publish\n'
 fi
-git checkout master
+git checkout main
