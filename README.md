@@ -14,4 +14,4 @@ The following scripts are defined for building and running letter-sketch:
 - `npm run clean`: clean the local build cache
 - `npm run scrub`: clean the build cache and remove all installed node modules
 - `npm run build`: build a production version of letter-sketch
-- `npm run publish`: build and publish a production build of letter-sketch to github pages
+- `npm run web-publish`: build and publish a production build of letter-sketch to github pages
