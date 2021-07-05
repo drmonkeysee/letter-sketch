@@ -83,16 +83,17 @@ class DrawGesture extends Gesture {
     const drawnTiles = new Set(), currTiles = [];
     for (const {x, y, cell} of this._activeFigure) {
       this.sketchpad.updateAt(x, y, cell)
-      drawnTiles.add(hashTile({x, y}));
-      currTiles.push({x, y});
+      const tile = {x, y};
+      drawnTiles.add(hashTile(tile));
+      currTiles.push(tile);
     }
     // NOTE: any tiles from the previous draw frame that are not
     // touched by the current frame must be restored from the current
     // terminal state.
     // TODO: this can probably be optimized further
-    for (const {x, y} of this._prevDrawTiles) {
-      if (!drawnTiles.has(hashTile({x, y}))) {
-        const cell = this.terminal.getCell(x, y);
+    for (const tile of this._prevDrawTiles) {
+      if (!drawnTiles.has(hashTile(tile))) {
+        const {x, y} = tile, cell = this.terminal.getCell(x, y);
         this.sketchpad.updateAt(x, y, cell);
       }
     }
