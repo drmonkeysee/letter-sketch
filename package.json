@@ -1,6 +1,6 @@
 {
   "name": "letter-sketch",
-  "version": "0.8.0",
+  "version": "0.8.5",
   "description": "An ASCII sketch program",
   "browser": "main.js",
   "scripts": {
