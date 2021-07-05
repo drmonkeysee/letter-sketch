@@ -55,3 +55,9 @@ export class Cell {
 export function makeTile(x, y, cell) {
   return {x, y, cell};
 }
+
+// NOTE: shift/xor works as a key cuz terminal coordinates
+// cannot be greater than 0xffff.
+export function hashTile(tile) {
+  return (tile.x << 16) ^ tile.y;
+}

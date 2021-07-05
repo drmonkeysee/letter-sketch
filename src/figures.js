@@ -1,11 +1,5 @@
 import codepage from './codepage.js';
-import {makeTile, Cell} from './models/cell.js';
-
-// NOTE: shift/xor works as a key cuz terminal coordinates
-// cannot be greater than 0xffff.
-function hashTile(tile) {
-  return (tile.x << 16) ^ tile.y;
-}
+import {hashTile, makeTile, Cell} from './models/cell.js';
 
 function* neighbors(tile, dims) {
   const {x, y} = tile,

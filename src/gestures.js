@@ -1,4 +1,5 @@
 import codepage from './codepage.js';
+import {hashTile} from './models/cell.js';
 
 function getPoint(target) {
   return {
@@ -79,18 +80,23 @@ class DrawGesture extends Gesture {
   }
 
   _drawFigure() {
-    // NOTE: on each draw refresh clear the previous frame
-    // with current terminal contents before drawing the new one.
-    // TODO: i hate this
-    for (const {x, y} of this._prevDrawTiles) {
-      const cell = this.terminal.getCell(x, y);
-      this.sketchpad.updateAt(x, y, cell);
-    }
-    this._prevDrawTiles.length = 0;
+    const drawnTiles = new Set(), currTiles = [];
     for (const {x, y, cell} of this._activeFigure) {
       this.sketchpad.updateAt(x, y, cell)
-      this._prevDrawTiles.push({x, y});
+      drawnTiles.add(hashTile({x, y}));
+      currTiles.push({x, y});
     }
+    // NOTE: any tiles from the previous draw frame that are not
+    // touched by the current frame must be restored from the current
+    // terminal state.
+    // TODO: this can probably be optimized further
+    for (const {x, y} of this._prevDrawTiles) {
+      if (!drawnTiles.has(hashTile({x, y}))) {
+        const cell = this.terminal.getCell(x, y);
+        this.sketchpad.updateAt(x, y, cell);
+      }
+    }
+    this._prevDrawTiles = currTiles;
   }
 }
 
