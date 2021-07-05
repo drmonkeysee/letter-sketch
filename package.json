@@ -27,12 +27,12 @@
   "homepage": "https://github.com/drmonkeysee/letter-sketch#readme",
   "devDependencies": {
     "@babel/polyfill": "^7.12.1",
-    "@babel/register": "^7.12.1",
-    "chai": "^4.2.0",
-    "mocha": "^8.2.1",
-    "parcel-bundler": "^1.12.4",
+    "@babel/register": "^7.14.5",
+    "chai": "^4.3.4",
+    "mocha": "^9.0.2",
+    "parcel-bundler": "^1.12.5",
     "precss": "^4.0.0",
-    "sinon": "^9.2.1"
+    "sinon": "^11.1.1"
   },
   "private": true
 }
