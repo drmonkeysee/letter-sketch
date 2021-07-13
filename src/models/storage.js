@@ -6,12 +6,13 @@ import {TOOLS} from '../tools.js';
 export default {
   load() {
     return {
+      currentTool: TOOLS.brush,
       lettertype: {
         cell: new Cell(codepage.SIGILS.DEFAULT),
         fontSize: 24,
       },
+      lineMode: false,
       terminal: new Terminal(50, 20),
-      currentTool: TOOLS.brush,
     };
   },
 };

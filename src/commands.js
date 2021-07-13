@@ -33,6 +33,12 @@ const COMMAND_REGISTRY = {
       );
     };
   },
+  setLineMode(models, value) {
+    return () => {
+      models.lineMode = value;
+      return makeUpdate(EVENTS.onLineModeChanged, {value});
+    };
+  },
   commitDraw(models, figure, cleanup = false) {
     return () => {
       models.terminal.update(figure);

@@ -1,14 +1,15 @@
 import namemap from './namemap.js';
 
 const EVENT_NAMES = [
-  'onForegroundColorChanged',
   'onBackgroundColorChanged',
-  'onGlyphChanged',
-  'onToolChanged',
   'onDrawCommitted',
-  'onTerminalResizeVerify',
-  'onTerminalResizeReady',
+  'onForegroundColorChanged',
+  'onGlyphChanged',
+  'onLineModeChanged',
   'onTerminalResized',
+  'onTerminalResizeReady',
+  'onTerminalResizeVerify',
+  'onToolChanged',
 ];
 
 export const EVENTS = namemap(EVENT_NAMES, (name, e) => name);

@@ -8,6 +8,7 @@ export class ToolSelector extends View {
     super(...args);
     this._toolSelector = this.doc.getElementById('tool-selections');
     this._toolSelections = [];
+    this._lineToggle = this.doc.getElementById('line-mode');
   }
 
   draw(initialState) {
@@ -26,10 +27,16 @@ export class ToolSelector extends View {
       this._toolSelector.appendChild(label);
       this._toolSelections.push(radio);
     }
+
+    this._lineToggle.checked = initialState.lineMode;
+    this._lineToggle.addEventListener('input',
+                                      this._toggleLineMode.bind(this));
   }
 
   subscribe(notifier) {
     notifier.subscribe(EVENTS.onToolChanged, this._refreshTool.bind(this));
+    notifier.subscribe(EVENTS.onLineModeChanged,
+                       this._refreshLineMode.bind(this));
   }
 
   _pickTool(event) {
@@ -40,5 +47,13 @@ export class ToolSelector extends View {
     for (const radio of this._toolSelections) {
       radio.checked = radio.value === update.name;
     }
+  }
+
+  _toggleLineMode(event) {
+    this.dispatch.command(COMMANDS.setLineMode, event.target.checked);
+  }
+
+  _refreshLineMode(update) {
+    this._lineToggle.checked = update.value;
   }
 }

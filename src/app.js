@@ -49,15 +49,16 @@ class App {
 
   _initialState() {
     return {
-      fontSize: this._models.lettertype.fontSize,
-      terminal: this._models.terminal,
-      toolName: this._models.currentTool,
-      tool: currentTool(this._models),
-      glyphId: this._models.lettertype.cell.glyphId,
       colors: {
-        fg: this._models.lettertype.cell.fgColorId,
         bg: this._models.lettertype.cell.bgColorId,
+        fg: this._models.lettertype.cell.fgColorId,
       },
+      fontSize: this._models.lettertype.fontSize,
+      glyphId: this._models.lettertype.cell.glyphId,
+      lineMode: this._models.lineMode,
+      terminal: this._models.terminal,
+      tool: currentTool(this._models),
+      toolName: this._models.currentTool,
     };
   }
 }
