@@ -7,14 +7,18 @@
   </head>
   <body>
     <div id="tool-selections"></div>
+    <div id="line-drawing">
+      <label for="line-mode">Line Mode</label>
+      <input id="line-mode" name="line-mode" type="checkbox">
+    </div>
     <form id="sketchpad-controls">
       <label for="font-size">Font Size</label>
-      <input id="font-size" type="number" min="10" max="50" required>
+      <input id="font-size" name="font-size" type="number" min="10" max="50" required>
       <span>px</span>
       <label for="column-count">Columns</label>
-      <input id="column-count" type="number" min="10" max="100" required>
+      <input id="column-count" name="column-count" type="number" min="10" max="100" required>
       <label for="row-count">Rows</label>
-      <input id="row-count" type="number" min="10" max="100" required>
+      <input id="row-count" name="row-count" type="number" min="10" max="100" required>
       <button disabled>Resize</button>
     </form>
     <div id="sketchpad"></div>
