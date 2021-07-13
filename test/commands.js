@@ -141,6 +141,25 @@ describe('commands', function () {
     });
   });
 
+  describe('#setLineMode()', function () {
+    beforeEach(function () {
+      this.models = {lineMode: false};
+      this.target = getBinder(COMMANDS.setLineMode, this.models);
+    });
+
+    it('sets the line mode', function () {
+      const val = true,
+            cmd = this.target(val);
+
+      const result = cmd();
+
+      expect(this.models.lineMode).to.be.true;
+      expect(result).to.eql(
+        {event: EVENTS.onLineModeChanged, value: val}
+      );
+    });
+  });
+
   describe('#commitDraw()', function () {
     beforeEach(function () {
       this.models = {
