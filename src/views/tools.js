@@ -8,7 +8,7 @@ export class ToolSelector extends View {
     super(...args);
     this._toolSelector = this.doc.getElementById('tool-selections');
     this._toolSelections = [];
-    this._lineToggle = this.doc.getElementById('line-mode');
+    this._boxToggle = this.doc.getElementById('box-mode');
   }
 
   draw(initialState) {
@@ -28,15 +28,15 @@ export class ToolSelector extends View {
       this._toolSelections.push(radio);
     }
 
-    this._lineToggle.checked = initialState.lineMode;
-    this._lineToggle.addEventListener('input',
-                                      this._toggleLineMode.bind(this));
+    this._boxToggle.checked = initialState.boxMode;
+    this._boxToggle.addEventListener('input',
+                                     this._toggleBoxMode.bind(this));
   }
 
   subscribe(notifier) {
     notifier.subscribe(EVENTS.onToolChanged, this._refreshTool.bind(this));
-    notifier.subscribe(EVENTS.onLineModeChanged,
-                       this._refreshLineMode.bind(this));
+    notifier.subscribe(EVENTS.onBoxModeChanged,
+                       this._refreshBoxMode.bind(this));
   }
 
   _pickTool(event) {
@@ -49,11 +49,11 @@ export class ToolSelector extends View {
     }
   }
 
-  _toggleLineMode(event) {
-    this.dispatch.command(COMMANDS.setLineMode, event.target.checked);
+  _toggleBoxMode(event) {
+    this.dispatch.command(COMMANDS.setBoxMode, event.target.checked);
   }
 
-  _refreshLineMode(update) {
-    this._lineToggle.checked = update.value;
+  _refreshBoxMode(update) {
+    this._boxToggle.checked = update.value;
   }
 }

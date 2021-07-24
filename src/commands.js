@@ -33,10 +33,10 @@ const COMMAND_REGISTRY = {
       );
     };
   },
-  setLineMode(models, value) {
+  setBoxMode(models, value) {
     return () => {
-      models.lineMode = value;
-      return makeUpdate(EVENTS.onLineModeChanged, {value});
+      models.boxMode = value;
+      return makeUpdate(EVENTS.onBoxModeChanged, {value});
     };
   },
   commitDraw(models, figure, cleanup = false) {

@@ -141,21 +141,21 @@ describe('commands', function () {
     });
   });
 
-  describe('#setLineMode()', function () {
+  describe('#setBoxMode()', function () {
     beforeEach(function () {
-      this.models = {lineMode: false};
-      this.target = getBinder(COMMANDS.setLineMode, this.models);
+      this.models = {boxMode: false};
+      this.target = getBinder(COMMANDS.setBoxMode, this.models);
     });
 
-    it('sets the line mode', function () {
+    it('sets the box mode', function () {
       const val = true,
             cmd = this.target(val);
 
       const result = cmd();
 
-      expect(this.models.lineMode).to.be.true;
+      expect(this.models.boxMode).to.be.true;
       expect(result).to.eql(
-        {event: EVENTS.onLineModeChanged, value: val}
+        {event: EVENTS.onBoxModeChanged, value: val}
       );
     });
   });

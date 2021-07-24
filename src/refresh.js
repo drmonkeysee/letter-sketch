@@ -5,7 +5,7 @@ const EVENT_NAMES = [
   'onDrawCommitted',
   'onForegroundColorChanged',
   'onGlyphChanged',
-  'onLineModeChanged',
+  'onBoxModeChanged',
   'onTerminalResized',
   'onTerminalResizeReady',
   'onTerminalResizeVerify',
