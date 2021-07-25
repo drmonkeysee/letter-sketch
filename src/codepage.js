@@ -65,6 +65,28 @@ const CP437 = [
   '\u207f', '\u00b2', '\u25a0', '\u00a0',
 ];
 
+const SINGLE_LINES = new Set(
+  [179, 180, 191, 192, 193, 194, 195, 196, 197, 217, 218]
+);
+const SINGLE_LINE_CONSTRAINTS = [
+  196,  // 0000
+  179,  // 0001
+  196,  // 0010
+  192,  // 0011
+  179,  // 0100
+  179,  // 0101
+  218,  // 0110
+  195,  // 0111
+  196,  // 1000
+  217,  // 1001
+  196,  // 1010
+  193,  // 1011
+  191,  // 1100
+  180,  // 1101
+  194,  // 1110
+  197,  // 1111
+];
+
 export default {
   *glyphs() {
     yield* CP437;
@@ -77,6 +99,14 @@ export default {
   },
   id(glyph) {
     return CP437.indexOf(glyph);
+  },
+  lines: {
+    isLine(id) {
+      return SINGLE_LINES.has(id);
+    },
+    getLineId(constraints) {
+      return SINGLE_LINE_CONSTRAINTS[constraints];
+    },
   },
   SIGILS: {
     DEFAULT: 0x41,

@@ -1,16 +1,24 @@
 import codepage from './codepage.js';
 import {hashTile, makeTile, Cell} from './models/cell.js';
 
+const DIRECTIONS = {
+  NONE: 0x0,
+  TOP: 0x1,
+  RIGHT: 0x2,
+  BOTTOM: 0x4,
+  LEFT: 0x8,
+};
+
 function* neighbors(tile, dims) {
   const {x, y} = tile,
         left = x - 1,
         top = y - 1,
         right = x + 1,
         bottom = y + 1;
-  if (left >= 0) yield {x: left, y};
-  if (top >= 0) yield {x, y: top};
-  if (right < dims.width) yield {x: right, y};
-  if (bottom < dims.height) yield {x, y: bottom};
+  if (top >= 0) yield {x, y: top, direction: DIRECTIONS.TOP};
+  if (right < dims.width) yield {x: right, y, direction: DIRECTIONS.RIGHT};
+  if (bottom < dims.height) yield {x, y: bottom, direction: DIRECTIONS.BOTTOM};
+  if (left >= 0) yield {x: left, y, direction: DIRECTIONS.LEFT};
 }
 
 function drawRect(start, end, lettertypeCell, plotStyle) {
@@ -33,6 +41,28 @@ function plotRect(top, right, bottom, left, lettertypeCell) {
     figure.add(makeTile(left, y, lettertypeCell));
     figure.add(makeTile(right, y, lettertypeCell));
   }
+  return figure;
+}
+
+function plotBoxRect(terminal, top, right, bottom, left, lettertypeCell) {
+  const figure = new BoxFigure(terminal);
+  for (let x = left; x <= right; ++x) {
+    figure.add(makeTile(x, top,
+                        new Cell(196, lettertypeCell.fgColorId,
+                                 lettertypeCell.bgColorId)));
+    figure.add(makeTile(x, bottom,
+                        new Cell(196, lettertypeCell.fgColorId,
+                                 lettertypeCell.bgColorId)));
+  }
+  for (let y = top + 1; y < bottom; ++y) {
+    figure.add(makeTile(left, y,
+                        new Cell(196, lettertypeCell.fgColorId,
+                                 lettertypeCell.bgColorId)));
+    figure.add(makeTile(right, y,
+                        new Cell(196, lettertypeCell.fgColorId,
+                                 lettertypeCell.bgColorId)));
+  }
+  figure.constrain();
   return figure;
 }
 
@@ -237,6 +267,32 @@ class PlotFigure extends ActiveFigure {
   }
 }
 
+class BoxFigure extends PlotFigure {
+  constructor(terminal) {
+    super();
+    this.terminal = terminal;
+  }
+
+  constrain() {
+    for (const tile of this._tiles) {
+      let lineConstraints = 0;
+      for (const n of neighbors(tile, this.terminal.dimensions)) {
+        const nCell = this._points.has(hashTile(n))
+                      ? this._find(n).cell
+                      : this.terminal.getCell(n.x, n.y);
+        if (codepage.lines.isLine(nCell.glyphId)) {
+          lineConstraints |= n.direction;
+        }
+      }
+      tile.cell.glyphId = codepage.lines.getLineId(lineConstraints);
+    }
+  }
+
+  _find(tile) {
+    return this._tiles.find(t => t.x === tile.x && t.y === tile.y);
+  }
+}
+
 class TextFigure extends ActiveFigure {
   constructor(lettertypeCell) {
     super();
@@ -284,6 +340,10 @@ export function freeDraw(lettertypeCell, terminal) {
   };
 }
 
+export function boxDraw(lettertypeCell, terminal) {
+  return (start, end, activeFigure) => [];
+}
+
 export function floodFill(lettertypeCell, terminal) {
   const dims = terminal.dimensions;
 
@@ -322,6 +382,12 @@ export function rectangle(lettertypeCell, terminal) {
 export function filledRectangle(lettertypeCell, terminal) {
   return (start, end, activeFigure) => drawRect(
     start, end, lettertypeCell, plotFilledRect
+  );
+}
+
+export function boxRectangle(lettertypeCell, terminal) {
+  return (start, end, activeFigure) => drawRect(
+    start, end, lettertypeCell, (...args) => plotBoxRect(terminal, ...args)
   );
 }
 

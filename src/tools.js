@@ -1,6 +1,7 @@
 import {
   singleCell, freeDraw, floodFill, rectangle, filledRectangle,
-  ellipse, filledEllipse, lineSegment, textBuffer, replace
+  ellipse, filledEllipse, lineSegment, textBuffer, replace, boxDraw,
+  boxRectangle
 } from './figures.js';
 import {MouseGesture, CursorGesture, SampleCell} from './gestures.js';
 import namemap from './namemap.js';
@@ -77,6 +78,9 @@ const TOOLS_REGISTRY = {
   brush(models) {
     return new Tool(models, MouseGesture, freeDraw);
   },
+  boxBrush(models) {
+    return new Tool(models, MouseGesture, boxDraw);
+  },
   fill(models) {
     return new Tool(models, MouseGesture, floodFill);
   },
@@ -85,6 +89,9 @@ const TOOLS_REGISTRY = {
   },
   fillRect(models) {
     return new Tool(models, MouseGesture, filledRectangle);
+  },
+  boxRect(models) {
+    return new Tool(models, MouseGesture, boxRectangle);
   },
   ellipse(models) {
     return new Tool(models, MouseGesture, ellipse);
