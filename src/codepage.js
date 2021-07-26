@@ -65,10 +65,20 @@ const CP437 = [
   '\u207f', '\u00b2', '\u25a0', '\u00a0',
 ];
 
-const SINGLE_LINES = new Set(
-  [179, 180, 191, 192, 193, 194, 195, 196, 197, 217, 218]
-);
-const SINGLE_LINE_CONSTRAINTS = [
+const SINGLE_LINES = new Map([
+  [179, 0b0101],
+  [180, 0b1101],
+  [191, 0b1100],
+  [192, 0b0011],
+  [193, 0b1011],
+  [194, 0b1110],
+  [195, 0b0111],
+  [196, 0b1010],
+  [197, 0b1111],
+  [217, 0b1001],
+  [218, 0b0110],
+]);
+const ATTRACTORS_TO_SINGLE_LINE = [
   196,  // 0000
   179,  // 0001
   196,  // 0010
@@ -104,8 +114,11 @@ export default {
     isLine(id) {
       return SINGLE_LINES.has(id);
     },
-    getLineId(constraints) {
-      return SINGLE_LINE_CONSTRAINTS[constraints];
+    getLineId(attractors) {
+      return ATTRACTORS_TO_SINGLE_LINE[attractors];
+    },
+    hasAttractor(id, direction) {
+      return SINGLE_LINES.get(id) & direction;
     },
   },
   SIGILS: {

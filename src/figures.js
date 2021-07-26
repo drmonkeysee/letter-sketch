@@ -2,11 +2,11 @@ import codepage from './codepage.js';
 import {hashTile, makeTile, Cell} from './models/cell.js';
 
 const DIRECTIONS = {
-  NONE: 0x0,
-  TOP: 0x1,
-  RIGHT: 0x2,
-  BOTTOM: 0x4,
-  LEFT: 0x8,
+  NONE: 0b0000,
+  TOP: 0b0001,
+  RIGHT: 0b0010,
+  BOTTOM: 0b0100,
+  LEFT: 0b1000,
 };
 
 function* neighbors(tile, dims) {
@@ -47,22 +47,38 @@ function plotRect(top, right, bottom, left, lettertypeCell) {
 function plotBoxRect(terminal, top, right, bottom, left, lettertypeCell) {
   const figure = new BoxFigure(terminal);
   for (let x = left; x <= right; ++x) {
-    figure.add(makeTile(x, top,
-                        new Cell(196, lettertypeCell.fgColorId,
-                                 lettertypeCell.bgColorId)));
-    figure.add(makeTile(x, bottom,
-                        new Cell(196, lettertypeCell.fgColorId,
-                                 lettertypeCell.bgColorId)));
+    if (x === left) {
+      figure.add(makeTile(x, top,
+                          new Cell(218, lettertypeCell.fgColorId,
+                                   lettertypeCell.bgColorId)));
+      figure.add(makeTile(x, bottom,
+                          new Cell(192, lettertypeCell.fgColorId,
+                                   lettertypeCell.bgColorId)));
+    } else if (x === right) {
+      figure.add(makeTile(x, top,
+                          new Cell(191, lettertypeCell.fgColorId,
+                                   lettertypeCell.bgColorId)));
+      figure.add(makeTile(x, bottom,
+                          new Cell(217, lettertypeCell.fgColorId,
+                                   lettertypeCell.bgColorId)));
+    } else {
+      figure.add(makeTile(x, top,
+                          new Cell(196, lettertypeCell.fgColorId,
+                                   lettertypeCell.bgColorId)));
+      figure.add(makeTile(x, bottom,
+                          new Cell(196, lettertypeCell.fgColorId,
+                                   lettertypeCell.bgColorId)));
+    }
   }
   for (let y = top + 1; y < bottom; ++y) {
     figure.add(makeTile(left, y,
-                        new Cell(196, lettertypeCell.fgColorId,
+                        new Cell(179, lettertypeCell.fgColorId,
                                  lettertypeCell.bgColorId)));
     figure.add(makeTile(right, y,
-                        new Cell(196, lettertypeCell.fgColorId,
+                        new Cell(179, lettertypeCell.fgColorId,
                                  lettertypeCell.bgColorId)));
   }
-  figure.constrain();
+  figure.constrain(true);
   return figure;
 }
 
@@ -273,17 +289,24 @@ class BoxFigure extends PlotFigure {
     this.terminal = terminal;
   }
 
-  constrain() {
+  constrain(requireAttractors = false) {
     for (const tile of this._tiles) {
       let lineConstraints = 0;
       for (const n of neighbors(tile, this.terminal.dimensions)) {
         const nCell = this._points.has(hashTile(n))
                       ? this._find(n).cell
-                      : this.terminal.getCell(n.x, n.y);
-        if (codepage.lines.isLine(nCell.glyphId)) {
+                      : this.terminal.getCell(n.x, n.y),
+              compDirection = n.direction > 2
+                              ? n.direction >> 2
+                              : n.direction << 2;
+        if (codepage.lines.isLine(nCell.glyphId)
+            && (!requireAttractors
+                || codepage.lines.hasAttractor(nCell.glyphId,
+                                               compDirection))) {
           lineConstraints |= n.direction;
         }
       }
+      console.log('(%d, %d) has directions %s', tile.x, tile.y, lineConstraints.toString(2).padStart(4, '0'))
       tile.cell.glyphId = codepage.lines.getLineId(lineConstraints);
     }
   }
@@ -341,7 +364,16 @@ export function freeDraw(lettertypeCell, terminal) {
 }
 
 export function boxDraw(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => [];
+  return (start, end, activeFigure) => {
+    activeFigure = activeFigure || new BoxFigure(terminal);
+    // TODO: don't create cell on every draw
+    activeFigure.add(makeTile(end.x, end.y,
+                              new Cell(196,
+                                       lettertypeCell.fgColorId,
+                                       lettertypeCell.bgColorId)));
+    activeFigure.constrain();
+    return activeFigure;
+  };
 }
 
 export function floodFill(lettertypeCell, terminal) {
