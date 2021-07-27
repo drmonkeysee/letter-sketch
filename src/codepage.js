@@ -120,6 +120,9 @@ export default {
     hasAttractor(id, direction) {
       return SINGLE_LINES.get(id) & direction;
     },
+    getAttractors(id) {
+      return SINGLE_LINES.get(id);
+    }
   },
   SIGILS: {
     DEFAULT: 0x41,

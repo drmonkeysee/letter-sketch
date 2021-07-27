@@ -45,7 +45,7 @@ function plotRect(top, right, bottom, left, lettertypeCell) {
 }
 
 function plotBoxRect(terminal, top, right, bottom, left, lettertypeCell) {
-  const figure = new BoxFigure(terminal);
+  const figure = new BoxFigure(terminal, true);
   for (let x = left; x <= right; ++x) {
     if (x === left) {
       figure.add(makeTile(x, top,
@@ -284,30 +284,50 @@ class PlotFigure extends ActiveFigure {
 }
 
 class BoxFigure extends PlotFigure {
-  constructor(terminal) {
+  constructor(terminal, rect) {
     super();
     this.terminal = terminal;
+    this.rect = rect
   }
 
-  constrain(requireAttractors = false) {
+  constrain() {
+    const additionalTiles = [];
     for (const tile of this._tiles) {
       let lineConstraints = 0;
+      console.log('Scanning tile (%d, %d)', tile.x, tile.y);
       for (const n of neighbors(tile, this.terminal.dimensions)) {
-        const nCell = this._points.has(hashTile(n))
+        const figureNeighbor = this._points.has(hashTile(n));
+        const nCell = figureNeighbor
                       ? this._find(n).cell
-                      : this.terminal.getCell(n.x, n.y),
-              compDirection = n.direction > 2
-                              ? n.direction >> 2
-                              : n.direction << 2;
-        if (codepage.lines.isLine(nCell.glyphId)
-            && (!requireAttractors
-                || codepage.lines.hasAttractor(nCell.glyphId,
-                                               compDirection))) {
-          lineConstraints |= n.direction;
+                      : this.terminal.getCell(n.x, n.y);
+        if (codepage.lines.isLine(nCell.glyphId)) {
+          const compDirection = n.direction > 2
+                                ? n.direction >> 2
+                                : n.direction << 2;
+          if (this.rect) {
+            if (codepage.lines.hasAttractor(nCell.glyphId, compDirection)) {
+              lineConstraints |= n.direction;
+            }
+          } else {
+            lineConstraints |= n.direction;
+            if (!figureNeighbor) {
+              let nDirections = codepage.lines.getAttractors(nCell.glyphId);
+              nDirections |= compDirection;
+              console.log('Comp directions: %s', nDirections.toString(2).padStart(4, '0'));
+              const newCell = new Cell(codepage.lines.getLineId(nDirections),
+                                       nCell.fgColorId,
+                                       nCell.bgColorId);
+              console.log('New cell: %s (%d, %d)', codepage.glyph(newCell.glyphId), n.x, n.y);
+              additionalTiles.push(makeTile(n.x, n.y, newCell));
+            }
+          }
         }
       }
-      console.log('(%d, %d) has directions %s', tile.x, tile.y, lineConstraints.toString(2).padStart(4, '0'))
+      //console.log('(%d, %d) has directions %s', tile.x, tile.y, lineConstraints.toString(2).padStart(4, '0'))
       tile.cell.glyphId = codepage.lines.getLineId(lineConstraints);
+    }
+    for (const tile of additionalTiles) {
+      this.add(tile);
     }
   }
 
@@ -365,7 +385,7 @@ export function freeDraw(lettertypeCell, terminal) {
 
 export function boxDraw(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    activeFigure = activeFigure || new BoxFigure(terminal);
+    activeFigure = activeFigure || new BoxFigure(terminal, false);
     // TODO: don't create cell on every draw
     activeFigure.add(makeTile(end.x, end.y,
                               new Cell(196,
