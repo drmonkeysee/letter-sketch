@@ -45,7 +45,7 @@ function plotRect(top, right, bottom, left, lettertypeCell) {
 }
 
 function plotBoxRect(terminal, top, right, bottom, left, lettertypeCell) {
-  const figure = new BoxRectFigure(terminal);
+  const figure = new BoxFigure(terminal, true);
   for (let x = left; x <= right; ++x) {
     if (x === left) {
       figure.add(makeTile(x, top,
@@ -78,6 +78,7 @@ function plotBoxRect(terminal, top, right, bottom, left, lettertypeCell) {
                         new Cell(179, lettertypeCell.fgColorId,
                                  lettertypeCell.bgColorId)));
   }
+  figure.constrain(true);
   return figure;
 }
 
@@ -265,10 +266,6 @@ class ActiveFigure {
   *[Symbol.iterator]() {
     yield* this._tiles;
   }
-
-  _find(tile) {
-    return this._tiles.find(t => t.x === tile.x && t.y === tile.y);
-  }
 }
 
 class PlotFigure extends ActiveFigure {
@@ -278,40 +275,11 @@ class PlotFigure extends ActiveFigure {
   }
 
   add(tile) {
-    this._tryAdd(tile);
-  }
-
-  _tryAdd(tile) {
     const h = hashTile(tile);
-    if (this._points.has(h)) return false;
-    super.add(tile);
-    this._points.add(h);
-    return true;
-  }
-}
-
-class BoxRectFigure extends PlotFigure {
-  constructor(terminal) {
-    super();
-    this.terminal = terminal;
-  }
-
-  add(tile) {
-    if (!this._tryAdd(tile)) return;
-    let tileAttractors = codepage.lines.getAttractors(tile.cell.glyphId);
-    for (const n of neighbors(tile, this.terminal.dimensions)) {
-      if (this._points.has(hashTile(n))) continue;
-      const nCell = this.terminal.getCell(n.x, n.y);
-      if (codepage.lines.isLine(nCell.glyphId)) {
-        const compDirection = n.direction > 2
-                              ? n.direction >> 2
-                              : n.direction << 2;
-        if (codepage.lines.hasAttractor(nCell.glyphId, compDirection)) {
-          tileAttractors |= n.direction;
-        }
-      }
+    if (!this._points.has(h)) {
+      super.add(tile);
+      this._points.add(h);
     }
-    tile.cell.glyphId = codepage.lines.getLineId(tileAttractors);
   }
 }
 
@@ -361,6 +329,10 @@ class BoxFigure extends PlotFigure {
     for (const tile of additionalTiles) {
       this.add(tile);
     }
+  }
+
+  _find(tile) {
+    return this._tiles.find(t => t.x === tile.x && t.y === tile.y);
   }
 }
 
