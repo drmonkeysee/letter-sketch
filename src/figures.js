@@ -78,7 +78,7 @@ function plotBoxRect(terminal, top, right, bottom, left, lettertypeCell) {
                         new Cell(179, lettertypeCell.fgColorId,
                                  lettertypeCell.bgColorId)));
   }
-  figure.constrain(true);
+  figure.solve();
   return figure;
 }
 
@@ -290,7 +290,7 @@ class BoxFigure extends PlotFigure {
     this.rect = rect
   }
 
-  constrain() {
+  solve() {
     const additionalTiles = [];
     for (const tile of this._tiles) {
       let lineConstraints = 0;
@@ -391,7 +391,7 @@ export function boxDraw(lettertypeCell, terminal) {
                               new Cell(196,
                                        lettertypeCell.fgColorId,
                                        lettertypeCell.bgColorId)));
-    activeFigure.constrain();
+    activeFigure.solve();
     return activeFigure;
   };
 }
