@@ -287,19 +287,20 @@ class BoxFigure extends PlotFigure {
   constructor(terminal, rect) {
     super();
     this.terminal = terminal;
-    this.rect = rect
+    this.rect = rect;
   }
 
   solve() {
     const additionalTiles = [];
     for (const tile of this._tiles) {
-      let lineConstraints = 0;
+      let lineConstraints = tile.locked
+                            ? codepage.lines.getAttractors(tile.cell.glyphId)
+                            : 0;
       console.log('Scanning tile (%d, %d)', tile.x, tile.y);
+      console.log('Initial constraints %s', lineConstraints.toString(2).padStart(4, '0'));
       for (const n of neighbors(tile, this.terminal.dimensions)) {
-        const figureNeighbor = this._points.has(hashTile(n));
-        const nCell = figureNeighbor
-                      ? this._find(n).cell
-                      : this.terminal.getCell(n.x, n.y);
+        const existingTile = this._find(n) ?? this._findin(n, additionalTiles),
+              nCell = existingTile?.cell ?? this.terminal.getCell(n.x, n.y);
         if (codepage.lines.isLine(nCell.glyphId)) {
           const compDirection = n.direction > 2
                                 ? n.direction >> 2
@@ -310,29 +311,38 @@ class BoxFigure extends PlotFigure {
             }
           } else {
             lineConstraints |= n.direction;
-            if (!figureNeighbor) {
-              let nDirections = codepage.lines.getAttractors(nCell.glyphId);
-              nDirections |= compDirection;
-              console.log('Comp directions: %s', nDirections.toString(2).padStart(4, '0'));
+            const nDirections = codepage.lines.getAttractors(nCell.glyphId) | compDirection;
+            console.log('Comp directions: %s', nDirections.toString(2).padStart(4, '0'));
+            if (existingTile) {
+              existingTile.cell.glyphId = codepage.lines.getLineId(nDirections);
+            } else {
               const newCell = new Cell(codepage.lines.getLineId(nDirections),
                                        nCell.fgColorId,
                                        nCell.bgColorId);
               console.log('New cell: %s (%d, %d)', codepage.glyph(newCell.glyphId), n.x, n.y);
-              additionalTiles.push(makeTile(n.x, n.y, newCell));
+              const tile = makeTile(n.x, n.y, newCell);
+              tile.locked = true;
+              additionalTiles.push(tile);
             }
           }
         }
       }
       //console.log('(%d, %d) has directions %s', tile.x, tile.y, lineConstraints.toString(2).padStart(4, '0'))
+      console.log('Final constraints %s', lineConstraints.toString(2).padStart(4, '0'));
       tile.cell.glyphId = codepage.lines.getLineId(lineConstraints);
     }
+    // TODO: on subsequent calls these additional tiles "floodfill" far beyond actual figure
     for (const tile of additionalTiles) {
       this.add(tile);
     }
   }
 
   _find(tile) {
-    return this._tiles.find(t => t.x === tile.x && t.y === tile.y);
+    return this._findin(tile, this._tiles);
+  }
+
+  _findin(tile, tiles) {
+    return tiles.find(t => t.x === tile.x && t.y === tile.y);
   }
 }
 
