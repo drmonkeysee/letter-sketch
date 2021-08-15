@@ -293,9 +293,8 @@ class BoxFigure extends PlotFigure {
   solve() {
     const additionalTiles = [];
     for (const tile of this._tiles) {
-      let lineConstraints = tile.locked
-                            ? codepage.lines.getAttractors(tile.cell.glyphId)
-                            : 0;
+      if (tile.locked) continue;
+      let lineConstraints = 0;
       console.log('Scanning tile (%d, %d)', tile.x, tile.y);
       console.log('Initial constraints %s', lineConstraints.toString(2).padStart(4, '0'));
       for (const n of neighbors(tile, this.terminal.dimensions)) {
@@ -331,7 +330,6 @@ class BoxFigure extends PlotFigure {
       console.log('Final constraints %s', lineConstraints.toString(2).padStart(4, '0'));
       tile.cell.glyphId = codepage.lines.getLineId(lineConstraints);
     }
-    // TODO: on subsequent calls these additional tiles "floodfill" far beyond actual figure
     for (const tile of additionalTiles) {
       this.add(tile);
     }
