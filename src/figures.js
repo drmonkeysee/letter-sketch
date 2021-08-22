@@ -45,7 +45,7 @@ function plotRect(top, right, bottom, left, lettertypeCell) {
 }
 
 function plotBoxRect(terminal, top, right, bottom, left, lettertypeCell) {
-  const figure = new BoxFigure(terminal, true);
+  const figure = new BoxRectFigure(terminal);
   for (let x = left; x <= right; ++x) {
     if (x === left) {
       figure.add(makeTile(x, top,
@@ -266,6 +266,14 @@ class ActiveFigure {
   *[Symbol.iterator]() {
     yield* this._tiles;
   }
+
+  _find(tile) {
+    return this._findin(tile, this._tiles);
+  }
+
+  _findin(tile, tiles) {
+    return tiles.find(t => t.x === tile.x && t.y === tile.y);
+  }
 }
 
 class PlotFigure extends ActiveFigure {
@@ -275,72 +283,101 @@ class PlotFigure extends ActiveFigure {
   }
 
   add(tile) {
-    const h = hashTile(tile);
-    if (!this._points.has(h)) {
-      super.add(tile);
-      this._points.add(h);
+    const h = this._newTileHash(tile);
+    if (h) {
+      this._insert(tile, h);
     }
+  }
+
+  _insert(tile, hash) {
+    super.add(tile);
+    this._points.add(hash);
+  }
+
+  _newTileHash(tile) {
+    const h = hashTile(tile);
+    return this._points.has(h) ? null : h;
   }
 }
 
-class BoxFigure extends PlotFigure {
-  constructor(terminal, rect) {
+class BoxRectFigure extends PlotFigure {
+  constructor(terminal) {
     super();
     this.terminal = terminal;
-    this.rect = rect;
   }
 
   solve() {
-    const additionalTiles = [];
     for (const tile of this._tiles) {
-      if (tile.locked) continue;
       let lineConstraints = 0;
-      console.log('Scanning tile (%d, %d)', tile.x, tile.y);
-      console.log('Initial constraints %s', lineConstraints.toString(2).padStart(4, '0'));
       for (const n of neighbors(tile, this.terminal.dimensions)) {
-        const existingTile = this._find(n) ?? this._findin(n, additionalTiles),
-              nCell = existingTile?.cell ?? this.terminal.getCell(n.x, n.y);
+        const nTile = this._find(n),
+              nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y);
         if (codepage.lines.isLine(nCell.glyphId)) {
           const compDirection = n.direction > 2
                                 ? n.direction >> 2
                                 : n.direction << 2;
-          if (this.rect) {
-            if (codepage.lines.hasAttractor(nCell.glyphId, compDirection)) {
-              lineConstraints |= n.direction;
-            }
-          } else {
+          if (codepage.lines.hasAttractor(nCell.glyphId, compDirection)) {
             lineConstraints |= n.direction;
-            const nDirections = codepage.lines.getAttractors(nCell.glyphId) | compDirection;
-            console.log('Comp directions: %s', nDirections.toString(2).padStart(4, '0'));
-            if (existingTile) {
-              existingTile.cell.glyphId = codepage.lines.getLineId(nDirections);
-            } else {
-              const newCell = new Cell(codepage.lines.getLineId(nDirections),
-                                       nCell.fgColorId,
-                                       nCell.bgColorId);
-              console.log('New cell: %s (%d, %d)', codepage.glyph(newCell.glyphId), n.x, n.y);
-              const tile = makeTile(n.x, n.y, newCell);
-              tile.locked = true;
-              additionalTiles.push(tile);
-            }
           }
         }
       }
-      //console.log('(%d, %d) has directions %s', tile.x, tile.y, lineConstraints.toString(2).padStart(4, '0'))
-      console.log('Final constraints %s', lineConstraints.toString(2).padStart(4, '0'));
       tile.cell.glyphId = codepage.lines.getLineId(lineConstraints);
     }
-    for (const tile of additionalTiles) {
-      this.add(tile);
+  }
+}
+
+class BoxDrawFigure extends PlotFigure {
+  constructor(terminal) {
+    super();
+    this.terminal = terminal;
+  }
+
+  add(tile) {
+    const h = this._newTileHash(tile);
+    if (h) {
+      // NOTE: if current brush is adding a new cell, duplicate the lettertype
+      // selection to render the correct box-drawing glyph.
+      tile.cell = new Cell(196, tile.cell.fgColorId, tile.cell.bgColorId);
+      this._insert(tile, h);
+    } else {
+      // NOTE: current tile may have been pulled into the figure from the
+      // terminal by an earlier tile and still has its old colors; make sure
+      // the tile currently under the brush always reflects the currently-
+      // selected colors.
+      const currentTile = this._find(tile);
+      currentTile.cell.update({fgColorId: tile.cell.fgColorId, bgColorId: tile.cell.bgColorId});
+      tile = currentTile;
     }
-  }
-
-  _find(tile) {
-    return this._findin(tile, this._tiles);
-  }
-
-  _findin(tile, tiles) {
-    return tiles.find(t => t.x === tile.x && t.y === tile.y);
+    const additionalTiles = [];
+    let lineConstraints = 0;
+    for (const n of neighbors(tile, this.terminal.dimensions)) {
+      let nTile = this._find(n) ?? this._findin(n, additionalTiles);
+      const nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y);
+      if (codepage.lines.isLine(nCell.glyphId)) {
+        const compDirection = n.direction > 2
+                              ? n.direction >> 2
+                              : n.direction << 2;
+        lineConstraints |= n.direction;
+        if (!nTile) {
+          const newCell = new Cell(196, nCell.fgColorId, nCell.bgColorId);
+          nTile = makeTile(n.x, n.y, newCell);
+          additionalTiles.push(nTile);
+        }
+        let nConstraints = compDirection;
+        for (const nn of neighbors(nTile, this.terminal.dimensions)) {
+          const existingNN = this._find(nn) ?? this._findin(nn, additionalTiles),
+                nnCell = existingNN?.cell ?? this.terminal.getCell(nn.x, nn.y);
+          if (codepage.lines.isLine(nnCell.glyphId)) {
+            nConstraints |= nn.direction;
+          }
+        }
+        nTile.cell.glyphId = codepage.lines.getLineId(nConstraints);
+      }
+      tile.cell.glyphId = codepage.lines.getLineId(lineConstraints);
+    }
+    for (const adt of additionalTiles) {
+      super.add(adt);
+    }
   }
 }
 
@@ -393,13 +430,8 @@ export function freeDraw(lettertypeCell, terminal) {
 
 export function boxDraw(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    activeFigure = activeFigure || new BoxFigure(terminal, false);
-    // TODO: don't create cell on every draw
-    activeFigure.add(makeTile(end.x, end.y,
-                              new Cell(196,
-                                       lettertypeCell.fgColorId,
-                                       lettertypeCell.bgColorId)));
-    activeFigure.solve();
+    activeFigure = activeFigure || new BoxDrawFigure(terminal);
+    activeFigure.add(makeTile(end.x, end.y, lettertypeCell));
     return activeFigure;
   };
 }
