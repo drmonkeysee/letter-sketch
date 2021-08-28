@@ -1,6 +1,7 @@
-import {Cell} from './cell.js';
+import {Cell, HASH_WIDTH} from './cell.js';
 
-const MIN_DIM = 0x1, MAX_DIM = 0x10000;
+// NOTE: max terminal size is related to hash width of tiles
+const MIN_DIM = 1, MAX_DIM = 2**HASH_WIDTH;
 
 export class Terminal {
   constructor(columns, rows) {

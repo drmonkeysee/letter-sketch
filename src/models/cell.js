@@ -1,6 +1,8 @@
 import codepage from '../codepage.js';
 import palette from '../palette.js';
 
+export const HASH_WIDTH = 16;
+
 export class Cell {
   constructor(glyphId, fgColorId, bgColorId) {
     this._setFields(glyphId, fgColorId, bgColorId);
@@ -56,8 +58,6 @@ export function makeTile(x, y, cell) {
   return {x, y, cell};
 }
 
-// NOTE: shift/xor works as a key cuz terminal coordinates
-// cannot be greater than 0xffff.
 export function hashTile(tile) {
-  return (tile.x << 16) ^ tile.y;
+  return (tile.x << HASH_WIDTH) ^ tile.y;
 }
