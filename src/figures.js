@@ -44,6 +44,16 @@ function plotRect(top, right, bottom, left, lettertypeCell) {
   return figure;
 }
 
+function plotFilledRect(top, right, bottom, left, lettertypeCell) {
+  const figure = [];
+  for (let y = top; y <= bottom; ++y) {
+    for (let x = left; x <= right; ++x) {
+      figure.push(makeTile(x, y, lettertypeCell));
+    }
+  }
+  return figure;
+}
+
 function plotBoxRect(terminal, top, right, bottom, left, lettertypeCell) {
   const figure = new BoxRectFigure(terminal);
   for (let x = left; x <= right; ++x) {
@@ -79,16 +89,6 @@ function plotBoxRect(terminal, top, right, bottom, left, lettertypeCell) {
                                  lettertypeCell.bgColorId)));
   }
   figure.solve();
-  return figure;
-}
-
-function plotFilledRect(top, right, bottom, left, lettertypeCell) {
-  const figure = [];
-  for (let y = top; y <= bottom; ++y) {
-    for (let x = left; x <= right; ++x) {
-      figure.push(makeTile(x, y, lettertypeCell));
-    }
-  }
   return figure;
 }
 
@@ -433,7 +433,7 @@ export function freeDraw(lettertypeCell, terminal) {
 
 export function boxDraw(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    activeFigure = activeFigure || new BoxDrawFigure(terminal);
+    activeFigure = activeFigure || (codepage.lines.isLine(lettertypeCell.glyphId) ? new BoxDrawFigure(terminal) : new PlotFigure());
     activeFigure.add(makeTile(end.x, end.y, lettertypeCell));
     return activeFigure;
   };
@@ -482,7 +482,7 @@ export function filledRectangle(lettertypeCell, terminal) {
 
 export function boxRectangle(lettertypeCell, terminal) {
   return (start, end, activeFigure) => drawRect(
-    start, end, lettertypeCell, (...args) => plotBoxRect(terminal, ...args)
+    start, end, lettertypeCell, codepage.lines.isLine(lettertypeCell.glyphId) ? (...args) => plotBoxRect(terminal, ...args) : plotRect
   );
 }
 
