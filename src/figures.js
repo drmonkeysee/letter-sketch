@@ -366,8 +366,11 @@ class BoxDrawFigure extends PlotFigure {
         let nConstraints = compDirection;
         for (const nn of neighbors(nTile, this.terminal.dimensions)) {
           const existingNN = this._find(nn) ?? this._findin(nn, additionalTiles),
-                nnCell = existingNN?.cell ?? this.terminal.getCell(nn.x, nn.y);
-          if (codepage.lines.isLine(nnCell.glyphId)) {
+                nnCell = existingNN?.cell ?? this.terminal.getCell(nn.x, nn.y),
+                nCompDirection = nn.direction > 2
+                                 ? nn.direction >> 2
+                                 : nn.direction << 2;
+          if (codepage.lines.isLine(nnCell.glyphId) && codepage.lines.hasAttractor(nnCell.glyphId, nCompDirection)) {
             nConstraints |= nn.direction;
           }
         }
