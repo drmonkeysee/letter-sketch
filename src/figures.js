@@ -92,7 +92,7 @@ function plotBoxRect(terminal, top, right, bottom, left, lettertypeCell) {
   return figure;
 }
 
-function drawEllipse(start, end, width, height, lettertypeCell, plotStyle) {
+function drawEllipse(start, end, {width, height}, lettertypeCell, plotStyle) {
   const xRadius = Math.abs(end.x - start.x),
         yRadius = Math.abs(end.y - start.y),
         figure = new PlotFigure();
@@ -487,16 +487,14 @@ export function boxRectangle(lettertypeCell, terminal) {
 }
 
 export function ellipse(lettertypeCell, terminal) {
-  const {width, height} = terminal.dimensions;
   return (start, end, activeFigure) => drawEllipse(
-    start, end, width, height, lettertypeCell, plotEllipse
+    start, end, terminal.dimensions, lettertypeCell, plotEllipse
   );
 }
 
 export function filledEllipse(lettertypeCell, terminal) {
-  const {width, height} = terminal.dimensions;
   return (start, end, activeFigure) => drawEllipse(
-    start, end, width, height, lettertypeCell, plotFilledEllipse
+    start, end, terminal.dimensions, lettertypeCell, plotFilledEllipse
   );
 }
 
