@@ -3,8 +3,8 @@ import codepage from '../src/codepage.js';
 import palette from '../src/palette.js';
 
 import {
-  singleCell, freeDraw, floodFill, rectangle, filledRectangle,
-  ellipse, filledEllipse, lineSegment, textBuffer, replace
+  ellipse, filledEllipse, filledRectangle, floodFill,
+  freeDraw, lineSegment, rectangle, replace, singleCell, textBuffer,
 } from '../src/figures.js';
 import {Cell, makeTile} from '../src/models/cell.js';
 import {Terminal} from '../src/models/terminal.js';

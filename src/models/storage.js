@@ -1,7 +1,7 @@
-import {Cell} from './cell.js';
 import codepage from '../codepage.js';
-import {Terminal} from './terminal.js';
 import {TOOLS} from '../tools.js';
+import {Cell} from './cell.js';
+import {Terminal} from './terminal.js';
 
 export default {
   load() {

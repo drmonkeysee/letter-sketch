@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 
-import {ViewNotifier, EVENTS} from '../src/refresh.js';
+import {EVENTS, ViewNotifier} from '../src/refresh.js';
 
 describe('ViewNotifier', function () {
   beforeEach(function () {

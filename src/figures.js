@@ -1,5 +1,5 @@
 import codepage from './codepage.js';
-import {hashTile, makeTile, Cell} from './models/cell.js';
+import {Cell, hashTile, makeTile} from './models/cell.js';
 
 const DIRECTIONS = {
   NONE: 0b0000,

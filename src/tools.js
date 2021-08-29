@@ -1,9 +1,8 @@
 import {
-  singleCell, freeDraw, floodFill, rectangle, filledRectangle,
-  ellipse, filledEllipse, lineSegment, textBuffer, replace, boxDraw,
-  boxRectangle
+  boxDraw, boxRectangle, ellipse, filledEllipse, filledRectangle, floodFill,
+  freeDraw, lineSegment, rectangle, replace, singleCell, textBuffer,
 } from './figures.js';
-import {MouseGesture, CursorGesture, SampleCell} from './gestures.js';
+import {CursorGesture, MouseGesture, SampleCell} from './gestures.js';
 import namemap from './namemap.js';
 
 class Tool {
