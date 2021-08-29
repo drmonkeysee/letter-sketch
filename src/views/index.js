@@ -4,8 +4,8 @@ import {SketchPad} from './sketchpad.js';
 import {ToolSelector} from './tools.js';
 
 export const VIEW_REGISTRY = [
-  LetterBlock,
   ColorPalette,
+  LetterBlock,
   SketchPad,
   ToolSelector,
 ];

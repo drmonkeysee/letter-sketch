@@ -29,14 +29,14 @@ export class ToolSelector extends View {
     }
 
     this._boxToggle.checked = initialState.boxMode;
-    this._boxToggle.addEventListener('input',
-                                     this._toggleBoxMode.bind(this));
+    this._boxToggle.addEventListener('input', this._toggleBoxMode.bind(this));
   }
 
   subscribe(notifier) {
     notifier.subscribe(EVENTS.onToolChanged, this._refreshTool.bind(this));
-    notifier.subscribe(EVENTS.onBoxModeChanged,
-                       this._refreshBoxMode.bind(this));
+    notifier.subscribe(
+      EVENTS.onBoxModeChanged, this._refreshBoxMode.bind(this)
+    );
   }
 
   _pickTool(event) {

@@ -58,35 +58,51 @@ function plotBoxRect(terminal, top, right, bottom, left, lettertypeCell) {
   const figure = new BoxRectFigure(terminal);
   for (let x = left; x <= right; ++x) {
     if (x === left) {
-      figure.add(makeTile(x, top,
-                          new Cell(218, lettertypeCell.fgColorId,
-                                   lettertypeCell.bgColorId)));
-      figure.add(makeTile(x, bottom,
-                          new Cell(192, lettertypeCell.fgColorId,
-                                   lettertypeCell.bgColorId)));
+      figure.add(makeTile(
+        x, top, new Cell(
+          218, lettertypeCell.fgColorId, lettertypeCell.bgColorId
+        )
+      ));
+      figure.add(makeTile(
+        x, bottom, new Cell(
+          192, lettertypeCell.fgColorId, lettertypeCell.bgColorId
+        )
+      ));
     } else if (x === right) {
-      figure.add(makeTile(x, top,
-                          new Cell(191, lettertypeCell.fgColorId,
-                                   lettertypeCell.bgColorId)));
-      figure.add(makeTile(x, bottom,
-                          new Cell(217, lettertypeCell.fgColorId,
-                                   lettertypeCell.bgColorId)));
+      figure.add(makeTile(
+        x, top, new Cell(
+          191, lettertypeCell.fgColorId, lettertypeCell.bgColorId
+        )
+      ));
+      figure.add(makeTile(
+        x, bottom, new Cell(
+          217, lettertypeCell.fgColorId, lettertypeCell.bgColorId
+        )
+      ));
     } else {
-      figure.add(makeTile(x, top,
-                          new Cell(196, lettertypeCell.fgColorId,
-                                   lettertypeCell.bgColorId)));
-      figure.add(makeTile(x, bottom,
-                          new Cell(196, lettertypeCell.fgColorId,
-                                   lettertypeCell.bgColorId)));
+      figure.add(makeTile(
+        x, top, new Cell(
+          196, lettertypeCell.fgColorId, lettertypeCell.bgColorId
+        )
+      ));
+      figure.add(makeTile(
+        x, bottom, new Cell(
+          196, lettertypeCell.fgColorId, lettertypeCell.bgColorId
+        )
+      ));
     }
   }
   for (let y = top + 1; y < bottom; ++y) {
-    figure.add(makeTile(left, y,
-                        new Cell(179, lettertypeCell.fgColorId,
-                                 lettertypeCell.bgColorId)));
-    figure.add(makeTile(right, y,
-                        new Cell(179, lettertypeCell.fgColorId,
-                                 lettertypeCell.bgColorId)));
+    figure.add(makeTile(
+      left, y, new Cell(
+        179, lettertypeCell.fgColorId, lettertypeCell.bgColorId
+      )
+    ));
+    figure.add(makeTile(
+      right, y, new Cell(
+        179, lettertypeCell.fgColorId, lettertypeCell.bgColorId
+      )
+    ));
   }
   figure.solve();
   return figure;
@@ -345,7 +361,9 @@ class BoxDrawFigure extends PlotFigure {
       // the tile currently under the brush always reflects the currently-
       // selected colors.
       const currentTile = this._find(tile);
-      currentTile.cell.update({fgColorId: tile.cell.fgColorId, bgColorId: tile.cell.bgColorId});
+      currentTile.cell.update(
+        {fgColorId: tile.cell.fgColorId, bgColorId: tile.cell.bgColorId}
+      );
       tile = currentTile;
     }
     const additionalTiles = [];
@@ -365,12 +383,14 @@ class BoxDrawFigure extends PlotFigure {
         }
         let nConstraints = compDirection;
         for (const nn of neighbors(nTile, this.terminal.dimensions)) {
-          const existingNN = this._find(nn) ?? this._findin(nn, additionalTiles),
+          const existingNN = this._find(nn)
+                              ?? this._findin(nn, additionalTiles),
                 nnCell = existingNN?.cell ?? this.terminal.getCell(nn.x, nn.y),
                 nCompDirection = nn.direction > 2
-                                 ? nn.direction >> 2
-                                 : nn.direction << 2;
-          if (codepage.lines.isLine(nnCell.glyphId) && codepage.lines.hasAttractor(nnCell.glyphId, nCompDirection)) {
+                                  ? nn.direction >> 2
+                                  : nn.direction << 2;
+          if (codepage.lines.isLine(nnCell.glyphId)
+              && codepage.lines.hasAttractor(nnCell.glyphId, nCompDirection)) {
             nConstraints |= nn.direction;
           }
         }
@@ -420,12 +440,12 @@ class TextFigure extends ActiveFigure {
 
 export function singleCell(lettertypeCell, terminal) {
   return (start, end, activeFigure) =>
-    activeFigure || [makeTile(start.x, start.y, lettertypeCell)];
+    activeFigure ?? [makeTile(start.x, start.y, lettertypeCell)];
 }
 
 export function freeDraw(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    activeFigure = activeFigure || new PlotFigure();
+    activeFigure = activeFigure ?? new PlotFigure();
     activeFigure.add(makeTile(end.x, end.y, lettertypeCell));
     return activeFigure;
   };
@@ -433,7 +453,10 @@ export function freeDraw(lettertypeCell, terminal) {
 
 export function boxDraw(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
-    activeFigure = activeFigure || (codepage.lines.isLine(lettertypeCell.glyphId) ? new BoxDrawFigure(terminal) : new PlotFigure());
+    activeFigure = activeFigure
+                   ?? (codepage.lines.isLine(lettertypeCell.glyphId)
+                        ? new BoxDrawFigure(terminal)
+                        : new PlotFigure());
     activeFigure.add(makeTile(end.x, end.y, lettertypeCell));
     return activeFigure;
   };
@@ -482,7 +505,9 @@ export function filledRectangle(lettertypeCell, terminal) {
 
 export function boxRectangle(lettertypeCell, terminal) {
   return (start, end, activeFigure) => drawRect(
-    start, end, lettertypeCell, codepage.lines.isLine(lettertypeCell.glyphId) ? (...args) => plotBoxRect(terminal, ...args) : plotRect
+    start, end, lettertypeCell, codepage.lines.isLine(lettertypeCell.glyphId)
+                                ? (...args) => plotBoxRect(terminal, ...args)
+                                : plotRect
   );
 }
 
@@ -505,8 +530,8 @@ export function lineSegment(lettertypeCell, terminal) {
 }
 
 export function textBuffer(lettertypeCell, terminal) {
-  return (start, end, activeFigure) =>
-    activeFigure || new TextFigure(lettertypeCell);
+  return (start, end, activeFigure) => activeFigure
+                                        ?? new TextFigure(lettertypeCell);
 }
 
 export function replace(lettertypeCell, terminal) {

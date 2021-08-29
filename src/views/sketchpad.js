@@ -103,9 +103,7 @@ export class SketchPad extends View {
     this._drawSketchpad(initialState.terminal, initialState.fontSize);
 
     // NOTE: end current gesture if mouseup outside sketchpad
-    this.doc.addEventListener(
-      'mouseup', this._handleGesture.bind(this)
-    );
+    this.doc.addEventListener('mouseup', this._handleGesture.bind(this));
     this.doc.addEventListener('keydown', this._handleGesture.bind(this));
   }
 
