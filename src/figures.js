@@ -58,51 +58,19 @@ function plotBoxRect(terminal, top, right, bottom, left, lettertypeCell) {
   const figure = new BoxRectFigure(terminal);
   for (let x = left; x <= right; ++x) {
     if (x === left) {
-      figure.add(makeTile(
-        x, top, new Cell(
-          218, lettertypeCell.fgColorId, lettertypeCell.bgColorId
-        )
-      ));
-      figure.add(makeTile(
-        x, bottom, new Cell(
-          192, lettertypeCell.fgColorId, lettertypeCell.bgColorId
-        )
-      ));
+      figure.add(makeTile(x, top, lettertypeCell.clone({glyphId: 218})));
+      figure.add(makeTile(x, bottom, lettertypeCell.clone({glyphId: 192})));
     } else if (x === right) {
-      figure.add(makeTile(
-        x, top, new Cell(
-          191, lettertypeCell.fgColorId, lettertypeCell.bgColorId
-        )
-      ));
-      figure.add(makeTile(
-        x, bottom, new Cell(
-          217, lettertypeCell.fgColorId, lettertypeCell.bgColorId
-        )
-      ));
+      figure.add(makeTile(x, top, lettertypeCell.clone({glyphId: 191})));
+      figure.add(makeTile(x, bottom, lettertypeCell.clone({glyphId: 217})));
     } else {
-      figure.add(makeTile(
-        x, top, new Cell(
-          196, lettertypeCell.fgColorId, lettertypeCell.bgColorId
-        )
-      ));
-      figure.add(makeTile(
-        x, bottom, new Cell(
-          196, lettertypeCell.fgColorId, lettertypeCell.bgColorId
-        )
-      ));
+      figure.add(makeTile(x, top, lettertypeCell.clone({glyphId: 196})));
+      figure.add(makeTile(x, bottom, lettertypeCell.clone({glyphId: 196})));
     }
   }
   for (let y = top + 1; y < bottom; ++y) {
-    figure.add(makeTile(
-      left, y, new Cell(
-        179, lettertypeCell.fgColorId, lettertypeCell.bgColorId
-      )
-    ));
-    figure.add(makeTile(
-      right, y, new Cell(
-        179, lettertypeCell.fgColorId, lettertypeCell.bgColorId
-      )
-    ));
+    figure.add(makeTile(left, y, lettertypeCell.clone({glyphId: 179})));
+    figure.add(makeTile(right, y, lettertypeCell.clone({glyphId: 179})));
   }
   figure.solve();
   return figure;
@@ -353,7 +321,7 @@ class BoxDrawFigure extends PlotFigure {
     if (h !== null) {
       // NOTE: if current brush is adding a new cell, duplicate the lettertype
       // selection to render the correct box-drawing glyph.
-      tile.cell = new Cell(196, tile.cell.fgColorId, tile.cell.bgColorId);
+      tile.cell = tile.cell.clone({glyphId: 196});
       this._insert(tile, h);
     } else {
       // NOTE: current tile may have been pulled into the figure from the
@@ -377,7 +345,7 @@ class BoxDrawFigure extends PlotFigure {
                               : n.direction << 2;
         lineConstraints |= n.direction;
         if (!nTile) {
-          const newCell = new Cell(196, nCell.fgColorId, nCell.bgColorId);
+          const newCell = nCell.clone({glyphId: 196});
           nTile = makeTile(n.x, n.y, newCell);
           additionalTiles.push(nTile);
         }

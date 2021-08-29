@@ -1150,9 +1150,7 @@ describe('figures', function () {
       expect(actual).to.have.lengthOf(expectedLength || expected.length);
       actual = [...actual];
       for (const [i, [char, tile]] of expected.entries()) {
-        const cell = new Cell(
-          char, srcCell.fgColorId, srcCell.bgColorId
-        );
+        const cell = srcCell.clone({glyphId: char});
         expect(actual[i]).to.eql({cell, ...tile});
       }
     }
@@ -1166,38 +1164,30 @@ describe('figures', function () {
     it('returns empty figure on initial call', function () {
       expect(this._figure).to.have.lengthOf(0);
       expect(this._figure.cursorOn).to.eql(
-        new Cell(
-          codepage.SIGILS.CURSOR, this._cell.fgColorId, this._cell.bgColorId
-        )
+        this._cell.clone({glyphId: codepage.SIGILS.CURSOR})
       );
       expect(this._figure.cursorOff).to.eql(
-        new Cell(
-          codepage.SIGILS.TRANSPARENT,
-          this._cell.fgColorId,
-          this._cell.bgColorId
-        )
+        this._cell.clone({glyphId: codepage.SIGILS.TRANSPARENT})
       );
     });
 
     it('prints single character', function () {
       const tile = {x: 1, y: 1};
 
-      this._figure.advance(tile, 'G')
+      this._figure.advance(tile, 71)
 
       expect(this._figure).to.have.lengthOf(1);
-      const cell = new Cell(
-        'G', this._cell.fgColorId, this._cell.bgColorId
-      );
+      const cell = this._cell.clone({glyphId: 71});
       expect([...this._figure][0]).to.eql({cell, ...tile});
     });
 
     it('prints multiple characters', function () {
       const start = {x: 1, y: 1},
             tiles = [
-              ['T', {x: 1, y: 1}],
-              ['e', {x: 1, y: 2}],
-              ['s', {x: 1, y: 3}],
-              ['t', {x: 1, y: 4}],
+              [84  /*'T'*/, {x: 1, y: 1}],
+              [101 /*'e'*/, {x: 1, y: 2}],
+              [115 /*'s'*/, {x: 1, y: 3}],
+              [116 /*'t'*/, {x: 1, y: 4}],
             ];
 
       for (const [char, tile] of tiles) {
@@ -1210,10 +1200,10 @@ describe('figures', function () {
     it('prints non-contiguous characters', function () {
       const start = {x: 1, y: 1},
             tiles = [
-              ['T', {x: 0, y: 1}],
-              ['e', {x: 3, y: 4}],
-              ['s', {x: 2, y: 2}],
-              ['t', {x: 1, y: 0}],
+              [84  /*'T'*/, {x: 0, y: 1}],
+              [101 /*'e'*/, {x: 3, y: 4}],
+              [115 /*'s'*/, {x: 2, y: 2}],
+              [116 /*'t'*/, {x: 1, y: 0}],
             ];
 
       for (const [char, tile] of tiles) {
@@ -1233,10 +1223,10 @@ describe('figures', function () {
     it('removes trailing character for reverse', function () {
       const start = {x: 1, y: 1},
             tiles = [
-              ['T', {x: 1, y: 1}],
-              ['e', {x: 1, y: 2}],
-              ['s', {x: 1, y: 3}],
-              ['t', {x: 1, y: 4}],
+              [84  /*'T'*/, {x: 1, y: 1}],
+              [101 /*'e'*/, {x: 1, y: 2}],
+              [115 /*'s'*/, {x: 1, y: 3}],
+              [116 /*'t'*/, {x: 1, y: 4}],
             ];
       for (const [char, tile] of tiles) {
         this._figure.advance(tile, char);
@@ -1248,9 +1238,7 @@ describe('figures', function () {
       expect(tile).to.eql({
           x: 1,
           y: 4,
-          cell: new Cell(
-            't', this._cell.fgColorId, this._cell.bgColorId
-          ),
+          cell: this._cell.clone({glyphId: 116}),
         }
       );
     });
@@ -1267,10 +1255,10 @@ describe('figures', function () {
     it('does not include sentinels in iterator', function () {
       const start = {x: 1, y: 1},
             tiles = [
-              ['T', {x: 0, y: 1}],
-              ['e', {x: 3, y: 4}],
-              ['s', {x: 2, y: 2}],
-              ['t', {x: 1, y: 1}],
+              [84  /*'T'*/, {x: 0, y: 1}],
+              [101 /*'e'*/, {x: 3, y: 4}],
+              [115 /*'s'*/, {x: 2, y: 2}],
+              [116 /*'t'*/, {x: 1, y: 1}],
             ];
 
       for (const [char, tile] of tiles) {
