@@ -125,10 +125,10 @@ export default {
     }
   },
   SIGILS: {
-    DEFAULT: 0x41,
-    CLEAR: 0x20,
-    CURSOR: 0x7c,
-    TRANSPARENT: 0xff,
+    DEFAULT: 65,
+    CLEAR: 32,
+    CURSOR: 124,
+    TRANSPARENT: 255,
     NEWLINE: '\n',
   },
 };

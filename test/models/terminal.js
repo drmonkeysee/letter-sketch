@@ -43,7 +43,7 @@ describe('Terminal', function () {
   describe('#updateCell()', function () {
     it('updates given cell', function () {
       const target = new Terminal(10, 5),
-            newCell = new Cell(0x42, 16, 20),
+            newCell = new Cell(66, 16, 20),
             targetCell = target.getCell(5, 2);
 
       target.updateCell(5, 2, newCell);
@@ -51,7 +51,7 @@ describe('Terminal', function () {
       const updatedCell = target.getCell(5, 2);
       expect(updatedCell).to.equal(targetCell);
       expect(updatedCell).to.not.equal(newCell);
-      expect(updatedCell.glyphId).to.equal(0x42);
+      expect(updatedCell.glyphId).to.equal(66);
       expect(updatedCell.fgColorId).to.equal(16);
       expect(updatedCell.bgColorId).to.equal(20);
       expect(updatedCell.glyphId).to.equal(newCell.glyphId);

@@ -4,7 +4,7 @@ import codepage from '../src/codepage.js';
 
 describe('#glyph()', function () {
   it('returns expected value for id', function () {
-    const result = codepage.glyph(0x41);
+    const result = codepage.glyph(65);
 
     expect(result).to.equal('A');
   });
@@ -20,7 +20,7 @@ describe('#id()', function () {
   it('returns expected id for glyph', function() {
     const result = codepage.id('#');
 
-    expect(result).to.equal(0x23);
+    expect(result).to.equal(35);
   });
 
   it('returns invalid id for unknown glyph', function () {

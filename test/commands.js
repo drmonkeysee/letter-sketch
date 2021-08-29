@@ -106,7 +106,7 @@ describe('commands', function () {
     });
 
     it('sets the cell glyph', function () {
-      const glyph = 0x55,
+      const glyph = 85,
             cmd = this.target(glyph);
 
       const result = cmd();

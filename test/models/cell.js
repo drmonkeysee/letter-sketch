@@ -21,15 +21,15 @@ describe('Cell', function () {
     });
 
     it('sets NUL glyph if given 0', function () {
-      const result = new Cell(0x0);
+      const result = new Cell(0);
 
-      expect(result.glyphId).to.equal(0x0);
+      expect(result.glyphId).to.equal(0);
     });
 
     it('sets properties', function () {
-      const result = new Cell(0x42, 18, 2);
+      const result = new Cell(66, 18, 2);
 
-      expect(result.glyphId).to.equal(0x42);
+      expect(result.glyphId).to.equal(66);
       expect(result.fgColorId).to.equal(18);
       expect(result.bgColorId).to.equal(2);
     });
@@ -49,13 +49,13 @@ describe('Cell', function () {
     });
 
     it('is not empty if glyph but no colors', function () {
-      const result = new Cell(0x42);
+      const result = new Cell(66);
 
       expect(result.isEmpty()).to.be.false;
     });
 
     it('is not empty if all properties set', function () {
-      const result = new Cell(0x42, 18, 2);
+      const result = new Cell(66, 18, 2);
 
       expect(result.isEmpty()).to.be.false;
     });
@@ -69,29 +69,29 @@ describe('Cell', function () {
     });
 
     it('returns true for equal cells', function () {
-      const cell1 = new Cell(0x41, 0, 26),
-            cell2 = new Cell(0x41, 0, 26);
+      const cell1 = new Cell(65, 0, 26),
+            cell2 = new Cell(65, 0, 26);
 
       expect(cell1.equals(cell2)).to.be.true;
     });
 
     it('returns false for different glyphs', function () {
-      const cell1 = new Cell(0x41, 0, 26),
-            cell2 = new Cell(0x42, 0, 26);
+      const cell1 = new Cell(65, 0, 26),
+            cell2 = new Cell(66, 0, 26);
 
       expect(cell1.equals(cell2)).to.be.false;
     });
 
     it('returns false for different fg colors', function () {
-      const cell1 = new Cell(0x41, 0, 26),
-            cell2 = new Cell(0x41, 15, 26);
+      const cell1 = new Cell(65, 0, 26),
+            cell2 = new Cell(65, 15, 26);
 
       expect(cell1.equals(cell2)).to.be.false;
     });
 
     it('returns false for different bg colors', function () {
-      const cell1 = new Cell(0x41, 0, 26),
-            cell2 = new Cell(0x41, 0, 23);
+      const cell1 = new Cell(65, 0, 26),
+            cell2 = new Cell(65, 0, 23);
 
       expect(cell1.equals(cell2)).to.be.false;
     });
@@ -99,31 +99,23 @@ describe('Cell', function () {
 
   describe('#update()', function () {
     beforeEach(function () {
-      this.target = new Cell(0x42, 18, 2);
-    });
-
-    it('does nothing if no arguments', function () {
-      this.target.update();
-
-      expect(this.target.glyphId).to.equal(0x42);
-      expect(this.target.fgColorId).to.equal(18);
-      expect(this.target.bgColorId).to.equal(2);
+      this.target = new Cell(66, 18, 2);
     });
 
     it('updates all fields from other cell', function () {
-      const other = new Cell(0x74, 24, 3);
+      const other = new Cell(116, 24, 3);
 
       this.target.update(other);
 
-      expect(this.target.glyphId).to.equal(0x74);
+      expect(this.target.glyphId).to.equal(116);
       expect(this.target.fgColorId).to.equal(24);
       expect(this.target.bgColorId).to.equal(3);
     });
 
     it('updates single field', function () {
-      this.target.update({glyphId: 0x74});
+      this.target.update({glyphId: 116});
 
-      expect(this.target.glyphId).to.equal(0x74);
+      expect(this.target.glyphId).to.equal(116);
       expect(this.target.fgColorId).to.equal(18);
       expect(this.target.bgColorId).to.equal(2);
     });
@@ -133,27 +125,27 @@ describe('Cell', function () {
         {bgColorId: 3, fgColorId: 24}
       );
 
-      expect(this.target.glyphId).to.equal(0x42);
+      expect(this.target.glyphId).to.equal(66);
       expect(this.target.fgColorId).to.equal(24);
       expect(this.target.bgColorId).to.equal(3);
     });
 
     it('updates all fields from a literal', function () {
       this.target.update(
-        {bgColorId: 3, glyphId: 0x74, fgColorId: 24}
+        {bgColorId: 3, glyphId: 116, fgColorId: 24}
       );
 
-      expect(this.target.glyphId).to.equal(0x74);
+      expect(this.target.glyphId).to.equal(116);
       expect(this.target.fgColorId).to.equal(24);
       expect(this.target.bgColorId).to.equal(3);
     });
 
     it('updates all fields directly', function () {
       this.target.bgColorId = 3;
-      this.target.glyphId = 0x74;
+      this.target.glyphId = 116;
       this.target.fgColorId = 24;
 
-      expect(this.target.glyphId).to.equal(0x74);
+      expect(this.target.glyphId).to.equal(116);
       expect(this.target.fgColorId).to.equal(24);
       expect(this.target.bgColorId).to.equal(3);
     });
