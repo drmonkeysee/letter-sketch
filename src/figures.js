@@ -284,7 +284,7 @@ class PlotFigure extends ActiveFigure {
 
   add(tile) {
     const h = this._newTileHash(tile);
-    if (h) {
+    if (h !== null) {
       this._insert(tile, h);
     }
   }
@@ -334,7 +334,7 @@ class BoxDrawFigure extends PlotFigure {
 
   add(tile) {
     const h = this._newTileHash(tile);
-    if (h) {
+    if (h !== null) {
       // NOTE: if current brush is adding a new cell, duplicate the lettertype
       // selection to render the correct box-drawing glyph.
       tile.cell = new Cell(196, tile.cell.fgColorId, tile.cell.bgColorId);
