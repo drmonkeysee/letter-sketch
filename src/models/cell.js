@@ -47,6 +47,14 @@ export class Cell {
     this._setFields(glyphId, fgColorId, bgColorId);
   }
 
+  clone({
+    glyphId = this.glyphId,
+    fgColorId = this.fgColorId,
+    bgColorId = this.bgColorId,
+  } = {}) {
+    return new Cell(glyphId, fgColorId, bgColorId);
+  }
+
   _setFields(glyphId, fgColorId, bgColorId) {
     this.glyphId = glyphId;
     this.fgColorId = fgColorId;

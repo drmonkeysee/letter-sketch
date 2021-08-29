@@ -177,6 +177,63 @@ describe('Cell', function () {
       expect(this.target.glyphId).to.equal(codepage.SIGILS.CLEAR);
     });
   });
+
+  describe('#clone()', function () {
+    beforeEach(function () {
+      this.target = new Cell(66, 18, 2);
+    });
+
+    it('creates new cell', function () {
+      const other = this.target.clone();
+
+      expect(other.glyphId).to.equal(66);
+      expect(other.fgColorId).to.equal(18);
+      expect(other.bgColorId).to.equal(2);
+      expect(other).to.not.equal(this.target);
+    });
+
+    it('overrides single field', function () {
+      const other = this.target.clone({glyphId: 116});
+
+      expect(other.glyphId).to.equal(116);
+      expect(other.fgColorId).to.equal(18);
+      expect(other.bgColorId).to.equal(2);
+      expect(other).to.not.equal(this.target);
+    });
+
+    it('overrides multiple fields', function () {
+      const other = this.target.clone({bgColorId: 3, fgColorId: 24});
+
+      expect(other.glyphId).to.equal(66);
+      expect(other.fgColorId).to.equal(24);
+      expect(other.bgColorId).to.equal(3);
+      expect(other).to.not.equal(this.target);
+    });
+
+    it('overrides all fields from a literal', function () {
+      const other = this.target.clone(
+        {bgColorId: 3, glyphId: 116, fgColorId: 24}
+      );
+
+      expect(other.glyphId).to.equal(116);
+      expect(other.fgColorId).to.equal(24);
+      expect(other.bgColorId).to.equal(3);
+      expect(other).to.not.equal(this.target);
+    });
+
+    it('can set colors to defaults', function () {
+      const other = this.target.clone({bgColorId: null, fgColorId: null});
+
+      expect(other.fgColorId).to.equal(palette.COLORS.BLACK);
+      expect(other.bgColorId).to.equal(palette.COLORS.WHITE);
+    });
+
+    it('can set glyph to blank', function () {
+      const other = this.target.clone({glyphId: null});
+
+      expect(other.glyphId).to.equal(codepage.SIGILS.CLEAR);
+    });
+  });
 });
 
 describe('#makeTile()', function () {
