@@ -7,38 +7,6 @@ function makeUpdate(event, data) {
 }
 
 const COMMAND_REGISTRY = {
-  setForegroundColor(models, colorId) {
-    return () => {
-      models.lettertype.cell.fgColorId = colorId;
-      return makeUpdate(EVENTS.onForegroundColorChanged, {colorId});
-    };
-  },
-  setBackgroundColor(models, colorId) {
-    return () => {
-      models.lettertype.cell.bgColorId = colorId;
-      return makeUpdate(EVENTS.onBackgroundColorChanged, {colorId});
-    };
-  },
-  setGlyph(models, glyphId) {
-    return () => {
-      models.lettertype.cell.glyphId = glyphId;
-      return makeUpdate(EVENTS.onGlyphChanged, {glyphId});
-    };
-  },
-  setTool(models, toolName) {
-    return () => {
-      models.currentTool = toolName;
-      return makeUpdate(
-        EVENTS.onToolChanged, {tool: currentTool(models), name: toolName}
-      );
-    };
-  },
-  setBoxMode(models, value) {
-    return () => {
-      models.boxMode = value;
-      return makeUpdate(EVENTS.onBoxModeChanged, {value});
-    };
-  },
   commitDraw(models, figure, cleanup = false) {
     return () => {
       models.terminal.update(figure);
@@ -63,6 +31,38 @@ const COMMAND_REGISTRY = {
       return makeUpdate(EVENTS.onTerminalResized, {
         terminal: models.terminal, fontSize: dims.fontSize
       });
+    };
+  },
+  setBackgroundColor(models, colorId) {
+    return () => {
+      models.lettertype.cell.bgColorId = colorId;
+      return makeUpdate(EVENTS.onBackgroundColorChanged, {colorId});
+    };
+  },
+  setBoxMode(models, value) {
+    return () => {
+      models.boxMode = value;
+      return makeUpdate(EVENTS.onBoxModeChanged, {value});
+    };
+  },
+  setForegroundColor(models, colorId) {
+    return () => {
+      models.lettertype.cell.fgColorId = colorId;
+      return makeUpdate(EVENTS.onForegroundColorChanged, {colorId});
+    };
+  },
+  setGlyph(models, glyphId) {
+    return () => {
+      models.lettertype.cell.glyphId = glyphId;
+      return makeUpdate(EVENTS.onGlyphChanged, {glyphId});
+    };
+  },
+  setTool(models, toolName) {
+    return () => {
+      models.currentTool = toolName;
+      return makeUpdate(
+        EVENTS.onToolChanged, {tool: currentTool(models), name: toolName}
+      );
     };
   },
 };
