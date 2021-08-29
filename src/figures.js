@@ -510,7 +510,6 @@ export function textBuffer(lettertypeCell, terminal) {
 }
 
 export function replace(lettertypeCell, terminal) {
-  const {width, height} = terminal.dimensions;
   return (start, end, activeFigure) => {
     if (activeFigure) return activeFigure;
 
@@ -518,6 +517,7 @@ export function replace(lettertypeCell, terminal) {
           figure = [];
     if (targetCell.equals(lettertypeCell)) return figure;
 
+    const {width, height} = terminal.dimensions;
     for (let y = 0; y < height; ++y) {
       for (let x = 0; x < width; ++x) {
         const c = terminal.getCell(x, y);
