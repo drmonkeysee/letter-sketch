@@ -43,7 +43,7 @@ export class Cell {
     glyphId = this.glyphId,
     fgColorId = this.fgColorId,
     bgColorId = this.bgColorId,
-  } = {}) {
+  }) {
     this._setFields(glyphId, fgColorId, bgColorId);
   }
 
