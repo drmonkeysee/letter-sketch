@@ -57,8 +57,8 @@ class Controls extends View {
 
   _verifyResize(update) {
     const confirm = this.doc.defaultView.confirm(
-      'Reducing the drawing size may discard portions ' +
-      'of your current sketch. Continue?'
+      'Reducing the drawing size may discard portions '
+      + 'of your current sketch. Continue?'
     );
     if (confirm) {
       this._commitResize(update);

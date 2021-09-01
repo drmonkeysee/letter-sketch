@@ -35,8 +35,8 @@ export class Cell {
 
   equals(other) {
     return this.glyphId === other.glyphId
-      && this.fgColorId === other.fgColorId
-      && this.bgColorId === other.bgColorId;
+            && this.fgColorId === other.fgColorId
+            && this.bgColorId === other.bgColorId;
   }
 
   update({

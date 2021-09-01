@@ -473,9 +473,12 @@ export function filledRectangle(lettertypeCell, terminal) {
 
 export function boxRectangle(lettertypeCell, terminal) {
   return (start, end, activeFigure) => drawRect(
-    start, end, lettertypeCell, codepage.lines.isLine(lettertypeCell.glyphId)
-                                ? (...args) => plotBoxRect(terminal, ...args)
-                                : plotRect
+    start,
+    end,
+    lettertypeCell,
+    codepage.lines.isLine(lettertypeCell.glyphId)
+      ? (...args) => plotBoxRect(terminal, ...args)
+      : plotRect
   );
 }
 

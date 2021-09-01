@@ -17,7 +17,7 @@ const COMMAND_REGISTRY = {
     return () => {
       const terminalSize = models.terminal.dimensions,
             event = dims.columns < terminalSize.width
-                        || dims.rows < terminalSize.height
+                    || dims.rows < terminalSize.height
                       ? EVENTS.onTerminalResizeVerify
                       : EVENTS.onTerminalResizeReady;
       return makeUpdate(event, {dims});
