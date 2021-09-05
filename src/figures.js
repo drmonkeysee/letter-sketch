@@ -1,13 +1,6 @@
+import {DIRECTIONS, getLineSet, hasAttractor} from './boxdraw.js';
 import codepage from './codepage.js';
 import {Cell, hashTile, makeTile} from './models/cell.js';
-
-const DIRECTIONS = {
-  NONE: 0b0000,
-  TOP: 0b0001,
-  RIGHT: 0b0010,
-  BOTTOM: 0b0100,
-  LEFT: 0b1000,
-};
 
 function* neighbors(tile, dims) {
   const {x, y} = tile,
@@ -54,23 +47,41 @@ function plotFilledRect(top, right, bottom, left, lettertypeCell) {
   return figure;
 }
 
-function plotBoxRect(terminal, top, right, bottom, left, lettertypeCell) {
-  const figure = new BoxRectFigure(terminal);
+function plotBoxRect(
+  terminal, lineSet, top, right, bottom, left, lettertypeCell
+) {
+  const figure = new BoxRectFigure(terminal, lineSet);
   for (let x = left; x <= right; ++x) {
     if (x === left) {
-      figure.add(makeTile(x, top, lettertypeCell.clone({glyphId: 218})));
-      figure.add(makeTile(x, bottom, lettertypeCell.clone({glyphId: 192})));
+      figure.add(makeTile(x, top, lettertypeCell.clone(
+        {glyphId: lineSet.getId(DIRECTIONS.RIGHT | DIRECTIONS.DOWN)}
+      )));
+      figure.add(makeTile(x, bottom, lettertypeCell.clone(
+        {glyphId: lineSet.getId(DIRECTIONS.TOP | DIRECTIONS.RIGHT)}
+      )));
     } else if (x === right) {
-      figure.add(makeTile(x, top, lettertypeCell.clone({glyphId: 191})));
-      figure.add(makeTile(x, bottom, lettertypeCell.clone({glyphId: 217})));
+      figure.add(makeTile(x, top, lettertypeCell.clone(
+        {glyphId: lineSet.getId(DIRECTIONS.BOTTOM | DIRECTIONS.LEFT)}
+      )));
+      figure.add(makeTile(x, bottom, lettertypeCell.clone(
+        {glyphId: lineSet.getId(DIRECTIONS.TOP | DIRECTIONS.LEFT)}
+      )));
     } else {
-      figure.add(makeTile(x, top, lettertypeCell.clone({glyphId: 196})));
-      figure.add(makeTile(x, bottom, lettertypeCell.clone({glyphId: 196})));
+      figure.add(makeTile(x, top, lettertypeCell.clone(
+        {glyphId: lineSet.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT)}
+      )));
+      figure.add(makeTile(x, bottom, lettertypeCell.clone(
+        {glyphId: lineSet.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT)}
+      )));
     }
   }
   for (let y = top + 1; y < bottom; ++y) {
-    figure.add(makeTile(left, y, lettertypeCell.clone({glyphId: 179})));
-    figure.add(makeTile(right, y, lettertypeCell.clone({glyphId: 179})));
+    figure.add(makeTile(left, y, lettertypeCell.clone(
+      {glyphId: lineSet.getId(DIRECTIONS.TOP | DIRECTIONS.BOTTOM)}
+    )));
+    figure.add(makeTile(right, y, lettertypeCell.clone(
+      {glyphId: lineSet.getId(DIRECTIONS.TOP | DIRECTIONS.BOTTOM)}
+    )));
   }
   figure.solve();
   return figure;
@@ -285,9 +296,10 @@ class PlotFigure extends ActiveFigure {
 }
 
 class BoxRectFigure extends PlotFigure {
-  constructor(terminal) {
+  constructor(terminal, lineSet) {
     super();
     this.terminal = terminal;
+    this.lineSet = lineSet;
   }
 
   solve() {
@@ -295,25 +307,25 @@ class BoxRectFigure extends PlotFigure {
       let lineConstraints = 0;
       for (const n of neighbors(tile, this.terminal.dimensions)) {
         const nTile = this._find(n),
-              nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y);
-        if (codepage.lines.isLine(nCell.glyphId)) {
-          const compDirection = n.direction > 2
-                                ? n.direction >> 2
-                                : n.direction << 2;
-          if (codepage.lines.hasAttractor(nCell.glyphId, compDirection)) {
-            lineConstraints |= n.direction;
-          }
+              nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y),
+              compDirection = n.direction > 2
+                              ? n.direction >> 2
+                              : n.direction << 2;
+
+        if (hasAttractor(nCell.glyphId, compDirection)) {
+          lineConstraints |= n.direction;
         }
       }
-      tile.cell.glyphId = codepage.lines.getLineId(lineConstraints);
+      tile.cell.glyphId = this.lineSet.getId(lineConstraints);
     }
   }
 }
 
 class BoxDrawFigure extends PlotFigure {
-  constructor(terminal) {
+  constructor(terminal, lineSet) {
     super();
     this.terminal = terminal;
+    this.lineSet = lineSet;
   }
 
   add(tile) {
@@ -321,7 +333,9 @@ class BoxDrawFigure extends PlotFigure {
     if (h !== null) {
       // NOTE: if current brush is adding a new cell, duplicate the lettertype
       // selection to render the correct box-drawing glyph.
-      tile.cell = tile.cell.clone({glyphId: 196});
+      tile.cell = tile.cell.clone(
+        {glyphId: this.lineSet.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT)}
+      );
       this._insert(tile, h);
     } else {
       // NOTE: current tile may have been pulled into the figure from the
@@ -338,14 +352,17 @@ class BoxDrawFigure extends PlotFigure {
     let lineConstraints = 0;
     for (const n of neighbors(tile, this.terminal.dimensions)) {
       let nTile = this._find(n) ?? this._findin(n, additionalTiles);
-      const nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y);
-      if (codepage.lines.isLine(nCell.glyphId)) {
-        const compDirection = n.direction > 2
-                              ? n.direction >> 2
-                              : n.direction << 2;
+      const nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y),
+            compDirection = n.direction > 2
+                            ? n.direction >> 2
+                            : n.direction << 2,
+            nLineSet = getLineSet(nCell.glyphId);
+      if (nLineSet) {
         lineConstraints |= n.direction;
         if (!nTile) {
-          const newCell = nCell.clone({glyphId: 196});
+          const newCell = nCell.clone(
+            {glyphId: nLineSet.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT)}
+          );
           nTile = makeTile(n.x, n.y, newCell);
           additionalTiles.push(nTile);
         }
@@ -357,14 +374,13 @@ class BoxDrawFigure extends PlotFigure {
                 nCompDirection = nn.direction > 2
                                   ? nn.direction >> 2
                                   : nn.direction << 2;
-          if (codepage.lines.isLine(nnCell.glyphId)
-              && codepage.lines.hasAttractor(nnCell.glyphId, nCompDirection)) {
+          if (hasAttractor(nnCell.glyphId, nCompDirection)) {
             nConstraints |= nn.direction;
           }
         }
-        nTile.cell.glyphId = codepage.lines.getLineId(nConstraints);
+        nTile.cell.glyphId = nLineSet.getId(nConstraints);
       }
-      tile.cell.glyphId = codepage.lines.getLineId(lineConstraints);
+      tile.cell.glyphId = this.lineSet.getId(lineConstraints);
     }
     for (const adt of additionalTiles) {
       super.add(adt);
@@ -421,9 +437,10 @@ export function freeDraw(lettertypeCell, terminal) {
 
 export function boxDraw(lettertypeCell, terminal) {
   return (start, end, activeFigure) => {
+    const lineSet = getLineSet(lettertypeCell.glyphId);
     activeFigure = activeFigure
-                   ?? (codepage.lines.isLine(lettertypeCell.glyphId)
-                        ? new BoxDrawFigure(terminal)
+                   ?? (lineSet
+                        ? new BoxDrawFigure(terminal, lineSet)
                         : new PlotFigure());
     activeFigure.add(makeTile(end.x, end.y, lettertypeCell));
     return activeFigure;
@@ -472,14 +489,17 @@ export function filledRectangle(lettertypeCell, terminal) {
 }
 
 export function boxRectangle(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => drawRect(
-    start,
-    end,
-    lettertypeCell,
-    codepage.lines.isLine(lettertypeCell.glyphId)
-      ? (...args) => plotBoxRect(terminal, ...args)
-      : plotRect
-  );
+  return (start, end, activeFigure) => {
+    const lineSet = getLineSet(lettertypeCell.glyphId);
+    return drawRect(
+      start,
+      end,
+      lettertypeCell,
+      lineSet
+        ? (...args) => plotBoxRect(terminal, lineSet, ...args)
+        : plotRect
+    );
+  };
 }
 
 export function ellipse(lettertypeCell, terminal) {

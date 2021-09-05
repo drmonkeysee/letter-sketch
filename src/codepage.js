@@ -65,38 +65,6 @@ const CP437 = [
   '\u207f', '\u00b2', '\u25a0', '\u00a0',
 ];
 
-const SINGLE_LINES = new Map([
-  [179, 0b0101],
-  [180, 0b1101],
-  [191, 0b1100],
-  [192, 0b0011],
-  [193, 0b1011],
-  [194, 0b1110],
-  [195, 0b0111],
-  [196, 0b1010],
-  [197, 0b1111],
-  [217, 0b1001],
-  [218, 0b0110],
-]);
-const ATTRACTORS_TO_SINGLE_LINE = [
-  196,  // 0000
-  179,  // 0001
-  196,  // 0010
-  192,  // 0011
-  179,  // 0100
-  179,  // 0101
-  218,  // 0110
-  195,  // 0111
-  196,  // 1000
-  217,  // 1001
-  196,  // 1010
-  193,  // 1011
-  191,  // 1100
-  180,  // 1101
-  194,  // 1110
-  197,  // 1111
-];
-
 export default {
   *glyphs() {
     yield* CP437;
@@ -109,20 +77,6 @@ export default {
   },
   id(glyph) {
     return CP437.indexOf(glyph);
-  },
-  lines: {
-    isLine(id) {
-      return SINGLE_LINES.has(id);
-    },
-    getLineId(attractors) {
-      return ATTRACTORS_TO_SINGLE_LINE[attractors];
-    },
-    hasAttractor(id, direction) {
-      return SINGLE_LINES.get(id) & direction;
-    },
-    getAttractors(id) {
-      return SINGLE_LINES.get(id);
-    }
   },
   SIGILS: {
     DEFAULT: 65,
