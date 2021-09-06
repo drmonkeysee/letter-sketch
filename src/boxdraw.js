@@ -41,7 +41,7 @@ class LineSet {
   }
 
   hasAttractor(glyphId, direction) {
-    return (this.lines[glyphId] ?? 0) & direction;
+    return Boolean(this.lines[glyphId] & direction);
   }
 }
 
