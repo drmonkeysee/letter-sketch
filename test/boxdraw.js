@@ -2,7 +2,7 @@ import {expect} from 'chai';
 
 import {DIRECTIONS, getLineSet, hasAttractor} from '../src/boxdraw.js';
 
-describe('#hasAttractor', function () {
+describe('#hasAttractor()', function () {
   it('has attractor', function () {
     const result = hasAttractor(218, DIRECTIONS.RIGHT);
 
@@ -22,7 +22,7 @@ describe('#hasAttractor', function () {
   });
 });
 
-describe('#getLineSet', function () {
+describe('#getLineSet()', function () {
   it('returns null for non-line glyph', function () {
     const result = getLineSet(41);
 
@@ -34,46 +34,206 @@ describe('#getLineSet', function () {
       this.target = getLineSet(218);
     });
 
-    it('gets best fit for directions', function () {
-      const result = this.target.getId(DIRECTIONS.TOP | DIRECTIONS.LEFT);
+    describe('#getId()', function () {
+      it('gets best fit for directions', function () {
+        const result = this.target.getId(DIRECTIONS.TOP | DIRECTIONS.LEFT);
 
-      expect(result).to.equal(217);
+        expect(result).to.equal(217);
+      });
+
+      it('gets best fit for no directions', function () {
+        const result = this.target.getId(0);
+
+        expect(result).to.equal(196);
+      });
+
+      it('gets best fit for horizontal', function () {
+        const result = this.target.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT);
+
+        expect(result).to.equal(196);
+      });
+
+      it('gets best fit for vertical', function () {
+        const result = this.target.getId(DIRECTIONS.TOP | DIRECTIONS.BOTTOM);
+
+        expect(result).to.equal(179);
+      });
     });
 
-    it('gets best fit for no directions', function () {
-      const result = this.target.getId(0);
+    describe('#hasAttractor()', function () {
+      it('has attractor', function () {
+        const result = this.target.hasAttractor(218, DIRECTIONS.RIGHT);
 
-      expect(result).to.equal(196);
+        expect(result).to.be.true;
+      });
+
+      it('does not have attractor', function () {
+        const result = this.target.hasAttractor(218, DIRECTIONS.TOP);
+
+        expect(result).to.be.false;
+      });
+
+      it('has no attractor for invalid glyph', function () {
+        const result = this.target.hasAttractor(41, DIRECTIONS.RIGHT);
+
+        expect(result).to.be.false;
+      });
+    });
+  });
+
+  describe('doubleLineSet', function () {
+    beforeEach(function ()  {
+      this.target = getLineSet(201);
     });
 
-    it('gets best fit for horizontal', function () {
-      const result = this.target.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT);
+    describe('#getId()', function () {
+      it('gets best fit for directions', function () {
+        const result = this.target.getId(DIRECTIONS.TOP | DIRECTIONS.LEFT);
 
-      expect(result).to.equal(196);
+        expect(result).to.equal(188);
+      });
+
+      it('gets best fit for no directions', function () {
+        const result = this.target.getId(0);
+
+        expect(result).to.equal(205);
+      });
+
+      it('gets best fit for horizontal', function () {
+        const result = this.target.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT);
+
+        expect(result).to.equal(205);
+      });
+
+      it('gets best fit for vertical', function () {
+        const result = this.target.getId(DIRECTIONS.TOP | DIRECTIONS.BOTTOM);
+
+        expect(result).to.equal(186);
+      });
     });
 
-    it('gets best fit for vertical', function () {
-      const result = this.target.getId(DIRECTIONS.TOP | DIRECTIONS.BOTTOM);
+    describe('#hasAttractor()', function () {
+      it('has attractor', function () {
+        const result = this.target.hasAttractor(201, DIRECTIONS.RIGHT);
 
-      expect(result).to.equal(179);
+        expect(result).to.be.true;
+      });
+
+      it('does not have attractor', function () {
+        const result = this.target.hasAttractor(201, DIRECTIONS.TOP);
+
+        expect(result).to.be.false;
+      });
+
+      it('has no attractor for invalid glyph', function () {
+        const result = this.target.hasAttractor(41, DIRECTIONS.RIGHT);
+
+        expect(result).to.be.false;
+      });
+    });
+  });
+
+  describe('doubleHLineSet', function () {
+    beforeEach(function ()  {
+      this.target = getLineSet(213);
     });
 
-    it('has attractor', function () {
-      const result = this.target.hasAttractor(218, DIRECTIONS.RIGHT);
+    describe('#getId()', function () {
+      it('gets best fit for directions', function () {
+        const result = this.target.getId(DIRECTIONS.TOP | DIRECTIONS.LEFT);
 
-      expect(result).to.be.true;
+        expect(result).to.equal(190);
+      });
+
+      it('gets best fit for no directions', function () {
+        const result = this.target.getId(0);
+
+        expect(result).to.equal(205);
+      });
+
+      it('gets best fit for horizontal', function () {
+        const result = this.target.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT);
+
+        expect(result).to.equal(205);
+      });
+
+      it('gets best fit for vertical', function () {
+        const result = this.target.getId(DIRECTIONS.TOP | DIRECTIONS.BOTTOM);
+
+        expect(result).to.equal(179);
+      });
     });
 
-    it('does not have attractor', function () {
-      const result = this.target.hasAttractor(218, DIRECTIONS.TOP);
+    describe('#hasAttractor()', function () {
+      it('has attractor', function () {
+        const result = this.target.hasAttractor(213, DIRECTIONS.RIGHT);
 
-      expect(result).to.be.false;
+        expect(result).to.be.true;
+      });
+
+      it('does not have attractor', function () {
+        const result = this.target.hasAttractor(213, DIRECTIONS.TOP);
+
+        expect(result).to.be.false;
+      });
+
+      it('has no attractor for invalid glyph', function () {
+        const result = this.target.hasAttractor(41, DIRECTIONS.RIGHT);
+
+        expect(result).to.be.false;
+      });
+    });
+  });
+
+  describe('doubleVLineSet', function () {
+    beforeEach(function ()  {
+      this.target = getLineSet(214);
     });
 
-    it('has no attractor for invalid glyph', function () {
-      const result = this.target.hasAttractor(41, DIRECTIONS.RIGHT);
+    describe('#getId()', function () {
+      it('gets best fit for directions', function () {
+        const result = this.target.getId(DIRECTIONS.TOP | DIRECTIONS.LEFT);
 
-      expect(result).to.be.false;
+        expect(result).to.equal(189);
+      });
+
+      it('gets best fit for no directions', function () {
+        const result = this.target.getId(0);
+
+        expect(result).to.equal(196);
+      });
+
+      it('gets best fit for horizontal', function () {
+        const result = this.target.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT);
+
+        expect(result).to.equal(196);
+      });
+
+      it('gets best fit for vertical', function () {
+        const result = this.target.getId(DIRECTIONS.TOP | DIRECTIONS.BOTTOM);
+
+        expect(result).to.equal(186);
+      });
+    });
+
+    describe('#hasAttractor()', function () {
+      it('has attractor', function () {
+        const result = this.target.hasAttractor(214, DIRECTIONS.RIGHT);
+
+        expect(result).to.be.true;
+      });
+
+      it('does not have attractor', function () {
+        const result = this.target.hasAttractor(214, DIRECTIONS.TOP);
+
+        expect(result).to.be.false;
+      });
+
+      it('has no attractor for invalid glyph', function () {
+        const result = this.target.hasAttractor(41, DIRECTIONS.RIGHT);
+
+        expect(result).to.be.false;
+      });
     });
   });
 });
