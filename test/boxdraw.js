@@ -2,6 +2,34 @@ import {expect} from 'chai';
 
 import {DIRECTIONS, getLineSet, hasAttractor} from '../src/boxdraw.js';
 
+describe('DIRECTIONS', function () {
+  describe('#complement()', function () {
+    it('flips top to bottom', function () {
+      const result = DIRECTIONS.complement(DIRECTIONS.TOP);
+
+      expect(result).to.equal(DIRECTIONS.BOTTOM);
+    });
+
+    it('flips bottom to top', function () {
+      const result = DIRECTIONS.complement(DIRECTIONS.BOTTOM);
+
+      expect(result).to.equal(DIRECTIONS.TOP);
+    });
+
+    it('flips left to right', function () {
+      const result = DIRECTIONS.complement(DIRECTIONS.LEFT);
+
+      expect(result).to.equal(DIRECTIONS.RIGHT);
+    });
+
+    it('flips right to left', function () {
+      const result = DIRECTIONS.complement(DIRECTIONS.RIGHT);
+
+      expect(result).to.equal(DIRECTIONS.LEFT);
+    });
+  });
+});
+
 describe('#hasAttractor()', function () {
   it('has attractor', function () {
     const result = hasAttractor(218, DIRECTIONS.RIGHT);

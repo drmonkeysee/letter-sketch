@@ -149,6 +149,9 @@ export const DIRECTIONS = {
   RIGHT: 0b0010,
   BOTTOM: 0b0100,
   LEFT: 0b1000,
+  complement(direction) {
+    return direction > 2 ? direction >> 2 : direction << 2;
+  },
 };
 
 export function getLineSet(glyphId) {
@@ -161,4 +164,8 @@ export function getLineSet(glyphId) {
 
 export function hasAttractor(glyphId, direction) {
   return Boolean(getLineSet(glyphId)?.hasAttractor(glyphId, direction));
+}
+
+export function interpolateLineSet(lineSet, direction, neighbor) {
+  return null;
 }

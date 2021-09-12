@@ -1,4 +1,6 @@
-import {DIRECTIONS, getLineSet, hasAttractor} from './boxdraw.js';
+import {
+  DIRECTIONS, getLineSet, hasAttractor, interpolateLineSet,
+} from './boxdraw.js';
 import codepage from './codepage.js';
 import {Cell, hashTile, makeTile} from './models/cell.js';
 
@@ -307,12 +309,8 @@ class BoxRectFigure extends PlotFigure {
       let lineConstraints = 0;
       for (const n of neighbors(tile, this.terminal.dimensions)) {
         const nTile = this._find(n),
-              nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y),
-              compDirection = n.direction > 2
-                              ? n.direction >> 2
-                              : n.direction << 2;
-
-        if (hasAttractor(nCell.glyphId, compDirection)) {
+              nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y);
+        if (hasAttractor(nCell.glyphId, DIRECTIONS.complement(n.direction))) {
           lineConstraints |= n.direction;
         }
       }
@@ -353,10 +351,9 @@ class BoxDrawFigure extends PlotFigure {
     for (const n of neighbors(tile, this.terminal.dimensions)) {
       let nTile = this._find(n) ?? this._findin(n, additionalTiles);
       const nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y),
-            compDirection = n.direction > 2
-                            ? n.direction >> 2
-                            : n.direction << 2,
-            nLineSet = getLineSet(nCell.glyphId);
+            nLineSet = nTile
+                        ? this.lineSet
+                        : interpolateLineSet(this.lineSet, n.direction, nCell);
       if (nLineSet) {
         lineConstraints |= n.direction;
         if (!nTile) {
@@ -366,15 +363,15 @@ class BoxDrawFigure extends PlotFigure {
           nTile = makeTile(n.x, n.y, newCell);
           additionalTiles.push(nTile);
         }
-        let nConstraints = compDirection;
+        let nConstraints = DIRECTIONS.complement(n.direction);
         for (const nn of neighbors(nTile, this.terminal.dimensions)) {
           const existingNN = this._find(nn)
                               ?? this._findin(nn, additionalTiles),
                 nnCell = existingNN?.cell ?? this.terminal.getCell(nn.x, nn.y),
-                nCompDirection = nn.direction > 2
-                                  ? nn.direction >> 2
-                                  : nn.direction << 2;
-          if (hasAttractor(nnCell.glyphId, nCompDirection)) {
+                nnAttractor = hasAttractor(
+                  nnCell.glyphId, DIRECTIONS.complement(nn.direction)
+                );
+          if (nnAttractor) {
             nConstraints |= nn.direction;
           }
         }
