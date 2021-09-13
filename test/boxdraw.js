@@ -1,6 +1,8 @@
 import {expect} from 'chai';
 
-import {DIRECTIONS, getLineSet, hasAttractor} from '../src/boxdraw.js';
+import {
+  DIRECTIONS, getLineSet, hasAttractor, interpolateLineSet,
+} from '../src/boxdraw.js';
 
 describe('DIRECTIONS', function () {
   describe('#complement()', function () {
@@ -262,6 +264,256 @@ describe('#getLineSet()', function () {
 
         expect(result).to.be.false;
       });
+    });
+  });
+});
+
+describe('#interpolateLineSet()', function () {
+  it('interpolates null for non-line glyph', function () {
+    const ls = getLineSet(218);
+
+    const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 41);
+
+    expect(result).to.be.null;
+  });
+
+  it('returns same line set if both single line', function () {
+    const ls = getLineSet(218);
+
+    const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 179);
+
+    expect(result).to.equal(ls);
+  });
+
+  it('returns same line set if both double line', function () {
+    const ls = getLineSet(205);
+
+    const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 186);
+
+    expect(result).to.equal(ls);
+  });
+
+  describe('single attractor', function () {
+    it('horizontal to double', function () {
+      const ls = getLineSet(218);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 205);
+
+      const expected = getLineSet(214);
+      expect(result).to.equal(expected);
+    });
+
+    it('vertical to double', function () {
+      const ls = getLineSet(218);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 205);
+
+      const expected = getLineSet(213);
+      expect(result).to.equal(expected);
+    });
+
+    it('horizontal to hdouble', function () {
+      const ls = getLineSet(218);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 181);
+
+      const expected = getLineSet(218);
+      expect(result).to.equal(expected);
+    });
+
+    it('vertical to hdouble', function () {
+      const ls = getLineSet(218);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 181);
+
+      const expected = getLineSet(213);
+      expect(result).to.equal(expected);
+    });
+
+    it('horizontal to vdouble', function () {
+      const ls = getLineSet(218);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 182);
+
+      const expected = getLineSet(214);
+      expect(result).to.equal(expected);
+    });
+
+    it('vertical to vdouble', function () {
+      const ls = getLineSet(218);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 182);
+
+      const expected = getLineSet(218);
+      expect(result).to.equal(expected);
+    });
+  });
+
+  describe('double attractor', function () {
+    it('horizontal to single', function () {
+      const ls = getLineSet(201);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 196);
+
+      const expected = getLineSet(213);
+      expect(result).to.equal(expected);
+    });
+
+    it('vertical to single', function () {
+      const ls = getLineSet(201);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 196);
+
+      const expected = getLineSet(214);
+      expect(result).to.equal(expected);
+    });
+
+    it('horizontal to hdouble', function () {
+      const ls = getLineSet(201);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 181);
+
+      const expected = getLineSet(213);
+      expect(result).to.equal(expected);
+    });
+
+    it('vertical to hdouble', function () {
+      const ls = getLineSet(201);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 181);
+
+      const expected = getLineSet(201);
+      expect(result).to.equal(expected);
+    });
+
+    it('horizontal to vdouble', function () {
+      const ls = getLineSet(201);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 182);
+
+      const expected = getLineSet(201);
+      expect(result).to.equal(expected);
+    });
+
+    it('vertical to vdouble', function () {
+      const ls = getLineSet(201);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 182);
+
+      const expected = getLineSet(214);
+      expect(result).to.equal(expected);
+    });
+  });
+
+  describe('hdouble attractor', function () {
+    it('horizontal to single', function () {
+      const ls = getLineSet(213);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 196);
+
+      const expected = getLineSet(213);
+      expect(result).to.equal(expected);
+    });
+
+    it('vertical to single', function () {
+      const ls = getLineSet(213);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 196);
+
+      const expected = getLineSet(218);
+      expect(result).to.equal(expected);
+    });
+
+    it('horizontal to double', function () {
+      const ls = getLineSet(213);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 205);
+
+      const expected = getLineSet(201);
+      expect(result).to.equal(expected);
+    });
+
+    it('vertical to double', function () {
+      const ls = getLineSet(213);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 205);
+
+      const expected = getLineSet(213);
+      expect(result).to.equal(expected);
+    });
+
+    it('horizontal to vdouble', function () {
+      const ls = getLineSet(213);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 182);
+
+      const expected = getLineSet(201);
+      expect(result).to.equal(expected);
+    });
+
+    it('vertical to vdouble', function () {
+      const ls = getLineSet(213);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 182);
+
+      const expected = getLineSet(218);
+      expect(result).to.equal(expected);
+    });
+  });
+
+  describe('vdouble attractor', function () {
+    it('horizontal to single', function () {
+      const ls = getLineSet(214);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 196);
+
+      const expected = getLineSet(218);
+      expect(result).to.equal(expected);
+    });
+
+    it('vertical to single', function () {
+      const ls = getLineSet(214);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 196);
+
+      const expected = getLineSet(214);
+      expect(result).to.equal(expected);
+    });
+
+    it('horizontal to double', function () {
+      const ls = getLineSet(214);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 205);
+
+      const expected = getLineSet(214);
+      expect(result).to.equal(expected);
+    });
+
+    it('vertical to double', function () {
+      const ls = getLineSet(213);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 205);
+
+      const expected = getLineSet(201);
+      expect(result).to.equal(expected);
+    });
+
+    it('horizontal to hdouble', function () {
+      const ls = getLineSet(214);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 181);
+
+      const expected = getLineSet(214);
+      expect(result).to.equal(expected);
+    });
+
+    it('vertical to hdouble', function () {
+      const ls = getLineSet(214);
+
+      const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 181);
+
+      const expected = getLineSet(201);
+      expect(result).to.equal(expected);
     });
   });
 });
