@@ -166,8 +166,78 @@ export function hasAttractor(glyphId, direction) {
   return Boolean(getLineSet(glyphId)?.hasAttractor(glyphId, direction));
 }
 
+/*
+ * Interpolate best line set fit between the primary (currently-drawn) glyph's
+ * line set and the neighbor's line set for the given direction, where the
+ * primary line set takes precedence over the neighbor line set.
+ *
+ * Vertical Direction
+ * +---------+---------+---------+---------+---------+
+ * |  n\p    | single  | double  | doubleV | doubleH |
+ * +---------+---------+---------+---------+---------+
+ * | single  | single  | doubleV | doubleV | single  |
+ * | double  | doubleH | double  | double  | doubleH |
+ * | doubleV | single  | doubleV | doubleV | single  |
+ * | doubleH | doubleH | double  | double  | doubleH |
+ * +---------+---------+---------+---------+---------+
+ *
+ * Horizontal Direction
+ * +---------+---------+---------+---------+---------+
+ * |  n\p    | single  | double  | doubleH | doubleV |
+ * +---------+---------+---------+---------+---------+
+ * | single  | single  | doubleH | doubleH | single  |
+ * | double  | doubleV | double  | double  | doubleV |
+ * | doubleH | single  | doubleH | doubleH | single  |
+ * | doubleV | doubleV | double  | double  | doubleV |
+ * +---------+---------+---------+---------+---------+
+ *
+ * Note that single and doubleH have the same effect in the vertical direction
+ * while single and doubleV have the same effect in the horizontal direction,
+ * and vice-versa for the other two corresponding line sets. These effects are
+ * expressed as the single and double "counterparts" in the function below.
+ */
+
 export function interpolateLineSet(lineSet, direction, neighborGlyph) {
   const nLineSet = getLineSet(neighborGlyph);
-  if (lineSet === nLineSet) return lineSet;
+  let singleCounterPart = null,
+      doubleCounterPart = null;
+  switch (direction) {
+    case DIRECTIONS.TOP:
+    case DIRECTIONS.BOTTOM:
+      singleCounterPart = doubleHLineSet;
+      doubleCounterPart = doubleVLineSet;
+      break;
+    case DIRECTIONS.RIGHT:
+    case DIRECTIONS.LEFT:
+      singleCounterPart = doubleVLineSet;
+      doubleCounterPart = doubleHLineSet;
+      break;
+  }
+  if (!singleCounterPart) return null;
+
+  switch (lineSet) {
+    case singleLineSet:
+    case singleCounterPart:
+      switch (nLineSet) {
+        case singleLineSet:
+        case doubleCounterPart:
+          return singleLineSet;
+        case doubleLineSet:
+        case singleCounterPart:
+          return singleCounterPart;
+      }
+      break;
+    case doubleLineSet:
+    case doubleCounterPart:
+      switch (nLineSet) {
+        case singleLineSet:
+        case doubleCounterPart:
+          return doubleCounterPart;
+        case doubleLineSet:
+        case singleCounterPart:
+          return doubleLineSet;
+      }
+      break;
+  }
   return null;
 }

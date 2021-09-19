@@ -277,6 +277,22 @@ describe('#interpolateLineSet()', function () {
     expect(result).to.be.null;
   });
 
+  it('interpolates null for invalid direction', function () {
+    const ls = getLineSet(218);
+
+    const result = interpolateLineSet(ls, DIRECTIONS.NONE, 179);
+
+    expect(result).to.be.null;
+  });
+
+  it('interpolates null for invalid line set', function () {
+    const ls = 'not a line set'
+
+    const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 179);
+
+    expect(result).to.be.null;
+  });
+
   it('returns same line set if both single line', function () {
     const ls = getLineSet(218);
 
@@ -490,7 +506,7 @@ describe('#interpolateLineSet()', function () {
     });
 
     it('vertical to double', function () {
-      const ls = getLineSet(213);
+      const ls = getLineSet(214);
 
       const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 205);
 
@@ -503,7 +519,7 @@ describe('#interpolateLineSet()', function () {
 
       const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 181);
 
-      const expected = getLineSet(214);
+      const expected = getLineSet(218);
       expect(result).to.equal(expected);
     });
 
