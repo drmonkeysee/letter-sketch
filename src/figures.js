@@ -353,7 +353,9 @@ class BoxDrawFigure extends PlotFigure {
       const nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y),
             nLineSet = nTile
                         ? this.lineSet
-                        : interpolateLineSet(this.lineSet, n.direction, nCell);
+                        : interpolateLineSet(
+                            this.lineSet, n.direction, nCell.glyphId
+                          );
       if (nLineSet) {
         lineConstraints |= n.direction;
         if (!nTile) {

@@ -166,8 +166,8 @@ export function hasAttractor(glyphId, direction) {
   return Boolean(getLineSet(glyphId)?.hasAttractor(glyphId, direction));
 }
 
-export function interpolateLineSet(lineSet, direction, neighbor) {
-  const nLineSet = getLineSet(neighbor);
+export function interpolateLineSet(lineSet, direction, neighborGlyph) {
+  const nLineSet = getLineSet(neighborGlyph);
   if (lineSet === nLineSet) return lineSet;
   return null;
 }

@@ -312,7 +312,7 @@ describe('#interpolateLineSet()', function () {
       expect(result).to.equal(expected);
     });
 
-    it('horizontal to hdouble', function () {
+    it('horizontal to doubleH', function () {
       const ls = getLineSet(218);
 
       const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 181);
@@ -321,7 +321,7 @@ describe('#interpolateLineSet()', function () {
       expect(result).to.equal(expected);
     });
 
-    it('vertical to hdouble', function () {
+    it('vertical to doubleH', function () {
       const ls = getLineSet(218);
 
       const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 181);
@@ -330,7 +330,7 @@ describe('#interpolateLineSet()', function () {
       expect(result).to.equal(expected);
     });
 
-    it('horizontal to vdouble', function () {
+    it('horizontal to doubleV', function () {
       const ls = getLineSet(218);
 
       const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 182);
@@ -339,7 +339,7 @@ describe('#interpolateLineSet()', function () {
       expect(result).to.equal(expected);
     });
 
-    it('vertical to vdouble', function () {
+    it('vertical to doubleV', function () {
       const ls = getLineSet(218);
 
       const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 182);
@@ -368,7 +368,7 @@ describe('#interpolateLineSet()', function () {
       expect(result).to.equal(expected);
     });
 
-    it('horizontal to hdouble', function () {
+    it('horizontal to doubleH', function () {
       const ls = getLineSet(201);
 
       const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 181);
@@ -377,7 +377,7 @@ describe('#interpolateLineSet()', function () {
       expect(result).to.equal(expected);
     });
 
-    it('vertical to hdouble', function () {
+    it('vertical to doubleH', function () {
       const ls = getLineSet(201);
 
       const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 181);
@@ -386,7 +386,7 @@ describe('#interpolateLineSet()', function () {
       expect(result).to.equal(expected);
     });
 
-    it('horizontal to vdouble', function () {
+    it('horizontal to doubleV', function () {
       const ls = getLineSet(201);
 
       const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 182);
@@ -395,7 +395,7 @@ describe('#interpolateLineSet()', function () {
       expect(result).to.equal(expected);
     });
 
-    it('vertical to vdouble', function () {
+    it('vertical to doubleV', function () {
       const ls = getLineSet(201);
 
       const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 182);
@@ -405,7 +405,7 @@ describe('#interpolateLineSet()', function () {
     });
   });
 
-  describe('hdouble attractor', function () {
+  describe('doubleH attractor', function () {
     it('horizontal to single', function () {
       const ls = getLineSet(213);
 
@@ -442,7 +442,7 @@ describe('#interpolateLineSet()', function () {
       expect(result).to.equal(expected);
     });
 
-    it('horizontal to vdouble', function () {
+    it('horizontal to doubleV', function () {
       const ls = getLineSet(213);
 
       const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 182);
@@ -451,7 +451,7 @@ describe('#interpolateLineSet()', function () {
       expect(result).to.equal(expected);
     });
 
-    it('vertical to vdouble', function () {
+    it('vertical to doubleV', function () {
       const ls = getLineSet(213);
 
       const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 182);
@@ -461,7 +461,7 @@ describe('#interpolateLineSet()', function () {
     });
   });
 
-  describe('vdouble attractor', function () {
+  describe('doubleV attractor', function () {
     it('horizontal to single', function () {
       const ls = getLineSet(214);
 
@@ -498,7 +498,7 @@ describe('#interpolateLineSet()', function () {
       expect(result).to.equal(expected);
     });
 
-    it('horizontal to hdouble', function () {
+    it('horizontal to doubleH', function () {
       const ls = getLineSet(214);
 
       const result = interpolateLineSet(ls, DIRECTIONS.RIGHT, 181);
@@ -507,7 +507,7 @@ describe('#interpolateLineSet()', function () {
       expect(result).to.equal(expected);
     });
 
-    it('vertical to hdouble', function () {
+    it('vertical to doubleH', function () {
       const ls = getLineSet(214);
 
       const result = interpolateLineSet(ls, DIRECTIONS.BOTTOM, 181);
