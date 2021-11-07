@@ -152,6 +152,20 @@ export const DIRECTIONS = {
   complement(direction) {
     return direction > 2 ? direction >> 2 : direction << 2;
   },
+  // NOTE: convert horizontal to vertical and vice-versa
+  // i.e. phase-shift between sine and cosine.
+  rotate(direction) {
+    switch (direction) {
+      case DIRECTIONS.TOP:
+      case DIRECTIONS.RIGHT:
+      case DIRECTIONS.BOTTOM:
+        return direction << 1;
+      case DIRECTIONS.LEFT:
+        return DIRECTIONS.TOP;
+      default:
+        return direction;
+    }
+  },
 };
 
 export function getLineSet(glyphId) {
