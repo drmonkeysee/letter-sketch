@@ -313,7 +313,7 @@ class BoxRectFigure extends PlotFigure {
         if (hasAttractor(nCell.glyphId, DIRECTIONS.complement(n.direction))) {
           lineConstraints |= n.direction;
           // NOTE: if neighbor is not part of this rect, give the neighbor's
-          // line set precedence in the interpolation by phase-shifting the
+          // line-set precedence in the interpolation by phase-shifting the
           // direction; this gives a more consistent visual effect than the
           // "normal" interpolation.
           if (!nTile) {
