@@ -2,7 +2,6 @@ import namemap from './namemap.js';
 
 const EVENT_NAMES = [
   'onBackgroundColorChanged',
-  'onBoxModeChanged',
   'onDrawCommitted',
   'onForegroundColorChanged',
   'onGlyphChanged',

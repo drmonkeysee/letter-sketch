@@ -55,7 +55,6 @@ class App {
       },
       fontSize: this._models.lettertype.fontSize,
       glyphId: this._models.lettertype.cell.glyphId,
-      boxMode: this._models.boxMode,
       terminal: this._models.terminal,
       tool: currentTool(this._models),
       toolName: this._models.currentTool,

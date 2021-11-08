@@ -141,25 +141,6 @@ describe('commands', function () {
     });
   });
 
-  describe('#setBoxMode()', function () {
-    beforeEach(function () {
-      this.models = {boxMode: false};
-      this.target = getBinder(COMMANDS.setBoxMode, this.models);
-    });
-
-    it('sets the box mode', function () {
-      const val = true,
-            cmd = this.target(val);
-
-      const result = cmd();
-
-      expect(this.models.boxMode).to.be.true;
-      expect(result).to.eql(
-        {event: EVENTS.onBoxModeChanged, value: val}
-      );
-    });
-  });
-
   describe('#commitDraw()', function () {
     beforeEach(function () {
       this.models = {

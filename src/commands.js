@@ -39,12 +39,6 @@ const COMMAND_REGISTRY = {
       return makeUpdate(EVENTS.onBackgroundColorChanged, {colorId});
     };
   },
-  setBoxMode(models, value) {
-    return () => {
-      models.boxMode = value;
-      return makeUpdate(EVENTS.onBoxModeChanged, {value});
-    };
-  },
   setForegroundColor(models, colorId) {
     return () => {
       models.lettertype.cell.fgColorId = colorId;
