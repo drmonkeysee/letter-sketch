@@ -33,9 +33,9 @@
       </div>
     </div>
     <div id="palette"></div>
-    <script src="src/main.js"></script>
+    <script src="src/main.js" type="module"></script>
     <script>
-      lettersketch.start(window);
+      window.addEventListener('load', e => lettersketch.start(window));
     </script>
   </body>
 </html>
