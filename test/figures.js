@@ -3,13 +3,13 @@ import codepage from '../src/codepage.js';
 import palette from '../src/palette.js';
 
 import {
-  ellipse, filledEllipse, filledRectangle, floodFill,
+  boxRectangle, ellipse, filledEllipse, filledRectangle, floodFill,
   freeDraw, lineSegment, rectangle, replace, singleCell, textBuffer,
 } from '../src/figures.js';
 import {Cell, makeTile} from '../src/models/cell.js';
 import {Terminal} from '../src/models/terminal.js';
 
-function assertUnorderedFigure(expTiles, expCell, actual) {
+function assertUnorderedFigure(expTiles, actual, expCell) {
   expect(actual).to.have.lengthOf(expTiles.length);
   for (const tileExpected of expTiles) {
     let foundTile = false;
@@ -17,7 +17,7 @@ function assertUnorderedFigure(expTiles, expCell, actual) {
       const sameTile = tileExpected.x === tileActual.x
                         && tileExpected.y === tileActual.y;
       if (!sameTile) continue;
-      expect(tileActual.cell).to.equal(expCell);
+      expect(tileExpected.cell ?? expCell).to.eql(tileActual.cell);
       foundTile = true;
     }
     if (!foundTile) {
@@ -116,7 +116,7 @@ describe('figures', function () {
         {x: 1, y: 2},
         {x: 2, y: 2},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('fills terminal from edge cell', function () {
@@ -135,7 +135,7 @@ describe('figures', function () {
         {x: 1, y: 2},
         {x: 2, y: 2},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('fills terminal from corner cell', function () {
@@ -154,7 +154,7 @@ describe('figures', function () {
         {x: 1, y: 2},
         {x: 2, y: 2},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('does not fill past solid line', function () {
@@ -174,7 +174,7 @@ describe('figures', function () {
         {x: 0, y: 1},
         {x: 0, y: 2},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('does not fill past diagonal line', function () {
@@ -194,7 +194,7 @@ describe('figures', function () {
         {x: 0, y: 1},
         {x: 1, y: 0},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('fills single tile', function () {
@@ -203,7 +203,7 @@ describe('figures', function () {
 
       const figure = this._target(tile);
 
-      assertUnorderedFigure([tile], this._cell, figure);
+      assertUnorderedFigure([tile], figure, this._cell);
     });
 
     it('fills solid line', function () {
@@ -223,7 +223,7 @@ describe('figures', function () {
         {x: 1, y: 1},
         {x: 1, y: 2},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('does not fill diagonal line', function () {
@@ -241,7 +241,7 @@ describe('figures', function () {
       const expected = [
         {x: 0, y: 2},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('fills contiguous shape', function () {
@@ -274,7 +274,7 @@ describe('figures', function () {
         {x: 2, y: 3},
         {x: 3, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
   });
 
@@ -301,7 +301,7 @@ describe('figures', function () {
       const figure = this._target(start, end);
 
       const expected = [start, end];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a 2-tile vertical rect', function () {
@@ -311,7 +311,7 @@ describe('figures', function () {
       const figure = this._target(start, end);
 
       const expected = [start, end];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a 4-tile square', function () {
@@ -326,7 +326,7 @@ describe('figures', function () {
         {x: 4, y: 3},
         {x: 4, y: 4},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates an LT open square', function () {
@@ -345,7 +345,7 @@ describe('figures', function () {
         {x: 5, y: 4},
         {x: 5, y: 5},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates an RB open square', function () {
@@ -364,7 +364,7 @@ describe('figures', function () {
         {x: 3, y: 2},
         {x: 3, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates an open horizontal rect', function () {
@@ -385,7 +385,7 @@ describe('figures', function () {
         {x: 5, y: 5},
         {x: 6, y: 5},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates an open vertical rect', function () {
@@ -406,7 +406,7 @@ describe('figures', function () {
         {x: 5, y: 5},
         {x: 5, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
   });
 
@@ -433,7 +433,7 @@ describe('figures', function () {
       const figure = this._target(start, end);
 
       const expected = [start, end];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a 2-tile vertical rect', function () {
@@ -443,7 +443,7 @@ describe('figures', function () {
       const figure = this._target(start, end);
 
       const expected = [start, end];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a 4-tile square', function () {
@@ -458,7 +458,7 @@ describe('figures', function () {
         {x: 4, y: 3},
         {x: 4, y: 4},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates an LT solid square', function () {
@@ -478,7 +478,7 @@ describe('figures', function () {
         {x: 5, y: 4},
         {x: 5, y: 5},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates an RB solid square', function () {
@@ -498,7 +498,7 @@ describe('figures', function () {
         {x: 3, y: 2},
         {x: 3, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a solid horizontal rect', function () {
@@ -521,7 +521,7 @@ describe('figures', function () {
         {x: 5, y: 5},
         {x: 6, y: 5},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a solid vertical rect', function () {
@@ -579,7 +579,7 @@ describe('figures', function () {
         {x: 3, y: 5},
         {x: 3, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a horizontal figure', function () {
@@ -597,7 +597,7 @@ describe('figures', function () {
         {x: 5, y: 3},
         {x: 6, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a 2x2 ellipse', function () {
@@ -612,7 +612,7 @@ describe('figures', function () {
         {x: 3, y: 4},
         {x: 4, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a thin vertical ellipse', function () {
@@ -635,7 +635,7 @@ describe('figures', function () {
         {x: 4, y: 5},
         {x: 3, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a thin horizontal ellipse', function () {
@@ -658,7 +658,7 @@ describe('figures', function () {
         {x: 5, y: 4},
         {x: 6, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a full ellipse', function () {
@@ -685,7 +685,7 @@ describe('figures', function () {
         {x: 3, y: 6},
         {x: 4, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a top-left full ellipse', function () {
@@ -712,7 +712,7 @@ describe('figures', function () {
         {x: 3, y: 6},
         {x: 4, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a partial ellipse in upper-left', function () {
@@ -728,7 +728,7 @@ describe('figures', function () {
         {x: 1, y: 3},
         {x: 0, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a partial ellipse in lower-right', function () {
@@ -744,7 +744,7 @@ describe('figures', function () {
         {x: 3, y: 5},
         {x: 3, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
   });
 
@@ -779,7 +779,7 @@ describe('figures', function () {
         {x: 3, y: 5},
         {x: 3, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a horizontal figure', function () {
@@ -797,7 +797,7 @@ describe('figures', function () {
         {x: 5, y: 3},
         {x: 6, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a 2x2 ellipse', function () {
@@ -813,7 +813,7 @@ describe('figures', function () {
         {x: 3, y: 4},
         {x: 4, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a thin vertical ellipse', function () {
@@ -841,7 +841,7 @@ describe('figures', function () {
         {x: 4, y: 5},
         {x: 3, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a thin horizontal ellipse', function () {
@@ -869,7 +869,7 @@ describe('figures', function () {
         {x: 5, y: 4},
         {x: 6, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a full ellipse', function () {
@@ -917,7 +917,7 @@ describe('figures', function () {
         {x: 3, y: 6},
         {x: 4, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a top-left full ellipse', function () {
@@ -965,7 +965,7 @@ describe('figures', function () {
         {x: 3, y: 6},
         {x: 4, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a partial ellipse in upper-left', function () {
@@ -989,7 +989,7 @@ describe('figures', function () {
         {x: 1, y: 3},
         {x: 0, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a partial ellipse in lower-right', function () {
@@ -1013,7 +1013,7 @@ describe('figures', function () {
         {x: 5, y: 6},
         {x: 6, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
   });
 
@@ -1045,7 +1045,7 @@ describe('figures', function () {
         {x: 3, y: 5},
         {x: 3, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a horizontal line', function () {
@@ -1060,7 +1060,7 @@ describe('figures', function () {
         {x: 5, y: 3},
         {x: 6, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a positive slope', function () {
@@ -1078,7 +1078,7 @@ describe('figures', function () {
         {x: 5, y: 5},
         {x: 6, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a negative slope', function () {
@@ -1096,7 +1096,7 @@ describe('figures', function () {
         {x: 5, y: 1},
         {x: 6, y: 0},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a partial positive slope', function () {
@@ -1114,7 +1114,7 @@ describe('figures', function () {
         {x: 5, y: 3},
         {x: 6, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('creates a partial negative slope', function () {
@@ -1132,7 +1132,7 @@ describe('figures', function () {
         {x: 5, y: 3},
         {x: 6, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
   });
 
@@ -1340,7 +1340,7 @@ describe('figures', function () {
         {x: 1, y: 1},
         {x: 2, y: 2},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('replaces basic glyph tiles', function () {
@@ -1351,7 +1351,7 @@ describe('figures', function () {
         {x: 1, y: 3},
         {x: 1, y: 3},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
 
     it('replaces single tile', function () {
@@ -1360,7 +1360,7 @@ describe('figures', function () {
       const expected = [
         {x: 2, y: 0},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
     });
   });
 });
