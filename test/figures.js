@@ -544,7 +544,165 @@ describe('figures', function () {
         {x: 5, y: 5},
         {x: 5, y: 6},
       ];
-      assertUnorderedFigure(expected, this._cell, figure);
+      assertUnorderedFigure(expected, figure, this._cell);
+    });
+  });
+
+  describe('#boxRectangle', function () {
+    beforeEach(function () {
+      this._terminal = new Terminal(7, 7);
+      this._cell = new Cell(218);
+      this._target = boxRectangle(this._cell, this._terminal);
+    });
+
+    it('creates a single tile figure', function () {
+      const tile = {x: 3, y: 3};
+
+      const figure = this._target(tile, tile);
+
+      expect(figure).to.have.lengthOf(1);
+      expect([...figure][0]).to.eql({
+        cell: this._cell.clone({glyphId: 196}),
+        ...tile,
+      });
+    });
+
+    it('creates a 2-tile horizontal rect', function () {
+      const start = {x: 3, y: 3, cell: this._cell.clone({glyphId: 196})},
+            end = {x: 4, y: 3, cell: this._cell.clone({glyphId: 196})};
+
+      const figure = this._target(start, end);
+
+      const expected = [start, end];
+      assertUnorderedFigure(expected, figure);
+    });
+
+    it('creates a 2-tile vertical rect', function () {
+      const start = {x: 3, y: 3, cell: this._cell.clone({glyphId: 179})},
+            end = {x: 3, y: 4, cell: this._cell.clone({glyphId: 179})};
+
+      const figure = this._target(start, end);
+
+      const expected = [start, end];
+      assertUnorderedFigure(expected, figure);
+    });
+
+    it('creates a 4-tile square', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 4, y: 4};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 3, y: 3, cell: this._cell.clone({glyphId: 218})},
+        {x: 3, y: 4, cell: this._cell.clone({glyphId: 192})},
+        {x: 4, y: 3, cell: this._cell.clone({glyphId: 191})},
+        {x: 4, y: 4, cell: this._cell.clone({glyphId: 217})},
+      ];
+      assertUnorderedFigure(expected, figure);
+    });
+
+    it('creates a 9-tile square (single)', function () {
+      const start = {x: 3, y: 3},
+            end = {x: 5, y: 5};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 3, y: 3, cell: this._cell.clone({glyphId: 218})},
+        {x: 3, y: 4, cell: this._cell.clone({glyphId: 179})},
+        {x: 3, y: 5, cell: this._cell.clone({glyphId: 192})},
+        {x: 4, y: 3, cell: this._cell.clone({glyphId: 196})},
+        {x: 4, y: 5, cell: this._cell.clone({glyphId: 196})},
+        {x: 5, y: 3, cell: this._cell.clone({glyphId: 191})},
+        {x: 5, y: 4, cell: this._cell.clone({glyphId: 179})},
+        {x: 5, y: 5, cell: this._cell.clone({glyphId: 217})},
+      ];
+      assertUnorderedFigure(expected, figure);
+    });
+
+    it('creates a 9-tile square (double)', function () {
+      this._cell = new Cell(201);
+      this._target = boxRectangle(this._cell, this._terminal);
+      const start = {x: 3, y: 3},
+            end = {x: 5, y: 5};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 3, y: 3, cell: this._cell.clone({glyphId: 201})},
+        {x: 3, y: 4, cell: this._cell.clone({glyphId: 186})},
+        {x: 3, y: 5, cell: this._cell.clone({glyphId: 200})},
+        {x: 4, y: 3, cell: this._cell.clone({glyphId: 205})},
+        {x: 4, y: 5, cell: this._cell.clone({glyphId: 205})},
+        {x: 5, y: 3, cell: this._cell.clone({glyphId: 187})},
+        {x: 5, y: 4, cell: this._cell.clone({glyphId: 186})},
+        {x: 5, y: 5, cell: this._cell.clone({glyphId: 188})},
+      ];
+      assertUnorderedFigure(expected, figure);
+    });
+
+    it('creates a 9-tile square (doubleH)', function () {
+      this._cell = new Cell(213);
+      this._target = boxRectangle(this._cell, this._terminal);
+      const start = {x: 3, y: 3},
+            end = {x: 5, y: 5};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 3, y: 3, cell: this._cell.clone({glyphId: 213})},
+        {x: 3, y: 4, cell: this._cell.clone({glyphId: 179})},
+        {x: 3, y: 5, cell: this._cell.clone({glyphId: 212})},
+        {x: 4, y: 3, cell: this._cell.clone({glyphId: 205})},
+        {x: 4, y: 5, cell: this._cell.clone({glyphId: 205})},
+        {x: 5, y: 3, cell: this._cell.clone({glyphId: 184})},
+        {x: 5, y: 4, cell: this._cell.clone({glyphId: 179})},
+        {x: 5, y: 5, cell: this._cell.clone({glyphId: 190})},
+      ];
+      assertUnorderedFigure(expected, figure);
+    });
+
+    it('creates a 9-tile square (doubleV)', function () {
+      this._cell = new Cell(214);
+      this._target = boxRectangle(this._cell, this._terminal);
+      const start = {x: 3, y: 3},
+            end = {x: 5, y: 5};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 3, y: 3, cell: this._cell.clone({glyphId: 214})},
+        {x: 3, y: 4, cell: this._cell.clone({glyphId: 186})},
+        {x: 3, y: 5, cell: this._cell.clone({glyphId: 211})},
+        {x: 4, y: 3, cell: this._cell.clone({glyphId: 196})},
+        {x: 4, y: 5, cell: this._cell.clone({glyphId: 196})},
+        {x: 5, y: 3, cell: this._cell.clone({glyphId: 183})},
+        {x: 5, y: 4, cell: this._cell.clone({glyphId: 186})},
+        {x: 5, y: 5, cell: this._cell.clone({glyphId: 189})},
+      ];
+      assertUnorderedFigure(expected, figure);
+    });
+
+    it('creates a 9-tile square (non-box)', function () {
+      this._cell = new Cell(codepage.id('A'));
+      this._target = boxRectangle(this._cell, this._terminal);
+      const start = {x: 3, y: 3},
+            end = {x: 5, y: 5};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 3, y: 3},
+        {x: 3, y: 4},
+        {x: 3, y: 5},
+        {x: 4, y: 3},
+        {x: 4, y: 5},
+        {x: 5, y: 3},
+        {x: 5, y: 4},
+        {x: 5, y: 5},
+      ];
+      assertUnorderedFigure(expected, figure, this._cell);
     });
   });
 
