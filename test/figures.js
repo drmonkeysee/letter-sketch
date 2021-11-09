@@ -704,6 +704,42 @@ describe('figures', function () {
       ];
       assertUnorderedFigure(expected, figure, this._cell);
     });
+
+    it('interpolates an intersecting neighbor', function () {
+      this._terminal.updateCell(4, 5, {glyphId: 186});
+      const start = {x: 3, y: 3},
+            end = {x: 5, y: 4};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 3, y: 3, cell: this._cell.clone({glyphId: 218})},
+        {x: 3, y: 4, cell: this._cell.clone({glyphId: 192})},
+        {x: 4, y: 3, cell: this._cell.clone({glyphId: 196})},
+        {x: 4, y: 4, cell: this._cell.clone({glyphId: 210})},
+        {x: 5, y: 3, cell: this._cell.clone({glyphId: 191})},
+        {x: 5, y: 4, cell: this._cell.clone({glyphId: 217})},
+      ];
+      assertUnorderedFigure(expected, figure);
+    });
+
+    it('does not interpolate a non-intersecting neighbor', function () {
+      this._terminal.updateCell(4, 5, {glyphId: 205});
+      const start = {x: 3, y: 3},
+            end = {x: 5, y: 4};
+
+      const figure = this._target(start, end);
+
+      const expected = [
+        {x: 3, y: 3, cell: this._cell.clone({glyphId: 218})},
+        {x: 3, y: 4, cell: this._cell.clone({glyphId: 192})},
+        {x: 4, y: 3, cell: this._cell.clone({glyphId: 196})},
+        {x: 4, y: 4, cell: this._cell.clone({glyphId: 196})},
+        {x: 5, y: 3, cell: this._cell.clone({glyphId: 191})},
+        {x: 5, y: 4, cell: this._cell.clone({glyphId: 217})},
+      ];
+      assertUnorderedFigure(expected, figure);
+    });
   });
 
   describe('#ellipse', function () {
