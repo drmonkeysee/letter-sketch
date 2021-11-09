@@ -308,23 +308,30 @@ class BoxRectFigure extends PlotFigure {
     for (const tile of this._tiles) {
       let lineConstraints = 0, lineSet = this.lineSet;
       for (const n of neighbors(tile, this.terminal.dimensions)) {
-        const nTile = this._find(n),
-              nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y);
-        if (hasAttractor(nCell.glyphId, DIRECTIONS.complement(n.direction))) {
-          lineConstraints |= n.direction;
-          // NOTE: if neighbor is not part of this rect, give the neighbor's
-          // line-set precedence in the interpolation by phase-shifting the
-          // direction; this gives a more consistent visual effect than the
-          // "normal" interpolation.
-          if (!nTile) {
-            lineSet = interpolateLineSet(
-              this.lineSet, DIRECTIONS.rotate(n.direction), nCell.glyphId
-            );
-          }
-        }
+        [lineConstraints, lineSet] = this._solveNeighborConstraints(
+          n, lineConstraints, lineSet
+        );
       }
       tile.cell.glyphId = lineSet.getId(lineConstraints);
     }
+  }
+
+  _solveNeighborConstraints(n, lineConstraints, lineSet) {
+    const nTile = this._find(n),
+          nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y);
+    if (hasAttractor(nCell.glyphId, DIRECTIONS.complement(n.direction))) {
+      lineConstraints |= n.direction;
+      // NOTE: if neighbor is not part of this rect, give the neighbor's
+      // line-set precedence in the interpolation by phase-shifting the
+      // direction; this gives a more consistent visual effect than the
+      // "normal" interpolation.
+      if (!nTile) {
+        lineSet = interpolateLineSet(
+          this.lineSet, DIRECTIONS.rotate(n.direction), nCell.glyphId
+        );
+      }
+    }
+    return [lineConstraints, lineSet];
   }
 }
 
