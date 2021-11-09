@@ -152,7 +152,7 @@ export const DIRECTIONS = {
   complement(direction) {
     return direction > 2 ? direction >> 2 : direction << 2;
   },
-  // NOTE: convert horizontal to vertical and vice-versa
+  // NOTE: convert horizontal to vertical and vice-versa;
   // i.e. phase-shift between sine and cosine.
   rotate(direction) {
     switch (direction) {
