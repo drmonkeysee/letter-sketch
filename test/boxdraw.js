@@ -32,28 +32,28 @@ describe('DIRECTIONS', function () {
   });
 
   describe('#rotate()', function () {
-    it('rotates top to right', function () {
+    it('rotates top to left', function () {
       const result = DIRECTIONS.rotate(DIRECTIONS.TOP);
-
-      expect(result).to.equal(DIRECTIONS.RIGHT);
-    });
-
-    it('rotates bottom to left', function () {
-      const result = DIRECTIONS.rotate(DIRECTIONS.BOTTOM);
 
       expect(result).to.equal(DIRECTIONS.LEFT);
     });
 
-    it('rotates left to top', function () {
-      const result = DIRECTIONS.rotate(DIRECTIONS.LEFT);
+    it('rotates bottom to right', function () {
+      const result = DIRECTIONS.rotate(DIRECTIONS.BOTTOM);
 
-      expect(result).to.equal(DIRECTIONS.TOP);
+      expect(result).to.equal(DIRECTIONS.RIGHT);
     });
 
-    it('rotates right to bottom', function () {
-      const result = DIRECTIONS.rotate(DIRECTIONS.RIGHT);
+    it('rotates left to bottom', function () {
+      const result = DIRECTIONS.rotate(DIRECTIONS.LEFT);
 
       expect(result).to.equal(DIRECTIONS.BOTTOM);
+    });
+
+    it('rotates right to top', function () {
+      const result = DIRECTIONS.rotate(DIRECTIONS.RIGHT);
+
+      expect(result).to.equal(DIRECTIONS.TOP);
     });
 
     it('does not rotate explicit direction', function () {
