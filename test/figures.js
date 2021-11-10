@@ -3,7 +3,7 @@ import codepage from '../src/codepage.js';
 import palette from '../src/palette.js';
 
 import {
-  boxRectangle, ellipse, filledEllipse, filledRectangle, floodFill,
+  boxDraw, boxRectangle, ellipse, filledEllipse, filledRectangle, floodFill,
   freeDraw, lineSegment, rectangle, replace, singleCell, textBuffer,
 } from '../src/figures.js';
 import {Cell, makeTile} from '../src/models/cell.js';
@@ -90,6 +90,218 @@ describe('figures', function () {
       tiles.forEach((t, i) =>
         expect(figureList[i]).to.eql({x: t.x, y: t.y, cell: this._cell})
       );
+    });
+  });
+
+  describe('#boxDraw', function () {
+    beforeEach(function () {
+      this._terminal = new Terminal(7, 7);
+      this._cell = new Cell(218);
+      this._target = boxDraw(this._cell, this._terminal);
+    });
+
+    it('draws starting tile', function () {
+      const tile = {x: 1, y: 2};
+
+      const figure = this._target(tile, tile);
+
+      expect(figure).to.have.lengthOf(1);
+      expect([...figure][0]).to.eql({
+        cell: this._cell.clone({glyphId: 196}),
+        ...tile,
+      });
+    });
+
+    it('continues current figure', function () {
+      const tiles = [
+        {x: 0, y: 0},
+        {x: 1, y: 0},
+        {x: 1, y: 1},
+        {x: 2, y: 1},
+      ];
+
+      let figure = null;
+      for (const tile of tiles) {
+        figure = this._target(tiles[0], tile, figure);
+      }
+
+      const expected = [
+        {x: 0, y: 0, cell: this._cell.clone({glyphId: 196})},
+        {x: 1, y: 0, cell: this._cell.clone({glyphId: 191})},
+        {x: 1, y: 1, cell: this._cell.clone({glyphId: 192})},
+        {x: 2, y: 1, cell: this._cell.clone({glyphId: 196})},
+      ];
+      assertUnorderedFigure(expected, figure);
+    });
+
+    it('intersects itself (single)', function () {
+      const tiles = [
+        {x: 0, y: 0},
+        {x: 0, y: 1},
+        {x: 0, y: 2},
+        {x: 1, y: 2},
+        {x: 2, y: 2},
+        {x: 3, y: 2},
+        {x: 4, y: 2},
+        {x: 4, y: 1},
+        {x: 4, y: 0},
+        {x: 3, y: 0},
+        {x: 2, y: 0},
+        {x: 2, y: 1},
+        {x: 2, y: 2},
+        {x: 2, y: 3},
+      ];
+
+      let figure = null;
+      for (const tile of tiles) {
+        figure = this._target(tiles[0], tile, figure);
+      }
+
+      const expected = [
+        {x: 0, y: 0, cell: this._cell.clone({glyphId: 179})},
+        {x: 0, y: 1, cell: this._cell.clone({glyphId: 179})},
+        {x: 0, y: 2, cell: this._cell.clone({glyphId: 192})},
+        {x: 1, y: 2, cell: this._cell.clone({glyphId: 196})},
+        {x: 2, y: 2, cell: this._cell.clone({glyphId: 197})},
+        {x: 3, y: 2, cell: this._cell.clone({glyphId: 196})},
+        {x: 4, y: 2, cell: this._cell.clone({glyphId: 217})},
+        {x: 4, y: 1, cell: this._cell.clone({glyphId: 179})},
+        {x: 4, y: 0, cell: this._cell.clone({glyphId: 191})},
+        {x: 3, y: 0, cell: this._cell.clone({glyphId: 196})},
+        {x: 2, y: 0, cell: this._cell.clone({glyphId: 218})},
+        {x: 2, y: 1, cell: this._cell.clone({glyphId: 179})},
+        {x: 2, y: 3, cell: this._cell.clone({glyphId: 179})},
+      ];
+      assertUnorderedFigure(expected, figure);
+    });
+
+    it('intersects itself (double)', function () {
+      this._cell = new Cell(201);
+      this._target = boxDraw(this._cell, this._terminal);
+      const tiles = [
+        {x: 0, y: 0},
+        {x: 0, y: 1},
+        {x: 0, y: 2},
+        {x: 1, y: 2},
+        {x: 2, y: 2},
+        {x: 3, y: 2},
+        {x: 4, y: 2},
+        {x: 4, y: 1},
+        {x: 4, y: 0},
+        {x: 3, y: 0},
+        {x: 2, y: 0},
+        {x: 2, y: 1},
+        {x: 2, y: 2},
+        {x: 2, y: 3},
+      ];
+
+      let figure = null;
+      for (const tile of tiles) {
+        figure = this._target(tiles[0], tile, figure);
+      }
+
+      const expected = [
+        {x: 0, y: 0, cell: this._cell.clone({glyphId: 186})},
+        {x: 0, y: 1, cell: this._cell.clone({glyphId: 186})},
+        {x: 0, y: 2, cell: this._cell.clone({glyphId: 200})},
+        {x: 1, y: 2, cell: this._cell.clone({glyphId: 205})},
+        {x: 2, y: 2, cell: this._cell.clone({glyphId: 206})},
+        {x: 3, y: 2, cell: this._cell.clone({glyphId: 205})},
+        {x: 4, y: 2, cell: this._cell.clone({glyphId: 188})},
+        {x: 4, y: 1, cell: this._cell.clone({glyphId: 186})},
+        {x: 4, y: 0, cell: this._cell.clone({glyphId: 187})},
+        {x: 3, y: 0, cell: this._cell.clone({glyphId: 205})},
+        {x: 2, y: 0, cell: this._cell.clone({glyphId: 201})},
+        {x: 2, y: 1, cell: this._cell.clone({glyphId: 186})},
+        {x: 2, y: 3, cell: this._cell.clone({glyphId: 186})},
+      ];
+      assertUnorderedFigure(expected, figure);
+    });
+
+    it('intersects itself (doubleH)', function () {
+      this._cell = new Cell(213);
+      this._target = boxDraw(this._cell, this._terminal);
+      const tiles = [
+        {x: 0, y: 0},
+        {x: 0, y: 1},
+        {x: 0, y: 2},
+        {x: 1, y: 2},
+        {x: 2, y: 2},
+        {x: 3, y: 2},
+        {x: 4, y: 2},
+        {x: 4, y: 1},
+        {x: 4, y: 0},
+        {x: 3, y: 0},
+        {x: 2, y: 0},
+        {x: 2, y: 1},
+        {x: 2, y: 2},
+        {x: 2, y: 3},
+      ];
+
+      let figure = null;
+      for (const tile of tiles) {
+        figure = this._target(tiles[0], tile, figure);
+      }
+
+      const expected = [
+        {x: 0, y: 0, cell: this._cell.clone({glyphId: 179})},
+        {x: 0, y: 1, cell: this._cell.clone({glyphId: 179})},
+        {x: 0, y: 2, cell: this._cell.clone({glyphId: 212})},
+        {x: 1, y: 2, cell: this._cell.clone({glyphId: 205})},
+        {x: 2, y: 2, cell: this._cell.clone({glyphId: 216})},
+        {x: 3, y: 2, cell: this._cell.clone({glyphId: 205})},
+        {x: 4, y: 2, cell: this._cell.clone({glyphId: 190})},
+        {x: 4, y: 1, cell: this._cell.clone({glyphId: 179})},
+        {x: 4, y: 0, cell: this._cell.clone({glyphId: 184})},
+        {x: 3, y: 0, cell: this._cell.clone({glyphId: 205})},
+        {x: 2, y: 0, cell: this._cell.clone({glyphId: 213})},
+        {x: 2, y: 1, cell: this._cell.clone({glyphId: 179})},
+        {x: 2, y: 3, cell: this._cell.clone({glyphId: 179})},
+      ];
+      assertUnorderedFigure(expected, figure);
+    });
+
+    it('intersects itself (doubleV)', function () {
+      this._cell = new Cell(214);
+      this._target = boxDraw(this._cell, this._terminal);
+      const tiles = [
+        {x: 0, y: 0},
+        {x: 0, y: 1},
+        {x: 0, y: 2},
+        {x: 1, y: 2},
+        {x: 2, y: 2},
+        {x: 3, y: 2},
+        {x: 4, y: 2},
+        {x: 4, y: 1},
+        {x: 4, y: 0},
+        {x: 3, y: 0},
+        {x: 2, y: 0},
+        {x: 2, y: 1},
+        {x: 2, y: 2},
+        {x: 2, y: 3},
+      ];
+
+      let figure = null;
+      for (const tile of tiles) {
+        figure = this._target(tiles[0], tile, figure);
+      }
+
+      const expected = [
+        {x: 0, y: 0, cell: this._cell.clone({glyphId: 186})},
+        {x: 0, y: 1, cell: this._cell.clone({glyphId: 186})},
+        {x: 0, y: 2, cell: this._cell.clone({glyphId: 211})},
+        {x: 1, y: 2, cell: this._cell.clone({glyphId: 196})},
+        {x: 2, y: 2, cell: this._cell.clone({glyphId: 215})},
+        {x: 3, y: 2, cell: this._cell.clone({glyphId: 196})},
+        {x: 4, y: 2, cell: this._cell.clone({glyphId: 189})},
+        {x: 4, y: 1, cell: this._cell.clone({glyphId: 186})},
+        {x: 4, y: 0, cell: this._cell.clone({glyphId: 183})},
+        {x: 3, y: 0, cell: this._cell.clone({glyphId: 196})},
+        {x: 2, y: 0, cell: this._cell.clone({glyphId: 214})},
+        {x: 2, y: 1, cell: this._cell.clone({glyphId: 186})},
+        {x: 2, y: 3, cell: this._cell.clone({glyphId: 186})},
+      ];
+      assertUnorderedFigure(expected, figure);
     });
   });
 
