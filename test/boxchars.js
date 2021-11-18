@@ -2,7 +2,7 @@ import {expect} from 'chai';
 
 import {
   DIRECTIONS, getLineSet, hasAttractor, interpolateLineSet,
-} from '../src/boxdraw.js';
+} from '../src/boxchars.js';
 
 describe('DIRECTIONS', function () {
   describe('#complement()', function () {

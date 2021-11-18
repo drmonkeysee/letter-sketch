@@ -1,6 +1,6 @@
 import {
   DIRECTIONS, getLineSet, hasAttractor, interpolateLineSet,
-} from './boxdraw.js';
+} from './boxchars.js';
 import codepage from './codepage.js';
 import {Cell, hashTile, makeTile} from './models/cell.js';
 
