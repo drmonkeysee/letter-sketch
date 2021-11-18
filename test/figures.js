@@ -303,6 +303,39 @@ describe('figures', function () {
       ];
       assertUnorderedFigure(expected, figure);
     });
+
+    it('interpolates an intersecting neighbor', function () {
+      this._cell = new Cell(205);
+      this._target = boxDraw(this._cell, this._terminal);
+      this._terminal.updateCell(2, 2, {glyphId: 196});
+      this._terminal.updateCell(3, 2, {glyphId: 196});
+      this._terminal.updateCell(4, 2, {glyphId: 196});
+      const start = {x: 3, y: 3};
+
+      const figure = this._target(start, start);
+
+      const expected = [
+        {x: 3, y: 3, cell: this._cell.clone({glyphId: 186})},
+        {x: 3, y: 2, cell: this._cell.clone({glyphId: 210})},
+      ];
+      assertUnorderedFigure(expected, figure);
+    });
+
+    it('does not interpolate a non-intersecting neighbor', function () {
+      this._cell = new Cell(205);
+      this._target = boxDraw(this._cell, this._terminal);
+      this._terminal.updateCell(2, 2, {glyphId: 65});
+      this._terminal.updateCell(3, 2, {glyphId: 65});
+      this._terminal.updateCell(4, 2, {glyphId: 65});
+      const start = {x: 3, y: 3};
+
+      const figure = this._target(start, start);
+
+      const expected = [
+        {x: 3, y: 3, cell: this._cell.clone({glyphId: 205})},
+      ];
+      assertUnorderedFigure(expected, figure);
+    });
   });
 
   describe('#floodFill', function () {
