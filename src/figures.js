@@ -280,8 +280,8 @@ class PlotFigure extends ActiveFigure {
   }
 
   add(tile) {
-    const h = this._newTileHash(tile);
-    if (h !== null) {
+    const h = hashTile(tile);
+    if (!this._points.has(h)) {
       this._insert(tile, h);
     }
   }
@@ -289,11 +289,6 @@ class PlotFigure extends ActiveFigure {
   _insert(tile, hash) {
     super.add(tile);
     this._points.add(hash);
-  }
-
-  _newTileHash(tile) {
-    const h = hashTile(tile);
-    return this._points.has(h) ? null : h;
   }
 }
 
@@ -354,15 +349,8 @@ class BoxDrawFigure extends BoxCharFigure {
   }
 
   _resolveTile(tile) {
-    const h = this._newTileHash(tile);
-    if (h !== null) {
-      // NOTE: if current brush is adding a new cell, duplicate the lettertype
-      // selection to render the correct box-drawing glyph.
-      tile.cell = tile.cell.clone(
-        {glyphId: this.lineSet.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT)}
-      );
-      this._insert(tile, h);
-    } else {
+    const h = hashTile(tile);
+    if (this._points.has(h)) {
       // NOTE: current tile may have been pulled into the figure from the
       // terminal by an earlier tile and still has its old colors; make sure
       // the tile currently under the brush always reflects the currently-
@@ -372,6 +360,13 @@ class BoxDrawFigure extends BoxCharFigure {
         {fgColorId: tile.cell.fgColorId, bgColorId: tile.cell.bgColorId}
       );
       tile = currentTile;
+    } else {
+      // NOTE: if current brush is adding a new cell, duplicate the lettertype
+      // selection to render the correct box-drawing glyph.
+      tile.cell = tile.cell.clone(
+        {glyphId: this.lineSet.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT)}
+      );
+      this._insert(tile, h);
     }
     return tile;
   }
