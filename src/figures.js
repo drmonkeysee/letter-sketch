@@ -297,13 +297,15 @@ class PlotFigure extends ActiveFigure {
   }
 }
 
-class BoxRectFigure extends PlotFigure {
+class BoxCharFigure extends PlotFigure {
   constructor(terminal, lineSet) {
     super();
     this.terminal = terminal;
     this.lineSet = lineSet;
   }
+}
 
+class BoxRectFigure extends BoxCharFigure {
   solve() {
     for (const tile of this._tiles) {
       let lineConstraints = 0, lineSet = this.lineSet;
@@ -335,14 +337,23 @@ class BoxRectFigure extends PlotFigure {
   }
 }
 
-class BoxDrawFigure extends PlotFigure {
-  constructor(terminal, lineSet) {
-    super();
-    this.terminal = terminal;
-    this.lineSet = lineSet;
+class BoxDrawFigure extends BoxCharFigure {
+  add(tile) {
+    tile = this._resolveTile(tile);
+    const additionalTiles = [];
+    let lineConstraints = 0;
+    for (const n of neighbors(tile, this.terminal.dimensions)) {
+      lineConstraints = this._processNeighbor(
+        n, lineConstraints, additionalTiles
+      );
+      tile.cell.glyphId = this.lineSet.getId(lineConstraints);
+    }
+    for (const adt of additionalTiles) {
+      super.add(adt);
+    }
   }
 
-  add(tile) {
+  _resolveTile(tile) {
     const h = this._newTileHash(tile);
     if (h !== null) {
       // NOTE: if current brush is adding a new cell, duplicate the lettertype
@@ -362,44 +373,46 @@ class BoxDrawFigure extends PlotFigure {
       );
       tile = currentTile;
     }
-    const additionalTiles = [];
-    let lineConstraints = 0;
-    for (const n of neighbors(tile, this.terminal.dimensions)) {
-      let nTile = this._find(n) ?? this._findin(n, additionalTiles);
-      const nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y),
-            nLineSet = nTile
-                        ? this.lineSet
-                        : interpolateLineSet(
-                            this.lineSet, n.direction, nCell.glyphId
-                          );
-      if (nLineSet) {
-        lineConstraints |= n.direction;
-        if (!nTile) {
-          const newCell = nCell.clone(
-            {glyphId: nLineSet.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT)}
+    return tile;
+  }
+
+  _processNeighbor(n, lineConstraints, additionalTiles) {
+    let nTile = this._find(n) ?? this._findin(n, additionalTiles);
+    const nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y),
+          nLineSet = nTile ? this.lineSet : interpolateLineSet(
+            this.lineSet, n.direction, nCell.glyphId
           );
-          nTile = makeTile(n.x, n.y, newCell);
-          additionalTiles.push(nTile);
-        }
-        let nConstraints = DIRECTIONS.complement(n.direction);
-        for (const nn of neighbors(nTile, this.terminal.dimensions)) {
-          const existingNN = this._find(nn)
-                              ?? this._findin(nn, additionalTiles),
-                nnCell = existingNN?.cell ?? this.terminal.getCell(nn.x, nn.y),
-                nnAttractor = hasAttractor(
-                  nnCell.glyphId, DIRECTIONS.complement(nn.direction)
-                );
-          if (nnAttractor) {
-            nConstraints |= nn.direction;
-          }
-        }
-        nTile.cell.glyphId = nLineSet.getId(nConstraints);
+    if (nLineSet) {
+      lineConstraints |= n.direction;
+      if (!nTile) {
+        const newCell = nCell.clone(
+          {glyphId: nLineSet.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT)}
+        );
+        nTile = makeTile(n.x, n.y, newCell);
+        additionalTiles.push(nTile);
       }
-      tile.cell.glyphId = this.lineSet.getId(lineConstraints);
+      let nConstraints = DIRECTIONS.complement(n.direction);
+      for (const nn of neighbors(nTile, this.terminal.dimensions)) {
+        nConstraints = this._processNeighborOfNeighbor(
+          nn, nConstraints, additionalTiles
+        );
+      }
+      nTile.cell.glyphId = nLineSet.getId(nConstraints);
     }
-    for (const adt of additionalTiles) {
-      super.add(adt);
+    return lineConstraints;
+  }
+
+  _processNeighborOfNeighbor(nn, nConstraints, additionalTiles) {
+    const existingNN = this._find(nn)
+                        ?? this._findin(nn, additionalTiles),
+          nnCell = existingNN?.cell ?? this.terminal.getCell(nn.x, nn.y),
+          nnAttractor = hasAttractor(
+            nnCell.glyphId, DIRECTIONS.complement(nn.direction)
+          );
+    if (nnAttractor) {
+      nConstraints |= nn.direction;
     }
+    return nConstraints;
   }
 }
 
