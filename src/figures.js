@@ -89,7 +89,7 @@ function plotBoxRect(
   return figure;
 }
 
-function drawEllipse(start, end, {width, height}, lettertypeCell, plotStyle) {
+function drawEllipse(start, end, dims, lettertypeCell, plotStyle) {
   const xRadius = Math.abs(end.x - start.x),
         yRadius = Math.abs(end.y - start.y),
         figure = new PlotFigure();
@@ -99,7 +99,7 @@ function drawEllipse(start, end, {width, height}, lettertypeCell, plotStyle) {
   } else if (!xRadius) {
     for (let y = 0; y <= yRadius; ++y) {
       const posY = start.y + y, negY = start.y - y;
-      if (posY < height) {
+      if (posY < dims.height) {
         figure.add(makeTile(start.x, posY, lettertypeCell));
       }
       if (negY >= 0) {
@@ -109,7 +109,7 @@ function drawEllipse(start, end, {width, height}, lettertypeCell, plotStyle) {
   } else if (!yRadius) {
     for (let x = 0; x <= xRadius; ++x) {
       const posX = start.x + x, negX = start.x - x;
-      if (posX < width) {
+      if (posX < dims.width) {
         figure.add(makeTile(posX, start.y, lettertypeCell));
       }
       if (negX >= 0) {
@@ -118,7 +118,7 @@ function drawEllipse(start, end, {width, height}, lettertypeCell, plotStyle) {
     }
   } else {
     bresenhamEllipse(xRadius, yRadius, (x, y) => plotStyle(
-      x, y, start, width, height, figure, lettertypeCell
+      x, y, start, dims.width, dims.height, figure, lettertypeCell
     ));
   }
 
