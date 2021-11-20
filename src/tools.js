@@ -6,10 +6,10 @@ import {CursorGesture, MouseGesture, SampleCell} from './gestures.js';
 import namemap from './namemap.js';
 
 class Tool {
-  constructor(models, gestureCls, figureStyle) {
+  constructor(models, gestureCls, figure) {
     this.models = models;
     this.gestureCls = gestureCls;
-    this.figureStyle = figureStyle;
+    this.figure = figure;
   }
 
   forward(sketchpadView, event) {
@@ -30,7 +30,9 @@ class Tool {
 
   _createGesture(sketchpadView) {
     return new this.gestureCls(
-      this.figureStyle(this.models.lettertype.cell, this.models.terminal),
+      // NOTE: curry the figure with the current cell and match gesture's
+      // figure-update signature.
+      (t, s, e, af) => this.figure(this.models.lettertype.cell, t, s, e, af),
       sketchpadView,
       this.models.terminal
     );
@@ -65,8 +67,8 @@ class TextTool extends Tool {
 
 class EyedropTool extends Tool {
   constructor(models) {
-    // NOTE: empty figureStyle used to terminate gesture immediately
-    super(models, SampleCell, () => () => []);
+    // NOTE: empty figure used to terminate gesture immediately
+    super(models, SampleCell, () => []);
   }
 }
 

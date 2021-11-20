@@ -445,125 +445,106 @@ class TextFigure extends ActiveFigure {
   }
 }
 
-export function singleCell(lettertypeCell, terminal) {
-  return (start, end, activeFigure) =>
-    activeFigure ?? [makeTile(start.x, start.y, lettertypeCell)];
+export function singleCell(lettertypeCell, terminal, start, end, activeFigure) {
+  return activeFigure ?? [makeTile(start.x, start.y, lettertypeCell)];
 }
 
-export function freeDraw(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => {
-    activeFigure = activeFigure ?? new PlotFigure();
-    activeFigure.add(makeTile(end.x, end.y, lettertypeCell));
-    return activeFigure;
-  };
+export function freeDraw(lettertypeCell, terminal, start, end, activeFigure) {
+  activeFigure = activeFigure ?? new PlotFigure();
+  activeFigure.add(makeTile(end.x, end.y, lettertypeCell));
+  return activeFigure;
 }
 
-export function boxDraw(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => {
-    const lineSet = getLineSet(lettertypeCell.glyphId);
-    activeFigure = activeFigure
-                   ?? (lineSet
-                        ? new BoxDrawFigure(terminal, lineSet)
-                        : new PlotFigure());
-    activeFigure.add(makeTile(end.x, end.y, lettertypeCell));
-    return activeFigure;
-  };
+export function boxDraw(lettertypeCell, terminal, start, end, activeFigure) {
+  const lineSet = getLineSet(lettertypeCell.glyphId);
+  activeFigure = activeFigure
+                  ?? (lineSet
+                      ? new BoxDrawFigure(terminal, lineSet)
+                      : new PlotFigure());
+  activeFigure.add(makeTile(end.x, end.y, lettertypeCell));
+  return activeFigure;
 }
 
-export function floodFill(lettertypeCell, terminal) {
-  const dims = terminal.dimensions;
+export function floodFill(lettertypeCell, terminal, start, end, activeFigure) {
+  if (activeFigure) return activeFigure;
 
-  return (start, end, activeFigure) => {
-    if (activeFigure) return activeFigure;
+  const visited = new Set([hashTile(start)]),
+        neighborQueue = [start],
+        figure = [makeTile(start.x, start.y, lettertypeCell)],
+        originalCell = terminal.getCell(start.x, start.y);
 
-    const visited = new Set([hashTile(start)]),
-          neighborQueue = [start],
-          figure = [makeTile(start.x, start.y, lettertypeCell)],
-          originalCell = terminal.getCell(start.x, start.y);
-
-    while (neighborQueue.length > 0) {
-      const current = neighborQueue.shift();
-      for (const n of neighbors(current, dims)) {
-        const nHash = hashTile(n);
-        if (visited.has(nHash)) continue;
-        visited.add(nHash);
-        const neighborCell = terminal.getCell(n.x, n.y);
-        if (neighborCell.equals(originalCell)) {
-          figure.push(makeTile(n.x, n.y, lettertypeCell));
-          neighborQueue.push(n);
-        }
+  while (neighborQueue.length > 0) {
+    const current = neighborQueue.shift();
+    for (const n of neighbors(current, terminal.dimensions)) {
+      const nHash = hashTile(n);
+      if (visited.has(nHash)) continue;
+      visited.add(nHash);
+      const neighborCell = terminal.getCell(n.x, n.y);
+      if (neighborCell.equals(originalCell)) {
+        figure.push(makeTile(n.x, n.y, lettertypeCell));
+        neighborQueue.push(n);
       }
     }
+  }
 
-    return figure;
-  };
+  return figure;
 }
 
-export function rectangle(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => drawRect(
-    start, end, lettertypeCell, plotRect
+export function rectangle(lettertypeCell, terminal, start, end, activeFigure) {
+  return drawRect(start, end, lettertypeCell, plotRect);
+}
+
+export function filledRectangle(lettertypeCell, terminal, start, end, activeFigure) {
+  return drawRect(start, end, lettertypeCell, plotFilledRect);
+}
+
+export function boxRectangle(lettertypeCell, terminal, start, end, activeFigure) {
+  const lineSet = getLineSet(lettertypeCell.glyphId);
+  return drawRect(
+    start,
+    end,
+    lettertypeCell,
+    lineSet
+      ? (...args) => plotBoxRect(terminal, lineSet, ...args)
+      : plotRect
   );
 }
 
-export function filledRectangle(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => drawRect(
-    start, end, lettertypeCell, plotFilledRect
-  );
-}
-
-export function boxRectangle(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => {
-    const lineSet = getLineSet(lettertypeCell.glyphId);
-    return drawRect(
-      start,
-      end,
-      lettertypeCell,
-      lineSet
-        ? (...args) => plotBoxRect(terminal, lineSet, ...args)
-        : plotRect
-    );
-  };
-}
-
-export function ellipse(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => drawEllipse(
+export function ellipse(lettertypeCell, terminal, start, end, activeFigure) {
+  return drawEllipse(
     start, end, terminal.dimensions, lettertypeCell, plotEllipse
   );
 }
 
-export function filledEllipse(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => drawEllipse(
+export function filledEllipse(
+  lettertypeCell, terminal, start, end, activeFigure
+) {
+  return drawEllipse(
     start, end, terminal.dimensions, lettertypeCell, plotFilledEllipse
   );
 }
 
-export function lineSegment(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => drawLineSegment(
-    start.x, start.y, end.x, end.y, lettertypeCell
-  );
+export function lineSegment(lettertypeCell, terminal, start, end, activeFigure) {
+  return drawLineSegment(start.x, start.y, end.x, end.y, lettertypeCell);
 }
 
-export function textBuffer(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => activeFigure
-                                        ?? new TextFigure(lettertypeCell);
+export function textBuffer(lettertypeCell, terminal, start, end, activeFigure) {
+  return activeFigure ?? new TextFigure(lettertypeCell);
 }
 
-export function replace(lettertypeCell, terminal) {
-  return (start, end, activeFigure) => {
-    if (activeFigure) return activeFigure;
+export function replace(lettertypeCell, terminal, start, end, activeFigure) {
+  if (activeFigure) return activeFigure;
 
-    const targetCell = terminal.getCell(start.x, start.y),
-          figure = [];
-    if (targetCell.equals(lettertypeCell)) return figure;
+  const targetCell = terminal.getCell(start.x, start.y), figure = [];
+  if (targetCell.equals(lettertypeCell)) return figure;
 
-    const {width, height} = terminal.dimensions;
-    for (let y = 0; y < height; ++y) {
-      for (let x = 0; x < width; ++x) {
-        const c = terminal.getCell(x, y);
-        if (!c.equals(targetCell)) continue;
-        figure.push(makeTile(x, y, lettertypeCell));
-      }
+  const {width, height} = terminal.dimensions;
+  for (let y = 0; y < height; ++y) {
+    for (let x = 0; x < width; ++x) {
+      const c = terminal.getCell(x, y);
+      if (!c.equals(targetCell)) continue;
+      figure.push(makeTile(x, y, lettertypeCell));
     }
-    return figure;
-  };
+  }
+  return figure;
 }

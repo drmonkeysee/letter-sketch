@@ -106,7 +106,7 @@ export class MouseGesture extends DrawGesture {
     this._started = true;
     this._start = this._end = getPoint(event.target);
     this._activeFigure = this.updateFigure(
-      this._start, this._end, this._activeFigure
+      this.terminal, this._start, this._end, this._activeFigure
     );
     this._drawFigure();
     return null;
@@ -116,7 +116,7 @@ export class MouseGesture extends DrawGesture {
     if (!this._started) return null;
     this._end = getPoint(event.target);
     this._activeFigure = this.updateFigure(
-      this._start, this._end, this._activeFigure
+      this.terminal, this._start, this._end, this._activeFigure
     );
     this._drawFigure();
     return null;
