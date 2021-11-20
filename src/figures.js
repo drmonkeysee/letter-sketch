@@ -445,11 +445,11 @@ class TextFigure extends ActiveFigure {
   }
 }
 
-export function singleCell(lettertypeCell, start, end, activeFigure, terminal) {
+export function singleCell(lettertypeCell, start, end, activeFigure) {
   return activeFigure ?? [makeTile(start.x, start.y, lettertypeCell)];
 }
 
-export function freeDraw(lettertypeCell, start, end, activeFigure, terminal) {
+export function freeDraw(lettertypeCell, start, end, activeFigure) {
   activeFigure = activeFigure ?? new PlotFigure();
   activeFigure.add(makeTile(end.x, end.y, lettertypeCell));
   return activeFigure;
@@ -490,15 +490,17 @@ export function floodFill(lettertypeCell, start, end, activeFigure, terminal) {
   return figure;
 }
 
-export function rectangle(lettertypeCell, start, end, activeFigure, terminal) {
+export function rectangle(lettertypeCell, start, end) {
   return drawRect(start, end, lettertypeCell, plotRect);
 }
 
-export function filledRectangle(lettertypeCell, start, end, activeFigure, terminal) {
+export function filledRectangle(lettertypeCell, start, end) {
   return drawRect(start, end, lettertypeCell, plotFilledRect);
 }
 
-export function boxRectangle(lettertypeCell, start, end, activeFigure, terminal) {
+export function boxRectangle(
+  lettertypeCell, start, end, activeFigure, terminal
+) {
   const lineSet = getLineSet(lettertypeCell.glyphId);
   return drawRect(
     start,
@@ -524,11 +526,11 @@ export function filledEllipse(
   );
 }
 
-export function lineSegment(lettertypeCell, start, end, activeFigure, terminal) {
+export function lineSegment(lettertypeCell, start, end) {
   return drawLineSegment(start.x, start.y, end.x, end.y, lettertypeCell);
 }
 
-export function textBuffer(lettertypeCell, start, end, activeFigure, terminal) {
+export function textBuffer(lettertypeCell, start, end, activeFigure) {
   return activeFigure ?? new TextFigure(lettertypeCell);
 }
 
