@@ -32,15 +32,13 @@ function assertUnorderedFigure(expTiles, actual, expCell) {
 describe('figures', function () {
   describe('#singleCell', function () {
     beforeEach(function () {
-      this._terminal = new Terminal(3, 3);
       this._cell = new Cell(codepage.id('A'));
-      this._target = singleCell(this._cell, this._terminal);
     });
 
     it('returns single value figure', function () {
       const tile = {x: 1, y: 2};
 
-      const figure = this._target(tile);
+      const figure = singleCell(this._cell, tile);
 
       expect(figure).to.have.lengthOf(1);
       expect(figure[0]).to.eql({x: 1, y: 2, cell: this._cell});
@@ -49,8 +47,8 @@ describe('figures', function () {
     it('only returns single value figure', function () {
       const tile = {x: 1, y: 2};
 
-      let figure = this._target({x: 1, y: 2});
-      figure = this._target({x: 2, y: 0}, null, figure);
+      let figure = singleCell(this._cell, {x: 1, y: 2});
+      figure = singleCell(this._cell, {x: 2, y: 0}, null, figure);
 
       expect(figure).to.have.lengthOf(1);
       expect(figure[0]).to.eql({x: 1, y: 2, cell: this._cell});
@@ -59,15 +57,13 @@ describe('figures', function () {
 
   describe('#freeDraw', function () {
     beforeEach(function () {
-      this._terminal = new Terminal(3, 3);
       this._cell = new Cell(codepage.id('A'));
-      this._target = freeDraw(this._cell, this._terminal);
     });
 
     it('draws starting tile', function () {
       const tile = {x: 1, y: 2};
 
-      const figure = this._target(tile, tile);
+      const figure = freeDraw(this._cell, tile, tile);
 
       expect(figure).to.have.lengthOf(1);
       expect([...figure][0]).to.eql({x: 1, y: 2, cell: this._cell});
@@ -82,7 +78,7 @@ describe('figures', function () {
 
       let figure = null;
       for (const tile of tiles) {
-        figure = this._target(tiles[0], tile, figure);
+        figure = freeDraw(this._cell, tiles[0], tile, figure);
       }
 
       expect(figure).to.have.lengthOf(tiles.length);
@@ -97,13 +93,12 @@ describe('figures', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
       this._cell = new Cell(218);
-      this._target = boxDraw(this._cell, this._terminal);
     });
 
     it('draws starting tile', function () {
       const tile = {x: 1, y: 2};
 
-      const figure = this._target(tile, tile);
+      const figure = boxDraw(this._cell, tile, tile, null, this._terminal);
 
       expect(figure).to.have.lengthOf(1);
       expect([...figure][0]).to.eql({
@@ -122,7 +117,7 @@ describe('figures', function () {
 
       let figure = null;
       for (const tile of tiles) {
-        figure = this._target(tiles[0], tile, figure);
+        figure = boxDraw(this._cell, tiles[0], tile, figure, this._terminal);
       }
 
       const expected = [
@@ -154,7 +149,7 @@ describe('figures', function () {
 
       let figure = null;
       for (const tile of tiles) {
-        figure = this._target(tiles[0], tile, figure);
+        figure = boxDraw(this._cell, tiles[0], tile, figure, this._terminal);
       }
 
       const expected = [
@@ -177,7 +172,6 @@ describe('figures', function () {
 
     it('intersects itself (double)', function () {
       this._cell = new Cell(201);
-      this._target = boxDraw(this._cell, this._terminal);
       const tiles = [
         {x: 0, y: 0},
         {x: 0, y: 1},
@@ -197,7 +191,7 @@ describe('figures', function () {
 
       let figure = null;
       for (const tile of tiles) {
-        figure = this._target(tiles[0], tile, figure);
+        figure = boxDraw(this._cell, tiles[0], tile, figure, this._terminal);
       }
 
       const expected = [
@@ -220,7 +214,6 @@ describe('figures', function () {
 
     it('intersects itself (doubleH)', function () {
       this._cell = new Cell(213);
-      this._target = boxDraw(this._cell, this._terminal);
       const tiles = [
         {x: 0, y: 0},
         {x: 0, y: 1},
@@ -240,7 +233,7 @@ describe('figures', function () {
 
       let figure = null;
       for (const tile of tiles) {
-        figure = this._target(tiles[0], tile, figure);
+        figure = boxDraw(this._cell, tiles[0], tile, figure, this._terminal);
       }
 
       const expected = [
@@ -263,7 +256,6 @@ describe('figures', function () {
 
     it('intersects itself (doubleV)', function () {
       this._cell = new Cell(214);
-      this._target = boxDraw(this._cell, this._terminal);
       const tiles = [
         {x: 0, y: 0},
         {x: 0, y: 1},
@@ -283,7 +275,7 @@ describe('figures', function () {
 
       let figure = null;
       for (const tile of tiles) {
-        figure = this._target(tiles[0], tile, figure);
+        figure = boxDraw(this._cell, tiles[0], tile, figure, this._terminal);
       }
 
       const expected = [
@@ -306,13 +298,12 @@ describe('figures', function () {
 
     it('interpolates an intersecting neighbor', function () {
       this._cell = new Cell(205);
-      this._target = boxDraw(this._cell, this._terminal);
       this._terminal.updateCell(2, 2, {glyphId: 196});
       this._terminal.updateCell(3, 2, {glyphId: 196});
       this._terminal.updateCell(4, 2, {glyphId: 196});
       const start = {x: 3, y: 3};
 
-      const figure = this._target(start, start);
+      const figure = boxDraw(this._cell, start, start, null, this._terminal);
 
       const expected = [
         {x: 3, y: 3, cell: this._cell.clone({glyphId: 186})},
@@ -323,13 +314,12 @@ describe('figures', function () {
 
     it('does not interpolate a non-intersecting neighbor', function () {
       this._cell = new Cell(205);
-      this._target = boxDraw(this._cell, this._terminal);
       this._terminal.updateCell(2, 2, {glyphId: 65});
       this._terminal.updateCell(3, 2, {glyphId: 65});
       this._terminal.updateCell(4, 2, {glyphId: 65});
       const start = {x: 3, y: 3};
 
-      const figure = this._target(start, start);
+      const figure = boxDraw(this._cell, start, start, null, this._terminal);
 
       const expected = [
         {x: 3, y: 3, cell: this._cell.clone({glyphId: 205})},
@@ -342,13 +332,12 @@ describe('figures', function () {
     beforeEach(function () {
       this._terminal = new Terminal(3, 3);
       this._cell = new Cell(codepage.id('A'));
-      this._target = floodFill(this._cell, this._terminal);
     });
 
     it('fills terminal from middle cell', function () {
       const tile = {x: 1, y: 1};
 
-      const figure = this._target(tile);
+      const figure = floodFill(this._cell, tile, null, null, this._terminal);
 
       const expected = [
         {x: 0, y: 0},
@@ -367,7 +356,7 @@ describe('figures', function () {
     it('fills terminal from edge cell', function () {
       const tile = {x: 1, y: 2};
 
-      const figure = this._target(tile);
+      const figure = floodFill(this._cell, tile, null, null, this._terminal);
 
       const expected = [
         {x: 0, y: 0},
@@ -386,7 +375,7 @@ describe('figures', function () {
     it('fills terminal from corner cell', function () {
       const tile = {x: 0, y: 0};
 
-      const figure = this._target(tile);
+      const figure = floodFill(this._cell, tile, null, null, this._terminal);
 
       const expected = [
         {x: 0, y: 0},
@@ -412,7 +401,7 @@ describe('figures', function () {
       this._terminal.update(verticalLine);
       const tile = {x: 0, y: 0};
 
-      const figure = this._target(tile);
+      const figure = floodFill(this._cell, tile, null, null, this._terminal);
 
       const expected = [
         {x: 0, y: 0},
@@ -432,7 +421,7 @@ describe('figures', function () {
       this._terminal.update(diag);
       const tile = {x: 0, y: 0};
 
-      const figure = this._target(tile);
+      const figure = floodFill(this._cell, tile, null, null, this._terminal);
 
       const expected = [
         {x: 0, y: 0},
@@ -446,7 +435,7 @@ describe('figures', function () {
       const tile = {x: 1, y: 1};
       this._terminal.update([{cell: new Cell(codepage.id('X')), ...tile}]);
 
-      const figure = this._target(tile);
+      const figure = floodFill(this._cell, tile, null, null, this._terminal);
 
       assertUnorderedFigure([tile], figure, this._cell);
     });
@@ -461,7 +450,7 @@ describe('figures', function () {
       this._terminal.update(verticalLine);
       const tile = {x: 1, y: 1};
 
-      const figure = this._target(tile);
+      const figure = floodFill(this._cell, tile, null, null, this._terminal);
 
       const expected = [
         {x: 1, y: 0},
@@ -481,7 +470,7 @@ describe('figures', function () {
       this._terminal.update(diag);
       const tile = {x: 0, y: 2};
 
-      const figure = this._target(tile);
+      const figure = floodFill(this._cell, tile, null, null, this._terminal);
 
       const expected = [
         {x: 0, y: 2},
@@ -502,12 +491,10 @@ describe('figures', function () {
               {x: 3, y: 3, cell},
             ];
       this._terminal.resize(5, 5);
-      // NOTE: reset target after resizing terminal
-      this._target = floodFill(this._cell, this._terminal);
       this._terminal.update(square);
       const tile = {x: 1, y: 1};
 
-      const figure = this._target(tile);
+      const figure = floodFill(this._cell, tile, null, null, this._terminal);
 
       const expected = [
         {x: 1, y: 1},
@@ -525,15 +512,13 @@ describe('figures', function () {
 
   describe('#rectangle', function () {
     beforeEach(function () {
-      this._terminal = new Terminal(7, 7);
       this._cell = new Cell(codepage.id('A'));
-      this._target = rectangle(this._cell, this._terminal);
     });
 
     it('creates a single tile figure', function () {
       const tile = {x: 3, y: 3};
 
-      const figure = this._target(tile, tile);
+      const figure = rectangle(this._cell, tile, tile);
 
       expect(figure).to.have.lengthOf(1);
       expect([...figure][0]).to.eql({cell: this._cell, ...tile});
@@ -543,7 +528,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 4, y: 3};
 
-      const figure = this._target(start, end);
+      const figure = rectangle(this._cell, start, end);
 
       const expected = [start, end];
       assertUnorderedFigure(expected, figure, this._cell);
@@ -553,7 +538,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 3, y: 4};
 
-      const figure = this._target(start, end);
+      const figure = rectangle(this._cell, start, end);
 
       const expected = [start, end];
       assertUnorderedFigure(expected, figure, this._cell);
@@ -563,7 +548,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 4, y: 4};
 
-      const figure = this._target(start, end);
+      const figure = rectangle(this._cell, start, end);
 
       const expected = [
         {x: 3, y: 3},
@@ -578,7 +563,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 5, y: 5};
 
-      const figure = this._target(start, end);
+      const figure = rectangle(this._cell, start, end);
 
       const expected = [
         {x: 3, y: 3},
@@ -597,7 +582,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 1, y: 1};
 
-      const figure = this._target(start, end);
+      const figure = rectangle(this._cell, start, end);
 
       const expected = [
         {x: 1, y: 1},
@@ -616,7 +601,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 6, y: 5};
 
-      const figure = this._target(start, end);
+      const figure = rectangle(this._cell, start, end);
 
       const expected = [
         {x: 3, y: 3},
@@ -637,7 +622,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 5, y: 6};
 
-      const figure = this._target(start, end);
+      const figure = rectangle(this._cell, start, end);
 
       const expected = [
         {x: 3, y: 3},
@@ -657,15 +642,13 @@ describe('figures', function () {
 
   describe('#filledRectangle', function () {
     beforeEach(function () {
-      this._terminal = new Terminal(7, 7);
       this._cell = new Cell(codepage.id('A'));
-      this._target = filledRectangle(this._cell, this._terminal);
     });
 
     it('creates a single tile figure', function () {
       const tile = {x: 3, y: 3};
 
-      const figure = this._target(tile, tile);
+      const figure = filledRectangle(this._cell, tile, tile);
 
       expect(figure).to.have.lengthOf(1);
       expect(figure[0]).to.eql({cell: this._cell, ...tile});
@@ -675,7 +658,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 4, y: 3};
 
-      const figure = this._target(start, end);
+      const figure = filledRectangle(this._cell, start, end);
 
       const expected = [start, end];
       assertUnorderedFigure(expected, figure, this._cell);
@@ -685,7 +668,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 3, y: 4};
 
-      const figure = this._target(start, end);
+      const figure = filledRectangle(this._cell, start, end);
 
       const expected = [start, end];
       assertUnorderedFigure(expected, figure, this._cell);
@@ -695,7 +678,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 4, y: 4};
 
-      const figure = this._target(start, end);
+      const figure = filledRectangle(this._cell, start, end);
 
       const expected = [
         {x: 3, y: 3},
@@ -710,7 +693,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 5, y: 5};
 
-      const figure = this._target(start, end);
+      const figure = filledRectangle(this._cell, start, end);
 
       const expected = [
         {x: 3, y: 3},
@@ -730,7 +713,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 1, y: 1};
 
-      const figure = this._target(start, end);
+      const figure = filledRectangle(this._cell, start, end);
 
       const expected = [
         {x: 1, y: 1},
@@ -750,7 +733,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 6, y: 5};
 
-      const figure = this._target(start, end);
+      const figure = filledRectangle(this._cell, start, end);
 
       const expected = [
         {x: 3, y: 3},
@@ -773,7 +756,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 5, y: 6};
 
-      const figure = this._target(start, end);
+      const figure = filledRectangle(this._cell, start, end);
 
       const expected = [
         {x: 3, y: 3},
@@ -797,13 +780,14 @@ describe('figures', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
       this._cell = new Cell(218);
-      this._target = boxRectangle(this._cell, this._terminal);
     });
 
     it('creates a single tile figure', function () {
       const tile = {x: 3, y: 3};
 
-      const figure = this._target(tile, tile);
+      const figure = boxRectangle(
+        this._cell, tile, tile, null, this._terminal
+      );
 
       expect(figure).to.have.lengthOf(1);
       expect([...figure][0]).to.eql({
@@ -816,7 +800,9 @@ describe('figures', function () {
       const start = {x: 3, y: 3, cell: this._cell.clone({glyphId: 196})},
             end = {x: 4, y: 3, cell: this._cell.clone({glyphId: 196})};
 
-      const figure = this._target(start, end);
+      const figure = boxRectangle(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [start, end];
       assertUnorderedFigure(expected, figure);
@@ -826,7 +812,9 @@ describe('figures', function () {
       const start = {x: 3, y: 3, cell: this._cell.clone({glyphId: 179})},
             end = {x: 3, y: 4, cell: this._cell.clone({glyphId: 179})};
 
-      const figure = this._target(start, end);
+      const figure = boxRectangle(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [start, end];
       assertUnorderedFigure(expected, figure);
@@ -836,7 +824,9 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 4, y: 4};
 
-      const figure = this._target(start, end);
+      const figure = boxRectangle(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 3, y: 3, cell: this._cell.clone({glyphId: 218})},
@@ -851,7 +841,9 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 5, y: 5};
 
-      const figure = this._target(start, end);
+      const figure = boxRectangle(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 3, y: 3, cell: this._cell.clone({glyphId: 218})},
@@ -868,11 +860,12 @@ describe('figures', function () {
 
     it('creates a 9-tile square (double)', function () {
       this._cell = new Cell(201);
-      this._target = boxRectangle(this._cell, this._terminal);
       const start = {x: 3, y: 3},
             end = {x: 5, y: 5};
 
-      const figure = this._target(start, end);
+      const figure = boxRectangle(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 3, y: 3, cell: this._cell.clone({glyphId: 201})},
@@ -889,11 +882,12 @@ describe('figures', function () {
 
     it('creates a 9-tile square (doubleH)', function () {
       this._cell = new Cell(213);
-      this._target = boxRectangle(this._cell, this._terminal);
       const start = {x: 3, y: 3},
             end = {x: 5, y: 5};
 
-      const figure = this._target(start, end);
+      const figure = boxRectangle(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 3, y: 3, cell: this._cell.clone({glyphId: 213})},
@@ -910,11 +904,12 @@ describe('figures', function () {
 
     it('creates a 9-tile square (doubleV)', function () {
       this._cell = new Cell(214);
-      this._target = boxRectangle(this._cell, this._terminal);
       const start = {x: 3, y: 3},
             end = {x: 5, y: 5};
 
-      const figure = this._target(start, end);
+      const figure = boxRectangle(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 3, y: 3, cell: this._cell.clone({glyphId: 214})},
@@ -931,11 +926,12 @@ describe('figures', function () {
 
     it('creates a 9-tile square (non-box)', function () {
       this._cell = new Cell(codepage.id('A'));
-      this._target = boxRectangle(this._cell, this._terminal);
       const start = {x: 3, y: 3},
             end = {x: 5, y: 5};
 
-      const figure = this._target(start, end);
+      const figure = boxRectangle(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 3, y: 3},
@@ -955,7 +951,9 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 5, y: 4};
 
-      const figure = this._target(start, end);
+      const figure = boxRectangle(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 3, y: 3, cell: this._cell.clone({glyphId: 218})},
@@ -973,7 +971,9 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 5, y: 4};
 
-      const figure = this._target(start, end);
+      const figure = boxRectangle(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 3, y: 3, cell: this._cell.clone({glyphId: 218})},
@@ -991,13 +991,12 @@ describe('figures', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
       this._cell = new Cell(codepage.id('A'));
-      this._target = ellipse(this._cell, this._terminal);
     });
 
     it('creates a single tile figure', function () {
       const tile = {x: 3, y: 3};
 
-      const figure = this._target(tile, tile);
+      const figure = ellipse(this._cell, tile, tile, null, this._terminal);
 
       expect(figure).to.have.lengthOf(1);
       expect([...figure][0]).to.eql({cell: this._cell, ...tile});
@@ -1007,7 +1006,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 3, y: 6};
 
-      const figure = this._target(start, end);
+      const figure = ellipse(this._cell, start, end, null, this._terminal);
 
       const expected = [
         {x: 3, y: 0},
@@ -1025,7 +1024,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 6, y: 3};
 
-      const figure = this._target(start, end);
+      const figure = ellipse(this._cell, start, end, null, this._terminal);
 
       const expected = [
         {x: 0, y: 3},
@@ -1043,7 +1042,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 4, y: 4};
 
-      const figure = this._target(start, end);
+      const figure = ellipse(this._cell, start, end, null, this._terminal);
 
       const expected = [
         {x: 2, y: 3},
@@ -1058,7 +1057,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 4, y: 6};
 
-      const figure = this._target(start, end);
+      const figure = ellipse(this._cell, start, end, null, this._terminal);
 
       const expected = [
         {x: 3, y: 0},
@@ -1081,7 +1080,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 6, y: 4};
 
-      const figure = this._target(start, end);
+      const figure = ellipse(this._cell, start, end, null, this._terminal);
 
       const expected = [
         {x: 0, y: 3},
@@ -1104,7 +1103,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 6, y: 6};
 
-      const figure = this._target(start, end);
+      const figure = ellipse(this._cell, start, end, null, this._terminal);
 
       const expected = [
         {x: 2, y: 0},
@@ -1131,7 +1130,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 0, y: 0};
 
-      const figure = this._target(start, end);
+      const figure = ellipse(this._cell, start, end, null, this._terminal);
 
       const expected = [
         {x: 2, y: 0},
@@ -1158,7 +1157,7 @@ describe('figures', function () {
       const start = {x: 0, y: 0},
             end = {x: 3, y: 3};
 
-      const figure = this._target(start, end);
+      const figure = ellipse(this._cell, start, end, null, this._terminal);
 
       const expected = [
         {x: 3, y: 0},
@@ -1174,7 +1173,7 @@ describe('figures', function () {
       const start = {x: 6, y: 6},
             end = {x: 3, y: 3};
 
-      const figure = this._target(start, end);
+      const figure = ellipse(this._cell, start, end, null, this._terminal);
 
       const expected = [
         {x: 6, y: 3},
@@ -1191,13 +1190,14 @@ describe('figures', function () {
     beforeEach(function () {
       this._terminal = new Terminal(7, 7);
       this._cell = new Cell(codepage.id('A'));
-      this._target = filledEllipse(this._cell, this._terminal);
     });
 
     it('creates a single tile figure', function () {
       const tile = {x: 3, y: 3};
 
-      const figure = this._target(tile, tile);
+      const figure = filledEllipse(
+        this._cell, tile, tile, null, this._terminal
+      );
 
       expect(figure).to.have.lengthOf(1);
       expect([...figure][0]).to.eql({cell: this._cell, ...tile});
@@ -1207,7 +1207,9 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 3, y: 6};
 
-      const figure = this._target(start, end);
+      const figure = filledEllipse(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 3, y: 0},
@@ -1225,7 +1227,9 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 6, y: 3};
 
-      const figure = this._target(start, end);
+      const figure = filledEllipse(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 0, y: 3},
@@ -1243,7 +1247,9 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 4, y: 4};
 
-      const figure = this._target(start, end);
+      const figure = filledEllipse(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 2, y: 3},
@@ -1259,7 +1265,9 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 4, y: 6};
 
-      const figure = this._target(start, end);
+      const figure = filledEllipse(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 3, y: 0},
@@ -1287,7 +1295,9 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 6, y: 4};
 
-      const figure = this._target(start, end);
+      const figure = filledEllipse(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 0, y: 3},
@@ -1315,7 +1325,9 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 6, y: 6};
 
-      const figure = this._target(start, end);
+      const figure = filledEllipse(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 2, y: 0},
@@ -1363,7 +1375,9 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 0, y: 0};
 
-      const figure = this._target(start, end);
+      const figure = filledEllipse(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 2, y: 0},
@@ -1411,7 +1425,9 @@ describe('figures', function () {
       const start = {x: 0, y: 0},
             end = {x: 3, y: 3};
 
-      const figure = this._target(start, end);
+      const figure = filledEllipse(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 0, y: 0},
@@ -1435,7 +1451,9 @@ describe('figures', function () {
       const start = {x: 6, y: 6},
             end = {x: 3, y: 3};
 
-      const figure = this._target(start, end);
+      const figure = filledEllipse(
+        this._cell, start, end, null, this._terminal
+      );
 
       const expected = [
         {x: 6, y: 3},
@@ -1458,15 +1476,13 @@ describe('figures', function () {
 
   describe('#lineSegment', function () {
     beforeEach(function () {
-      this._terminal = new Terminal(7, 7);
       this._cell = new Cell(codepage.id('A'));
-      this._target = lineSegment(this._cell, this._terminal);
     });
 
     it('creates a single tile figure', function () {
       const tile = {x: 3, y: 3};
 
-      const figure = this._target(tile, tile);
+      const figure = lineSegment(this._cell, tile, tile);
 
       expect(figure).to.have.lengthOf(1);
       expect([...figure][0]).to.eql({cell: this._cell, ...tile});
@@ -1476,7 +1492,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 3, y: 6};
 
-      const figure = this._target(start, end);
+      const figure = lineSegment(this._cell, start, end);
 
       const expected = [
         {x: 3, y: 3},
@@ -1491,7 +1507,7 @@ describe('figures', function () {
       const start = {x: 3, y: 3},
             end = {x: 6, y: 3};
 
-      const figure = this._target(start, end);
+      const figure = lineSegment(this._cell, start, end);
 
       const expected = [
         {x: 3, y: 3},
@@ -1506,7 +1522,7 @@ describe('figures', function () {
       const start = {x: 0, y: 0},
             end = {x: 6, y: 6};
 
-      const figure = this._target(start, end);
+      const figure = lineSegment(this._cell, start, end);
 
       const expected = [
         {x: 0, y: 0},
@@ -1524,7 +1540,7 @@ describe('figures', function () {
       const start = {x: 0, y: 6},
             end = {x: 6, y: 0};
 
-      const figure = this._target(start, end);
+      const figure = lineSegment(this._cell, start, end);
 
       const expected = [
         {x: 0, y: 6},
@@ -1542,7 +1558,7 @@ describe('figures', function () {
       const start = {x: 0, y: 0},
             end = {x: 6, y: 3};
 
-      const figure = this._target(start, end);
+      const figure = lineSegment(this._cell, start, end);
 
       const expected = [
         {x: 0, y: 0},
@@ -1560,7 +1576,7 @@ describe('figures', function () {
       const start = {x: 0, y: 6},
             end = {x: 6, y: 3};
 
-      const figure = this._target(start, end);
+      const figure = lineSegment(this._cell, start, end);
 
       const expected = [
         {x: 0, y: 6},
@@ -1581,8 +1597,7 @@ describe('figures', function () {
       this._cell = new Cell(
         codepage.id('A'), palette.id('#ff0000'), palette.id('#0000ff')
       );
-      this._target = textBuffer(this._cell, this._terminal)
-      this._figure = this._target();
+      this._figure = textBuffer(this._cell)
     });
 
     function assertBuffer(expected, srcCell, actual, expectedLength) {
@@ -1595,7 +1610,7 @@ describe('figures', function () {
     }
 
     it('returns existing active figure', function () {
-      const nextFigure = this._target(null, null, this._figure);
+      const nextFigure = textBuffer(this._cell, null, null, this._figure);
 
       expect(nextFigure).to.equal(this._figure);
     });
@@ -1746,32 +1761,36 @@ describe('figures', function () {
       this._cell = new Cell(
         codepage.id('X'), palette.id('#00ff00'), palette.id('#00ff00')
       );
-      this._target = replace(this._cell, this._terminal);
     });
 
     it('returns existing active figure', function () {
       const existingFigure = [];
 
-      const nextFigure = this._target(null, null, existingFigure);
+      const nextFigure = replace(
+        this._cell, null, null, existingFigure, this._terminal
+      );
 
       expect(nextFigure).to.equal(existingFigure);
     });
 
     it('does nothing if new cell matches target cell', function () {
-      this._target = replace(
+      const figure = replace(
         new Cell(
           codepage.id('b'), palette.id('#ff0000'), palette.id('#0000ff')
         ),
+        {x: 3, y: 1},
+        null,
+        null,
         this._terminal
       );
-
-      const figure = this._target({x: 3, y: 1});
 
       expect(figure).to.be.empty;
     });
 
     it('replaces default tiles', function () {
-      const figure = this._target({x: 0, y: 0});
+      const figure = replace(
+        this._cell, {x: 0, y: 0}, null, null, this._terminal
+      );
 
       const expected = [
         {x: 0, y: 0},
@@ -1783,7 +1802,9 @@ describe('figures', function () {
     });
 
     it('replaces basic glyph tiles', function () {
-      const figure = this._target({x: 0, y: 2});
+      const figure = replace(
+        this._cell, {x: 0, y: 2}, null, null, this._terminal
+      );
 
       const expected = [
         {x: 0, y: 2},
@@ -1794,7 +1815,9 @@ describe('figures', function () {
     });
 
     it('replaces single tile', function () {
-      const figure = this._target({x: 2, y: 0});
+      const figure = replace(
+        this._cell, {x: 2, y: 0}, null, null, this._terminal
+      );
 
       const expected = [
         {x: 2, y: 0},
