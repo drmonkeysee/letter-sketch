@@ -173,5 +173,4 @@ dist
 # Project
 #
 dist/
-assets/
 build_tmp/
