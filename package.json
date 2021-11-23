@@ -9,7 +9,7 @@
   "scripts": {
     "start": "parcel index.html",
     "test": "mocha",
-    "clean": "rm -rf dist .cache",
+    "clean": "rm -rf .parcel-cache dist",
     "scrub": "npm run clean && rm -r node_modules",
     "build": "parcel build index.html",
     "web-publish": "sh publish.sh"
