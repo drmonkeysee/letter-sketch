@@ -8,7 +8,7 @@ pub_dir=assets
 rm -rf $build_dir
 mkdir $build_dir
 npm run clean
-npm run build | tee /dev/stderr | awk 'NR > 6 {print $1}' | xargs -I {} cp -v {} $build_dir
+npm run build | tee /dev/stderr | awk 'NR > 9 {print $1}' | xargs -I {} cp -v {} $build_dir
 
 git checkout gh-pages
 rm -rf $pub_dir && mv -v $build_dir $pub_dir
