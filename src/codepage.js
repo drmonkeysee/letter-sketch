@@ -66,10 +66,10 @@ const CP437 = [
 ];
 
 export default {
-  *glyphs() {
+  * glyphs() {
     yield* CP437;
   },
-  *enumerate() {
+  * enumerate() {
     yield* CP437.entries();
   },
   glyph(id) {

@@ -9,25 +9,13 @@ export class Cell {
   }
 
   get glyphId() { return this._glyphId; }
-  set glyphId(value) {
-    this._glyphId = value === undefined || value === null
-                    ? codepage.SIGILS.CLEAR
-                    : value;
-  }
+  set glyphId(value) { this._glyphId = value ?? codepage.SIGILS.CLEAR; }
 
   get fgColorId() { return this._fgColorId; }
-  set fgColorId(value) {
-    this._fgColorId = value === undefined || value === null
-                      ? palette.COLORS.BLACK
-                      : value;
-  }
+  set fgColorId(value) { this._fgColorId = value ?? palette.COLORS.BLACK; }
 
   get bgColorId() { return this._bgColorId; }
-  set bgColorId(value) {
-    this._bgColorId = value === undefined || value === null
-                      ? palette.COLORS.WHITE
-                      : value;
-  }
+  set bgColorId(value) { this._bgColorId = value ?? palette.COLORS.WHITE; }
 
   isEmpty() {
     return this.glyphId === codepage.SIGILS.CLEAR;

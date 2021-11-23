@@ -18,11 +18,11 @@ function* neighbors(tile, dims) {
 
 function drawRect(start, end, lettertypeCell, plotStyle) {
   const [top, bottom] = start.y < end.y
-                        ? [start.y, end.y]
-                        : [end.y, start.y],
+                          ? [start.y, end.y]
+                          : [end.y, start.y],
         [left, right] = start.x < end.x
-                        ? [start.x, end.x]
-                        : [end.x, start.x];
+                          ? [start.x, end.x]
+                          : [end.x, start.x];
     return plotStyle(top, right, bottom, left, lettertypeCell);
 }
 
@@ -260,7 +260,7 @@ class ActiveFigure {
     this._tiles.push(tile);
   }
 
-  *[Symbol.iterator]() {
+  * [Symbol.iterator]() {
     yield* this._tiles;
   }
 
@@ -440,7 +440,7 @@ class TextFigure extends ActiveFigure {
   }
 
   // NOTE: newline sentinels are not part of the final figure
-  *[Symbol.iterator]() {
+  * [Symbol.iterator]() {
     yield* this._tiles.filter(t => t.cell !== codepage.SIGILS.NEWLINE);
   }
 }

@@ -15,8 +15,8 @@ export class Terminal {
     if (columns < MIN_DIM || columns > MAX_DIM
         || rows < MIN_DIM || rows > MAX_DIM) {
       const msg = 'Terminal dimensions must be in range '
-                  + `[${MIN_DIM}, ${MAX_DIM}];`
-                  + ` got arguments {columns: ${columns}, rows: ${rows}}`;
+                    + `[${MIN_DIM}, ${MAX_DIM}];`
+                    + ` got arguments {columns: ${columns}, rows: ${rows}}`;
       throw new Error(msg);
     }
 

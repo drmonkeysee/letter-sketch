@@ -33,10 +33,10 @@ function generatePalette() {
 const PALETTE = generatePalette();
 
 export default {
-  *cssColors() {
+  * cssColors() {
     yield* PALETTE;
   },
-  *enumerate() {
+  * enumerate() {
     yield* PALETTE.entries();
   },
   cssColor(id) {
