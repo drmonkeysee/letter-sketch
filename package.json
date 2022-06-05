@@ -29,17 +29,17 @@
   },
   "homepage": "https://github.com/drmonkeysee/letter-sketch#readme",
   "dependencies": {
-    "parcel": "^2.0.1",
-    "postcss": "^8.3.11",
+    "parcel": "^2.6.0",
+    "postcss": "^8.4.14",
     "precss": "^4.0.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.16.4",
-    "@babel/register": "^7.16.0",
-    "chai": "^4.3.4",
-    "core-js": "^3.19.1",
-    "mocha": "^9.1.3",
-    "sinon": "^12.0.1"
+    "@babel/preset-env": "^7.18.2",
+    "@babel/register": "^7.17.7",
+    "chai": "^4.3.6",
+    "core-js": "^3.22.8",
+    "mocha": "^10.0.0",
+    "sinon": "^14.0.0"
   },
   "private": true
 }
