@@ -29,15 +29,15 @@
   },
   "homepage": "https://github.com/drmonkeysee/letter-sketch#readme",
   "dependencies": {
-    "parcel": "^2.6.0",
+    "parcel": "^2.6.2",
     "postcss": "^8.4.14",
     "precss": "^4.0.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.18.2",
-    "@babel/register": "^7.17.7",
+    "@babel/preset-env": "^7.18.9",
+    "@babel/register": "^7.18.9",
     "chai": "^4.3.6",
-    "core-js": "^3.22.8",
+    "core-js": "^3.24.0",
     "mocha": "^10.0.0",
     "sinon": "^14.0.0"
   },
