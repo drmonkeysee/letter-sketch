@@ -1,5 +1,3 @@
-const COLOR_CHANNEL_MIN = 0x00, COLOR_CHANNEL_MAX = 0xff;
-
 function hexToRgb(hexString) {
   let r, g, b;
   if (hexString.length === 3) {
@@ -17,20 +15,27 @@ function hexToRgb(hexString) {
   return `rgb(${parseInt(r, 16)}, ${parseInt(g, 16)}, ${parseInt(b, 16)})`;
 }
 
-function generatePalette() {
-  const colorSteps = [COLOR_CHANNEL_MIN, 0x80, COLOR_CHANNEL_MAX],
-        colors = [];
-  for (const redStep of colorSteps) {
-    for (const greenStep of colorSteps) {
-      for (const blueStep of colorSteps) {
-        colors.push(`rgb(${redStep}, ${greenStep}, ${blueStep})`);
-      }
-    }
-  }
-  return colors;
-}
-
-const PALETTE = generatePalette();
+// NOTE: Basic 16-color Palette
+// https://en.wikipedia.org/wiki/Web_colors#Basic_colors
+// list taken from https://www.ditig.com/256-colors-cheat-sheet
+const PALETTE = [
+  'rgb(0, 0, 0)',       // Black
+  'rgb(128, 0, 0)',     // Maroon
+  'rgb(0, 128, 0)',     // Green
+  'rgb(128, 128, 0)',   // Olive
+  'rgb(0, 0, 128)',     // Navy
+  'rgb(128, 0, 128)',   // Purple
+  'rgb(0, 128, 128)',   // Teal
+  'rgb(192, 192, 192)', // Silver
+  'rgb(128, 128, 128)', // Gray
+  'rgb(255, 0, 0)',     // Red
+  'rgb(0, 255, 0)',     // Lime
+  'rgb(255, 255, 0)',   // Yellow
+  'rgb(0, 0, 255)',     // Blue
+  'rgb(255, 0, 255)',   // Fuchsia
+  'rgb(0, 255, 255)',   // Aqua
+  'rgb(255, 255, 255)', // White
+];
 
 export default {
   * cssColors() {
