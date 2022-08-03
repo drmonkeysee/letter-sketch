@@ -6,7 +6,7 @@ describe('#cssColor()', function () {
   it('returns expected value for id', function () {
     const result = palette.cssColor(5);
 
-    expect(result).to.equal('rgb(0, 128, 255)');
+    expect(result).to.equal('rgb(128, 0, 0)');
   });
 
   it('returns undefined if invalid id', function () {
@@ -18,7 +18,7 @@ describe('#cssColor()', function () {
 
 describe('#id()', function () {
   it('returns expected id for value', function () {
-    const result = palette.id('rgb(0, 128, 255)');
+    const result = palette.id('rgb(128, 0, 0)');
 
     expect(result).to.equal(5);
   });
@@ -30,7 +30,7 @@ describe('#id()', function () {
   });
 
   it('returns id for hex color', function () {
-    const result = palette.id('#80ff00');
+    const result = palette.id('#800080');
 
     expect(result).to.equal(15);
   });
@@ -38,7 +38,7 @@ describe('#id()', function () {
   it('returns id for short hex color', function () {
     const result = palette.id('#fff');
 
-    expect(result).to.equal(26);
+    expect(result).to.equal(0);
   });
 
   it('returns invalid id for malformed hex string', function () {
@@ -57,7 +57,7 @@ describe('#id()', function () {
 describe('COLORS', function () {
   describe('#black', function () {
     it('exists', function () {
-      expect(palette.COLORS.BLACK).to.equal(0);
+      expect(palette.COLORS.BLACK).to.equal(3);
     });
 
     it('matches expected css color', function () {
@@ -69,7 +69,7 @@ describe('COLORS', function () {
 
   describe('#white', function () {
     it('exists', function () {
-      expect(palette.COLORS.WHITE).to.equal(26);
+      expect(palette.COLORS.WHITE).to.equal(0);
     });
 
     it('matches expected css color', function () {

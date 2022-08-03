@@ -53,7 +53,7 @@ export default {
     return PALETTE.indexOf(color);
   },
   COLORS: {
-    BLACK: 0,
-    WHITE: PALETTE.length - 1,
+    BLACK: 3,
+    WHITE: 0,
   },
 };
