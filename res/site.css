@@ -62,49 +62,51 @@ body {
   }
 }
 
-#color-selections {
+#colors {
   width: 100px;
-  height: 100px;
   border: $border-thin $color-border-layout;
-  position: relative;
 
-  .selected {
-    outline: gold dotted 2px;
-  }
+  #color-selections {
+    height: 100px;
+    border-bottom: $border-thin $color-border-layout;
+    position: relative;
 
-  .tile-color {
-    width: calc(
-      $color-selection-dim - (2 * $color-selection-border-thickness)
-    );
-    height: calc(
-      $color-selection-dim - (2 * $color-selection-border-thickness)
-    );
-    position: absolute;
-    border: $color-selection-border-thickness solid $color-border-control;
+    .selected {
+      outline: gold dotted 2px;
+    }
 
-    hr {
-      border-top-color: $color-border-control;
+    .tile-color {
+      width: calc(
+        $color-selection-dim - (2 * $color-selection-border-thickness)
+      );
+      height: calc(
+        $color-selection-dim - (2 * $color-selection-border-thickness)
+      );
+      position: absolute;
+      border: $color-selection-border-thickness solid $color-border-control;
+
+      hr {
+        border-top-color: $color-border-control;
+      }
+    }
+
+    #background-selection {
+      bottom: $color-selection-offset;
+      right: $color-selection-offset;
+    }
+
+    #foreground-selection {
+      top: $color-selection-offset;
+      left: $color-selection-offset;
     }
   }
 
-  #background-selection {
-    bottom: $color-selection-offset;
-    right: $color-selection-offset;
-  }
+  #palette {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 
-  #foreground-selection {
-    top: $color-selection-offset;
-    left: $color-selection-offset;
-  }
-}
-
-#palette {
-  width: 100px;
-  display: grid;
-  border: $border-thin $color-border-layout;
-  grid-template-columns: repeat(2, 1fr);
-
-  .palette-cell {
-    height: 50px;
+    .palette-cell {
+      height: 50px;
+    }
   }
 }

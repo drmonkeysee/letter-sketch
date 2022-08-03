@@ -20,13 +20,15 @@
     <div id="sketchpad"></div>
     <span id="glyph-ruler"></span>
     <div id="letter-block"></div>
-    <div id="color-selections">
-      <div id="background-selection" class="color-selection tile-color">
+    <div id="colors">
+      <div id="color-selections">
+        <div id="background-selection" class="color-selection tile-color">
+        </div>
+        <div id="foreground-selection" class="color-selection tile-color">
+        </div>
       </div>
-      <div id="foreground-selection" class="color-selection tile-color">
-      </div>
+      <div id="palette"></div>
     </div>
-    <div id="palette"></div>
     <script src="src/main.js" type="module"></script>
     <script>
       window.addEventListener('load', e => lettersketch.start(window));
