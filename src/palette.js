@@ -17,24 +17,23 @@ function hexToRgb(hexString) {
 
 // NOTE: Basic 16-color Palette
 // https://en.wikipedia.org/wiki/Web_colors#Basic_colors
-// list taken from https://www.ditig.com/256-colors-cheat-sheet
 const PALETTE = [
-  'rgb(0, 0, 0)',       // Black
-  'rgb(128, 0, 0)',     // Maroon
-  'rgb(0, 128, 0)',     // Green
-  'rgb(128, 128, 0)',   // Olive
-  'rgb(0, 0, 128)',     // Navy
-  'rgb(128, 0, 128)',   // Purple
-  'rgb(0, 128, 128)',   // Teal
-  'rgb(192, 192, 192)', // Silver
-  'rgb(128, 128, 128)', // Gray
-  'rgb(255, 0, 0)',     // Red
-  'rgb(0, 255, 0)',     // Lime
-  'rgb(255, 255, 0)',   // Yellow
-  'rgb(0, 0, 255)',     // Blue
-  'rgb(255, 0, 255)',   // Fuchsia
-  'rgb(0, 255, 255)',   // Aqua
-  'rgb(255, 255, 255)', // White
+  hexToRgb('ffffff'),  // White
+  hexToRgb('c0c0c0'),  // Silver
+  hexToRgb('808080'),  // Gray
+  hexToRgb('000000'),  // Black
+  hexToRgb('ff0000'),  // Red
+  hexToRgb('800000'),  // Maroon
+  hexToRgb('ffff00'),  // Yellow
+  hexToRgb('808000'),  // Olive
+  hexToRgb('00ff00'),  // Lime
+  hexToRgb('008000'),  // Green
+  hexToRgb('00ffff'),  // Aqua
+  hexToRgb('008080'),  // Teal
+  hexToRgb('0000ff'),  // Blue
+  hexToRgb('000080'),  // Navy
+  hexToRgb('ff00ff'),  // Fuchsia
+  hexToRgb('800080'),  // Purple
 ];
 
 export default {
