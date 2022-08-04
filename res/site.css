@@ -14,7 +14,6 @@ body {
 #sketchpad {
   display: grid;
   outline: $pad-outline;
-  user-select: none;
 
   div {
     display: flex;
@@ -28,6 +27,7 @@ body {
 
     span {
       pointer-events: none;
+      user-select: none;
     }
   }
 }
@@ -63,16 +63,18 @@ body {
 }
 
 #colors {
-  width: 100px;
   border: $border-thin $color-border-layout;
+  display: flex;
+  width: fit-content;
 
   #color-selections {
-    height: 100px;
-    border-bottom: $border-thin $color-border-layout;
+    height: calc($color-selection-dim * 2);
+    width: calc($color-selection-dim * 2);
+    border-right: $border-thin $color-border-layout;
     position: relative;
 
     .selected {
-      outline: gold dotted 2px;
+      outline: gold dotted $color-selection-border-thickness;
     }
 
     .tile-color {
@@ -103,10 +105,11 @@ body {
 
   #palette {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(8, 1fr);
 
     .palette-cell {
-      height: 50px;
+      height: $color-selection-dim;
+      width: $color-selection-dim;
     }
   }
 }
