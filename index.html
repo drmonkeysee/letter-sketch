@@ -17,9 +17,6 @@
       <input id="row-count" name="row-count" type="number" min="10" max="100" required>
       <button disabled>Resize</button>
     </form>
-    <div id="sketchpad"></div>
-    <span id="glyph-ruler"></span>
-    <div id="letter-block"></div>
     <div id="colors">
       <div id="color-selections">
         <div id="background-selection" class="color-selection tile-color">
@@ -29,6 +26,9 @@
       </div>
       <div id="palette"></div>
     </div>
+    <div id="sketchpad"></div>
+    <span id="glyph-ruler"></span>
+    <div id="letter-block"></div>
     <script src="src/main.js" type="module"></script>
     <script>
       window.addEventListener('load', e => lettersketch.start(window));

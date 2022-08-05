@@ -3,9 +3,9 @@ $pad-outline: blue solid 1px;
 $border-thin: solid 1px;
 $color-border-control: gray;
 $color-border-layout: black;
-$color-selection-dim: 50px;
+$color-selection-dim: 25px;
 $color-selection-border-thickness: 2px;
-$color-selection-offset: 10px;
+$color-selection-offset: calc($color-selection-dim / 5);
 
 body {
   font: $default-font-size 'Courier New';
@@ -38,9 +38,8 @@ body {
 }
 
 #letter-block {
-  width: 400px;
   display: grid;
-  grid-template-columns: repeat(16, 1fr);
+  grid-template-columns: repeat(64, 1fr);
   border-left: $border-thin $color-border-control;
   border-top: $border-thin $color-border-control;
 
