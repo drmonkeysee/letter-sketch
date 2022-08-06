@@ -11,6 +11,21 @@ body {
   font: $default-font-size 'Courier New';
 }
 
+#control-bar {
+  display: flex;
+  align-items: center;
+  column-gap: 2em;
+}
+
+#sketchpad-controls {
+  font-size: 9pt;
+
+  input, button {
+    font-size: 8pt;
+    width: 5em;
+  }
+}
+
 #sketchpad {
   display: grid;
   outline: $pad-outline;
@@ -65,6 +80,7 @@ body {
   border: $border-thin $color-border-layout;
   display: flex;
   width: fit-content;
+  height: fit-content;
 
   #color-selections {
     height: calc($color-selection-dim * 2);

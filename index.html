@@ -7,24 +7,28 @@
   </head>
   <body>
     <div id="tool-selections"></div>
-    <form id="sketchpad-controls">
-      <label for="font-size">Font Size</label>
-      <input id="font-size" name="font-size" type="number" min="10" max="50" required>
-      <span>px</span>
-      <label for="column-count">Columns</label>
-      <input id="column-count" name="column-count" type="number" min="10" max="100" required>
-      <label for="row-count">Rows</label>
-      <input id="row-count" name="row-count" type="number" min="10" max="100" required>
-      <button disabled>Resize</button>
-    </form>
-    <div id="colors">
-      <div id="color-selections">
-        <div id="background-selection" class="color-selection tile-color">
+    <div id="control-bar">
+      <div id="colors">
+        <div id="color-selections">
+          <div id="background-selection" class="color-selection tile-color">
+          </div>
+          <div id="foreground-selection" class="color-selection tile-color">
+          </div>
         </div>
-        <div id="foreground-selection" class="color-selection tile-color">
-        </div>
+        <div id="palette"></div>
       </div>
-      <div id="palette"></div>
+      <form id="sketchpad-controls">
+        <label for="font-size">Font Size</label>
+        <input id="font-size" name="font-size" type="number" min="10" max="50" required>
+        <span>px</span>
+        <br>
+        <label for="column-count">Columns</label>
+        <input id="column-count" name="column-count" type="number" min="10" max="100" required>
+        <br>
+        <label for="row-count">Rows</label>
+        <input id="row-count" name="row-count" type="number" min="10" max="100" required>
+        <button disabled>Resize</button>
+      </form>
     </div>
     <div id="sketchpad"></div>
     <span id="glyph-ruler"></span>
