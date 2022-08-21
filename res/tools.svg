@@ -1,4 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" stroke="black">
-  <rect x="1" y="1" width="30" height="30" fill="none" />
-  <rect x="35" y="1" width="30" height="30" />
+  <rect x="1" y="1" width="44" height="44" fill="none" stroke="red" />
+  <rect x="45" y="1" width="44" height="44" fill="none" stroke="red" />
+  <rect x="89" y="1" width="44" height="44" fill="none" stroke="red" />
+  <rect x="133" y="1" width="44" height="44" fill="none" stroke="red" />
+  <rect x="1" y="45" width="44" height="44" fill="none" stroke="red" />
+  <rect x="45" y="45" width="44" height="44" fill="none" stroke="red" />
+  <rect x="89" y="45" width="44" height="44" fill="none" stroke="red" />
+  <rect x="133" y="45" width="44" height="44" fill="none" stroke="red" />
+  <rect x="1" y="89" width="44" height="44" fill="none" stroke="red" />
+  <rect x="45" y="89" width="44" height="44" fill="none" stroke="red" />
+  <rect x="89" y="89" width="44" height="44" fill="none" stroke="red" />
+  <rect x="133" y="89" width="44" height="44" fill="none" stroke="red" />
+  <rect x="1" y="133" width="44" height="44" fill="none" stroke="red" />
 </svg>

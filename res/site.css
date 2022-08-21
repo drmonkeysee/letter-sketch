@@ -1,14 +1,18 @@
 $default-font-size: 12pt;
 $pad-outline: blue solid 1px;
 $border-thin: solid 1px;
-$toolbar-element-dim: 25px;
-$toolbar-element-inset: 20px;
-$toolbar-element-inset: 20px;
-$toolbar-element-margin: calc(($toolbar-element-dim - $toolbar-element-inset) / 2);
+$tool-element-dim: 50px;
+$tool-element-inset: 44px;
+$tool-element-margin: calc(($tool-element-dim - $tool-element-inset) / 2);
 $color-border-control: gray;
+$color-element-dim: 25px;
 $color-border-layout: black;
 $color-selection-border-thickness: 2px;
-$color-selection-offset: calc($toolbar-element-dim / 5);
+$color-selection-offset: calc($color-element-dim / 5);
+$color-selector-dim: calc($color-element-dim * 2);
+$color-selection-dim: calc(
+  $color-element-dim - (2 * $color-selection-border-thickness)
+);
 
 body {
   font: $default-font-size 'Courier New';
@@ -25,18 +29,18 @@ body {
   }
 
   label {
-    border-left: $toolbar-element-dim solid aqua;
-    border-bottom: $toolbar-element-dim solid red;
+    border-left: $tool-element-dim solid aqua;
+    border-bottom: $tool-element-dim solid red;
     position: relative;
 
     &:before {
       content: "";
       position: absolute;
       background-color: yellow;
-      height: $toolbar-element-inset;
-      width: $toolbar-element-inset;
-      top: $toolbar-element-margin;
-      left: calc($toolbar-element-margin - $toolbar-element-dim);
+      height: $tool-element-inset;
+      width: $tool-element-inset;
+      top: $tool-element-margin;
+      left: calc($tool-element-margin - $tool-element-dim);
     }
   }
 
@@ -118,8 +122,8 @@ body {
   height: fit-content;
 
   #color-selections {
-    height: calc($toolbar-element-dim * 2);
-    width: calc($toolbar-element-dim * 2);
+    height: $color-selector-dim;
+    width: $color-selector-dim;
     border-right: $border-thin $color-border-layout;
     position: relative;
 
@@ -128,12 +132,8 @@ body {
     }
 
     .tile-color {
-      width: calc(
-        $toolbar-element-dim - (2 * $color-selection-border-thickness)
-      );
-      height: calc(
-        $toolbar-element-dim - (2 * $color-selection-border-thickness)
-      );
+      width: $color-selection-dim;
+      height: $color-selection-dim;
       position: absolute;
       border: $color-selection-border-thickness solid $color-border-control;
 
@@ -158,8 +158,8 @@ body {
     grid-template-columns: repeat(8, 1fr);
 
     .palette-cell {
-      height: $toolbar-element-dim;
-      width: $toolbar-element-dim;
+      height: $color-element-dim;
+      width: $color-element-dim;
     }
   }
 }
