@@ -21,7 +21,7 @@ export class ToolSelector extends View {
       radio.addEventListener('input', this._pickTool.bind(this));
       const label = this.doc.createElement('label');
       label.htmlFor = radio.id;
-      label.innerText = tool;
+      label.title = tool;
       this._toolSelector.appendChild(radio);
       this._toolSelector.appendChild(label);
       this._toolSelections.push(radio);

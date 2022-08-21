@@ -1,14 +1,49 @@
 $default-font-size: 12pt;
 $pad-outline: blue solid 1px;
 $border-thin: solid 1px;
+$toolbar-element-dim: 25px;
+$toolbar-element-inset: 20px;
+$toolbar-element-inset: 20px;
+$toolbar-element-margin: calc(($toolbar-element-dim - $toolbar-element-inset) / 2);
 $color-border-control: gray;
 $color-border-layout: black;
-$color-selection-dim: 25px;
 $color-selection-border-thickness: 2px;
-$color-selection-offset: calc($color-selection-dim / 5);
+$color-selection-offset: calc($toolbar-element-dim / 5);
 
 body {
   font: $default-font-size 'Courier New';
+}
+
+#tool-selections {
+  display: flex;
+  column-gap: 2px;
+  width: fit-content;
+  padding-bottom: 5px;
+
+  input {
+    display: none;
+  }
+
+  label {
+    border-left: $toolbar-element-dim solid aqua;
+    border-bottom: $toolbar-element-dim solid red;
+    position: relative;
+
+    &:before {
+      content: "";
+      position: absolute;
+      background-color: yellow;
+      height: $toolbar-element-inset;
+      width: $toolbar-element-inset;
+      top: $toolbar-element-margin;
+      left: calc($toolbar-element-margin - $toolbar-element-dim);
+    }
+  }
+
+  input:checked + label {
+    border-left-color: red;
+    border-bottom-color: aqua;
+  }
 }
 
 #control-bar {
@@ -83,8 +118,8 @@ body {
   height: fit-content;
 
   #color-selections {
-    height: calc($color-selection-dim * 2);
-    width: calc($color-selection-dim * 2);
+    height: calc($toolbar-element-dim * 2);
+    width: calc($toolbar-element-dim * 2);
     border-right: $border-thin $color-border-layout;
     position: relative;
 
@@ -94,10 +129,10 @@ body {
 
     .tile-color {
       width: calc(
-        $color-selection-dim - (2 * $color-selection-border-thickness)
+        $toolbar-element-dim - (2 * $color-selection-border-thickness)
       );
       height: calc(
-        $color-selection-dim - (2 * $color-selection-border-thickness)
+        $toolbar-element-dim - (2 * $color-selection-border-thickness)
       );
       position: absolute;
       border: $color-selection-border-thickness solid $color-border-control;
@@ -123,8 +158,8 @@ body {
     grid-template-columns: repeat(8, 1fr);
 
     .palette-cell {
-      height: $color-selection-dim;
-      width: $color-selection-dim;
+      height: $toolbar-element-dim;
+      width: $toolbar-element-dim;
     }
   }
 }
