@@ -38,6 +38,7 @@ body {
       position: absolute;
       background-color: white;
       background-repeat: no-repeat;
+      background-image: url("tools.svg");
       height: $tool-element-inset;
       width: $tool-element-inset;
       top: $tool-element-margin;
@@ -52,7 +53,7 @@ body {
     background-image: url("tools.svg#tool-rect");
   }
   #tool-fillRect:before {
-    background-image: url("tools.svg#tool-fill-rect");
+    background-image: url("tools.svg#tool-fillRect");
   }
 
   input:checked + label {

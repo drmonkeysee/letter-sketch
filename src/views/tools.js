@@ -23,8 +23,6 @@ export class ToolSelector extends View {
       label.htmlFor = radio.id;
       label.title = tool;
       label.id = `tool-${tool}`;
-      // TODO: make this work instead of hardcoding in css
-      //label.style.backgroundImage = `url("tools.svg#${label.id}")`;
       this._toolSelector.appendChild(radio);
       this._toolSelector.appendChild(label);
       this._toolSelections.push(radio);

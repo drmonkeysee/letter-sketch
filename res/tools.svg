@@ -1,21 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" stroke="black">
+<svg xmlns="http://www.w3.org/2000/svg" stroke="black" viewBox="0 0 100 50">
   <style>
     .sprite { display: none; }
     .sprite:target { display: inline; }
   </style>
 
-  <g id="tool-point" class="sprite">
-    <circle cx="22" cy="22" r="10" />
-  </g>
+  <circle id="tool-point" class="sprite" cx="22" cy="22" r="10" />
   <!-- brush -->
   <!-- box brush -->
   <!-- fill -->
-  <g id="tool-rect" class="sprite">
-    <rect x="5" y="5" width="35" height="35" fill="none" />
-  </g>
-  <g id="tool-fill-rect" class="sprite">
-    <rect x="5" y="5" width="35" height="35" fill="black" />
-  </g>
+  <rect id="tool-rect" x="5" y="5" width="35" height="35" fill="none" />
+  <rect id="tool-fillRect" class="sprite" x="5" y="5" width="35" height="35" fill="black" />
   <!-- box rect -->
   <!-- ellipse -->
   <!-- fill ellipse -->
@@ -23,4 +17,8 @@
   <!-- text -->
   <!-- swap -->
   <!-- eyedrop -->
+
+  <line x1="22" y1="0" x2="22" y2="45" stroke="blue" />
+  <line x1="0" y1="22" x2="45" y2="22" stroke="blue" />
+  <rect x="0" y="0" width="45" height="45" fill="none" stroke="red" />
 </svg>
