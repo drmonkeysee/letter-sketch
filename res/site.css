@@ -1,9 +1,9 @@
 $default-font-size: 12pt;
 $pad-outline: blue solid 1px;
 $border-thin: solid 1px;
-$tool-element-dim: 50px;
-$tool-element-inset: 44px;
-$tool-element-margin: calc(($tool-element-dim - $tool-element-inset) / 2);
+$tool-element-inset: 45px;
+$tool-element-margin: 3px;
+$tool-element-dim: calc($tool-element-inset + ($tool-element-margin * 2));
 $color-border-control: gray;
 $color-element-dim: 25px;
 $color-border-layout: black;
@@ -11,7 +11,7 @@ $color-selection-border-thickness: 2px;
 $color-selection-offset: calc($color-element-dim / 5);
 $color-selector-dim: calc($color-element-dim * 2);
 $color-selection-dim: calc(
-  $color-element-dim - (2 * $color-selection-border-thickness)
+  $color-element-dim - ($color-selection-border-thickness * 2)
 );
 
 body {
@@ -36,12 +36,23 @@ body {
     &:before {
       content: "";
       position: absolute;
-      background-color: yellow;
+      background-color: white;
+      background-repeat: no-repeat;
       height: $tool-element-inset;
       width: $tool-element-inset;
       top: $tool-element-margin;
       left: calc($tool-element-margin - $tool-element-dim);
     }
+  }
+
+  #tool-point:before {
+    background-image: url("tools.svg#tool-point");
+  }
+  #tool-rect:before {
+    background-image: url("tools.svg#tool-rect");
+  }
+  #tool-fillRect:before {
+    background-image: url("tools.svg#tool-fill-rect");
   }
 
   input:checked + label {
