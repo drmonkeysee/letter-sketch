@@ -1,7 +1,7 @@
 $default-font-size: 12pt;
 $pad-outline: blue solid 1px;
 $border-thin: solid 1px;
-$tool-element-inset: 45px;
+$tool-element-inset: 44px;
 $tool-element-margin: 3px;
 $tool-element-dim: calc($tool-element-inset + ($tool-element-margin * 2));
 $color-border-control: gray;
@@ -49,11 +49,32 @@ body {
   #tool-point:before {
     background-image: url("tools.svg#tool-point");
   }
+  #tool-brush:before {
+    background-image: url("tools.svg#tool-brush");
+  }
+  #tool-boxBrush:before {
+    background-image: url("tools.svg#tool-boxBrush");
+  }
   #tool-rect:before {
     background-image: url("tools.svg#tool-rect");
   }
   #tool-fillRect:before {
     background-image: url("tools.svg#tool-fillRect");
+  }
+  #tool-boxRect:before {
+    background-image: url("tools.svg#tool-boxRect");
+  }
+  #tool-ellipse:before {
+    background-image: url("tools.svg#tool-ellipse");
+  }
+  #tool-fillEllipse:before {
+    background-image: url("tools.svg#tool-fillEllipse");
+  }
+  #tool-line:before {
+    background-image: url("tools.svg#tool-line");
+  }
+  #tool-text:before {
+    background-image: url("tools.svg#tool-text");
   }
 
   input:checked + label {
