@@ -20,7 +20,7 @@ body {
 
 #tool-selections {
   display: flex;
-  column-gap: 2px;
+  column-gap: 1px;
   width: fit-content;
   padding-bottom: 5px;
 
@@ -54,6 +54,9 @@ body {
   }
   #tool-boxBrush:before {
     background-image: url("tools.svg#tool-boxBrush");
+  }
+  #tool-fill:before {
+    background-image: url("tools.svg#tool-fill");
   }
   #tool-rect:before {
     background-image: url("tools.svg#tool-rect");

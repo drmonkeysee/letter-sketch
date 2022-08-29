@@ -21,7 +21,11 @@
     <polyline points="20,8 20,22 22,22" fill="none" />
     <polyline points="34,22 34,36" fill="none" />
   </g>
-  <!-- fill -->
+  <g id="tool-fill" class="sprite" transform="rotate(45, 22, 22)">
+    <line x1="22" y1="5" x2="22" y2="20" stroke-width="3" />
+    <polyline points="22,20 22,26 32,26 32,30 29,30" fill="none" />
+    <line x1="14" y1="30" x2="30" y2="30" stroke-width="4" />
+  </g>
   <rect id="tool-rect" class="sprite" x="7" y="7" width="30" height="30" fill="none" />
   <rect id="tool-fillRect" class="sprite" x="7" y="7" width="30" height="30" fill="black" />
   <g id="tool-boxRect" class="sprite">
