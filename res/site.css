@@ -29,8 +29,8 @@ body {
   }
 
   label {
-    border-left: $tool-element-dim solid aqua;
-    border-bottom: $tool-element-dim solid red;
+    border-left: $tool-element-dim solid silver;
+    border-bottom: $tool-element-dim solid gray;
     position: relative;
 
     &:before {
@@ -87,8 +87,12 @@ body {
   }
 
   input:checked + label {
-    border-left-color: red;
-    border-bottom-color: aqua;
+    border-left-color: gray;
+    border-bottom-color: silver;
+
+    &:before {
+      background-color: aliceblue;
+    }
   }
 }
 
