@@ -76,6 +76,12 @@ body {
   #tool-text:before {
     background-image: url("tools.svg#tool-text");
   }
+  #tool-swap:before {
+    background-image: url("tools.svg#tool-swap");
+  }
+  #tool-eyedrop:before {
+    background-image: url("tools.svg#tool-eyedrop");
+  }
 
   input:checked + label {
     border-left-color: red;
