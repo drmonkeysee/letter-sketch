@@ -9,9 +9,9 @@ export default {
       currentTool: TOOLS.brush,
       lettertype: {
         cell: new Cell(codepage.SIGILS.DEFAULT),
-        fontSize: 24,
+        fontSize: 20,
       },
-      terminal: new Terminal(80, 20),
+      terminal: new Terminal(70, 22),
     };
   },
 };

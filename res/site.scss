@@ -18,6 +18,14 @@ body {
   font: $default-font-size 'Courier New';
 }
 
+#corner-section {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-basis: 20em;
+  flex-shrink: 0;
+}
+
 #tool-selections {
   display: flex;
   column-gap: 1px;
@@ -91,19 +99,21 @@ body {
     border-bottom-color: silver;
 
     &:before {
-      background-color: aliceblue;
+      background-color: aqua;
     }
   }
 }
 
-#control-bar {
+#toolbar {
   display: flex;
   align-items: center;
-  column-gap: 2em;
+  margin-left: 3px;
+  margin-bottom: 0.5em;
 }
 
 #sketchpad-controls {
   font-size: 9pt;
+  margin-right: 0.5em;
 
   input, button {
     font-size: 8pt;
@@ -111,9 +121,15 @@ body {
   }
 }
 
+#sketch-pane {
+  display: flex;
+  column-gap: 2px;
+  align-items: flex-start;
+}
+
 #sketchpad {
   display: grid;
-  outline: $pad-outline;
+  border: $pad-outline;
 
   div {
     display: flex;
@@ -139,9 +155,11 @@ body {
 
 #letter-block {
   display: grid;
-  grid-template-columns: repeat(64, 1fr);
+  grid-template-columns: repeat(16, 1fr);
   border-left: $border-thin $color-border-control;
   border-top: $border-thin $color-border-control;
+  flex-basis: 20em;
+  flex-shrink: 0;
 
   div {
     border-right: $border-thin $color-border-control;

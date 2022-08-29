@@ -7,33 +7,41 @@
   </head>
   <body>
     <img src="res/tools.svg">
-    <div id="tool-selections"></div>
-    <div id="control-bar">
-      <div id="colors">
-        <div id="color-selections">
-          <div id="background-selection" class="color-selection tile-color">
-          </div>
-          <div id="foreground-selection" class="color-selection tile-color">
-          </div>
-        </div>
-        <div id="palette"></div>
-      </div>
-      <form id="sketchpad-controls">
-        <label for="font-size">Font Size</label>
-        <input id="font-size" name="font-size" type="number" min="10" max="50" required>
-        <span>px</span>
-        <br>
-        <label for="column-count">Columns</label>
-        <input id="column-count" name="column-count" type="number" min="10" max="100" required>
-        <br>
-        <label for="row-count">Rows</label>
-        <input id="row-count" name="row-count" type="number" min="10" max="100" required>
-        <button disabled>Resize</button>
-      </form>
-    </div>
-    <div id="sketchpad"></div>
     <span id="glyph-ruler"></span>
-    <div id="letter-block"></div>
+    <div id="toolbar">
+      <div id="corner-section">
+        <img alt="letter-sketch" height="100" width="100">
+        <form id="sketchpad-controls">
+          <label for="font-size">Font Size</label>
+          <input id="font-size" name="font-size" type="number" min="10" max="50" required>
+          <span>px</span>
+          <br>
+          <label for="column-count">Columns</label>
+          <input id="column-count" name="column-count" type="number" min="10" max="100" required>
+          <br>
+          <label for="row-count">Rows</label>
+          <input id="row-count" name="row-count" type="number" min="10" max="100" required>
+          <br>
+          <button disabled>Resize</button>
+        </form>
+      </div>
+      <div>
+        <div id="tool-selections"></div>
+        <div id="colors">
+          <div id="color-selections">
+            <div id="background-selection" class="color-selection tile-color">
+            </div>
+            <div id="foreground-selection" class="color-selection tile-color">
+            </div>
+          </div>
+          <div id="palette"></div>
+        </div>
+      </div>
+    </div>
+    <div id="sketch-pane">
+      <div id="letter-block"></div>
+      <div id="sketchpad"></div>
+    </div>
     <script src="src/main.js" type="module"></script>
     <script>
       window.addEventListener('load', e => lettersketch.start(window));
