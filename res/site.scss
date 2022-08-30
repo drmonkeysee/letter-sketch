@@ -115,12 +115,22 @@ body {
   flex-basis: $left-pane-width;
   flex-shrink: 0;
   margin-right: 2px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1em;
+
+  h1 {
+    margin: 0;
+  }
+
+  sup, input, button {
+    font-size: 8pt;
+  }
 
   form {
     font-size: 9pt;
 
     input, button {
-      font-size: 8pt;
       width: 5em;
     }
   }

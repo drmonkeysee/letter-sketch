@@ -1,6 +1,7 @@
 import codepage from '../codepage.js';
 import {COMMANDS} from '../commands.js';
 import palette from '../palette.js';
+import {version} from '../../package.json';
 import {EVENTS} from '../refresh.js';
 import {View} from './view.js';
 
@@ -21,6 +22,9 @@ class Controls extends View {
   get rows() { return parseInt(this._inputControls[2].value, 10); }
 
   draw(initialState) {
+    const versionLabel = this.doc.getElementById('version');
+    versionLabel.textContent = `v${version}`;
+
     const termSize = initialState.terminal.dimensions;
     [initialState.fontSize, termSize.width, termSize.height]
       .forEach((v, i) => {
