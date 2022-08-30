@@ -6,26 +6,26 @@
     <link href="res/site.scss" rel="stylesheet">
   </head>
   <body>
-    <img src="res/tools.svg">
+    <!--<img src="res/tools.svg">-->
     <span id="glyph-ruler"></span>
-    <div id="toolbar">
-      <div id="corner-section">
-        <img alt="letter-sketch" height="100" width="100">
-        <form id="sketchpad-controls">
-          <label for="font-size">Font Size</label>
-          <input id="font-size" name="font-size" type="number" min="10" max="50" required>
-          <span>px</span>
-          <br>
-          <label for="column-count">Columns</label>
-          <input id="column-count" name="column-count" type="number" min="10" max="100" required>
-          <br>
-          <label for="row-count">Rows</label>
-          <input id="row-count" name="row-count" type="number" min="10" max="100" required>
-          <br>
-          <button disabled>Resize</button>
-        </form>
-      </div>
-      <div>
+    <section id="controlbar">
+      <form id="sketchpad-controls">
+        <label for="font-size">Font Size</label>
+        <input id="font-size" name="font-size" type="number" min="10" max="50" required>
+        <span>px</span>
+        <br>
+        <label for="column-count">Columns</label>
+        <input id="column-count" name="column-count" type="number" min="10" max="100" required>
+        <br>
+        <label for="row-count">Rows</label>
+        <input id="row-count" name="row-count" type="number" min="10" max="100" required>
+        <br>
+        <button disabled>Resize</button>
+      </form>
+      <div id="letter-block"></div>
+    </section>
+    <section id="sketch-pane">
+      <section id="toolbar">
         <div id="tool-selections"></div>
         <div id="colors">
           <div id="color-selections">
@@ -36,12 +36,9 @@
           </div>
           <div id="palette"></div>
         </div>
-      </div>
-    </div>
-    <div id="sketch-pane">
-      <div id="letter-block"></div>
+      </section>
       <div id="sketchpad"></div>
-    </div>
+    </section>
     <script src="src/main.js" type="module"></script>
     <script>
       window.addEventListener('load', e => lettersketch.start(window));

@@ -11,7 +11,7 @@ export default {
         cell: new Cell(codepage.SIGILS.DEFAULT),
         fontSize: 20,
       },
-      terminal: new Terminal(70, 22),
+      terminal: new Terminal(80, 25),
     };
   },
 };
