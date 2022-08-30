@@ -9,19 +9,21 @@
     <img src="res/tools.svg">
     <span id="glyph-ruler"></span>
     <section id="controlbar">
-      <form id="sketchpad-controls">
-        <label for="font-size">Font Size</label>
-        <input id="font-size" name="font-size" type="number" min="10" max="50" required>
-        <span>px</span>
-        <br>
-        <label for="column-count">Columns</label>
-        <input id="column-count" name="column-count" type="number" min="10" max="100" required>
-        <br>
-        <label for="row-count">Rows</label>
-        <input id="row-count" name="row-count" type="number" min="10" max="100" required>
-        <br>
-        <button disabled>Resize</button>
-      </form>
+      <section id="sketchpad-controls">
+        <form>
+          <label for="font-size">Font Size</label>
+          <input id="font-size" name="font-size" type="number" min="10" max="50" required>
+          <span>px</span>
+          <br>
+          <label for="column-count">Columns</label>
+          <input id="column-count" name="column-count" type="number" min="10" max="100" required>
+          <br>
+          <label for="row-count">Rows</label>
+          <input id="row-count" name="row-count" type="number" min="10" max="100" required>
+          <br>
+          <button disabled>Resize</button>
+        </form>
+      </section>
       <div id="letter-block"></div>
     </section>
     <section id="sketch-pane">

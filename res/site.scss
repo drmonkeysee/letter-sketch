@@ -13,6 +13,7 @@ $color-selector-dim: calc($color-element-dim * 2);
 $color-selection-dim: calc(
   $color-element-dim - ($color-selection-border-thickness * 2)
 );
+$left-pane-width: 10em;
 
 body {
   font: $default-font-size 'Courier New';
@@ -106,16 +107,22 @@ body {
 #toolbar {
   display: flex;
   column-gap: 2px;
-  width: 10em;
+  flex-basis: $left-pane-width;
+  flex-shrink: 0;
 }
 
 #sketchpad-controls {
-  font-size: 9pt;
-  margin-right: 0.6em;
+  flex-basis: $left-pane-width;
+  flex-shrink: 0;
+  margin-right: 2px;
 
-  input, button {
-    font-size: 8pt;
-    width: 5em;
+  form {
+    font-size: 9pt;
+
+    input, button {
+      font-size: 8pt;
+      width: 5em;
+    }
   }
 }
 
@@ -156,7 +163,7 @@ body {
   grid-template-columns: repeat(64, 1fr);
   border-left: $border-thin $color-border-control;
   border-top: $border-thin $color-border-control;
-  flex-basis: 60em;
+  flex-basis: 70em;
 
   div {
     border-right: $border-thin $color-border-control;
