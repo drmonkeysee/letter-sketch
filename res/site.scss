@@ -1,22 +1,94 @@
 $default-font-size: 12pt;
 $pad-outline: blue solid 1px;
 $border-thin: solid 1px;
+$widget-gap: 2px;
 $tool-element-inset: 44px;
 $tool-element-margin: 3px;
 $tool-element-dim: calc($tool-element-inset + ($tool-element-margin * 2));
 $color-border-control: gray;
 $color-element-dim: 25px;
 $color-border-layout: black;
-$color-selection-border-thickness: 2px;
 $color-selection-offset: calc($color-element-dim / 5);
 $color-selector-dim: calc($color-element-dim * 2);
-$color-selection-dim: calc(
-  $color-element-dim - ($color-selection-border-thickness * 2)
-);
+$color-selection-dim: calc($color-element-dim - ($widget-gap * 2));
 $left-pane-width: 10em;
 
 body {
   font: $default-font-size 'Courier New';
+}
+
+#glyph-ruler {
+  position: absolute;
+  visibility: hidden;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+
+  > div:first-child {
+    flex-basis: $left-pane-width;
+    flex-shrink: 0;
+    margin-right: $widget-gap;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1em;
+
+    h3 {
+      margin: 0;
+    }
+
+    sup, input, button {
+      font-size: 8pt;
+    }
+
+    form {
+      font-size: 9pt;
+
+      input, button {
+        width: 5em;
+      }
+    }
+  }
+}
+
+#letter-block {
+  display: grid;
+  grid-template-columns: repeat(64, 1fr);
+  border-left: $border-thin $color-border-control;
+  border-top: $border-thin $color-border-control;
+  flex-basis: 70em;
+
+  div {
+    border-right: $border-thin $color-border-control;
+    border-bottom: $border-thin $color-border-control;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc($default-font-size * 2);
+
+    span {
+      pointer-events: none;
+    }
+  }
+
+  .selected {
+    background-color: aqua;
+  }
+}
+
+.main {
+  display: flex;
+  column-gap: $widget-gap;
+  align-items: flex-start;
+
+  > div:first-child {
+    display: flex;
+    column-gap: $widget-gap;
+    flex-basis: $left-pane-width;
+    flex-shrink: 0;
+  }
 }
 
 #tool-selections {
@@ -98,123 +170,28 @@ body {
   }
 }
 
-#controlbar {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5em;
-}
-
-#toolbar {
-  display: flex;
-  column-gap: 2px;
-  flex-basis: $left-pane-width;
-  flex-shrink: 0;
-}
-
-#sketchpad-controls {
-  flex-basis: $left-pane-width;
-  flex-shrink: 0;
-  margin-right: 2px;
-  display: flex;
-  flex-direction: column;
-  row-gap: 1em;
-
-  h1 {
-    margin: 0;
-  }
-
-  sup, input, button {
-    font-size: 8pt;
-  }
-
-  form {
-    font-size: 9pt;
-
-    input, button {
-      width: 5em;
-    }
-  }
-}
-
-#sketch-pane {
-  display: flex;
-  column-gap: 2px;
-  align-items: flex-start;
-}
-
-#sketchpad {
-  display: grid;
-  border: $pad-outline;
-
-  div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &:hover {
-      outline: $pad-outline;
-      opacity: 0.8;
-    }
-
-    span {
-      pointer-events: none;
-      user-select: none;
-    }
-  }
-}
-
-#glyph-ruler {
-  position: absolute;
-  visibility: hidden;
-}
-
-#letter-block {
-  display: grid;
-  grid-template-columns: repeat(64, 1fr);
-  border-left: $border-thin $color-border-control;
-  border-top: $border-thin $color-border-control;
-  flex-basis: 70em;
-
-  div {
-    border-right: $border-thin $color-border-control;
-    border-bottom: $border-thin $color-border-control;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: calc($default-font-size * 2);
-
-    span {
-      pointer-events: none;
-    }
-  }
-
-  .selected {
-    background-color: aqua;
-  }
-}
-
-#colors {
+.colors {
   border: $border-thin $color-border-layout;
   display: flex;
   flex-direction: column;
   width: fit-content;
   height: fit-content;
 
-  #color-selections {
+  .color-selections {
     height: $color-selector-dim;
     width: $color-selector-dim;
     border-bottom: $border-thin $color-border-layout;
     position: relative;
 
     .selected {
-      outline: gold dotted $color-selection-border-thickness;
+      outline: gold dotted $widget-gap;
     }
 
     .tile-color {
       width: $color-selection-dim;
       height: $color-selection-dim;
       position: absolute;
-      border: $color-selection-border-thickness solid $color-border-control;
+      border: $widget-gap solid $color-border-control;
 
       hr {
         border-top-color: $color-border-control;
@@ -239,6 +216,27 @@ body {
     .palette-cell {
       height: $color-element-dim;
       width: $color-element-dim;
+    }
+  }
+}
+
+#sketchpad {
+  display: grid;
+  border: $pad-outline;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      outline: $pad-outline;
+      opacity: 0.8;
+    }
+
+    span {
+      pointer-events: none;
+      user-select: none;
     }
   }
 }
