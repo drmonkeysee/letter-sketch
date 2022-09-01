@@ -180,6 +180,10 @@ export function isBoxChar(glyphId) {
   return Boolean(getLineSet(glyphId));
 }
 
+export function firstBoxId() {
+  return Number.parseInt(Object.keys(SINGLE_LINES)[0], 10);
+}
+
 export function hasAttractor(glyphId, direction) {
   return Boolean(getLineSet(glyphId)?.hasAttractor(glyphId, direction));
 }

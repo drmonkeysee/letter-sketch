@@ -1,4 +1,4 @@
-import {isBoxChar} from '../boxchars.js';
+import {firstBoxId, isBoxChar} from '../boxchars.js';
 import codepage from '../codepage.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
@@ -46,6 +46,16 @@ export class LetterBlock extends View {
 
   _refreshGlyph(update) {
     const glyphId = update.glyphId;
+    if (this._selectable === boxSelectable) {
+      this._lastBoxGlyph = glyphId;
+    } else {
+      this._lastGlyph = glyphId;
+      // NOTE: sync regular and box selections if in regular mode and
+      // selecting a box char.
+      if (isBoxChar(glyphId)) {
+        this._lastBoxGlyph = glyphId;
+      }
+    }
     for (const cell of this._block.children) {
       if (cell.firstElementChild.dataset.id === glyphId.toString()) {
         this._selectedBlock.classList.remove('selected');
@@ -57,12 +67,23 @@ export class LetterBlock extends View {
   }
 
   _updateSelectionMode(update) {
-    const selectable = update.name === 'boxBrush' || update.name === 'boxRect'
-                        ? boxSelectable
-                        : allSelectable;
+    let selectable, newGlyph;
+    // TODO: move this condition to tools
+    if (update.name === 'boxBrush' || update.name === 'boxRect') {
+      selectable = boxSelectable;
+      newGlyph = this._lastBoxGlyph ?? firstBoxId();
+    } else {
+      selectable = allSelectable;
+      newGlyph = this._lastGlyph ?? codepage.SIGILS.DEFAULT;
+    }
     if (selectable !== this._selectable) {
       this._selectable = selectable;
       this._applySelectionPredicate();
+    }
+    // NOTE: only set back to previous glyph if the pre-box-mode selection
+    // wasn't already in the box char range.
+    if (!isBoxChar(this._lastGlyph)) {
+      this.dispatch.command(COMMANDS.setGlyph, newGlyph);
     }
   }
 

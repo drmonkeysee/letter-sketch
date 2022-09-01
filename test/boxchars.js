@@ -1,7 +1,8 @@
 import {expect} from 'chai';
 
 import {
-  DIRECTIONS, getLineSet, hasAttractor, interpolateLineSet, isBoxChar,
+  DIRECTIONS, firstBoxId, getLineSet, hasAttractor, interpolateLineSet,
+  isBoxChar,
 } from '../src/boxchars.js';
 
 describe('DIRECTIONS', function () {
@@ -311,6 +312,14 @@ describe('#isBoxChar()', function () {
     const result = isBoxChar(196);
 
     expect(result).to.be.true;
+  });
+});
+
+describe('#firstBoxId()', function() {
+  it('returns the glyph id of the first box char', function () {
+    const result = firstBoxId();
+
+    expect(result).to.equal(179);
   });
 });
 
