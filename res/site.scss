@@ -49,6 +49,13 @@ body {
       input, button {
         width: 5em;
       }
+
+      label[for=column-count] {
+        margin-right: 1.2em;
+      }
+      label[for=row-count] {
+        margin-right: 3em;
+      }
     }
   }
 
