@@ -1,4 +1,4 @@
-import {firstBoxId, isBoxChar} from '../boxchars.js';
+import {FIRST_BOX_ID, isBoxChar} from '../boxchars.js';
 import codepage from '../codepage.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
@@ -71,7 +71,7 @@ export class LetterBlock extends View {
     // TODO: move this condition to tools
     if (update.name === 'boxBrush' || update.name === 'boxRect') {
       selectable = boxSelectable;
-      newGlyph = this._lastBoxGlyph ?? firstBoxId();
+      newGlyph = this._lastBoxGlyph ?? FIRST_BOX_ID;
     } else {
       selectable = allSelectable;
       newGlyph = this._lastGlyph ?? codepage.SIGILS.DEFAULT;
