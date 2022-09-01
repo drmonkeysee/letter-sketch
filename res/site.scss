@@ -51,35 +51,35 @@ body {
       }
     }
   }
-}
 
-#letter-block {
-  display: grid;
-  grid-template-columns: repeat(64, 1fr);
-  border-left: $border-thin $color-border-control;
-  border-top: $border-thin $color-border-control;
-  flex-basis: 70em;
-  cursor: pointer;
+  #letter-block {
+    display: grid;
+    grid-template-columns: repeat(64, 1fr);
+    border-left: $border-thin $color-border-control;
+    border-top: $border-thin $color-border-control;
+    flex-basis: 70em;
+    cursor: pointer;
 
-  div {
-    border-right: $border-thin $color-border-control;
-    border-bottom: $border-thin $color-border-control;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: calc($default-font-size * 2);
+    div {
+      border-right: $border-thin $color-border-control;
+      border-bottom: $border-thin $color-border-control;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc($default-font-size * 2);
 
-    &.disabled {
-      color: silver;
-      cursor: auto;
-    }
+      &.disabled {
+        color: silver;
+        cursor: auto;
+      }
 
-    &.selected {
-      background-color: aqua;
-    }
+      &.selected {
+        background-color: aqua;
+      }
 
-    span {
-      pointer-events: none;
+      span {
+        pointer-events: none;
+      }
     }
   }
 }
@@ -95,158 +95,158 @@ body {
     flex-basis: $left-pane-width;
     flex-shrink: 0;
   }
-}
 
-#tool-selections {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  width: fit-content;
-  padding-bottom: 5px;
+  #tool-selections {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    width: fit-content;
+    padding-bottom: 5px;
 
-  input {
-    display: none;
-  }
-
-  label {
-    border-left: $tool-element-dim solid silver;
-    border-bottom: $tool-element-dim solid gray;
-    position: relative;
-    cursor: pointer;
-
-    &:before {
-      content: "";
-      position: absolute;
-      background-color: white;
-      background-repeat: no-repeat;
-      background-image: url("tools.svg");
-      height: $tool-element-inset;
-      width: $tool-element-inset;
-      top: $tool-element-margin;
-      left: calc($tool-element-margin - $tool-element-dim);
-    }
-  }
-
-  #tool-point:before {
-    background-image: url("tools.svg#tool-point");
-  }
-  #tool-brush:before {
-    background-image: url("tools.svg#tool-brush");
-  }
-  #tool-boxBrush:before {
-    background-image: url("tools.svg#tool-boxBrush");
-  }
-  #tool-fill:before {
-    background-image: url("tools.svg#tool-fill");
-  }
-  #tool-rect:before {
-    background-image: url("tools.svg#tool-rect");
-  }
-  #tool-fillRect:before {
-    background-image: url("tools.svg#tool-fillRect");
-  }
-  #tool-boxRect:before {
-    background-image: url("tools.svg#tool-boxRect");
-  }
-  #tool-ellipse:before {
-    background-image: url("tools.svg#tool-ellipse");
-  }
-  #tool-fillEllipse:before {
-    background-image: url("tools.svg#tool-fillEllipse");
-  }
-  #tool-line:before {
-    background-image: url("tools.svg#tool-line");
-  }
-  #tool-text:before {
-    background-image: url("tools.svg#tool-text");
-  }
-  #tool-swap:before {
-    background-image: url("tools.svg#tool-swap");
-  }
-  #tool-eyedrop:before {
-    background-image: url("tools.svg#tool-eyedrop");
-  }
-
-  input:checked + label {
-    border-left-color: gray;
-    border-bottom-color: silver;
-
-    &:before {
-      background-color: aqua;
-    }
-  }
-}
-
-.colors {
-  border: $border-thin $color-border-layout;
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-  height: fit-content;
-
-  .color-selections {
-    height: $color-selector-dim;
-    width: $color-selector-dim;
-    border-bottom: $border-thin $color-border-layout;
-    position: relative;
-
-    .selected {
-      outline: gold dotted $widget-gap;
+    input {
+      display: none;
     }
 
-    .tile-color {
-      width: $color-selection-dim;
-      height: $color-selection-dim;
-      position: absolute;
-      border: $widget-gap solid $color-border-control;
+    label {
+      border-left: $tool-element-dim solid silver;
+      border-bottom: $tool-element-dim solid gray;
+      position: relative;
+      cursor: pointer;
 
-      hr {
-        border-top-color: $color-border-control;
+      &:before {
+        content: "";
+        position: absolute;
+        background-color: white;
+        background-repeat: no-repeat;
+        background-image: url("tools.svg");
+        height: $tool-element-inset;
+        width: $tool-element-inset;
+        top: $tool-element-margin;
+        left: calc($tool-element-margin - $tool-element-dim);
       }
     }
 
-    #background-selection {
-      bottom: $color-selection-offset;
-      right: $color-selection-offset;
-      cursor: pointer;
+    #tool-point:before {
+      background-image: url("tools.svg#tool-point");
+    }
+    #tool-brush:before {
+      background-image: url("tools.svg#tool-brush");
+    }
+    #tool-boxBrush:before {
+      background-image: url("tools.svg#tool-boxBrush");
+    }
+    #tool-fill:before {
+      background-image: url("tools.svg#tool-fill");
+    }
+    #tool-rect:before {
+      background-image: url("tools.svg#tool-rect");
+    }
+    #tool-fillRect:before {
+      background-image: url("tools.svg#tool-fillRect");
+    }
+    #tool-boxRect:before {
+      background-image: url("tools.svg#tool-boxRect");
+    }
+    #tool-ellipse:before {
+      background-image: url("tools.svg#tool-ellipse");
+    }
+    #tool-fillEllipse:before {
+      background-image: url("tools.svg#tool-fillEllipse");
+    }
+    #tool-line:before {
+      background-image: url("tools.svg#tool-line");
+    }
+    #tool-text:before {
+      background-image: url("tools.svg#tool-text");
+    }
+    #tool-swap:before {
+      background-image: url("tools.svg#tool-swap");
+    }
+    #tool-eyedrop:before {
+      background-image: url("tools.svg#tool-eyedrop");
     }
 
-    #foreground-selection {
-      top: $color-selection-offset;
-      left: $color-selection-offset;
-      cursor: pointer;
+    input:checked + label {
+      border-left-color: gray;
+      border-bottom-color: silver;
+
+      &:before {
+        background-color: aqua;
+      }
     }
   }
 
-  #palette {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    cursor: pointer;
-
-    .palette-cell {
-      height: $color-element-dim;
-      width: $color-element-dim;
-    }
-  }
-}
-
-#sketchpad {
-  display: grid;
-  border: $pad-outline;
-
-  div {
+  .colors {
+    border: $border-thin $color-border-layout;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    width: fit-content;
+    height: fit-content;
 
-    &:hover {
-      outline: $pad-outline;
-      opacity: 0.8;
+    .color-selections {
+      height: $color-selector-dim;
+      width: $color-selector-dim;
+      border-bottom: $border-thin $color-border-layout;
+      position: relative;
+
+      .selected {
+        outline: gold dotted $widget-gap;
+      }
+
+      .tile-color {
+        width: $color-selection-dim;
+        height: $color-selection-dim;
+        position: absolute;
+        border: $widget-gap solid $color-border-control;
+
+        hr {
+          border-top-color: $color-border-control;
+        }
+      }
+
+      #background-selection {
+        bottom: $color-selection-offset;
+        right: $color-selection-offset;
+        cursor: pointer;
+      }
+
+      #foreground-selection {
+        top: $color-selection-offset;
+        left: $color-selection-offset;
+        cursor: pointer;
+      }
     }
 
-    span {
-      pointer-events: none;
-      user-select: none;
+    #palette {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      cursor: pointer;
+
+      .palette-cell {
+        height: $color-element-dim;
+        width: $color-element-dim;
+      }
+    }
+  }
+
+  #sketchpad {
+    display: grid;
+    border: $pad-outline;
+
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        outline: $pad-outline;
+        opacity: 0.8;
+      }
+
+      span {
+        pointer-events: none;
+        user-select: none;
+      }
     }
   }
 }
