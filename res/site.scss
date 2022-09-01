@@ -69,13 +69,18 @@ body {
     align-items: center;
     height: calc($default-font-size * 2);
 
+    &.disabled {
+      color: silver;
+      cursor: auto;
+    }
+
+    &.selected {
+      background-color: aqua;
+    }
+
     span {
       pointer-events: none;
     }
-  }
-
-  .selected {
-    background-color: aqua;
   }
 }
 

@@ -20,6 +20,7 @@ export class LetterBlock extends View {
 
       if (id === initialState.glyphId) {
         blockCell.className = 'selected';
+        this._selectedBlock = blockCell;
       }
 
       blockCell.addEventListener('click', this._pickGlyph.bind(this));
@@ -34,14 +35,22 @@ export class LetterBlock extends View {
   _refreshGlyph(update) {
     const glyphId = update.glyphId;
     for (const cell of this._block.children) {
-      cell.className = cell.firstElementChild.dataset.id === glyphId.toString()
-                        ? 'selected'
-                        : '';
+      if (cell.firstElementChild.dataset.id === glyphId.toString()) {
+        this._selectedBlock.classList.remove('selected');
+        cell.className = 'selected';
+        this._selectedBlock = cell;
+        break;
+      }
     }
   }
 
   _pickGlyph(event) {
-    const glyphId = parseInt(event.target.firstElementChild.dataset.id, 10);
-    this.dispatch.command(COMMANDS.setGlyph, glyphId);
+    const target = event.target;
+    if (target.classList.contains('disabled')) {
+      event.preventDefault();
+    } else {
+      const glyphId = parseInt(target.firstElementChild.dataset.id, 10);
+      this.dispatch.command(COMMANDS.setGlyph, glyphId);
+    }
   }
 }
