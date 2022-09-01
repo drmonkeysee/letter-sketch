@@ -238,6 +238,7 @@ body {
   #sketchpad {
     display: grid;
     border: $pad-outline;
+    padding: 1px;
 
     div {
       display: flex;
