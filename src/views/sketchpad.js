@@ -112,8 +112,7 @@ export class SketchPad extends View {
     const {width, height} = this._ruler.getBoundingClientRect();
     console.log('Font dims: %o', dims);
     console.log('Bounding rect: %o', {width, height});
-    // NOTE: round to the nearest pixel to close rounding gaps
-    return {width: Math.round(width), height: Math.round(height)};
+    return {width: Math.floor(width), height: Math.floor(height)};
   }
 
   _handleGesture(event) {
