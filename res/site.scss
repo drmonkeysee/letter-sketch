@@ -59,6 +59,7 @@ body {
   border-left: $border-thin $color-border-control;
   border-top: $border-thin $color-border-control;
   flex-basis: 70em;
+  cursor: pointer;
 
   div {
     border-right: $border-thin $color-border-control;
@@ -106,6 +107,7 @@ body {
     border-left: $tool-element-dim solid silver;
     border-bottom: $tool-element-dim solid gray;
     position: relative;
+    cursor: pointer;
 
     &:before {
       content: "";
@@ -201,17 +203,20 @@ body {
     #background-selection {
       bottom: $color-selection-offset;
       right: $color-selection-offset;
+      cursor: pointer;
     }
 
     #foreground-selection {
       top: $color-selection-offset;
       left: $color-selection-offset;
+      cursor: pointer;
     }
   }
 
   #palette {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    cursor: pointer;
 
     .palette-cell {
       height: $color-element-dim;
