@@ -132,44 +132,44 @@ body {
       }
     }
 
-    #tool-point:before {
-      background-image: url("tools.svg#tool-point");
+    .tool-point:before {
+      background-image: url("tools.svg#point");
     }
-    #tool-brush:before {
-      background-image: url("tools.svg#tool-brush");
+    .tool-brush:before {
+      background-image: url("tools.svg#brush");
     }
-    #tool-boxBrush:before {
-      background-image: url("tools.svg#tool-boxBrush");
+    .tool-boxBrush:before {
+      background-image: url("tools.svg#boxBrush");
     }
-    #tool-fill:before {
-      background-image: url("tools.svg#tool-fill");
+    .tool-fill:before {
+      background-image: url("tools.svg#fill");
     }
-    #tool-rect:before {
-      background-image: url("tools.svg#tool-rect");
+    .tool-rect:before {
+      background-image: url("tools.svg#rect");
     }
-    #tool-fillRect:before {
-      background-image: url("tools.svg#tool-fillRect");
+    .tool-fillRect:before {
+      background-image: url("tools.svg#fillRect");
     }
-    #tool-boxRect:before {
-      background-image: url("tools.svg#tool-boxRect");
+    .tool-boxRect:before {
+      background-image: url("tools.svg#boxRect");
     }
-    #tool-ellipse:before {
-      background-image: url("tools.svg#tool-ellipse");
+    .tool-ellipse:before {
+      background-image: url("tools.svg#ellipse");
     }
-    #tool-fillEllipse:before {
-      background-image: url("tools.svg#tool-fillEllipse");
+    .tool-fillEllipse:before {
+      background-image: url("tools.svg#fillEllipse");
     }
-    #tool-line:before {
-      background-image: url("tools.svg#tool-line");
+    .tool-line:before {
+      background-image: url("tools.svg#line");
     }
-    #tool-text:before {
-      background-image: url("tools.svg#tool-text");
+    .tool-text:before {
+      background-image: url("tools.svg#text");
     }
-    #tool-swap:before {
-      background-image: url("tools.svg#tool-swap");
+    .tool-swap:before {
+      background-image: url("tools.svg#swap");
     }
-    #tool-eyedrop:before {
-      background-image: url("tools.svg#tool-eyedrop");
+    .tool-eyedrop:before {
+      background-image: url("tools.svg#eyedrop");
     }
 
     input:checked + label {
