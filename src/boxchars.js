@@ -176,6 +176,10 @@ export function getLineSet(glyphId) {
   return null;
 }
 
+export function isBoxChar(glyphId) {
+  return Boolean(getLineSet(glyphId));
+}
+
 export function hasAttractor(glyphId, direction) {
   return Boolean(getLineSet(glyphId)?.hasAttractor(glyphId, direction));
 }

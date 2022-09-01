@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 
 import {
-  DIRECTIONS, getLineSet, hasAttractor, interpolateLineSet,
+  DIRECTIONS, getLineSet, hasAttractor, interpolateLineSet, isBoxChar,
 } from '../src/boxchars.js';
 
 describe('DIRECTIONS', function () {
@@ -297,6 +297,20 @@ describe('#getLineSet()', function () {
         expect(result).to.be.false;
       });
     });
+  });
+});
+
+describe('#isBoxChar()', function () {
+  it('returns false for a non-box glyph', function () {
+    const result = isBoxChar(41);
+
+    expect(result).to.be.false;
+  });
+
+  it('returns true for a box glyph', function () {
+    const result = isBoxChar(196);
+
+    expect(result).to.be.true;
   });
 });
 
