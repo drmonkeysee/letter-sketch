@@ -2,7 +2,6 @@ import {expect} from 'chai';
 import sinon from 'sinon';
 
 import {CommandDispatcher, COMMANDS} from '../src/commands.js';
-import * as nmModule from '../src/namemap.js';
 import {EVENTS} from '../src/refresh.js';
 import * as toolModule from '../src/tools.js';
 
@@ -11,10 +10,12 @@ describe('CommandDispatcher', function () {
     beforeEach(function () {
       this.command = sinon.fake.returns('testNotification');
       this.bindCmd = sinon.fake.returns(this.command);
-      const injectBindCmd = (r, f, n) => ({testCmd: f(n, this.bindCmd)});
-      sinon.stub(nmModule, 'default').callsFake(injectBindCmd);
       this.notifier = {signal: sinon.fake()};
-      this.target = new CommandDispatcher(this.notifier, 'testModels');
+      const models = 'testModels';
+      this.target = new CommandDispatcher(this.notifier, models);
+      this.target._commands.testCmd = (...args) => this.bindCmd(
+        models, ...args
+      );
     });
     afterEach(function () {
       sinon.restore();

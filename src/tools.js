@@ -3,7 +3,6 @@ import {
   freeDraw, lineSegment, rectangle, replace, singleCell, textBuffer,
 } from './figures.js';
 import {CursorGesture, MouseGesture, SampleCell} from './gestures.js';
-import namemap from './namemap.js';
 
 class Tool {
   constructor(models, gestureCls, figure) {
@@ -114,7 +113,9 @@ const TOOLS_REGISTRY = {
   },
 };
 
-export const TOOLS = namemap(Object.values(TOOLS_REGISTRY), (name, t) => name);
+export const TOOLS = Object.fromEntries(
+  Object.keys(TOOLS_REGISTRY).map(k => [k, k])
+);
 
 export function currentTool(models) {
   const tool = TOOLS_REGISTRY[models.currentTool];

@@ -1,4 +1,3 @@
-import namemap from './namemap.js';
 import {EVENTS} from './refresh.js';
 import {currentTool} from './tools.js';
 
@@ -61,8 +60,8 @@ const COMMAND_REGISTRY = {
   },
 };
 
-export const COMMANDS = namemap(
-  Object.values(COMMAND_REGISTRY), (name, c) => name
+export const COMMANDS = Object.fromEntries(
+  Object.keys(COMMAND_REGISTRY).map(k => [k, k])
 );
 
 export class CommandDispatcher {
@@ -82,9 +81,10 @@ export class CommandDispatcher {
   _bindCommands(models) {
     // NOTE: bind models to each command function via currying so only
     // command-specific args are needed when invoked from the view layer.
-    this._commands = namemap(
-      Object.values(COMMAND_REGISTRY),
-      (n, mkCmd) => (...args) => mkCmd(models, ...args)
+    this._commands = Object.fromEntries(
+      Object.entries(COMMAND_REGISTRY).map(
+        ([k, v]) => [k, (...args) => v(models, ...args)]
+      )
     );
   }
 }
