@@ -1601,7 +1601,7 @@ describe('figures', function () {
     });
 
     function assertBuffer(expected, srcCell, actual, expectedLength) {
-      expect(actual).to.have.lengthOf(expectedLength || expected.length);
+      expect(actual).to.have.lengthOf(expectedLength ?? expected.length);
       actual = [...actual];
       for (const [i, [char, tile]] of expected.entries()) {
         const cell = srcCell.clone({glyphId: char});

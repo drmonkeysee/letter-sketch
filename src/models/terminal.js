@@ -58,7 +58,7 @@ export class Terminal {
               oldCell = this._getResizeAdjustedCell(
                 resizeXAdjust, resizeYAdjust
               );
-        cells.push(oldCell || new Cell());
+        cells.push(oldCell ?? new Cell());
       }
     }
     return cells;
