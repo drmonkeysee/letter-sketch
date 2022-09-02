@@ -1,4 +1,4 @@
-const EVENT_NAMES = [
+export const EVENTS = Object.fromEntries([
   'onBackgroundColorChanged',
   'onDrawCommitted',
   'onForegroundColorChanged',
@@ -7,9 +7,7 @@ const EVENT_NAMES = [
   'onTerminalResizeReady',
   'onTerminalResizeVerify',
   'onToolChanged',
-];
-
-export const EVENTS = Object.fromEntries(EVENT_NAMES.map(n => [n, n]));
+].map(n => [n, n]));
 
 export class ViewNotifier {
   constructor() {
