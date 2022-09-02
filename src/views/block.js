@@ -79,11 +79,11 @@ export class LetterBlock extends View {
     if (selectable !== this._selectable) {
       this._selectable = selectable;
       this._applySelectionPredicate();
-    }
-    // NOTE: only set back to previous glyph if the pre-box-mode selection
-    // wasn't already in the box char range.
-    if (!isBoxChar(this._lastGlyph)) {
-      this.dispatch.command(COMMANDS.setGlyph, newGlyph);
+      // NOTE: only set back to previous glyph if the pre-box-mode selection
+      // wasn't already in the box char range.
+      if (!isBoxChar(this._lastGlyph)) {
+        this.dispatch.command(COMMANDS.setGlyph, newGlyph);
+      }
     }
   }
 
