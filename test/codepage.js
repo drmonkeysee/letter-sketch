@@ -17,7 +17,7 @@ describe('#glyph()', function () {
 });
 
 describe('#id()', function () {
-  it('returns expected id for glyph', function() {
+  it('returns expected id for glyph', function () {
     const result = codepage.id('#');
 
     expect(result).to.equal(35);

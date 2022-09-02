@@ -9,7 +9,6 @@ class App {
     this.win = win;
     this._doc = win.document;
     this._notifier = new ViewNotifier();
-    this._models = {};
   }
 
   initialize() {

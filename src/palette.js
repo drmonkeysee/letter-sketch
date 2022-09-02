@@ -17,7 +17,7 @@ function hexToRgb(hexString) {
 
 // NOTE: Basic 16-color Palette
 // https://en.wikipedia.org/wiki/Web_colors#Basic_colors
-const [NAMES, PALETTE] = (function() {
+const [NAMES, PALETTE] = (function () {
   const colors = {
     White: hexToRgb('ffffff'),
     Silver: hexToRgb('c0c0c0'),

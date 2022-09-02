@@ -315,7 +315,7 @@ describe('#isBoxChar()', function () {
   });
 });
 
-describe('#FIRST_BOX_ID', function() {
+describe('#FIRST_BOX_ID', function () {
   it('returns the glyph id of the first box char', function () {
     expect(FIRST_BOX_ID).to.equal(179);
   });

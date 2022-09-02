@@ -6,7 +6,7 @@ describe('ViewNotifier', function () {
   beforeEach(function () {
     this.target = new ViewNotifier();
   });
-  afterEach(function() {
+  afterEach(function () {
     sinon.restore();
   });
 
