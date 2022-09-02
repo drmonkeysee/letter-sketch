@@ -73,6 +73,7 @@ export class ColorPalette extends View {
       const colorCell = this.doc.createElement('div');
       colorCell.className = 'palette-cell';
       colorCell.dataset.id = colorId;
+      colorCell.title = palette.name(colorId);
       colorCell.style.backgroundColor = colorValue;
       colorCell.addEventListener('click', this._pickColor.bind(this));
       this._palette.appendChild(colorCell);

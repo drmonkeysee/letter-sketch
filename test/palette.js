@@ -16,6 +16,20 @@ describe('#cssColor()', function () {
   });
 });
 
+describe('#name()', function () {
+  it('returns expected name for id', function () {
+    const result = palette.name(5);
+
+    expect(result).to.equal('Maroon');
+  });
+
+  it('returns undefined if invalid id', function () {
+    const result = palette.name(1000);
+
+    expect(result).to.be.undefined;
+  });
+});
+
 describe('#id()', function () {
   it('returns expected id for value', function () {
     const result = palette.id('rgb(128, 0, 0)');

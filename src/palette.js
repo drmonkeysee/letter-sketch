@@ -17,24 +17,27 @@ function hexToRgb(hexString) {
 
 // NOTE: Basic 16-color Palette
 // https://en.wikipedia.org/wiki/Web_colors#Basic_colors
-const PALETTE = [
-  hexToRgb('ffffff'),  // White
-  hexToRgb('c0c0c0'),  // Silver
-  hexToRgb('808080'),  // Gray
-  hexToRgb('000000'),  // Black
-  hexToRgb('ff0000'),  // Red
-  hexToRgb('800000'),  // Maroon
-  hexToRgb('ffff00'),  // Yellow
-  hexToRgb('808000'),  // Olive
-  hexToRgb('00ff00'),  // Lime
-  hexToRgb('008000'),  // Green
-  hexToRgb('00ffff'),  // Aqua
-  hexToRgb('008080'),  // Teal
-  hexToRgb('0000ff'),  // Blue
-  hexToRgb('000080'),  // Navy
-  hexToRgb('ff00ff'),  // Fuchsia
-  hexToRgb('800080'),  // Purple
-];
+const [NAMES, PALETTE] = (function() {
+  const colors = {
+    White: hexToRgb('ffffff'),
+    Silver: hexToRgb('c0c0c0'),
+    Gray: hexToRgb('808080'),
+    Black: hexToRgb('000000'),
+    Red: hexToRgb('ff0000'),
+    Maroon: hexToRgb('800000'),
+    Yellow: hexToRgb('ffff00'),
+    Olive: hexToRgb('808000'),
+    Lime: hexToRgb('00ff00'),
+    Green: hexToRgb('008000'),
+    Aqua: hexToRgb('00ffff'),
+    Teal: hexToRgb('008080'),
+    Blue: hexToRgb('0000ff'),
+    Navy: hexToRgb('000080'),
+    Fuchsia: hexToRgb('ff00ff'),
+    Purple: hexToRgb('800080'),
+  };
+  return [Object.keys(colors), Object.values(colors)];
+})();
 
 export default {
   * cssColors() {
@@ -45,6 +48,9 @@ export default {
   },
   cssColor(id) {
     return PALETTE[id];
+  },
+  name(id) {
+    return NAMES[id];
   },
   id(color) {
     if (color.startsWith('#')) {
