@@ -59,7 +59,7 @@ export default {
     return PALETTE.indexOf(color);
   },
   COLORS: {
-    BLACK: 3,
-    WHITE: 0,
+    BLACK: NAMES.indexOf('Black'),
+    WHITE: NAMES.indexOf('White'),
   },
 };
