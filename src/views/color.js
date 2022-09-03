@@ -40,6 +40,7 @@ class ColorSelection extends View {
 
   _setColor(colorId) {
     this._selection.style.backgroundColor = palette.cssColor(colorId);
+    this._selection.title = palette.name(colorId);
   }
 }
 
