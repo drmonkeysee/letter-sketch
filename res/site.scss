@@ -209,13 +209,13 @@ body {
           }
         }
 
-        #background-selection {
+        #bg-color {
           bottom: $color-selection-offset;
           right: $color-selection-offset;
           cursor: pointer;
         }
 
-        #foreground-selection {
+        #fg-color {
           top: $color-selection-offset;
           left: $color-selection-offset;
           cursor: pointer;

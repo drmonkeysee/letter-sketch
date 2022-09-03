@@ -51,7 +51,7 @@ export class ColorPalette extends View {
     const onSelectedHandler = this._setSelection.bind(this);
     this._colorSelections = [
       new ColorSelection(
-        'foreground-selection',
+        'fg-color',
         COMMANDS.setForegroundColor,
         EVENTS.onForegroundColorChanged,
         onSelectedHandler,
@@ -59,7 +59,7 @@ export class ColorPalette extends View {
         ...args
       ),
       new ColorSelection(
-        'background-selection',
+        'bg-color',
         COMMANDS.setBackgroundColor,
         EVENTS.onBackgroundColorChanged,
         onSelectedHandler,
