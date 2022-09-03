@@ -249,6 +249,10 @@ function drawLineSegment(x0, y0, x1, y1, cell) {
   return figure;
 }
 
+function findtile(tiles, tile) {
+  return tiles.find(t => t.x === tile.x && t.y === tile.y);
+}
+
 class ActiveFigure {
   constructor() {
     this._tiles = [];
@@ -265,11 +269,7 @@ class ActiveFigure {
   }
 
   _find(tile) {
-    return this._findin(tile, this._tiles);
-  }
-
-  _findin(tile, tiles) {
-    return tiles.find(t => t.x === tile.x && t.y === tile.y);
+    return findtile(this._tiles, tile);
   }
 }
 
@@ -372,7 +372,7 @@ class BoxDrawFigure extends BoxCharFigure {
   }
 
   _processNeighbor(n, lineConstraints, additionalTiles) {
-    let nTile = this._find(n) ?? this._findin(n, additionalTiles);
+    let nTile = this._find(n) ?? findtile(additionalTiles, n);
     const nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y),
           nLineSet = nTile ? this.lineSet : interpolateLineSet(
             this.lineSet, n.direction, nCell.glyphId
@@ -398,8 +398,7 @@ class BoxDrawFigure extends BoxCharFigure {
   }
 
   _processNeighborOfNeighbor(nn, nConstraints, additionalTiles) {
-    const existingNN = this._find(nn)
-                        ?? this._findin(nn, additionalTiles),
+    const existingNN = this._find(nn) ?? findtile(additionalTiles, nn),
           nnCell = existingNN?.cell ?? this.terminal.getCell(nn.x, nn.y),
           nnAttractor = hasAttractor(
             nnCell.glyphId, DIRECTIONS.complement(nn.direction)

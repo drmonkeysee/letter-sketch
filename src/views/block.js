@@ -7,6 +7,7 @@ import {View} from './view.js';
 function allSelectable(glyphId) {
   return true;
 }
+
 function boxSelectable(glyphId) {
   return isBoxChar(glyphId);
 }
