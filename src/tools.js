@@ -72,53 +72,104 @@ class EyedropTool extends Tool {
 }
 
 const TOOLS_REGISTRY = {
-  point(models) {
-    return new Tool(models, MouseGesture, singleCell);
+  point: {
+    name: 'Single Cell',
+    make(models) {
+      return new Tool(models, MouseGesture, singleCell);
+    },
   },
-  brush(models) {
-    return new Tool(models, MouseGesture, freeDraw);
+  brush: {
+    name: 'Free Draw',
+    make(models) {
+      return new Tool(models, MouseGesture, freeDraw);
+    },
   },
-  boxBrush(models) {
-    return new Tool(models, MouseGesture, boxDraw);
+  boxBrush: {
+    name: 'Box Draw',
+    make(models) {
+      return new Tool(models, MouseGesture, boxDraw);
+    },
   },
-  fill(models) {
-    return new Tool(models, MouseGesture, floodFill);
+  fill: {
+    name: 'Fill',
+    make(models) {
+      return new Tool(models, MouseGesture, floodFill);
+    },
   },
-  rect(models) {
-    return new Tool(models, MouseGesture, rectangle);
+  rect: {
+    name: 'Rectangle',
+    make(models) {
+      return new Tool(models, MouseGesture, rectangle);
+    },
   },
-  fillRect(models) {
-    return new Tool(models, MouseGesture, filledRectangle);
+  fillRect: {
+    name: 'Filled Rectangle',
+    make(models) {
+      return new Tool(models, MouseGesture, filledRectangle);
+    },
   },
-  boxRect(models) {
-    return new Tool(models, MouseGesture, boxRectangle);
+  boxRect: {
+    name: 'Box Rectangle',
+    make(models) {
+      return new Tool(models, MouseGesture, boxRectangle);
+    },
   },
-  ellipse(models) {
-    return new Tool(models, MouseGesture, ellipse);
+  ellipse: {
+    name: 'Ellipse',
+    make(models) {
+      return new Tool(models, MouseGesture, ellipse);
+    },
   },
-  fillEllipse(models) {
-    return new Tool(models, MouseGesture, filledEllipse);
+  fillEllipse: {
+    name: 'Filled Ellipse',
+    make(models) {
+      return new Tool(models, MouseGesture, filledEllipse);
+    },
   },
-  line(models) {
-    return new Tool(models, MouseGesture, lineSegment);
+  line: {
+    name: 'Line',
+    make(models) {
+      return new Tool(models, MouseGesture, lineSegment);
+    },
   },
-  text(models) {
-    return new TextTool(models);
+  text: {
+    name: 'Text',
+    make(models) {
+      return new TextTool(models);
+    },
   },
-  swap(models) {
-    return new Tool(models, MouseGesture, replace);
+  swap: {
+    name: 'Replace',
+    make(models) {
+      return new Tool(models, MouseGesture, replace);
+    },
   },
-  eyedrop(models) {
-    return new EyedropTool(models);
+  eyedrop: {
+    name: 'Eyedrop',
+    make(models) {
+      return new EyedropTool(models);
+    },
   },
 };
+
+const NAMES = Object.fromEntries(
+  Object.entries(TOOLS_REGISTRY).map(([k, v]) => [k, v.name])
+);
 
 export const TOOLS = Object.fromEntries(
   Object.keys(TOOLS_REGISTRY).map(k => [k, k])
 );
 
+export function toolName(tool) {
+  return NAMES[tool];
+}
+
+export function isBoxTool(tool) {
+  return tool.startsWith('box');
+}
+
 export function currentTool(models) {
   const tool = TOOLS_REGISTRY[models.currentTool];
   if (!tool) throw new Error(`Unknown tool: ${models.currentTool}`);
-  return tool(models);
+  return tool.make(models);
 }

@@ -2,6 +2,7 @@ import {FIRST_BOX_ID, isBoxChar} from '../boxchars.js';
 import codepage from '../codepage.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
+import {isBoxTool} from '../tools.js';
 import {View} from './view.js';
 
 function allSelectable(glyphId) {
@@ -68,9 +69,8 @@ export class LetterBlock extends View {
   }
 
   _updateSelectionMode(update) {
-    let selectable, newGlyph;
-    // TODO: move this condition to tools
-    if (update.name === 'boxBrush' || update.name === 'boxRect') {
+    let newGlyph, selectable;
+    if (isBoxTool(update.name)) {
       selectable = boxSelectable;
       newGlyph = this._lastBoxGlyph ?? FIRST_BOX_ID;
     } else {

@@ -1,6 +1,6 @@
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
-import {TOOLS} from '../tools.js';
+import {toolName, TOOLS} from '../tools.js';
 import {View} from './view.js';
 
 export class ToolSelector extends View {
@@ -21,7 +21,7 @@ export class ToolSelector extends View {
       radio.addEventListener('input', this._pickTool.bind(this));
       const label = this.doc.createElement('label');
       label.htmlFor = radio.id;
-      label.title = tool;
+      label.title = toolName(tool);
       label.className = `tool-${tool}`;
       this._toolSelector.appendChild(radio);
       this._toolSelector.appendChild(label);
