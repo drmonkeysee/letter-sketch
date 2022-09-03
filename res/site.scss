@@ -15,244 +15,244 @@ $left-pane-width: 10em;
 
 body {
   font: $default-font-size 'Courier New';
-}
 
-#glyph-ruler {
-  position: absolute;
-  visibility: hidden;
-}
-
-.top {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5em;
-
-  > div:first-child {
-    flex-basis: $left-pane-width;
-    flex-shrink: 0;
-    margin-right: $widget-gap;
-    display: flex;
-    flex-direction: column;
-    row-gap: 1em;
-
-    h3 {
-      margin: 0;
-    }
-
-    sup, input, button {
-      font-size: 8pt;
-    }
-
-    form {
-      font-size: 9pt;
-
-      input, button {
-        width: 5em;
-      }
-
-      label[for=column-count] {
-        margin-right: 1.2em;
-      }
-      label[for=row-count] {
-        margin-right: 3em;
-      }
-    }
+  #glyph-ruler {
+    position: absolute;
+    visibility: hidden;
   }
 
-  #letter-block {
-    display: grid;
-    grid-template-columns: repeat(64, 1fr);
-    border-left: $border-thin $color-border-control;
-    border-top: $border-thin $color-border-control;
-    flex-basis: 70em;
-    cursor: pointer;
+  .top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5em;
 
-    div {
-      border-right: $border-thin $color-border-control;
-      border-bottom: $border-thin $color-border-control;
+    > div:first-child {
+      flex-basis: $left-pane-width;
+      flex-shrink: 0;
+      margin-right: $widget-gap;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: calc($default-font-size * 2);
+      flex-direction: column;
+      row-gap: 1em;
 
-      &.disabled {
-        color: silver;
-        cursor: auto;
+      h3 {
+        margin: 0;
       }
 
-      &.selected {
-        background-color: aqua;
+      sup, input, button {
+        font-size: 8pt;
       }
 
-      span {
-        pointer-events: none;
+      form {
+        font-size: 9pt;
+
+        input, button {
+          width: 5em;
+        }
+
+        label[for=column-count] {
+          margin-right: 1.2em;
+        }
+        label[for=row-count] {
+          margin-right: 3em;
+        }
       }
     }
-  }
-}
 
-.main {
-  display: flex;
-  column-gap: $widget-gap;
-  align-items: flex-start;
-
-  > div:first-child {
-    display: flex;
-    column-gap: $widget-gap;
-    flex-basis: $left-pane-width;
-    flex-shrink: 0;
-  }
-
-  #tool-selections {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    width: fit-content;
-    padding-bottom: 5px;
-
-    input {
-      display: none;
-    }
-
-    label {
-      border-left: $tool-element-dim solid silver;
-      border-bottom: $tool-element-dim solid gray;
-      position: relative;
+    #letter-block {
+      display: grid;
+      grid-template-columns: repeat(64, 1fr);
+      border-left: $border-thin $color-border-control;
+      border-top: $border-thin $color-border-control;
+      flex-basis: 70em;
       cursor: pointer;
 
-      &:before {
-        content: "";
-        position: absolute;
-        background-color: white;
-        background-repeat: no-repeat;
-        height: $tool-element-inset;
-        width: $tool-element-inset;
-        top: $tool-element-margin;
-        left: calc($tool-element-margin - $tool-element-dim);
-      }
-    }
+      div {
+        border-right: $border-thin $color-border-control;
+        border-bottom: $border-thin $color-border-control;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc($default-font-size * 2);
 
-    .tool-point:before {
-      background-image: url("tools.svg#point");
-    }
-    .tool-brush:before {
-      background-image: url("tools.svg#brush");
-    }
-    .tool-boxBrush:before {
-      background-image: url("tools.svg#boxBrush");
-    }
-    .tool-fill:before {
-      background-image: url("tools.svg#fill");
-    }
-    .tool-rect:before {
-      background-image: url("tools.svg#rect");
-    }
-    .tool-fillRect:before {
-      background-image: url("tools.svg#fillRect");
-    }
-    .tool-boxRect:before {
-      background-image: url("tools.svg#boxRect");
-    }
-    .tool-ellipse:before {
-      background-image: url("tools.svg#ellipse");
-    }
-    .tool-fillEllipse:before {
-      background-image: url("tools.svg#fillEllipse");
-    }
-    .tool-line:before {
-      background-image: url("tools.svg#line");
-    }
-    .tool-text:before {
-      background-image: url("tools.svg#text");
-    }
-    .tool-swap:before {
-      background-image: url("tools.svg#swap");
-    }
-    .tool-eyedrop:before {
-      background-image: url("tools.svg#eyedrop");
-    }
+        &.disabled {
+          color: silver;
+          cursor: auto;
+        }
 
-    input:checked + label {
-      border-left-color: gray;
-      border-bottom-color: silver;
+        &.selected {
+          background-color: aqua;
+        }
 
-      &:before {
-        background-color: aqua;
+        span {
+          pointer-events: none;
+        }
       }
     }
   }
 
-  .colors {
-    border: $border-thin $color-border-layout;
+  .main {
     display: flex;
-    flex-direction: column;
-    width: fit-content;
-    height: fit-content;
+    column-gap: $widget-gap;
+    align-items: flex-start;
 
-    .color-selections {
-      height: $color-selector-dim;
-      width: $color-selector-dim;
-      border-bottom: $border-thin $color-border-layout;
-      position: relative;
+    > div:first-child {
+      display: flex;
+      column-gap: $widget-gap;
+      flex-basis: $left-pane-width;
+      flex-shrink: 0;
+    }
 
-      .selected {
-        outline: gold dotted $widget-gap;
+    #tool-selections {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      width: fit-content;
+      padding-bottom: 5px;
+
+      input {
+        display: none;
       }
 
-      .tile-color {
-        width: $color-selection-dim;
-        height: $color-selection-dim;
-        position: absolute;
-        border: $widget-gap solid $color-border-control;
+      label {
+        border-left: $tool-element-dim solid silver;
+        border-bottom: $tool-element-dim solid gray;
+        position: relative;
+        cursor: pointer;
 
-        hr {
-          border-top-color: $color-border-control;
+        &:before {
+          content: "";
+          position: absolute;
+          background-color: white;
+          background-repeat: no-repeat;
+          height: $tool-element-inset;
+          width: $tool-element-inset;
+          top: $tool-element-margin;
+          left: calc($tool-element-margin - $tool-element-dim);
         }
       }
 
-      #background-selection {
-        bottom: $color-selection-offset;
-        right: $color-selection-offset;
-        cursor: pointer;
+      .tool-point:before {
+        background-image: url("tools.svg#point");
+      }
+      .tool-brush:before {
+        background-image: url("tools.svg#brush");
+      }
+      .tool-boxBrush:before {
+        background-image: url("tools.svg#boxBrush");
+      }
+      .tool-fill:before {
+        background-image: url("tools.svg#fill");
+      }
+      .tool-rect:before {
+        background-image: url("tools.svg#rect");
+      }
+      .tool-fillRect:before {
+        background-image: url("tools.svg#fillRect");
+      }
+      .tool-boxRect:before {
+        background-image: url("tools.svg#boxRect");
+      }
+      .tool-ellipse:before {
+        background-image: url("tools.svg#ellipse");
+      }
+      .tool-fillEllipse:before {
+        background-image: url("tools.svg#fillEllipse");
+      }
+      .tool-line:before {
+        background-image: url("tools.svg#line");
+      }
+      .tool-text:before {
+        background-image: url("tools.svg#text");
+      }
+      .tool-swap:before {
+        background-image: url("tools.svg#swap");
+      }
+      .tool-eyedrop:before {
+        background-image: url("tools.svg#eyedrop");
       }
 
-      #foreground-selection {
-        top: $color-selection-offset;
-        left: $color-selection-offset;
-        cursor: pointer;
+      input:checked + label {
+        border-left-color: gray;
+        border-bottom-color: silver;
+
+        &:before {
+          background-color: aqua;
+        }
       }
     }
 
-    #palette {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      cursor: pointer;
-
-      .palette-cell {
-        height: $color-element-dim;
-        width: $color-element-dim;
-      }
-    }
-  }
-
-  #sketchpad {
-    display: grid;
-    border: $pad-outline;
-    padding: 1px;
-
-    div {
+    .colors {
+      border: $border-thin $color-border-layout;
       display: flex;
-      justify-content: center;
-      align-items: center;
+      flex-direction: column;
+      width: fit-content;
+      height: fit-content;
 
-      &:hover {
-        outline: $pad-outline;
-        opacity: 0.8;
+      .color-selections {
+        height: $color-selector-dim;
+        width: $color-selector-dim;
+        border-bottom: $border-thin $color-border-layout;
+        position: relative;
+
+        .selected {
+          outline: gold dotted $widget-gap;
+        }
+
+        .tile-color {
+          width: $color-selection-dim;
+          height: $color-selection-dim;
+          position: absolute;
+          border: $widget-gap solid $color-border-control;
+
+          hr {
+            border-top-color: $color-border-control;
+          }
+        }
+
+        #background-selection {
+          bottom: $color-selection-offset;
+          right: $color-selection-offset;
+          cursor: pointer;
+        }
+
+        #foreground-selection {
+          top: $color-selection-offset;
+          left: $color-selection-offset;
+          cursor: pointer;
+        }
       }
 
-      span {
-        pointer-events: none;
-        user-select: none;
+      #palette {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        cursor: pointer;
+
+        .palette-cell {
+          height: $color-element-dim;
+          width: $color-element-dim;
+        }
+      }
+    }
+
+    #sketchpad {
+      display: grid;
+      border: $pad-outline;
+      padding: 1px;
+
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+          outline: $pad-outline;
+          opacity: 0.8;
+        }
+
+        span {
+          pointer-events: none;
+          user-select: none;
+        }
       }
     }
   }
