@@ -12,7 +12,7 @@ npm run build | tee /dev/stderr | awk 'NR > 9 {print $1}' | xargs -I {} cp -v {}
 
 git checkout gh-pages
 rm -rf $pub_dir && mv -v $build_dir $pub_dir
-replace="s/(href|src)=\//\1=\"$pub_dir\//g"
+replace="s/(href|src)=\//\1=$pub_dir\//g"
 sed -E $replace $pub_dir/index.html > index.html
 rm $pub_dir/index.html
 
