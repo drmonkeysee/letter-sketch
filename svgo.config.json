@@ -4,6 +4,7 @@
       "name": "preset-default",
       "params": {
         "overrides": {
+          "minifyStyles": false,
           "removeHiddenElems": false
         }
       }
