@@ -15,7 +15,7 @@ function hexToRgb(hexString) {
   return `rgb(${parseInt(r, 16)}, ${parseInt(g, 16)}, ${parseInt(b, 16)})`;
 }
 
-// NOTE: Basic 16-color Palette
+// Basic 16-color Palette
 // https://en.wikipedia.org/wiki/Web_colors#Basic_colors
 const [NAMES, PALETTE] = (function () {
   const colors = {

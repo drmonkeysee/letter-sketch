@@ -1,6 +1,6 @@
 import {Cell, HASH_WIDTH} from './cell.js';
 
-// NOTE: max terminal size is related to hash width of tiles
+// max terminal size is related to hash width of tiles
 const MIN_DIM = 1, MAX_DIM = 2**HASH_WIDTH;
 
 export class Terminal {
@@ -23,7 +23,7 @@ export class Terminal {
     if (columns === this._stride && rows === this._height) return;
 
     const cells = this._newCellGrid(columns, rows);
-    // NOTE: update terminal state last so the resizing operation
+    // Update terminal state last so the resizing operation
     // can reference previous terminal state to preserve
     // as much of the original sketch as possible.
     this._stride = columns;

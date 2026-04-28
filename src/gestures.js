@@ -41,7 +41,7 @@ class Cursor {
 
   _start(point) {
     this._on = true;
-    // NOTE: copy point to prevent external updates
+    // copy point to prevent external updates
     this._position = {...point};
     this._toggle();
     this._timer = setInterval(this._toggle.bind(this), CURSOR_INTERVAL_MS);
@@ -87,7 +87,7 @@ class DrawGesture extends Gesture {
       drawnTiles.add(hashTile(tile));
       currTiles.push(tile);
     }
-    // NOTE: any tiles from the previous draw frame that are not
+    // Any tiles from the previous draw frame that are not
     // touched by the current frame must be restored from the current
     // terminal state.
     // TODO: this can probably be optimized further
@@ -159,7 +159,7 @@ export class CursorGesture extends DrawGesture {
       case 'Escape':
         return this.cleanup();
       case ' ':
-        // NOTE: convert plain space (ClEAR GLYPH) to
+        // Convert plain space (ClEAR GLYPH) to
         // cursor off state (TRANSPARENT GLYPH)
         // in order to preserve background color.
         this._advanceCharacter(this._cursor.offState.glyphId);
@@ -182,7 +182,7 @@ export class CursorGesture extends DrawGesture {
   }
 
   _advanceCharacter(glyphId) {
-    // NOTE: ignore keystroke if not a valid character
+    // Ignore keystroke if not a valid character
     // or cursor is off the edge of the grid.
     if (!this._isValidPosition || glyphId < 0) return;
 
@@ -198,7 +198,7 @@ export class CursorGesture extends DrawGesture {
       newX = 0;
       ++newY;
     }
-    // NOTE: always set `end` even when out of bounds to allow
+    // Always set `end` even when out of bounds to allow
     // the cursor to "leave" the sketchpad area, otherwise
     // the user can't type up to the end of the grid.
     this._end = {x: newX, y: newY};
@@ -244,7 +244,7 @@ export class SampleCell extends Gesture {
     this._started = true;
     event.stopPropagation();
     const point = getPoint(event.target);
-    // NOTE: mouseup may fire outside sketchpad, skip action if invalid point
+    // mouseup may fire outside sketchpad, skip action if invalid point
     if (!Number.isNaN(point.x) && !Number.isNaN(point.y)) {
       this.sketchpad.commitCellSampling(
         this.terminal.getCell(point.x, point.y)

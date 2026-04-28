@@ -52,7 +52,7 @@ export class LetterBlock extends View {
       this._lastBoxGlyph = glyphId;
     } else {
       this._lastGlyph = glyphId;
-      // NOTE: sync regular and box selections if in regular mode and
+      // Sync regular and box selections if in regular mode and
       // selecting a box char.
       if (isBoxChar(glyphId)) {
         this._lastBoxGlyph = glyphId;
@@ -80,7 +80,7 @@ export class LetterBlock extends View {
     if (selectable !== this._selectable) {
       this._selectable = selectable;
       this._applySelectionPredicate();
-      // NOTE: only set back to previous glyph if the pre-box-mode selection
+      // Only set back to previous glyph if the pre-box-mode selection
       // wasn't already in the box char range.
       if (!isBoxChar(this._lastGlyph)) {
         this.dispatch.command(COMMANDS.setGlyph, newGlyph);

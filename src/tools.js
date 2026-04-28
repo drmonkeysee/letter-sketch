@@ -29,7 +29,7 @@ class Tool {
 
   _createGesture(sketchpadView) {
     return new this.gestureCls(
-      // NOTE: curry the figure with the current cell and match gesture's
+      // Curry the figure with the current cell and match gesture's
       // figure-update signature.
       (t, s, e, af) => this.figure(this.models.lettertype.cell, t, s, e, af),
       sketchpadView,
@@ -66,7 +66,7 @@ class TextTool extends Tool {
 
 class EyedropTool extends Tool {
   constructor(models) {
-    // NOTE: empty figure used to terminate gesture immediately
+    // empty figure used to terminate gesture immediately
     super(models, SampleCell, () => []);
   }
 }

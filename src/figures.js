@@ -125,7 +125,7 @@ function drawEllipse(start, end, dims, lettertypeCell, plotStyle) {
   return figure;
 }
 
-// NOTE: Bresenham midpoint ellipse algorithm
+// Bresenham midpoint ellipse algorithm
 // calculating lower-right quadrant using +x goes right and +y goes down.
 // https://dai.fmph.uniba.sk/upload/0/01/Ellipse.pdf
 function bresenhamEllipse(rx, ry, plot) {
@@ -154,7 +154,7 @@ function bresenhamEllipse(rx, ry, plot) {
     }
   }
 
-  // NOTE: capture the end values of x and y
+  // Capture the end values of x and y
   // after the first tangent arc is plotted
   // for use below in finishing thin ellipses.
   const ex = x, ey = y;
@@ -179,7 +179,7 @@ function bresenhamEllipse(rx, ry, plot) {
     }
   }
 
-  // NOTE: midpoint algorithm finishes an arc too early
+  // Midpoint algorithm finishes an arc too early
   // on the major axis if the minor axis is too thin.
   while (y >= ey) {
     plot(x - 1, y--);
@@ -223,7 +223,7 @@ function plotFilledEllipse(x, y, center, width, height, figure, cell) {
   }
 }
 
-// NOTE: Bresenham line algorithm
+// Bresenham line algorithm
 // all-octets variant
 // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 function drawLineSegment(x0, y0, x1, y1, cell) {
@@ -318,7 +318,7 @@ class BoxRectFigure extends BoxCharFigure {
           nCell = nTile?.cell ?? this.terminal.getCell(n.x, n.y);
     if (hasAttractor(nCell.glyphId, DIRECTIONS.complement(n.direction))) {
       lineConstraints |= n.direction;
-      // NOTE: if neighbor is not part of this rect, give the neighbor's
+      // If neighbor is not part of this rect, give the neighbor's
       // line-set precedence in the interpolation by phase-shifting the
       // direction; this gives a more consistent visual effect than the
       // "normal" interpolation.
@@ -351,7 +351,7 @@ class BoxDrawFigure extends BoxCharFigure {
   _resolveTile(tile) {
     const h = hashTile(tile);
     if (this._points.has(h)) {
-      // NOTE: current tile may have been pulled into the figure from the
+      // Current tile may have been pulled into the figure from the
       // terminal by an earlier tile and still has its old colors; make sure
       // the tile currently under the brush always reflects the currently-
       // selected colors.
@@ -361,7 +361,7 @@ class BoxDrawFigure extends BoxCharFigure {
       );
       tile = currentTile;
     } else {
-      // NOTE: if current brush is adding a new cell, duplicate the lettertype
+      // If current brush is adding a new cell, duplicate the lettertype
       // selection to render the correct box-drawing glyph.
       tile.cell = tile.cell.clone(
         {glyphId: this.lineSet.getId(DIRECTIONS.RIGHT | DIRECTIONS.LEFT)}
@@ -428,7 +428,7 @@ class TextFigure extends ActiveFigure {
     this.add(makeTile(point.x, point.y, cell));
   }
 
-  // NOTE: store a newline sentinel to stay aligned with
+  // Store a newline sentinel to stay aligned with
   // the cursor position.
   newline(point) {
     this.add(makeTile(point.x, point.y, codepage.SIGILS.NEWLINE));
@@ -438,7 +438,7 @@ class TextFigure extends ActiveFigure {
     return this._tiles.pop();
   }
 
-  // NOTE: newline sentinels are not part of the final figure
+  // newline sentinels are not part of the final figure
   * [Symbol.iterator]() {
     yield* this._tiles.filter(t => t.cell !== codepage.SIGILS.NEWLINE);
   }

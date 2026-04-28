@@ -18,7 +18,7 @@ export class SketchPad extends View {
 
     this._drawSketchpad(initialState.terminal, initialState.fontSize);
 
-    // NOTE: end current gesture if mouseup outside sketchpad
+    // end current gesture if mouseup outside sketchpad
     this.doc.addEventListener('mouseup', this._handleGesture.bind(this));
     this.doc.addEventListener('keydown', this._handleGesture.bind(this));
   }
@@ -100,7 +100,7 @@ export class SketchPad extends View {
     dims = [...codepage.glyphs()].reduce((acc, letter) => {
       this._ruler.textContent = letter;
       const {width, height} = this._ruler.getBoundingClientRect();
-      // NOTE: || operators guard against glyphs with dimensions of 0
+      // || operators guard against glyphs with dimensions of 0
       return {
         minWidth: Math.min(acc.minWidth, width || acc.minWidth),
         maxWidth: Math.max(acc.maxWidth, width),
@@ -124,7 +124,7 @@ export class SketchPad extends View {
   }
 
   _committed(update) {
-    // NOTE: a cleanup update came from the previously selected tool and has
+    // A cleanup update came from the previously selected tool and has
     // already been committed.
     if (!update.cleanup) {
       console.log('commit figure');
@@ -133,7 +133,7 @@ export class SketchPad extends View {
   }
 
   _updateTool(update) {
-    // NOTE: capture any incomplete figure and commit before switching tools
+    // capture any incomplete figure and commit before switching tools
     const figure = this._tool.cleanup();
     if (figure) {
       this.dispatch.command(COMMANDS.commitDraw, figure, true);

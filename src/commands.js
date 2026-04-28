@@ -79,7 +79,7 @@ export class CommandDispatcher {
   }
 
   _bindCommands(models) {
-    // NOTE: bind models to each command function via currying so only
+    // Bind models to each command function via currying so only
     // command-specific args are needed when invoked from the view layer.
     this._commands = Object.fromEntries(
       Object.entries(COMMAND_REGISTRY).map(
