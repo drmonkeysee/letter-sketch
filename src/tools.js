@@ -90,10 +90,10 @@ const TOOLS_REGISTRY = {
       return new Tool(models, MouseGesture, boxDraw);
     },
   },
-  fill: {
-    name: 'Fill',
+  eraser: {
+    name: 'Eraser',
     make(models) {
-      return new Tool(models, MouseGesture, floodFill);
+      return new Tool(models, MouseGesture, freeDraw);
     },
   },
   rect: {
@@ -114,6 +114,12 @@ const TOOLS_REGISTRY = {
       return new Tool(models, MouseGesture, boxRectangle);
     },
   },
+  line: {
+    name: 'Line',
+    make(models) {
+      return new Tool(models, MouseGesture, lineSegment);
+    },
+  },
   ellipse: {
     name: 'Ellipse',
     make(models) {
@@ -124,12 +130,6 @@ const TOOLS_REGISTRY = {
     name: 'Filled Ellipse',
     make(models) {
       return new Tool(models, MouseGesture, filledEllipse);
-    },
-  },
-  line: {
-    name: 'Line',
-    make(models) {
-      return new Tool(models, MouseGesture, lineSegment);
     },
   },
   text: {
@@ -150,10 +150,10 @@ const TOOLS_REGISTRY = {
       return new EyedropTool(models);
     },
   },
-  eraser: {
-    name: 'Eraser',
+  fill: {
+    name: 'Fill',
     make(models) {
-      return new Tool(models, MouseGesture, freeDraw);
+      return new Tool(models, MouseGesture, floodFill);
     },
   },
 };
