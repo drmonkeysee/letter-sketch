@@ -241,6 +241,7 @@ body {
       display: grid;
       border: $pad-outline;
       padding: 1px;
+      user-select: none;
 
       div {
         display: flex;
@@ -254,7 +255,6 @@ body {
 
         span {
           pointer-events: none;
-          user-select: none;
         }
       }
     }
