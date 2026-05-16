@@ -150,6 +150,12 @@ const TOOLS_REGISTRY = {
       return new EyedropTool(models);
     },
   },
+  eraser: {
+    name: 'Eraser',
+    make(models) {
+      return new Tool(models, MouseGesture, freeDraw);
+    },
+  },
 };
 
 const NAMES = Object.fromEntries(

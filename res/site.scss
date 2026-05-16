@@ -170,6 +170,9 @@ body {
       .tool-eyedrop:before {
         background-image: url("tools.svg#eyedrop");
       }
+      .tool-eraser:before {
+        background-image: url("tools.svg#eraser");
+      }
 
       input:checked + label {
         border-left-color: gray;
