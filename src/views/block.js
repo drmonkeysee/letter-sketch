@@ -2,7 +2,7 @@ import {FIRST_BOX_ID, isBoxChar} from '../boxchars.js';
 import codepage from '../codepage.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
-import {isBoxTool} from '../tools.js';
+import {isBoxTool, isEraser} from '../tools.js';
 import {View} from './view.js';
 
 function allSelectable(glyphId) {
@@ -11,6 +11,10 @@ function allSelectable(glyphId) {
 
 function boxSelectable(glyphId) {
   return isBoxChar(glyphId);
+}
+
+function eraseSelectable(glyphId) {
+  return glyphId === codepage.SIGILS.CLEAR;
 }
 
 export class LetterBlock extends View {
@@ -50,7 +54,9 @@ export class LetterBlock extends View {
     const glyphId = update.glyphId;
     if (this._selectable === boxSelectable) {
       this._lastBoxGlyph = glyphId;
-    } else {
+    } else if (this._selectable != eraseSelectable) {
+      // Do not update last glyph if using the eraser tool, so it remembers the
+      // pre-eraser glyph.
       this._lastGlyph = glyphId;
       // Sync regular and box selections if in regular mode and
       // selecting a box char.
@@ -73,6 +79,9 @@ export class LetterBlock extends View {
     if (isBoxTool(update.name)) {
       selectable = boxSelectable;
       newGlyph = this._lastBoxGlyph ?? FIRST_BOX_ID;
+    } else if (isEraser(update.name)) {
+      selectable = eraseSelectable;
+      newGlyph = codepage.SIGILS.CLEAR;
     } else {
       selectable = allSelectable;
       newGlyph = this._lastGlyph ?? codepage.SIGILS.DEFAULT;

@@ -174,6 +174,10 @@ export function isBoxTool(tool) {
   return tool.startsWith('box');
 }
 
+export function isEraser(tool) {
+  return tool === "eraser";
+}
+
 export function currentTool(models) {
   const tool = TOOLS_REGISTRY[models.currentTool];
   if (!tool) throw new Error(`Unknown tool: ${models.currentTool}`);
