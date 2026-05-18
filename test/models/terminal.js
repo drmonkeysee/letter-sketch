@@ -103,6 +103,23 @@ describe('Terminal', function () {
     });
   });
 
+  describe('#clear()', function () {
+    it('sets all cells to given glyph', function () {
+      const target = new Terminal(3, 3),
+            glyphId = codepage.id('A');
+      target.updateCell(0, 0, new Cell(codepage.id('X')));
+      target.updateCell(2, 2, new Cell(codepage.id('Y')));
+
+      target.clear(glyphId);
+
+      for (let y = 0; y < 3; ++y) {
+        for (let x = 0; x < 3; ++x) {
+          expect(target.getCell(x, y).glyphId).to.equal(glyphId);
+        }
+      }
+    });
+  });
+
   describe('#resize()', function () {
     function filledCellCount(terminal) {
       const {width, height} = terminal.dimensions;

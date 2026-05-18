@@ -222,6 +222,35 @@ describe('commands', function () {
     });
   });
 
+  describe('#clearTerminal()', function () {
+    beforeEach(function () {
+      this.models = {
+        lettertype: {fontSize: 15},
+        terminal: {
+          clear: sinon.fake(),
+        },
+      };
+      this.target = getBinder(COMMANDS.clearTerminal, this.models);
+    });
+    afterEach(function () {
+      sinon.restore();
+    });
+
+    it('clears the terminal', function () {
+      const glyphId = 42,
+            cmd = this.target(glyphId);
+
+      const result = cmd();
+
+      sinon.assert.calledWith(this.models.terminal.clear, glyphId);
+      expect(result).to.eql({
+        event: EVENTS.onTerminalCleared,
+        terminal: this.models.terminal,
+        fontSize: this.models.lettertype.fontSize,
+      });
+    });
+  });
+
   describe('#commitResizeTerminal()', function () {
     beforeEach(function () {
       this.models = {
