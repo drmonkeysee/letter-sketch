@@ -27,7 +27,7 @@ export class SketchPad extends View {
     notifier.subscribe(EVENTS.onDrawCommitted, this._committed.bind(this));
     notifier.subscribe(EVENTS.onToolChanged, this._updateTool.bind(this));
     notifier.subscribe(EVENTS.onTerminalResized, this._refreshSketchpad.bind(this));
-    notifier.subscribe(EVENTS.onTerminalCleared, this._refreshSketchpad.bind(this));
+    notifier.subscribe(EVENTS.onTerminalCleared, this._resetSketchpad.bind(this));
   }
 
   updateAt(x, y, cell) {
@@ -143,5 +143,11 @@ export class SketchPad extends View {
 
   _refreshSketchpad(update) {
     this._drawSketchpad(update.terminal, update.fontSize);
+  }
+
+  _resetSketchpad(update) {
+    // cleanup any incomplete figure and throw it away before redrawing sketchpad
+    this._tool.cleanup();
+    this._refreshSketchpad(update);
   }
 }
