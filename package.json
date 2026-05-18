@@ -37,6 +37,8 @@
     "parcel": "^2.16.4",
     "sinon": "^21.1.2"
   },
-  "engines": {"node": ">=22"},
+  "engines": {
+    "node": ">=22"
+  },
   "private": true
 }
