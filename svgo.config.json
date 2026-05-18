@@ -5,7 +5,8 @@
       "params": {
         "overrides": {
           "minifyStyles": false,
-          "removeHiddenElems": false
+          "removeHiddenElems": false,
+          "removeUselessDefs": false
         }
       }
     }

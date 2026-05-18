@@ -7,7 +7,7 @@
     .swap { font-size: 13px; }
   </style>
 
-  <def>
+  <defs>
     <symbol id="pencil-sprite">
       <rect x="19" y="2" width="6" height="4" rx="1" />
       <rect x="19" y="4" width="6" height="2" />
@@ -25,7 +25,7 @@
     <clipPath id="eraser-clip">
       <rect x="18" y="1" width="8" height="20" />
     </clipPath>
-  </def>
+  </defs>
 
   <rect id="point" class="sprite" x="20" y="20" width="4" height="4" />
   <use href="#pencil-sprite" id="brush" class="sprite" transform="rotate(45, 22, 22)" />
