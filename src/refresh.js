@@ -3,6 +3,7 @@ export const EVENTS = Object.fromEntries([
   'onDrawCommitted',
   'onForegroundColorChanged',
   'onGlyphChanged',
+  'onTerminalCleared',
   'onTerminalResized',
   'onTerminalResizeReady',
   'onTerminalResizeVerify',

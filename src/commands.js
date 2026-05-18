@@ -22,13 +22,22 @@ const COMMAND_REGISTRY = {
       return makeUpdate(event, {dims});
     };
   },
+  clearTerminal(models, glyphId) {
+    return () => {
+      console.log('cleared terminal to glyph: %o', glyphId);
+      models.terminal.clear(glyphId);
+      return makeUpdate(EVENTS.onTerminalCleared, {
+        terminal: models.terminal, fontSize: models.lettertype.fontSize,
+      });
+    };
+  },
   commitResizeTerminal(models, dims) {
     return () => {
       console.log('resized terminal: %o', dims);
       models.terminal.resize(dims.columns, dims.rows);
       models.lettertype.fontSize = dims.fontSize;
       return makeUpdate(EVENTS.onTerminalResized, {
-        terminal: models.terminal, fontSize: dims.fontSize
+        terminal: models.terminal, fontSize: dims.fontSize,
       });
     };
   },

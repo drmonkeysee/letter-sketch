@@ -1,3 +1,4 @@
+import codepage from '../codepage.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
 import {View} from './view.js';
@@ -12,6 +13,7 @@ export class PadControls extends View {
       this.doc.getElementById('column-count'),
       this.doc.getElementById('row-count'),
     ];
+    this._clearButton = this.doc.getElementById('clear-sketch');
   }
 
   get fontSize() { return parseInt(this._inputControls[0].value, 10); }
@@ -32,6 +34,7 @@ export class PadControls extends View {
     this._form.addEventListener(
       'submit', this._updateSketchpadDims.bind(this)
     );
+    this._clearButton.addEventListener('click', this._clearSketch.bind(this));
   }
 
   subscribe(notifier) {
@@ -51,6 +54,10 @@ export class PadControls extends View {
       rows: this.rows,
     };
     this.dispatch.command(COMMANDS.checkResizeTerminal, dimensions);
+  }
+
+  _clearSketch(event) {
+    this.dispatch.command(COMMANDS.clearTerminal, codepage.SIGILS.CLEAR);
   }
 
   _verifyResize(update) {

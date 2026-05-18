@@ -47,6 +47,12 @@ export class Terminal {
     }
   }
 
+  clear(glyphId) {
+    for (const cell of this._cells) {
+      cell.update({glyphId});
+    }
+  }
+
   _newCellGrid(columns, rows) {
     const cells = [],
           resizeColumnAdjust = Math.trunc((this._stride - columns) / 2),
