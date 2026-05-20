@@ -146,8 +146,13 @@ export class SketchPad extends View {
   }
 
   _resetSketchpad(update) {
-    // cleanup any incomplete figure and throw it away before redrawing sketchpad
-    this._tool.cleanup();
-    this._refreshSketchpad(update);
+    const confirm = this.doc.defaultView.confirm(
+      'Clearing the current sketch cannot be undone. Continue?'
+    );
+    if (confirm) {
+      // cleanup any incomplete figure and throw it away before redrawing sketchpad
+      this._tool.cleanup();
+      this._refreshSketchpad(update);
+    }
   }
 }
