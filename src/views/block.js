@@ -84,16 +84,16 @@ export class LetterBlock extends View {
       newGlyph = codepage.SIGILS.CLEAR;
     } else {
       selectable = allSelectable;
-      newGlyph = this._lastGlyph ?? codepage.SIGILS.DEFAULT;
+      // If non-box draw mode was in the box-char range, use the most recently
+      // selected box-draw glyph.
+      newGlyph = isBoxChar(this._lastGlyph)
+                  ? this._lastBoxGlyph
+                  : (this._lastGlyph ?? codepage.SIGILS.DEFAULT);
     }
     if (selectable !== this._selectable) {
       this._selectable = selectable;
       this._applySelectionPredicate();
-      // Only set back to previous glyph if the pre-box-mode selection
-      // wasn't already in the box char range.
-      if (!isBoxChar(this._lastGlyph)) {
-        this.dispatch.command(COMMANDS.setGlyph, newGlyph);
-      }
+      this.dispatch.command(COMMANDS.setGlyph, newGlyph);
     }
   }
 
