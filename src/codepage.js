@@ -78,6 +78,7 @@ export default {
   id(glyph) {
     return CP437.indexOf(glyph);
   },
+  FONT_SIZE: 20,
   SIGILS: {
     DEFAULT: 65,
     CLEAR: 32,

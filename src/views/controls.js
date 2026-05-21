@@ -16,9 +16,13 @@ export class PadControls extends View {
     this._clearButton = this.doc.getElementById('clear-sketch');
   }
 
-  get fontSize() { return parseInt(this._inputControls[0].value, 10); }
+  get fontSize() { return parseInt(this.fontControl.value, 10); }
   get columns() { return parseInt(this._inputControls[1].value, 10); }
   get rows() { return parseInt(this._inputControls[2].value, 10); }
+
+  get fontMax() { return parseInt(this.fontControl.max, 10); }
+  get fontMin() { return parseInt(this.fontControl.min, 10); }
+  get fontControl() { return this._inputControls[0]; }
 
   draw(initialState) {
     const termSize = initialState.terminal.dimensions;
@@ -35,6 +39,7 @@ export class PadControls extends View {
       'submit', this._updateSketchpadDims.bind(this)
     );
     this._clearButton.addEventListener('click', this._clearSketch.bind(this));
+    this.doc.addEventListener('keyup', this._handleKeyboard.bind(this));
   }
 
   subscribe(notifier) {
@@ -87,5 +92,28 @@ export class PadControls extends View {
     this._button.disabled = this._inputControls.every(
       c => c.value === c.dataset.currentValue
     );
+  }
+
+  _handleKeyboard(event) {
+    if (!event.ctrlKey) return;
+    switch (event.key) {
+    case '-':
+      this._updateFontSize(Math.max(this.fontMin, this.fontSize - 1), event);
+      break;
+    case '=':
+      this._updateFontSize(Math.min(this.fontSize + 1, this.fontMax), event);
+      break;
+    case '0':
+      this._updateFontSize(codepage.FONT_SIZE, event);
+      break;
+    case 'd':
+      this._clearSketch(event);
+      break;
+    }
+  }
+
+  _updateFontSize(size, event) {
+    this.fontControl.value = size;
+    this._updateSketchpadDims(event);
   }
 }
