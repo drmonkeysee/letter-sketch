@@ -106,7 +106,7 @@ export class PadControls extends View {
     case '0':
       this._updateFontSize(codepage.FONT_SIZE, event);
       break;
-    case 'd':
+    case 'n':
       this._clearSketch(event);
       break;
     }
