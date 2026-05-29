@@ -156,6 +156,18 @@ const TOOLS_REGISTRY = {
       return new Tool(models, MouseGesture, floodFill);
     },
   },
+  undo: {
+    name: 'Undo',
+    make(models) {
+      return new Tool(models, MouseGesture, singleCell);
+    },
+  },
+  redo: {
+    name: 'Redo',
+    make(models) {
+      return new Tool(models, MouseGesture, singleCell);
+    },
+  },
 };
 
 const NAMES = Object.fromEntries(
