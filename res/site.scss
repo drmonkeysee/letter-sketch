@@ -181,7 +181,7 @@ body {
         background-image: url("tools.svg#redo");
       }
 
-      input:checked + label {
+      input:checked + label, label.active {
         border-left-color: gray;
         border-bottom-color: silver;
 

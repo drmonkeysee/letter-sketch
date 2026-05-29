@@ -3,6 +3,8 @@ import {EVENTS} from '../refresh.js';
 import {toolName, TOOLS} from '../tools.js';
 import {View} from './view.js';
 
+const BUTTON_TOOLS = new Set(['redo', 'undo']);
+
 export class ToolSelector extends View {
   constructor(...args) {
     super(...args);
@@ -12,20 +14,30 @@ export class ToolSelector extends View {
 
   draw(initialState) {
     for (const tool of Object.values(TOOLS)) {
-      const radio = this.doc.createElement('input');
-      radio.type = 'radio';
-      radio.id = `tool-selection-${tool}`;
-      radio.name = 'tool-selection';
-      radio.value = tool;
-      radio.checked = tool === initialState.toolName;
-      radio.addEventListener('input', this._pickTool.bind(this));
+      const input = this.doc.createElement('input');
+      input.id = `tool-selection-${tool}`;
+      input.name = 'tool-selection';
+      input.value = tool;
+      if (BUTTON_TOOLS.has(tool)) {
+        input.type = 'button';
+        input.addEventListener('click', e => console.log('clicked: %o', e.target.value));
+      } else {
+        input.type = 'radio';
+        input.checked = tool === initialState.toolName;
+        input.addEventListener('input', this._pickTool.bind(this));
+      }
       const label = this.doc.createElement('label');
-      label.htmlFor = radio.id;
+      label.htmlFor = input.id;
       label.title = toolName(tool);
       label.className = `tool-${tool}`;
-      this._toolSelector.appendChild(radio);
+      if (BUTTON_TOOLS.has(tool)) {
+        label.addEventListener('mousedown', e => e.target.classList.add('active'))
+        label.addEventListener('mouseup', e => e.target.classList.remove('active'))
+      } else {
+        this._toolSelections.push(input);
+      }
+      this._toolSelector.appendChild(input);
       this._toolSelector.appendChild(label);
-      this._toolSelections.push(radio);
     }
   }
 
