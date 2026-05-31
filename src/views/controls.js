@@ -14,6 +14,7 @@ export class PadControls extends View {
       this.doc.getElementById('row-count'),
     ];
     this._clearButton = this.doc.getElementById('clear-sketch');
+    this._isTextTool = false;
   }
 
   get fontSize() { return parseInt(this.fontControl.value, 10); }
@@ -49,6 +50,7 @@ export class PadControls extends View {
     notifier.subscribe(
       EVENTS.onTerminalResizeReady, this._commitResize.bind(this)
     );
+    notifier.subscribe(EVENTS.onToolChanged, this._checkTool.bind(this));
   }
 
   _updateSketchpadDims(event) {
@@ -62,7 +64,12 @@ export class PadControls extends View {
   }
 
   _clearSketch(event) {
-    this.dispatch.command(COMMANDS.clearTerminal, codepage.SIGILS.CLEAR);
+    const confirm = this.doc.defaultView.confirm(
+      'Clearing the current sketch cannot be undone. Continue?'
+    );
+    if (confirm) {
+      this.dispatch.command(COMMANDS.clearTerminal, codepage.SIGILS.CLEAR);
+    }
   }
 
   _verifyResize(update) {
@@ -88,6 +95,10 @@ export class PadControls extends View {
     this.dispatch.command(COMMANDS.commitResizeTerminal, update.dims);
   }
 
+  _checkTool(update) {
+    this._isTextTool = update.name === 'text';
+  }
+
   _updateButton() {
     this._button.disabled = this._inputControls.every(
       c => c.value === c.dataset.currentValue
@@ -95,12 +106,12 @@ export class PadControls extends View {
   }
 
   _handleKeyboard(event) {
-    if (!event.ctrlKey) return;
+    if (this._isTextTool) return;
     switch (event.key) {
     case '-':
       this._updateFontSize(Math.max(this.fontMin, this.fontSize - 1), event);
       break;
-    case '=':
+    case '=':   // +
       this._updateFontSize(Math.min(this.fontSize + 1, this.fontMax), event);
       break;
     case '0':
