@@ -45,8 +45,6 @@ describe('figures', function () {
     });
 
     it('only returns single value figure', function () {
-      const tile = {x: 1, y: 2};
-
       let figure = singleCell(this._cell, {x: 1, y: 2});
       figure = singleCell(this._cell, {x: 2, y: 0}, null, figure);
 
@@ -1636,8 +1634,7 @@ describe('figures', function () {
     });
 
     it('prints multiple characters', function () {
-      const start = {x: 1, y: 1},
-            tiles = [
+      const tiles = [
               [84  /*'T'*/, {x: 1, y: 1}],
               [101 /*'e'*/, {x: 1, y: 2}],
               [115 /*'s'*/, {x: 1, y: 3}],
@@ -1652,8 +1649,7 @@ describe('figures', function () {
     });
 
     it('prints non-contiguous characters', function () {
-      const start = {x: 1, y: 1},
-            tiles = [
+      const tiles = [
               [84  /*'T'*/, {x: 0, y: 1}],
               [101 /*'e'*/, {x: 3, y: 4}],
               [115 /*'s'*/, {x: 2, y: 2}],
@@ -1675,8 +1671,7 @@ describe('figures', function () {
     });
 
     it('removes trailing character for reverse', function () {
-      const start = {x: 1, y: 1},
-            tiles = [
+      const tiles = [
               [84  /*'T'*/, {x: 1, y: 1}],
               [101 /*'e'*/, {x: 1, y: 2}],
               [115 /*'s'*/, {x: 1, y: 3}],
@@ -1707,8 +1702,7 @@ describe('figures', function () {
     });
 
     it('does not include sentinels in iterator', function () {
-      const start = {x: 1, y: 1},
-            tiles = [
+      const tiles = [
               [84  /*'T'*/, {x: 0, y: 1}],
               [101 /*'e'*/, {x: 3, y: 4}],
               [115 /*'s'*/, {x: 2, y: 2}],

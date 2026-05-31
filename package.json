@@ -8,6 +8,8 @@
   "scripts": {
     "start": "parcel index.html",
     "test": "mocha",
+    "lint": "eslint src test",
+    "lint:fix": "eslint --fix src test",
     "clean": "rm -rf .parcel-cache dist",
     "scrub": "npm run clean && rm -r node_modules",
     "build": "parcel build index.html",

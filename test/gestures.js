@@ -40,6 +40,7 @@ describe('gestures', function () {
         this._updateFigure, this._sketchpad, this._terminal
       );
     });
+
     afterEach(function () {
       sinon.restore();
     });
@@ -168,6 +169,7 @@ describe('gestures', function () {
         this._updateFigure, this._sketchpad, this._terminal
       );
     });
+
     afterEach(function () {
       this._clock.restore();
       sinon.restore();
@@ -397,6 +399,7 @@ describe('gestures', function () {
         this._updateFigure, this._sketchpad, this._terminal
       );
     });
+
     afterEach(function () {
       sinon.restore();
     });

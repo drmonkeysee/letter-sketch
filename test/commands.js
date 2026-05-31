@@ -17,6 +17,7 @@ describe('CommandDispatcher', function () {
         models, ...args
       );
     });
+
     afterEach(function () {
       sinon.restore();
     });
@@ -124,6 +125,7 @@ describe('commands', function () {
                         .returns('testToolResult');
       this.target = getBinder(COMMANDS.setTool, this.models);
     });
+
     afterEach(function () {
       sinon.restore();
     });
@@ -151,6 +153,7 @@ describe('commands', function () {
       };
       this.target = getBinder(COMMANDS.commitDraw, this.models);
     });
+
     afterEach(function () {
       sinon.restore();
     });
@@ -232,6 +235,7 @@ describe('commands', function () {
       };
       this.target = getBinder(COMMANDS.clearTerminal, this.models);
     });
+
     afterEach(function () {
       sinon.restore();
     });
@@ -261,6 +265,7 @@ describe('commands', function () {
       };
       this.target = getBinder(COMMANDS.commitResizeTerminal, this.models);
     });
+
     afterEach(function () {
       sinon.restore();
     });

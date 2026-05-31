@@ -29,6 +29,7 @@ describe('tools', function () {
       this._sketchpad = {updateAt: sinon.fake()};
       this._target = currentTool(this._models);
     });
+
     afterEach(function () {
       sinon.restore();
     });
@@ -131,6 +132,7 @@ describe('tools', function () {
       this._sketchpad = {updateAt: sinon.fake()};
       this._target = currentTool(this._models);
     });
+
     afterEach(function () {
       this._clock.restore();
       sinon.restore();
