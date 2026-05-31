@@ -74,96 +74,147 @@ class EyedropTool extends Tool {
 const TOOLS_REGISTRY = {
   point: {
     name: 'Single Cell',
+    shortcut: {
+      key: 'c',
+    },
     make(models) {
       return new Tool(models, MouseGesture, singleCell);
     },
   },
   brush: {
     name: 'Free Draw',
+    shortcut: {
+      key: 'p',
+    },
     make(models) {
       return new Tool(models, MouseGesture, freeDraw);
     },
   },
   boxBrush: {
     name: 'Box Draw',
+    shortcut: {
+      key: 'b',
+    },
     make(models) {
       return new Tool(models, MouseGesture, boxDraw);
     },
   },
   eraser: {
     name: 'Eraser',
+    shortcut: {
+      key: 'e',
+    },
     make(models) {
       return new Tool(models, MouseGesture, freeDraw);
     },
   },
   rect: {
     name: 'Rectangle',
+    shortcut: {
+      key: 'r',
+    },
     make(models) {
       return new Tool(models, MouseGesture, rectangle);
     },
   },
   fillRect: {
     name: 'Filled Rectangle',
+    shortcut: {
+      key: 'r',
+      shift: true,
+    },
     make(models) {
       return new Tool(models, MouseGesture, filledRectangle);
     },
   },
   boxRect: {
     name: 'Box Rectangle',
+    shortcut: {
+      key: 'b',
+      shift: true,
+    },
     make(models) {
       return new Tool(models, MouseGesture, boxRectangle);
     },
   },
   line: {
     name: 'Line',
+    shortcut: {
+      key: 'l',
+    },
     make(models) {
       return new Tool(models, MouseGesture, lineSegment);
     },
   },
   ellipse: {
     name: 'Ellipse',
+    shortcut: {
+      key: 'o',
+    },
     make(models) {
       return new Tool(models, MouseGesture, ellipse);
     },
   },
   fillEllipse: {
     name: 'Filled Ellipse',
+    shortcut: {
+      key: 'o',
+      shift: true,
+    },
     make(models) {
       return new Tool(models, MouseGesture, filledEllipse);
     },
   },
   text: {
     name: 'Text',
+    shortcut: {
+      key: 't',
+    },
     make(models) {
       return new TextTool(models);
     },
   },
   swap: {
     name: 'Replace',
+    shortcut: {
+      key: 's',
+    },
     make(models) {
       return new Tool(models, MouseGesture, replace);
     },
   },
   eyedrop: {
     name: 'Eyedrop',
+    shortcut: {
+      key: 'd',
+    },
     make(models) {
       return new EyedropTool(models);
     },
   },
   fill: {
     name: 'Fill',
+    shortcut: {
+      key: 'f',
+    },
     make(models) {
       return new Tool(models, MouseGesture, floodFill);
     },
   },
   undo: {
     name: 'Undo',
+    shortcut: {
+      key: 'z',
+    },
     make(models) {
       return new Tool(models, MouseGesture, singleCell);
     },
   },
   redo: {
     name: 'Redo',
+    shortcut: {
+      key: 'y',
+    },
     make(models) {
       return new Tool(models, MouseGesture, singleCell);
     },
@@ -198,4 +249,10 @@ export function currentTool(models) {
   const tool = TOOLS_REGISTRY[models.currentTool];
   if (!tool) throw new Error(`Unknown tool: ${models.currentTool}`);
   return tool.make(models);
+}
+
+export function toolShortcut(tool) {
+  const entry = TOOLS_REGISTRY[tool];
+  if (!entry) throw new Error(`Unknown tool: ${tool}`);
+  return entry.shortcut;
 }

@@ -1,6 +1,6 @@
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
-import {toolName, TOOLS} from '../tools.js';
+import {toolName, toolShortcut, TOOLS} from '../tools.js';
 import {View} from './view.js';
 
 const BUTTON_TOOLS = new Set(['redo', 'undo']);
@@ -32,7 +32,7 @@ export class ToolSelector extends View {
       }
       const label = this.doc.createElement('label');
       label.htmlFor = input.id;
-      label.title = toolName(tool);
+      label.title = this._toolTitle(tool);
       label.className = `tool-${tool}`;
       if (BUTTON_TOOLS.has(tool)) {
         label.addEventListener('mousedown', e => {
@@ -68,5 +68,10 @@ export class ToolSelector extends View {
 
   _refreshDoAction(update) {
     console.log('DO ACTION: %o', update);
+  }
+
+  _toolTitle(tool) {
+    const name = toolName(tool), shortcut = toolShortcut(tool);
+    return `${name} (${shortcut.shift ? 'Shift+' : ''}${shortcut.key.toUpperCase()})`;
   }
 }
