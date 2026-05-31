@@ -19,7 +19,7 @@ class ColorSelection extends View {
   }
 
   subscribe(notifier) {
-    notifier.subscribe(this.refreshEvent, this._refreshColor.bind(this));
+    notifier.subscribe(this.refreshEvent, u => this._setColor(u.colorId));
   }
 
   select() {
@@ -32,10 +32,6 @@ class ColorSelection extends View {
 
   pick(colorId) {
     this.dispatch.command(this.cmd, colorId);
-  }
-
-  _refreshColor(update) {
-    this._setColor(update.colorId);
   }
 
   _setColor(colorId) {

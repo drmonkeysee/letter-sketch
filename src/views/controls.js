@@ -64,7 +64,7 @@ export class PadControls extends View {
     this.dispatch.command(COMMANDS.checkResizeTerminal, dimensions);
   }
 
-  _clearSketch(event) {
+  _clearSketch() {
     const confirm = this.doc.defaultView.confirm(
       'Clearing the current sketch cannot be undone. Continue?'
     );

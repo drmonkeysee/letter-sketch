@@ -26,7 +26,9 @@ export class ToolSelector extends View {
       } else {
         input.type = 'radio';
         input.checked = tool === initialState.toolName;
-        input.addEventListener('input', this._pickTool.bind(this));
+        input.addEventListener(
+          'input', e => this.dispatch.command(COMMANDS.setTool, e.target.value)
+        );
       }
       const label = this.doc.createElement('label');
       label.htmlFor = input.id;
@@ -51,10 +53,6 @@ export class ToolSelector extends View {
     notifier.subscribe(EVENTS.onToolChanged, this._refreshTool.bind(this));
     notifier.subscribe(EVENTS.onUndo, this._refreshDoAction.bind(this));
     notifier.subscribe(EVENTS.onRedo, this._refreshDoAction.bind(this));
-  }
-
-  _pickTool(event) {
-    this.dispatch.command(COMMANDS.setTool, event.target.value);
   }
 
   _refreshTool(update) {
