@@ -20,7 +20,8 @@ export class ToolSelector extends View {
       input.value = tool;
       if (BUTTON_TOOLS.has(tool)) {
         input.type = 'button';
-        input.addEventListener('click', e => console.log('clicked: %o', e.target.value));
+        input.disabled = tool === 'redo';
+        input.addEventListener('click', this._applyDoAction.bind(this));
       } else {
         input.type = 'radio';
         input.checked = tool === initialState.toolName;
@@ -31,8 +32,12 @@ export class ToolSelector extends View {
       label.title = toolName(tool);
       label.className = `tool-${tool}`;
       if (BUTTON_TOOLS.has(tool)) {
-        label.addEventListener('mousedown', e => e.target.classList.add('active'))
-        label.addEventListener('mouseup', e => e.target.classList.remove('active'))
+        label.addEventListener('mousedown', e => {
+          if (!e.target.control.disabled) {
+            e.target.classList.add('active');
+          }
+        });
+        label.addEventListener('mouseup', e => e.target.classList.remove('active'));
       } else {
         this._toolSelections.push(input);
       }
@@ -43,6 +48,8 @@ export class ToolSelector extends View {
 
   subscribe(notifier) {
     notifier.subscribe(EVENTS.onToolChanged, this._refreshTool.bind(this));
+    notifier.subscribe(EVENTS.onUndo, this._refreshDoAction.bind(this));
+    notifier.subscribe(EVENTS.onRedo, this._refreshDoAction.bind(this));
   }
 
   _pickTool(event) {
@@ -53,5 +60,14 @@ export class ToolSelector extends View {
     for (const radio of this._toolSelections) {
       radio.checked = radio.value === update.name;
     }
+  }
+
+  _applyDoAction(event) {
+    const cmd = event.target.value === 'redo' ? COMMANDS.redo : COMMANDS.undo;
+    this.dispatch.command(cmd);
+  }
+
+  _refreshDoAction(update) {
+    console.log('DO ACTION: %o', update);
   }
 }

@@ -3,11 +3,13 @@ export const EVENTS = Object.fromEntries([
   'onDrawCommitted',
   'onForegroundColorChanged',
   'onGlyphChanged',
+  'onRedo',
   'onTerminalCleared',
   'onTerminalResized',
   'onTerminalResizeReady',
   'onTerminalResizeVerify',
   'onToolChanged',
+  'onUndo',
 ].map(n => [n, n]));
 
 export class ViewNotifier {

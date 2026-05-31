@@ -41,6 +41,12 @@ const COMMAND_REGISTRY = {
       });
     };
   },
+  redo(models) {
+    return () => {
+      console.log('REDO');
+      return makeUpdate(EVENTS.onRedo, {});
+    };
+  },
   setBackgroundColor(models, colorId) {
     return () => {
       models.lettertype.cell.bgColorId = colorId;
@@ -65,6 +71,12 @@ const COMMAND_REGISTRY = {
       return makeUpdate(
         EVENTS.onToolChanged, {tool: currentTool(models), name: toolName}
       );
+    };
+  },
+  undo(models) {
+    return () => {
+      console.log('UNDO');
+      return makeUpdate(EVENTS.onUndo, {});
     };
   },
 };
