@@ -18,7 +18,7 @@ class Tool {
     return this._gesture.handleEvent(event);
   }
 
-  committed(update) {
+  committed() {
     this._gesture = null;
   }
 
@@ -52,12 +52,12 @@ class TextTool extends Tool {
     return figure;
   }
 
-  committed(update) {
+  committed() {
     this._gesture = this._pendingGesture;
     this._pendingGesture = null;
   }
 
-  cleanup(update) {
+  cleanup() {
     const figure = this._gesture.cleanup();
     this._gesture = this._pendingGesture = null;
     return figure;

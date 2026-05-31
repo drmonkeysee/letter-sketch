@@ -5,7 +5,7 @@ import {EVENTS} from '../refresh.js';
 import {isBoxTool, isEraser} from '../tools.js';
 import {View} from './view.js';
 
-function allSelectable(glyphId) {
+function allSelectable() {
   return true;
 }
 

@@ -15,7 +15,7 @@ class ColorSelection extends View {
 
   draw(initialState) {
     this._setColor(this.colorInitializer(initialState.colors));
-    this._selection.addEventListener('click', e => this.onSelected(this));
+    this._selection.addEventListener('click', () => this.onSelected(this));
   }
 
   subscribe(notifier) {

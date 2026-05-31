@@ -73,7 +73,7 @@ const COMMAND_REGISTRY = {
       );
     };
   },
-  signalTextCursor(models) {
+  signalTextCursor() {
     return () => {
       return makeUpdate(EVENTS.onTextCursorActive, {});
     };

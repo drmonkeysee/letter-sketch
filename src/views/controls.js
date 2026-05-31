@@ -50,8 +50,8 @@ export class PadControls extends View {
     notifier.subscribe(
       EVENTS.onTerminalResizeReady, this._commitResize.bind(this)
     );
-    notifier.subscribe(EVENTS.onTextCursorActive, u => this._suppressKeyHandler = true);
-    notifier.subscribe(EVENTS.onDrawCommitted, u => this._suppressKeyHandler = false);
+    notifier.subscribe(EVENTS.onTextCursorActive, () => this._suppressKeyHandler = true);
+    notifier.subscribe(EVENTS.onDrawCommitted, () => this._suppressKeyHandler = false);
   }
 
   _updateSketchpadDims(event) {

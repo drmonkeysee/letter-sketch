@@ -17,13 +17,12 @@ export default [
   {
     ...js.configs.recommended,
     languageOptions: {
-      ecmaVersion: 2022,
+      ecmaVersion: 'latest',
       sourceType: 'module',
       globals: browserGlobals,
     },
     rules: {
       ...js.configs.recommended.rules,
-      'no-unused-vars': ['error', {args: 'none'}],
     },
   },
   {

@@ -122,7 +122,7 @@ export class MouseGesture extends DrawGesture {
     return null;
   }
 
-  onMouseup(event) {
+  onMouseup() {
     return this._activeFigure;
   }
 }
