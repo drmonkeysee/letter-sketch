@@ -20,6 +20,7 @@ export class ToolSelector extends View {
       input.value = tool;
       if (BUTTON_TOOLS.has(tool)) {
         input.type = 'button';
+        // TODO: set this based on real state
         input.disabled = tool === 'redo';
         input.addEventListener('click', this._applyDoAction.bind(this));
       } else {

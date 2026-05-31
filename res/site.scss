@@ -189,6 +189,15 @@ body {
           background-color: aqua;
         }
       }
+
+      input:disabled + label {
+        opacity: 0.4;
+        cursor: auto;
+
+        &:before {
+          background-color: lightgray;
+        }
+      }
     }
 
     .colors {
