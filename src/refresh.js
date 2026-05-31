@@ -8,6 +8,7 @@ export const EVENTS = Object.fromEntries([
   'onTerminalResized',
   'onTerminalResizeReady',
   'onTerminalResizeVerify',
+  'onTextCursorActive',
   'onToolChanged',
   'onUndo',
 ].map(n => [n, n]));

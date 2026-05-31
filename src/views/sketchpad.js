@@ -2,6 +2,7 @@ import codepage from '../codepage.js';
 import {COMMANDS} from '../commands.js';
 import palette from '../palette.js';
 import {EVENTS} from '../refresh.js';
+import {isTextTool} from '../tools.js';
 import {View} from './view.js';
 
 export class SketchPad extends View {
@@ -11,10 +12,12 @@ export class SketchPad extends View {
     this._sketchpad = this.doc.getElementById('sketchpad');
     this._grid = [];
     this._stride = 0;
+    this._textTool = false;
   }
 
   draw(initialState) {
     this._tool = initialState.tool;
+    this._textTool = isTextTool(initialState.toolName);
 
     this._drawSketchpad(initialState.terminal, initialState.fontSize);
 
@@ -119,6 +122,8 @@ export class SketchPad extends View {
     if (figure) {
       this.dispatch.command(COMMANDS.commitDraw, figure);
       console.log('generated figure: %o', figure);
+    } else if (this._textTool && event.type === 'mouseup') {
+      this.dispatch.command(COMMANDS.signalTextCursor);
     }
   }
 
@@ -139,6 +144,7 @@ export class SketchPad extends View {
       console.log('got cleanup figure: %o', figure);
     }
     this._tool = update.tool;
+    this._textTool = isTextTool(update.name);
   }
 
   _refreshSketchpad(update) {

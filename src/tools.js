@@ -187,7 +187,11 @@ export function isBoxTool(tool) {
 }
 
 export function isEraser(tool) {
-  return tool === "eraser";
+  return tool === 'eraser';
+}
+
+export function isTextTool(tool) {
+  return tool === 'text';
 }
 
 export function currentTool(models) {

@@ -14,7 +14,7 @@ export class PadControls extends View {
       this.doc.getElementById('row-count'),
     ];
     this._clearButton = this.doc.getElementById('clear-sketch');
-    this._isTextTool = false;
+    this._suppressKeyHandler = false;
   }
 
   get fontSize() { return parseInt(this.fontControl.value, 10); }
@@ -50,7 +50,8 @@ export class PadControls extends View {
     notifier.subscribe(
       EVENTS.onTerminalResizeReady, this._commitResize.bind(this)
     );
-    notifier.subscribe(EVENTS.onToolChanged, this._checkTool.bind(this));
+    notifier.subscribe(EVENTS.onTextCursorActive, u => this._suppressKeyHandler = true);
+    notifier.subscribe(EVENTS.onDrawCommitted, u => this._suppressKeyHandler = false);
   }
 
   _updateSketchpadDims(event) {
@@ -95,10 +96,6 @@ export class PadControls extends View {
     this.dispatch.command(COMMANDS.commitResizeTerminal, update.dims);
   }
 
-  _checkTool(update) {
-    this._isTextTool = update.name === 'text';
-  }
-
   _updateButton() {
     this._button.disabled = this._inputControls.every(
       c => c.value === c.dataset.currentValue
@@ -106,7 +103,7 @@ export class PadControls extends View {
   }
 
   _handleKeyboard(event) {
-    if (this._isTextTool) return;
+    if (this._suppressKeyHandler) return;
     switch (event.key) {
     case '-':
       this._updateFontSize(Math.max(this.fontMin, this.fontSize - 1), event);
