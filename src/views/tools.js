@@ -1,7 +1,7 @@
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
-import {toolName, toolShortcut, TOOLS} from '../tools.js';
-import {View} from './view.js';
+import {toolFromShortcut, toolName, toolShortcut, TOOLS} from '../tools.js';
+import {keyHandlerMixin, View} from './view.js';
 
 const BUTTON_TOOLS = new Set(['redo', 'undo']);
 
@@ -53,6 +53,7 @@ export class ToolSelector extends View {
     notifier.subscribe(EVENTS.onToolChanged, this._refreshTool.bind(this));
     notifier.subscribe(EVENTS.onUndo, this._refreshDoAction.bind(this));
     notifier.subscribe(EVENTS.onRedo, this._refreshDoAction.bind(this));
+    keyHandlerMixin(this, notifier, this._handleKeyboard.bind(this));
   }
 
   _refreshTool(update) {
@@ -73,5 +74,17 @@ export class ToolSelector extends View {
   _toolTitle(tool) {
     const name = toolName(tool), shortcut = toolShortcut(tool);
     return `${name} (${shortcut.shift ? 'Shift+' : ''}${shortcut.key.toUpperCase()})`;
+  }
+
+  _handleKeyboard(event) {
+    if (this.suppressKeyHandler) return;
+    const tool = toolFromShortcut(event.key, event.shiftKey);
+    if (tool) {
+      if (BUTTON_TOOLS.has(tool)) {
+        console.log('dispatch do action shortcut');
+      } else {
+        this.dispatch.command(COMMANDS.setTool, tool);
+      }
+    }
   }
 }

@@ -1,7 +1,7 @@
 import codepage from '../codepage.js';
 import {COMMANDS} from '../commands.js';
 import {EVENTS} from '../refresh.js';
-import {View} from './view.js';
+import {keyHandlerMixin, View} from './view.js';
 
 export class PadControls extends View {
   constructor(...args) {
@@ -14,7 +14,6 @@ export class PadControls extends View {
       this.doc.getElementById('row-count'),
     ];
     this._clearButton = this.doc.getElementById('clear-sketch');
-    this._suppressKeyHandler = false;
   }
 
   get fontSize() { return parseInt(this.fontControl.value, 10); }
@@ -40,7 +39,6 @@ export class PadControls extends View {
       'submit', this._updateSketchpadDims.bind(this)
     );
     this._clearButton.addEventListener('click', this._clearSketch.bind(this));
-    this.doc.addEventListener('keyup', this._handleKeyboard.bind(this));
   }
 
   subscribe(notifier) {
@@ -50,8 +48,7 @@ export class PadControls extends View {
     notifier.subscribe(
       EVENTS.onTerminalResizeReady, this._commitResize.bind(this)
     );
-    notifier.subscribe(EVENTS.onTextCursorActive, () => this._suppressKeyHandler = true);
-    notifier.subscribe(EVENTS.onDrawCommitted, () => this._suppressKeyHandler = false);
+    keyHandlerMixin(this, notifier, this._handleKeyboard.bind(this));
   }
 
   _updateSketchpadDims(event) {
@@ -103,7 +100,7 @@ export class PadControls extends View {
   }
 
   _handleKeyboard(event) {
-    if (this._suppressKeyHandler) return;
+    if (this.suppressKeyHandler) return;
     switch (event.key) {
     case '-':
       this._updateFontSize(Math.max(this.fontMin, this.fontSize - 1), event);

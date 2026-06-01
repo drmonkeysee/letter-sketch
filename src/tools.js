@@ -225,6 +225,13 @@ const NAMES = Object.fromEntries(
   Object.entries(TOOLS_REGISTRY).map(([k, v]) => [k, v.name])
 );
 
+const SHORTCUTS = Object.fromEntries(
+  Object.entries(TOOLS_REGISTRY).map(([k, v]) => {
+    const sc = v.shortcut;
+    return [sc.shift ? sc.key.toUpperCase() : sc.key, k];
+  })
+);
+
 export const TOOLS = Object.fromEntries(
   Object.keys(TOOLS_REGISTRY).map(k => [k, k])
 );
@@ -255,4 +262,8 @@ export function toolShortcut(tool) {
   const entry = TOOLS_REGISTRY[tool];
   if (!entry) throw new Error(`Unknown tool: ${tool}`);
   return entry.shortcut;
+}
+
+export function toolFromShortcut(key, shift) {
+  return SHORTCUTS[shift ? key.toUpperCase() : key];
 }
