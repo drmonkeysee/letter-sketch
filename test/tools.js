@@ -4,7 +4,8 @@ import codepage from '../src/codepage.js';
 import {Cell} from '../src/models/cell.js';
 import {Terminal} from '../src/models/terminal.js';
 import {
-  TOOLS, currentTool, isBoxTool, isEraser, isTextTool, toolName,
+  TOOLS, currentTool, isBoxTool, isEraser, isTextTool, toolFromShortcut,
+  toolName, toolShortcut,
 } from '../src/tools.js';
 
 function makeMouseEvent(x, y, overrides = {}) {
@@ -237,6 +238,34 @@ describe('tools', function () {
 
     it('returns false for other tools', function () {
       expect(isTextTool('brush')).to.be.false;
+    });
+  });
+
+  describe('#toolShortcut()', function () {
+    it('returns shortcut for tool with no shift modifier', function () {
+      expect(toolShortcut('line')).to.deep.equal({key: 'l'});
+    });
+
+    it('returns shortcut for tool with shift modifier', function () {
+      expect(toolShortcut('fillRect')).to.deep.equal({key: 'r', shift: true});
+    });
+
+    it('throws for unknown tool', function () {
+      expect(() => toolShortcut('notATool')).to.throw('Unknown tool: notATool');
+    });
+  });
+
+  describe('#toolFromShortcut()', function () {
+    it('returns tool for unshifted key', function () {
+      expect(toolFromShortcut('l', false)).to.equal('line');
+    });
+
+    it('returns tool for shifted key', function () {
+      expect(toolFromShortcut('r', true)).to.equal('fillRect');
+    });
+
+    it('returns undefined for unknown key', function () {
+      expect(toolFromShortcut('x', false)).to.be.undefined;
     });
   });
 
