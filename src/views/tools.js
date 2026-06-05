@@ -10,6 +10,7 @@ export class ToolSelector extends View {
     super(...args);
     this._toolSelector = this.doc.getElementById('tool-selections');
     this._toolSelections = [];
+    this._doActions = {};
   }
 
   draw(initialState) {
@@ -20,8 +21,7 @@ export class ToolSelector extends View {
       input.value = tool;
       if (BUTTON_TOOLS.has(tool)) {
         input.type = 'button';
-        // TODO: set this based on real state
-        input.disabled = tool === 'redo';
+        input.disabled = true;
         input.addEventListener('click', this._applyDoAction.bind(this));
       } else {
         input.type = 'radio';
@@ -41,6 +41,7 @@ export class ToolSelector extends View {
           }
         });
         label.addEventListener('mouseup', e => e.target.classList.remove('active'));
+        this._doActions[tool] = input;
       } else {
         this._toolSelections.push(input);
       }
@@ -81,6 +82,8 @@ export class ToolSelector extends View {
     const tool = toolFromShortcut(event.key, event.shiftKey);
     if (tool) {
       if (BUTTON_TOOLS.has(tool)) {
+        const button = this._doActions[tool];
+        if (!button || button.disabled) return;
         console.log('dispatch do action shortcut');
       } else {
         this.dispatch.command(COMMANDS.setTool, tool);
