@@ -58,26 +58,42 @@ describe('Terminal', function () {
       expect(updatedCell.fgColorId).to.equal(newCell.fgColorId);
       expect(updatedCell.bgColorId).to.equal(newCell.bgColorId);
     });
+
+    it('returns old cell before update', function () {
+      const target = new Terminal(10, 5),
+            newCell = new Cell(66, 16, 20);
+
+      const old = target.updateCell(5, 2, newCell);
+
+      expect(old).to.not.equal(target.getCell(5, 2));
+      expect(old.glyphId).to.equal(codepage.SIGILS.CLEAR);
+      expect(old.fgColorId).to.equal(palette.COLORS.BLACK);
+      expect(old.bgColorId).to.equal(palette.COLORS.WHITE);
+    });
   });
 
   describe('#update()', function () {
-    it('updates all cells in figure', function () {
-      const target = new Terminal(5, 5),
-            figure = [
-              {x: 3, y: 2, cell: new Cell(
-                codepage.id('^'), palette.id('#ff0000'), palette.id('#000000')
-              )},
-              {x: 2, y: 3, cell: new Cell(
-                codepage.id('<'), palette.id('#00ff00'), palette.id('#000000')
-              )},
-              {x: 4, y: 3, cell: new Cell(
-                codepage.id('>'), palette.id('#0000ff'), palette.id('#000000')
-              )},
-              {x: 3, y: 4, cell: new Cell(
-                codepage.id('V'), palette.id('#ffff00'), palette.id('#000000')
-              )},
-            ];
+    let target, figure;
 
+    beforeEach(function () {
+      target = new Terminal(5, 5);
+      figure = [
+        {x: 3, y: 2, cell: new Cell(
+          codepage.id('^'), palette.id('#ff0000'), palette.id('#000000')
+        )},
+        {x: 2, y: 3, cell: new Cell(
+          codepage.id('<'), palette.id('#00ff00'), palette.id('#000000')
+        )},
+        {x: 4, y: 3, cell: new Cell(
+          codepage.id('>'), palette.id('#0000ff'), palette.id('#000000')
+        )},
+        {x: 3, y: 4, cell: new Cell(
+          codepage.id('V'), palette.id('#ffff00'), palette.id('#000000')
+        )},
+      ];
+    });
+
+    it('updates all cells in figure', function () {
       target.update(figure);
 
       const topCell = target.getCell(3, 2);
@@ -100,6 +116,33 @@ describe('Terminal', function () {
       expect(middleCell.glyphId).to.equal(codepage.SIGILS.CLEAR);
       expect(middleCell.fgColorId).to.equal(palette.COLORS.BLACK);
       expect(middleCell.bgColorId).to.equal(palette.COLORS.WHITE);
+    });
+
+    it('returns redo figure', function () {
+      const {redo} = target.update(figure);
+
+      expect(redo).to.equal(figure);
+    });
+
+    it('returns undo figure with previous cell values', function () {
+      const {undo} = target.update(figure);
+
+      expect(undo).to.have.lengthOf(figure.length);
+      for (const {x, y, cell} of undo) {
+        expect(cell.glyphId).to.equal(codepage.SIGILS.CLEAR);
+        expect(cell.fgColorId).to.equal(palette.COLORS.BLACK);
+        expect(cell.bgColorId).to.equal(palette.COLORS.WHITE);
+        expect(cell).to.not.equal(target.getCell(x, y));
+      }
+    });
+
+    it('returns undo figure with same positions as redo', function () {
+      const {redo, undo} = target.update(figure);
+
+      for (let i = 0; i < undo.length; ++i) {
+        expect(undo[i].x).to.equal(redo[i].x);
+        expect(undo[i].y).to.equal(redo[i].y);
+      }
     });
   });
 
