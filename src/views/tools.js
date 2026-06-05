@@ -86,7 +86,7 @@ export class ToolSelector extends View {
       if (BUTTON_TOOLS.has(tool)) {
         const button = this._doActions[tool];
         if (!button || button.disabled) return;
-        console.log('dispatch do action shortcut');
+        this.dispatch.command(COMMANDS[tool]);
       } else {
         this.dispatch.command(COMMANDS.setTool, tool);
       }

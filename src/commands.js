@@ -9,9 +9,12 @@ const COMMAND_REGISTRY = {
   commitDraw(models, figure, cleanup = false) {
     return () => {
       models.undo.push(models.terminal.update(figure));
-      return makeUpdate(
-        EVENTS.onDrawCommitted, {cleanup, undoOps: models.undo.length > 0}
-      );
+      models.redo.length = 0;
+      return makeUpdate(EVENTS.onDrawCommitted, {
+        cleanup,
+        redoOps: models.redo.length > 0,
+        undoOps: models.undo.length > 0,
+      });
     };
   },
   checkResizeTerminal(models, dims) {
@@ -45,9 +48,12 @@ const COMMAND_REGISTRY = {
   },
   redo(models) {
     return () => {
-      console.log('REDO');
+      const redo = models.redo.pop();
+      if (!redo) return;
+      models.undo.push(models.terminal.update(redo));
       return makeUpdate(EVENTS.onRedo, {
         redoOps: models.redo.length > 0,
+        terminal: models.terminal,
         undoOps: models.undo.length > 0,
       });
     };
@@ -85,9 +91,12 @@ const COMMAND_REGISTRY = {
   },
   undo(models) {
     return () => {
-      console.log('UNDO');
+      const undo = models.undo.pop();
+      if (!undo) return;
+      models.redo.push(models.terminal.update(undo));
       return makeUpdate(EVENTS.onUndo, {
         redoOps: models.redo.length > 0,
+        terminal: models.terminal,
         undoOps: models.undo.length > 0,
       });
     };

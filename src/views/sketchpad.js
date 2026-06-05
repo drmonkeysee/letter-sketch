@@ -28,9 +28,11 @@ export class SketchPad extends View {
 
   subscribe(notifier) {
     notifier.subscribe(EVENTS.onDrawCommitted, this._committed.bind(this));
+    notifier.subscribe(EVENTS.onRedo, this._refreshSketchpad.bind(this));
     notifier.subscribe(EVENTS.onToolChanged, this._updateTool.bind(this));
     notifier.subscribe(EVENTS.onTerminalResized, this._refreshSketchpad.bind(this));
     notifier.subscribe(EVENTS.onTerminalCleared, this._resetSketchpad.bind(this));
+    notifier.subscribe(EVENTS.onUndo, this._refreshSketchpad.bind(this));
   }
 
   updateAt(x, y, cell) {
