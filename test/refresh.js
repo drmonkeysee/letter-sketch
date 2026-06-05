@@ -61,6 +61,28 @@ describe('ViewNotifier', function () {
       handlers.forEach(h => sinon.assert.calledWith(h, this.update));
     });
 
+    it('notifies handler subscribed to multiple events', function () {
+      const handler = sinon.fake();
+
+      this.target.subscribe(
+        [EVENTS.onForegroundColorChanged, EVENTS.onGlyphChanged], handler
+      );
+      this.target.signal(this.update);
+
+      sinon.assert.calledWith(handler, this.update);
+    });
+
+    it('does not notify handler subscribed to multiple other events', function () {
+      const handler = sinon.fake();
+
+      this.target.subscribe(
+        [EVENTS.onGlyphChanged, EVENTS.onToolChanged], handler
+      );
+      this.target.signal(this.update);
+
+      sinon.assert.notCalled(handler);
+    });
+
     it('does not notify handler for different event', function () {
       const handler = sinon.fake();
 
