@@ -8,8 +8,10 @@ function makeUpdate(event, data) {
 const COMMAND_REGISTRY = {
   commitDraw(models, figure, cleanup = false) {
     return () => {
-      models.terminal.update(figure);
-      return makeUpdate(EVENTS.onDrawCommitted, {cleanup});
+      models.undo.push(models.terminal.update(figure));
+      return makeUpdate(
+        EVENTS.onDrawCommitted, {cleanup, undoOps: models.undo.length > 0}
+      );
     };
   },
   checkResizeTerminal(models, dims) {
@@ -44,7 +46,10 @@ const COMMAND_REGISTRY = {
   redo(models) {
     return () => {
       console.log('REDO');
-      return makeUpdate(EVENTS.onRedo, {});
+      return makeUpdate(EVENTS.onRedo, {
+        redoOps: models.redo.length > 0,
+        undoOps: models.undo.length > 0,
+      });
     };
   },
   setBackgroundColor(models, colorId) {
@@ -81,7 +86,10 @@ const COMMAND_REGISTRY = {
   undo(models) {
     return () => {
       console.log('UNDO');
-      return makeUpdate(EVENTS.onUndo, {});
+      return makeUpdate(EVENTS.onUndo, {
+        redoOps: models.redo.length > 0,
+        undoOps: models.undo.length > 0,
+      });
     };
   },
 };

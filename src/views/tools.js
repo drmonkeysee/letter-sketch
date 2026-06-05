@@ -52,6 +52,7 @@ export class ToolSelector extends View {
 
   subscribe(notifier) {
     notifier.subscribe(EVENTS.onToolChanged, this._refreshTool.bind(this));
+    notifier.subscribe(EVENTS.onDrawCommitted, this._refreshDoAction.bind(this));
     notifier.subscribe(EVENTS.onUndo, this._refreshDoAction.bind(this));
     notifier.subscribe(EVENTS.onRedo, this._refreshDoAction.bind(this));
     keyHandlerMixin(this, notifier, this._handleKeyboard.bind(this));
@@ -69,7 +70,8 @@ export class ToolSelector extends View {
   }
 
   _refreshDoAction(update) {
-    console.log('DO ACTION: %o', update);
+    this._doActions.undo.disabled = !update.undoOps;
+    this._doActions.redo.disabled = !update.redoOps;
   }
 
   _toolTitle(tool) {
