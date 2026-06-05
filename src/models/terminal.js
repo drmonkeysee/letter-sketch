@@ -44,7 +44,7 @@ export class Terminal {
   }
 
   update(figure) {
-    const undo = Array.from(figure, ({x, y, cell}) => this.updateCell(x, y, cell));
+    const undo = Array.from(figure, ({x, y, cell}) => {x, y, this.updateCell(x, y, cell)});
     return {
       redo: figure,
       undo,
