@@ -166,7 +166,7 @@ describe('commands', function () {
 
       sinon.assert.calledWith(this.models.terminal.update, figure);
       expect(result).to.eql(
-        {event: EVENTS.onDrawCommitted, figure: figure, cleanup: false}
+        {event: EVENTS.onDrawCommitted, cleanup: false}
       );
     });
 
@@ -178,7 +178,7 @@ describe('commands', function () {
 
       sinon.assert.calledWith(this.models.terminal.update, figure);
       expect(result).to.eql(
-        {event: EVENTS.onDrawCommitted, figure: figure, cleanup: true}
+        {event: EVENTS.onDrawCommitted, cleanup: true}
       );
     });
   });

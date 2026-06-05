@@ -22,8 +22,8 @@ class Tool {
     this._gesture = null;
   }
 
-  cleanup(update) {
-    this.committed(update);
+  cleanup() {
+    this.committed();
     return null;
   }
 

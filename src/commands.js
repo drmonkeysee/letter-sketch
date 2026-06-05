@@ -9,7 +9,7 @@ const COMMAND_REGISTRY = {
   commitDraw(models, figure, cleanup = false) {
     return () => {
       models.terminal.update(figure);
-      return makeUpdate(EVENTS.onDrawCommitted, {figure, cleanup});
+      return makeUpdate(EVENTS.onDrawCommitted, {cleanup});
     };
   },
   checkResizeTerminal(models, dims) {

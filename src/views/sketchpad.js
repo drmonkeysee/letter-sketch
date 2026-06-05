@@ -132,7 +132,7 @@ export class SketchPad extends View {
     // already been committed.
     if (!update.cleanup) {
       console.log('commit figure');
-      this._tool.committed(update);
+      this._tool.committed();
     }
   }
 
