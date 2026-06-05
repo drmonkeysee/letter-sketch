@@ -24,12 +24,15 @@ export class ViewNotifier {
     }
   }
 
-  subscribe(event, handler) {
-    let notification = this._notifications[event];
-    if (!notification) {
-      this._notifications[event] = notification = [];
+  subscribe(events, handler) {
+    events = [].concat(events);
+    for (const event of events) {
+      let notification = this._notifications[event];
+      if (!notification) {
+        this._notifications[event] = notification = [];
+      }
+      notification.push(handler);
     }
-    notification.push(handler);
   }
 
   signal(update) {
