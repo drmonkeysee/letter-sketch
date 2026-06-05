@@ -393,6 +393,8 @@ describe('commands', function () {
   describe('#clearTerminal()', function () {
     beforeEach(function () {
       this.models = {
+        redo: [],
+        undo: [],
         lettertype: {fontSize: 15},
         terminal: {
           clear: sinon.fake(),
@@ -416,7 +418,20 @@ describe('commands', function () {
         event: EVENTS.onTerminalCleared,
         terminal: this.models.terminal,
         fontSize: this.models.lettertype.fontSize,
+        redoOps: false,
+        undoOps: false,
       });
+    });
+
+    it('clears undo and redo stacks', function () {
+      this.models.undo.push('testUndo');
+      this.models.redo.push('testRedo');
+
+      const cmd = this.target(42);
+      cmd();
+
+      expect(this.models.undo).to.be.empty;
+      expect(this.models.redo).to.be.empty;
     });
   });
 
