@@ -5,10 +5,17 @@ function makeUpdate(event, data) {
   return {event, ...data};
 }
 
+function applyFigure(models, figure, inverseOp) {
+    const inverse = models.terminal.update(figure);
+    if (inverse.length > 0) {
+      models[inverseOp].push(inverse);
+    }
+}
+
 const COMMAND_REGISTRY = {
   commitDraw(models, figure, cleanup = false) {
     return () => {
-      models.undo.push(models.terminal.update(figure));
+      applyFigure(models, figure, 'undo');
       models.redo.length = 0;
       return makeUpdate(EVENTS.onDrawCommitted, {
         cleanup,
@@ -54,7 +61,7 @@ const COMMAND_REGISTRY = {
     return () => {
       const redo = models.redo.pop();
       if (!redo) return;
-      models.undo.push(models.terminal.update(redo));
+      applyFigure(models, redo, 'undo');
       return makeUpdate(EVENTS.onRedo, {
         redoOps: models.redo.length > 0,
         terminal: models.terminal,
@@ -97,7 +104,7 @@ const COMMAND_REGISTRY = {
     return () => {
       const undo = models.undo.pop();
       if (!undo) return;
-      models.redo.push(models.terminal.update(undo));
+      applyFigure(models, undo, 'redo');
       return makeUpdate(EVENTS.onUndo, {
         redoOps: models.redo.length > 0,
         terminal: models.terminal,
