@@ -168,7 +168,7 @@ describe('commands', function () {
 
       sinon.assert.calledWith(this.models.terminal.update, figure);
       expect(result).to.eql(
-        {event: EVENTS.onDrawCommitted, cleanup: false, undoOps: true}
+        {event: EVENTS.onDrawCommitted, cleanup: false, redoOps: false, undoOps: true}
       );
     });
 
@@ -180,7 +180,7 @@ describe('commands', function () {
 
       sinon.assert.calledWith(this.models.terminal.update, figure);
       expect(result).to.eql(
-        {event: EVENTS.onDrawCommitted, cleanup: true, undoOps: true}
+        {event: EVENTS.onDrawCommitted, cleanup: true, redoOps: false, undoOps: true}
       );
     });
 
@@ -191,75 +191,160 @@ describe('commands', function () {
 
       expect(this.models.undo).to.eql(['testUndo']);
     });
+
+    it('clears redo stack', function () {
+      this.models.redo.push('testRedo');
+
+      const cmd = this.target('testFigure');
+      cmd();
+
+      expect(this.models.redo).to.be.empty;
+    });
   });
 
   describe('#undo()', function () {
     beforeEach(function () {
-      this.models = {redo: [], undo: []};
+      this.models = {
+        redo: [],
+        undo: [],
+        terminal: {
+          update: sinon.fake.returns('testRedo'),
+        },
+      };
       this.target = getBinder(COMMANDS.undo, this.models);
     });
 
-    it('signals empty stacks', function () {
-      const result = this.target()();
-
-      expect(result).to.eql(
-        {event: EVENTS.onUndo, redoOps: false, undoOps: false}
-      );
+    afterEach(function () {
+      sinon.restore();
     });
 
-    it('signals non-empty undo stack', function () {
+    it('returns undefined if undo stack is empty', function () {
+      const result = this.target()();
+
+      expect(result).to.be.undefined;
+    });
+
+    it('applies undo figure to terminal', function () {
+      this.models.undo.push('testUndo');
+
+      this.target()();
+
+      sinon.assert.calledWith(this.models.terminal.update, 'testUndo');
+    });
+
+    it('pops undo figure from stack', function () {
+      this.models.undo.push('testUndo');
+
+      this.target()();
+
+      expect(this.models.undo).to.be.empty;
+    });
+
+    it('pushes redo figure onto redo stack', function () {
+      this.models.undo.push('testUndo');
+
+      this.target()();
+
+      expect(this.models.redo).to.eql(['testRedo']);
+    });
+
+    it('signals with remaining undo ops', function () {
+      this.models.undo.push('testUndo1', 'testUndo2');
+
+      const result = this.target()();
+
+      expect(result).to.eql({
+        event: EVENTS.onUndo,
+        redoOps: true,
+        terminal: this.models.terminal,
+        undoOps: true,
+      });
+    });
+
+    it('signals empty undo stack after last undo', function () {
       this.models.undo.push('testUndo');
 
       const result = this.target()();
 
-      expect(result).to.eql(
-        {event: EVENTS.onUndo, redoOps: false, undoOps: true}
-      );
-    });
-
-    it('signals non-empty redo stack', function () {
-      this.models.redo.push('testRedo');
-
-      const result = this.target()();
-
-      expect(result).to.eql(
-        {event: EVENTS.onUndo, redoOps: true, undoOps: false}
-      );
+      expect(result).to.eql({
+        event: EVENTS.onUndo,
+        redoOps: true,
+        terminal: this.models.terminal,
+        undoOps: false,
+      });
     });
   });
 
   describe('#redo()', function () {
     beforeEach(function () {
-      this.models = {redo: [], undo: []};
+      this.models = {
+        redo: [],
+        undo: [],
+        terminal: {
+          update: sinon.fake.returns('testUndo'),
+        },
+      };
       this.target = getBinder(COMMANDS.redo, this.models);
     });
 
-    it('signals empty stacks', function () {
-      const result = this.target()();
-
-      expect(result).to.eql(
-        {event: EVENTS.onRedo, redoOps: false, undoOps: false}
-      );
+    afterEach(function () {
+      sinon.restore();
     });
 
-    it('signals non-empty redo stack', function () {
+    it('returns undefined if redo stack is empty', function () {
+      const result = this.target()();
+
+      expect(result).to.be.undefined;
+    });
+
+    it('applies redo figure to terminal', function () {
+      this.models.redo.push('testRedo');
+
+      this.target()();
+
+      sinon.assert.calledWith(this.models.terminal.update, 'testRedo');
+    });
+
+    it('pops redo figure from stack', function () {
+      this.models.redo.push('testRedo');
+
+      this.target()();
+
+      expect(this.models.redo).to.be.empty;
+    });
+
+    it('pushes undo figure onto undo stack', function () {
+      this.models.redo.push('testRedo');
+
+      this.target()();
+
+      expect(this.models.undo).to.eql(['testUndo']);
+    });
+
+    it('signals with remaining redo ops', function () {
+      this.models.redo.push('testRedo1', 'testRedo2');
+
+      const result = this.target()();
+
+      expect(result).to.eql({
+        event: EVENTS.onRedo,
+        redoOps: true,
+        terminal: this.models.terminal,
+        undoOps: true,
+      });
+    });
+
+    it('signals empty redo stack after last redo', function () {
       this.models.redo.push('testRedo');
 
       const result = this.target()();
 
-      expect(result).to.eql(
-        {event: EVENTS.onRedo, redoOps: true, undoOps: false}
-      );
-    });
-
-    it('signals non-empty undo stack', function () {
-      this.models.undo.push('testUndo');
-
-      const result = this.target()();
-
-      expect(result).to.eql(
-        {event: EVENTS.onRedo, redoOps: false, undoOps: true}
-      );
+      expect(result).to.eql({
+        event: EVENTS.onRedo,
+        redoOps: false,
+        terminal: this.models.terminal,
+        undoOps: true,
+      });
     });
   });
 
