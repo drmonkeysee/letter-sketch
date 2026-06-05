@@ -150,7 +150,7 @@ describe('commands', function () {
         redo: [],
         undo: [],
         terminal: {
-          update: sinon.fake.returns('testUndo'),
+          update: sinon.fake.returns(['testUndo']),
         },
       };
       this.target = getBinder(COMMANDS.commitDraw, this.models);
@@ -189,7 +189,16 @@ describe('commands', function () {
 
       cmd();
 
-      expect(this.models.undo).to.eql(['testUndo']);
+      expect(this.models.undo).to.eql([['testUndo']]);
+    });
+
+    it('does not push to undo stack if figure makes no changes', function () {
+      this.models.terminal.update = sinon.fake.returns([]);
+
+      const cmd = this.target('testFigure');
+      cmd();
+
+      expect(this.models.undo).to.be.empty;
     });
 
     it('clears redo stack', function () {
@@ -208,7 +217,7 @@ describe('commands', function () {
         redo: [],
         undo: [],
         terminal: {
-          update: sinon.fake.returns('testRedo'),
+          update: sinon.fake.returns(['testRedo']),
         },
       };
       this.target = getBinder(COMMANDS.undo, this.models);
@@ -245,7 +254,16 @@ describe('commands', function () {
 
       this.target()();
 
-      expect(this.models.redo).to.eql(['testRedo']);
+      expect(this.models.redo).to.eql([['testRedo']]);
+    });
+
+    it('does not push to redo stack if inverse is empty', function () {
+      this.models.terminal.update = sinon.fake.returns([]);
+      this.models.undo.push('testUndo');
+
+      this.target()();
+
+      expect(this.models.redo).to.be.empty;
     });
 
     it('signals with remaining undo ops', function () {
@@ -281,7 +299,7 @@ describe('commands', function () {
         redo: [],
         undo: [],
         terminal: {
-          update: sinon.fake.returns('testUndo'),
+          update: sinon.fake.returns(['testUndo']),
         },
       };
       this.target = getBinder(COMMANDS.redo, this.models);
@@ -318,7 +336,16 @@ describe('commands', function () {
 
       this.target()();
 
-      expect(this.models.undo).to.eql(['testUndo']);
+      expect(this.models.undo).to.eql([['testUndo']]);
+    });
+
+    it('does not push to undo stack if inverse is empty', function () {
+      this.models.terminal.update = sinon.fake.returns([]);
+      this.models.redo.push('testRedo');
+
+      this.target()();
+
+      expect(this.models.undo).to.be.empty;
     });
 
     it('signals with remaining redo ops', function () {
