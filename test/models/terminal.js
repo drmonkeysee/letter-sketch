@@ -118,14 +118,8 @@ describe('Terminal', function () {
       expect(middleCell.bgColorId).to.equal(palette.COLORS.WHITE);
     });
 
-    it('returns redo figure', function () {
-      const {redo} = target.update(figure);
-
-      expect(redo).to.equal(figure);
-    });
-
     it('returns undo figure with previous cell values', function () {
-      const {undo} = target.update(figure);
+      const undo = target.update(figure);
 
       expect(undo).to.have.lengthOf(figure.length);
       for (const {x, y, cell} of undo) {
@@ -136,12 +130,12 @@ describe('Terminal', function () {
       }
     });
 
-    it('returns undo figure with same positions as redo', function () {
-      const {redo, undo} = target.update(figure);
+    it('returns undo figure with same positions as input figure', function () {
+      const undo = target.update(figure);
 
       for (let i = 0; i < undo.length; ++i) {
-        expect(undo[i].x).to.equal(redo[i].x);
-        expect(undo[i].y).to.equal(redo[i].y);
+        expect(undo[i].x).to.equal(figure[i].x);
+        expect(undo[i].y).to.equal(figure[i].y);
       }
     });
   });

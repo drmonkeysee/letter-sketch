@@ -147,8 +147,10 @@ describe('commands', function () {
   describe('#commitDraw()', function () {
     beforeEach(function () {
       this.models = {
+        redo: [],
+        undo: [],
         terminal: {
-          update: sinon.fake(),
+          update: sinon.fake.returns('testUndo'),
         },
       };
       this.target = getBinder(COMMANDS.commitDraw, this.models);
@@ -166,7 +168,7 @@ describe('commands', function () {
 
       sinon.assert.calledWith(this.models.terminal.update, figure);
       expect(result).to.eql(
-        {event: EVENTS.onDrawCommitted, cleanup: false}
+        {event: EVENTS.onDrawCommitted, cleanup: false, undoOps: true}
       );
     });
 
@@ -178,7 +180,85 @@ describe('commands', function () {
 
       sinon.assert.calledWith(this.models.terminal.update, figure);
       expect(result).to.eql(
-        {event: EVENTS.onDrawCommitted, cleanup: true}
+        {event: EVENTS.onDrawCommitted, cleanup: true, undoOps: true}
+      );
+    });
+
+    it('pushes undo figure onto undo stack', function () {
+      const cmd = this.target('testFigure');
+
+      cmd();
+
+      expect(this.models.undo).to.eql(['testUndo']);
+    });
+  });
+
+  describe('#undo()', function () {
+    beforeEach(function () {
+      this.models = {redo: [], undo: []};
+      this.target = getBinder(COMMANDS.undo, this.models);
+    });
+
+    it('signals empty stacks', function () {
+      const result = this.target()();
+
+      expect(result).to.eql(
+        {event: EVENTS.onUndo, redoOps: false, undoOps: false}
+      );
+    });
+
+    it('signals non-empty undo stack', function () {
+      this.models.undo.push('testUndo');
+
+      const result = this.target()();
+
+      expect(result).to.eql(
+        {event: EVENTS.onUndo, redoOps: false, undoOps: true}
+      );
+    });
+
+    it('signals non-empty redo stack', function () {
+      this.models.redo.push('testRedo');
+
+      const result = this.target()();
+
+      expect(result).to.eql(
+        {event: EVENTS.onUndo, redoOps: true, undoOps: false}
+      );
+    });
+  });
+
+  describe('#redo()', function () {
+    beforeEach(function () {
+      this.models = {redo: [], undo: []};
+      this.target = getBinder(COMMANDS.redo, this.models);
+    });
+
+    it('signals empty stacks', function () {
+      const result = this.target()();
+
+      expect(result).to.eql(
+        {event: EVENTS.onRedo, redoOps: false, undoOps: false}
+      );
+    });
+
+    it('signals non-empty redo stack', function () {
+      this.models.redo.push('testRedo');
+
+      const result = this.target()();
+
+      expect(result).to.eql(
+        {event: EVENTS.onRedo, redoOps: true, undoOps: false}
+      );
+    });
+
+    it('signals non-empty undo stack', function () {
+      this.models.undo.push('testUndo');
+
+      const result = this.target()();
+
+      expect(result).to.eql(
+        {event: EVENTS.onRedo, redoOps: false, undoOps: true}
       );
     });
   });
