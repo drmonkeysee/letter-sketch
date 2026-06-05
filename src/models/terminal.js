@@ -38,13 +38,17 @@ export class Terminal {
 
   updateCell(x, y, cell) {
     const targetCell = this.getCell(x, y);
+    const old = targetCell.clone();
     targetCell.update(cell);
+    return old;
   }
 
   update(figure) {
-    for (const {x, y, cell} of figure) {
-      this.updateCell(x, y, cell);
-    }
+    const undo = Array.from(figure, ({x, y, cell}) => this.updateCell(x, y, cell));
+    return {
+      redo: figure,
+      undo,
+    };
   }
 
   clear(glyphId) {
