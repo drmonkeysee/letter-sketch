@@ -52,10 +52,12 @@ export class ToolSelector extends View {
 
   subscribe(notifier) {
     notifier.subscribe(EVENTS.onToolChanged, this._refreshTool.bind(this));
-    notifier.subscribe(EVENTS.onDrawCommitted, this._refreshDoActions.bind(this));
-    notifier.subscribe(EVENTS.onRedo, this._refreshDoActions.bind(this));
-    notifier.subscribe(EVENTS.onTerminalCleared, this._refreshDoActions.bind(this));
-    notifier.subscribe(EVENTS.onUndo, this._refreshDoActions.bind(this));
+    notifier.subscribe([
+      EVENTS.onDrawCommitted,
+      EVENTS.onUndo,
+      EVENTS.onRedo,
+      EVENTS.onTerminalCleared,
+    ], this._refreshDoActions.bind(this));
     keyHandlerMixin(this, notifier, this._handleKeyboard.bind(this));
   }
 
