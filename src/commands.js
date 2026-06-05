@@ -31,8 +31,12 @@ const COMMAND_REGISTRY = {
     return () => {
       console.log('cleared terminal to glyph: %o', glyphId);
       models.terminal.clear(glyphId);
+      models.undo.length = models.redo.length = 0;
       return makeUpdate(EVENTS.onTerminalCleared, {
-        terminal: models.terminal, fontSize: models.lettertype.fontSize,
+        terminal: models.terminal,
+        fontSize: models.lettertype.fontSize,
+        redoOps: models.redo.length > 0,
+        undoOps: models.undo.length > 0,
       });
     };
   },
