@@ -38,6 +38,7 @@ export class Terminal {
 
   updateCell(x, y, cell) {
     const targetCell = this.getCell(x, y);
+    if (!targetCell) return null;
     const old = targetCell.clone();
     targetCell.update(cell);
     return old;
@@ -46,7 +47,7 @@ export class Terminal {
   update(figure) {
     return Array.from(
       figure, ({x, y, cell}) => ({x, y, cell: this.updateCell(x, y, cell)})
-    );
+    ).filter(({cell}) => cell);
   }
 
   clear(glyphId) {

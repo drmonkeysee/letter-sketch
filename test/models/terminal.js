@@ -70,6 +70,15 @@ describe('Terminal', function () {
       expect(old.fgColorId).to.equal(palette.COLORS.BLACK);
       expect(old.bgColorId).to.equal(palette.COLORS.WHITE);
     });
+
+    it('returns null for out-of-bounds coordinates', function () {
+      const target = new Terminal(10, 5),
+            newCell = new Cell(66, 16, 20);
+
+      expect(target.updateCell(0, 5, newCell)).to.be.null;
+      expect(target.updateCell(-1, 0, newCell)).to.be.null;
+      expect(target.updateCell(0, -1, newCell)).to.be.null;
+    });
   });
 
   describe('#update()', function () {
@@ -136,6 +145,22 @@ describe('Terminal', function () {
       for (let i = 0; i < undo.length; ++i) {
         expect(undo[i].x).to.equal(figure[i].x);
         expect(undo[i].y).to.equal(figure[i].y);
+      }
+    });
+
+    it('excludes out-of-bounds tiles from undo figure', function () {
+      const figureWithOOB = [
+        ...figure,
+        {x: -1, y: 0, cell: new Cell(codepage.id('X'))},
+        {x: 0, y: 5, cell: new Cell(codepage.id('Y'))},
+      ];
+
+      const undo = target.update(figureWithOOB);
+
+      expect(undo).to.have.lengthOf(figure.length);
+      for (const {x, y} of undo) {
+        expect(x).to.be.within(0, 4);
+        expect(y).to.be.within(0, 4);
       }
     });
   });
