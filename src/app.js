@@ -54,9 +54,11 @@ class App {
       },
       fontSize: this._models.lettertype.fontSize,
       glyphId: this._models.lettertype.cell.glyphId,
+      redoOps: this._models.redo.length > 0,
       terminal: this._models.terminal,
       tool: currentTool(this._models),
       toolName: this._models.currentTool,
+      undoOps: this._models.undo.length > 0,
     };
   }
 }

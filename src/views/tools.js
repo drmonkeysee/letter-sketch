@@ -21,7 +21,6 @@ export class ToolSelector extends View {
       input.value = tool;
       if (BUTTON_TOOLS.has(tool)) {
         input.type = 'button';
-        input.disabled = true;
         input.addEventListener('click', this._applyDoAction.bind(this));
       } else {
         input.type = 'radio';
@@ -48,6 +47,7 @@ export class ToolSelector extends View {
       this._toolSelector.appendChild(input);
       this._toolSelector.appendChild(label);
     }
+    this._refreshDoActions(initialState);
   }
 
   subscribe(notifier) {
