@@ -16,6 +16,26 @@ describe('#cssColor()', function () {
   });
 });
 
+describe('#hexColor()', function () {
+  it('returns expected value for id', function () {
+    const result = palette.hexColor(1);
+
+    expect(result).to.equal('#c0c0c0');
+  });
+
+  it('zero-pads single-digit hex components', function () {
+    const result = palette.hexColor(4);  // Red: rgb(255, 0, 0)
+
+    expect(result).to.equal('#ff0000');
+  });
+
+  it('returns undefined if invalid id', function () {
+    const result = palette.hexColor(1000);
+
+    expect(result).to.be.undefined;
+  });
+});
+
 describe('#name()', function () {
   it('returns expected name for id', function () {
     const result = palette.name(5);

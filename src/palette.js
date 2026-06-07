@@ -12,7 +12,14 @@ function hexToRgb(hexString) {
   } else {
     return '';
   }
-  return `rgb(${parseInt(r, 16)}, ${parseInt(g, 16)}, ${parseInt(b, 16)})`;
+  const toDec = s => parseInt(s, 16);
+  return `rgb(${toDec(r)}, ${toDec(g)}, ${toDec(b)})`;
+}
+
+function rgbToHex(rgbString) {
+  const [r, g, b] = rgbString.slice(4).split(','),
+        toHex = s => parseInt(s, 10).toString(16).padStart(2, '0');
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
 // Basic 16-color Palette
@@ -48,6 +55,11 @@ export default {
   },
   cssColor(id) {
     return PALETTE[id];
+  },
+  hexColor(id) {
+    const rgb = this.cssColor(id);
+    if (!rgb) return rgb;
+    return rgbToHex(rgb);
   },
   name(id) {
     return NAMES[id];
